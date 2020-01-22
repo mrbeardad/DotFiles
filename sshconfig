@@ -39,6 +39,7 @@ Port 50000
 #[Socket]
 #ListenStream=
 #ListenStream=12345
+#取消Accept=yes
 
 # 警告: 使用 sshd.socket 会使 ListenAddress 设置无效，这将允许来自任何地址的连接。为了达到与 ListenAddress 一样设置 IP 的效果,
 # 你必须在 ListenStream 中指定端口和 IP (例如：ListenStream=192.168.1.100:22)。你还需要在 [Socket] 下面增加 FreeBind=true，

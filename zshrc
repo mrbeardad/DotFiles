@@ -12,7 +12,19 @@ alias ip='ip -c'
 alias tmuxn='tmux new -s routin'
 alias tmuxa='tmux a'
 alias expactf='expac --timefmt="%Y-%m-%d %T" "%l\t%n" | sort'
-
+# zsh中git插件的补充
+alias gmv='git mv'
+alias grst='git restore --staged'
+alias gdtre='git diff-tree'
+alias gdt='git difftool --tool=gvimdiff3'
+alias gdts='git difftool --staged --tool=gvimdiff3'
+alias gt='git tag'
+alias gta='git tag -a'
+alias gtd='git tag -d'
+alias gbav='git branch -a -vv'
+alias glr='git ls-remote'
+alias gpd='git push -d'
+alias gpt='git push --tags'
 function man() {
         LESS_TERMCAP_md=$'\e[01;34m' \
 	LESS_TERMCAP_me=$'\e[0m' \

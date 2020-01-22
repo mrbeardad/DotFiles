@@ -1,0 +1,10 @@
+[Unit]
+Description="Cut HTTP File Server"
+
+[Service]
+Type="simple"
+ExecStart=/usr/bin/chfs --path=/srv/chfs --port=80
+User=chfs
+
+[Install]
+WantedBy="multi-user.target"
