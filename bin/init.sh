@@ -74,11 +74,14 @@ function zsh_cfg() {
 
     #添加alias和man() 
     cat zshrc >> ~/.zshrc
-    cp agnoster-time.zsh-theme ~/.oh-my-zsh/themes/
+    cp zsh/agnoster-time.zsh-theme ~/.oh-my-zsh/themes/
 }
 
 #手动配置ssh与sshd
 #请看文件sshconfig
+#systemd edit sshd.socket
+#/etc/ssh/sshd_config
+#~/.ssh/{config,authorized_keys}
 
 #配置tmux
 function tmux_cfg() {
@@ -87,13 +90,11 @@ function tmux_cfg() {
 	mkdir ~/.tmux
     fi
 
-    if [ -e ~/.tmux/.tmux.conf ] ;then
-	mv ~/.tmux/.tmux.conf{,.bak}
-    elif [ -e ~/.tmux.conf ] ;then
+    if [ -e ~/.tmux.conf ] ;then
 	mv ~/.tmux.conf{,.bak}
     fi
 
-    cp tmux.conf ~/.tmux/.tmux.conf
+    cp tmux/.tmux.conf ~/.tmux/.tmux.conf
     yay -S tmux-resurrect-git
 }
 
@@ -106,7 +107,7 @@ function chfs_cfg() {
     cp chfs-linux-amd64-2.0 /usr/local/bin
 
     cd -
-    cp chfs.{service,socket} /etc/systemd/system/
+    cp chfs/chfs.{service,socket} /etc/systemd/system/
     useradd -r -s/usr/bin/nologin chfs
     mkdir /srv/chfs
     chmod 755 /srv/chfs
@@ -129,13 +130,13 @@ function vim_cfg() {
 	mkdir ~/.vim
     fi
 
-    if [ -e ~/.vim/.vimrc ] ;then
-	mv ~/.vim/.vimrc{,.bak}
+    if [ -e ~/.vim/vimrc ] ;then
+	mv ~/.vim/vimrc{,.bak}
     elif [ -e ~/.vimrc ] ;then
 	mv ~/.vimrc{,.bak}
     fi
-    cp vimrc ~/.vim/.vimrc
-    cp gvimrc ~/.vim/.gvimrc
+    cp vim/vimrc ~/.vim/vimrc
+    cp vim/gvimrc ~/.vim/gvimrc
 }
 
 #function main() {

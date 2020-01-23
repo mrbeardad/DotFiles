@@ -1,0 +1,119 @@
+filetype plugin indent on   " 设置加载对应文件类型的插件
+syntax enable		    " 开启语法高亮功能
+syntax on		    " 自动语法高亮
+
+colorscheme ron
+
+set nocompatible	    " 设置不兼容原始vi模式
+
+set ignorecase		    " 搜索时忽略大小写
+set smartcase		    " 搜索时有大写才大小写敏感
+set hlsearch		    " 搜索高亮
+set incsearch		    " 搜索时及时跳转
+set nowrapscan		    " 搜索到头不自动折返再搜索
+
+set nu			    " 显示当前行号
+set rnu			    " 显示相对行号
+set laststatus=2	    " 显示状态栏
+set showmode		    " 显示当前模式，Airline插件会显示模式
+set showcmd		    " 显示当前未完成命令的按键
+set cmdheight=2		    " 设置命令行的高度
+set ruler		    " 显示光标当前位置
+set list		    " 显示空白符
+set listchars=tab:▸\ ,trail:·,extends:↷,precedes:↶  " 设置空白符如何显示
+
+set wildmenu		    " 命令行补全文件名
+set wildignorecase	    " 补全忽略大小写
+set showmatch		    " 左括号匹配，无则响铃
+set matchtime=0		    " 括号匹配时间，单位0.1s
+
+set wrap		    " 长行回绕而非超屏
+set linebreak		    " 回绕时避免断词
+set scrolloff=5		    " 保持5行始终在光标之下或之上
+
+set autochdir		    " 自动切换工作目录
+set mouse=a		    " 启用鼠标
+set path=/usr/include/
+
+set whichwrap=<,>,[,]		" 允许插入模式与普通模式光标在从首尾跨行
+set backspace=indent,eol,start	" 允许<BS>键在插入模式删除：行首空白符、换行符、进入插入模式时光标之前的字符
+set virtualedit=block,onemore   " 光标可出现在无字符空间：块选取模式，其它模式最多只允许出现在最后一个字符之后的位置
+
+set hidden			" 切换tab时自动隐藏当前buffer
+set previewheight=15		" 设置preview窗口的高度
+
+set viminfo='100,<50,s10,h,n$HOME/.vim/viminfo
+set history=1000
+set noswapfile
+set nobackup
+set undofile
+set undodir=$/HOME/.vim/undo
+
+set foldmethod=syntax		" 基于语法折叠
+set nofoldenable		" 启动vim时不开启折叠
+set autoindent			" 基于上行的缩进
+set tabstop=8			" 默认的tab宽，不足则为空格
+set softtabstop			" 键入的tab宽
+set shiftwidth			" 缩进的tab宽
+" set expandtab			" 用空格代替tab，:retab恢复本行
+
+" 读取缓冲区时回到上次离开时的位置
+autocmd BufReadPost * '"
+" 写入vimrc时自动读取配置
+autocmd BufWritePost $MYVIMRC source $MYVIMRC
+" 读取vim命令行的输出到当前文件缓冲区
+command! -nargs=* Rcmd :let tmp=<q-args>|put =execute(tmp)
+
+
+
+" Buffer切换
+nnoremap <Space>n :bn<CR>
+nnoremap <Space>b :bp<CR>
+
+" Tab切换
+nnoremap <Leader>n :tabn<CR>
+nnoremap <Leader>b :tabp<CR>
+
+" Window切换
+function! Jump(i) abort
+  if winnr('$') >= a:i
+    exe a:i . 'wincmd w'
+  endif
+endfunction
+nnoremap <Space>1 :call Jump(1)<CR>
+nnoremap <Space>2 :call Jump(2)<CR>
+nnoremap <Space>3 :call Jump(3)<CR>
+nnoremap <Space>4 :call Jump(4)<CR>
+nnoremap <Space>5 :call Jump(5)<CR>
+
+" 普通模式
+nnoremap <Space>w :only<CR>
+nnoremap <Leader>h :nohl<CR>
+nnoremap  
+nnoremap  
+nnoremap  0
+nnoremap  $
+nnoremap <Space>o o<Esc><Up>
+nnoremap <Space>O O<Esc><Down>
+
+" 插入模式
+inoremap  ^
+inoremap  $
+inoremap  d^
+inoremap }<CR> {<CR>}<Up><CR>
+
+" 命令模式
+cnoremap  
+
+" 可视模式
+vnoremap  0
+vnoremap  $
+vnoremap  "+y
+
+
+" 若外层为tmux，则可适当降低等待延迟，因为tmux已经处理了按键延迟的问题
+if $TMUX != ''
+    set ttimeoutlen=20
+else
+    set ttimeoutlen=50
+endif

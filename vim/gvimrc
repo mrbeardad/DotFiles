@@ -1,0 +1,13 @@
+set listchars+=eol:↵
+set gfn=Source\ Code\ Pro\ Black\ Italic\ 10
+set guioptions=agit
+set guicursor=n:block,i:hor10
+set background=dark
+" set colorscheme=主题
+set cursorline           " 高亮显示当前行
+set cursorcolumn         " 高亮显示当前行
+" 离开窗口时关闭高亮行列
+autocmd WinLeave * set nocul nocursorcolumn
+autocmd WinEnter * set cul cursorcolumn
+behave xterm
+

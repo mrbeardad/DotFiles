@@ -9,7 +9,7 @@ alias pstree='pstree -Uup'
 alias free='free -wh'
 alias vmstat='vmstat -w'
 alias ip='ip -c'
-alias tmuxn='tmux new -s routin'
+alias tmuxn='tmux new -s'
 alias tmuxa='tmux a'
 alias expactf='expac --timefmt="%Y-%m-%d %T" "%l\t%n" | sort'
 # zsh中git插件的补充
