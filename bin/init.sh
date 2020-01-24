@@ -119,7 +119,10 @@ function chfs_cfg() {
 #安装额外工具
 function extra_tool() {
 
-    yay -S sendEmail htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix
+    yay -S sendEmail htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat
+    if [ ! -e ~/.cheat ]
+	mkdir ~/.cheat
+    cp Linux.note ~/.cheat
 
 }
 

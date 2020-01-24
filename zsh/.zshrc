@@ -5,6 +5,7 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 alias jobs='jobs -l'
+alias psa='ps axo stat,euid,ruid,tty,tpgid,sess,pgrp,ppid,pid,pcpu,pmem,comm'
 alias pstree='pstree -Uup'
 alias free='free -wh'
 alias vmstat='vmstat -w'
@@ -25,6 +26,15 @@ alias gbav='git branch -a -vv'
 alias glr='git ls-remote'
 alias gpd='git push -d'
 alias gpt='git push --tags'
+
+function seec() {
+    sed -n "/●$1/,/^$/p" ~/.cheat/Linux.note
+}
+
+function seep() {
+    sed -n "/○$1/,/^$/p" ~/.cheat/Linux.note
+}
+
 function man() {
         LESS_TERMCAP_md=$'\e[01;34m' \
 	LESS_TERMCAP_me=$'\e[0m' \
