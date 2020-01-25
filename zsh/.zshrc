@@ -19,6 +19,7 @@ alias grst='git restore --staged'
 alias gdtre='git diff-tree'
 alias gdt='git difftool --tool=gvimdiff3'
 alias gdts='git difftool --staged --tool=gvimdiff3'
+alias gmt='git difftool --staged --tool=gvimdiff3'
 alias gt='git tag'
 alias gta='git tag -a'
 alias gtd='git tag -d'
@@ -28,11 +29,19 @@ alias gpd='git push -d'
 alias gpt='git push --tags'
 
 function seec() {
-    sed -n "/●$1/,/^$/p" ~/.cheat/Linux.note
+    if [ "$1" == "-l" ] ;then
+	grep ● ~/.cheat/Linux.note
+	return $?
+    fi
+    sed -n "/●.*$1/,/^$/p" ~/.cheat/Linux.note
 }
 
 function seep() {
-    sed -n "/○$1/,/^$/p" ~/.cheat/Linux.note
+    if [ "$1" == "-l" ] ;then
+	grep ○ ~/.cheat/Linux.note
+	return $?
+    fi
+    sed -n "/○.*$1/,/^$/p" ~/.cheat/Linux.note
 }
 
 function man() {
