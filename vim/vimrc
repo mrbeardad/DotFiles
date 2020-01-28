@@ -2,7 +2,8 @@ filetype plugin indent on   " 设置加载对应文件类型的插件
 syntax enable		    " 开启语法高亮功能
 syntax on		    " 自动语法高亮
 
-colorscheme ron
+set background dark	    " 背景色调
+colorscheme ron		    " 颜色主题
 
 set nocompatible	    " 设置不兼容原始vi模式
 
@@ -63,6 +64,9 @@ autocmd BufReadPost * '"
 autocmd BufWritePost $MYVIMRC source $MYVIMRC
 " 读取vim命令行的输出到当前文件缓冲区
 command! -nargs=* Rcmd :let tmp=<q-args>|put =execute(tmp)
+" 普通模式与插入模式的行号切换
+autocmd InsertEnter set norn
+autocmd InsertLeave set rn
 
 
 
@@ -71,14 +75,19 @@ nnoremap <Space>n :bn<CR>
 nnoremap <Space>b :bp<CR>
 
 " Tab切换
-nnoremap <Leader>n :tabn<CR>
-nnoremap <Leader>b :tabp<CR>
+nnoremap <Leader>+ :tabn<CR>
+nnoremap <Leader>- :tabp<CR>
+nnoremap <Leader>1 :tabn 1<CR>
+nnoremap <Leader>2 :tabn 2<CR>
+nnoremap <Leader>3 :tabn 3<CR>
+nnoremap <Leader>4 :tabn 4<CR>
+nnoremap <Leader>5 :tabn 5<CR>
 
 " Window切换
 function! Jump(i) abort
-  if winnr('$') >= a:i
-    exe a:i . 'wincmd w'
-  endif
+    if winnr('$') >= a:i
+	exe a:i . 'wincmd w'
+    endif
 endfunction
 nnoremap <Space>1 :call Jump(1)<CR>
 nnoremap <Space>2 :call Jump(2)<CR>
@@ -87,20 +96,20 @@ nnoremap <Space>4 :call Jump(4)<CR>
 nnoremap <Space>5 :call Jump(5)<CR>
 
 " 普通模式
-nnoremap <Space>w :only<CR>
 nnoremap <Leader>h :nohl<CR>
 nnoremap  
 nnoremap  
 nnoremap  0
 nnoremap  $
-nnoremap <Space>o o<Esc><Up>
-nnoremap <Space>O O<Esc><Down>
+nnoremap <space>o  :<c-u>put =repeat(nr2char(10), v:count1)<cr><up>
+nnoremap <space>O  :<c-u>put! =repeat(nr2char(10), v:count1)<cr><down>
+nnoremap , v"+y
+nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
 " 插入模式
 inoremap  ^
 inoremap  $
 inoremap  d^
-inoremap }<CR> {<CR>}<Up><CR>
 
 " 命令模式
 cnoremap  
