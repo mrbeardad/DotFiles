@@ -1,13 +1,25 @@
 set listchars+=eol:↵
-set gfn=Source\ Code\ Pro\ Black\ Italic\ 10
+set gfn=Source\ Code\ Pro\ Black\ Italic\ 10.5
 set guioptions=agit
 set guicursor=n:block,i:hor10
 set background=dark
-" set colorscheme=主题
+set ttimeoutlen=20
 set cursorline           " 高亮显示当前行
-set cursorcolumn         " 高亮显示当前行
+" set cursorcolumn         " 高亮显示当前行，这选项可能导致光标移动的延迟
 " 离开窗口时关闭高亮行列
-autocmd WinLeave * set nocul nocursorcolumn
-autocmd WinEnter * set cul cursorcolumn
-behave xterm
+autocmd WinLeave * set nocul
+autocmd WinEnter * set cul
+
+colorscheme solarized
+
+autocmd BufWritePost $MYGVIMRC source $MYGVIMRC
+
+" devicons插件的配置
+let g:webdevicons_enable_startify = 1
+let g:webdevicons_enable_airline_tabline = 1
+let g:webdevicons_enable_airline_statusline = 1
+let g:webdevicons_enable_vimfiler = 1
+
+" 手动加载pacman下载的只想用于gvim的插件
+source /usr/share/vim/vimfiles/startify.vim
 

@@ -1,62 +1,66 @@
 filetype plugin indent on   " 设置加载对应文件类型的插件
-syntax enable		    " 开启语法高亮功能
-syntax on		    " 自动语法高亮
+syntax enable               " 开启语法高亮功能
+syntax on                   " 自动语法高亮
 
-set background dark	    " 背景色调
-colorscheme ron		    " 颜色主题
+set nocompatible            " 设置不兼容原始vi模式
 
-set nocompatible	    " 设置不兼容原始vi模式
+set ignorecase              " 搜索时忽略大小写
+set smartcase               " 搜索时有大写才大小写敏感
+set hlsearch                " 搜索高亮
+set incsearch               " 搜索时及时跳转
+set nowrapscan              " 搜索到头不自动折返再搜索
 
-set ignorecase		    " 搜索时忽略大小写
-set smartcase		    " 搜索时有大写才大小写敏感
-set hlsearch		    " 搜索高亮
-set incsearch		    " 搜索时及时跳转
-set nowrapscan		    " 搜索到头不自动折返再搜索
-
-set nu			    " 显示当前行号
-set rnu			    " 显示相对行号
-set laststatus=2	    " 显示状态栏
-set showmode		    " 显示当前模式，Airline插件会显示模式
-set showcmd		    " 显示当前未完成命令的按键
-set cmdheight=2		    " 设置命令行的高度
-set ruler		    " 显示光标当前位置
-set list		    " 显示空白符
+set nu                      " 显示当前行号
+set rnu                     " 显示相对行号
+set laststatus=2            " 显示状态栏
+set noshowmode              " 不显示当前模式，Airline插件会显示模式
+set showcmd                 " 显示当前未完成命令的按键
+set cmdheight=2             " 设置命令行的高度
+set ruler                   " 显示光标当前位置
+set list                    " 显示空白符
 set listchars=tab:▸\ ,trail:·,extends:↷,precedes:↶  " 设置空白符如何显示
 
-set wildmenu		    " 命令行补全文件名
-set wildignorecase	    " 补全忽略大小写
-set showmatch		    " 左括号匹配，无则响铃
-set matchtime=0		    " 括号匹配时间，单位0.1s
+set wildmenu                " 命令行补全文件名
+set wildignorecase          " 补全忽略大小写
+set showmatch               " 左括号匹配，无则响铃
+set matchtime=0             " 括号匹配时间，单位0.1s
 
-set wrap		    " 长行回绕而非超屏
-set linebreak		    " 回绕时避免断词
-set scrolloff=5		    " 保持5行始终在光标之下或之上
+set wrap                    " 长行回绕而非超屏
+set linebreak               " 回绕时避免断词
+set scrolloff=7             " 保持5行始终在光标之下或之上
 
-set autochdir		    " 自动切换工作目录
-set mouse=a		    " 启用鼠标
+set autochdir               " 自动切换工作目录
+set mouse=a                 " 启用鼠标
 set path=/usr/include/
+packadd SpaceVim
 
-set whichwrap=<,>,[,]		" 允许插入模式与普通模式光标在从首尾跨行
-set backspace=indent,eol,start	" 允许<BS>键在插入模式删除：行首空白符、换行符、进入插入模式时光标之前的字符
+set whichwrap=<,>,[,]           " 允许插入模式与普通模式光标在从首尾跨行
+set backspace=indent,eol,start  " 允许<BS>键在插入模式删除：行首空白符、换行符、进入插入模式时光标之前的字符
 set virtualedit=block,onemore   " 光标可出现在无字符空间：块选取模式，其它模式最多只允许出现在最后一个字符之后的位置
 
-set hidden			" 切换tab时自动隐藏当前buffer
-set previewheight=15		" 设置preview窗口的高度
+set hidden                      " 切换tab时自动隐藏当前buffer
+set previewheight=15            " 设置preview窗口的高度
 
 set viminfo='100,<50,s10,h,n$HOME/.vim/viminfo
 set history=1000
 set noswapfile
 set nobackup
 set undofile
-set undodir=$/HOME/.vim/undo
+" set  undodir=$/HOME/.vim/undo
 
-set foldmethod=syntax		" 基于语法折叠
-set nofoldenable		" 启动vim时不开启折叠
-set autoindent			" 基于上行的缩进
-set tabstop=8			" 默认的tab宽，不足则为空格
-set softtabstop			" 键入的tab宽
-set shiftwidth			" 缩进的tab宽
-" set expandtab			" 用空格代替tab，:retab恢复本行
+set foldmethod=syntax           " 基于语法折叠
+set nofoldenable                " 启动vim时不开启折叠
+set autoindent                  " 基于上行的缩进
+set tabstop=8                   " 默认的tab宽，不足则为空格
+set softtabstop=4               " 键入的tab宽
+set shiftwidth=4                " 缩进的tab宽
+set expandtab                   " 用空格代替tab，:retab恢复本行
+
+" set background dark           " 背景色调
+" colorscheme ron               " 颜色主题
+if !exists("$MYGVIMRC")
+    colorscheme ron
+endif
 
 " 读取缓冲区时回到上次离开时的位置
 autocmd BufReadPost * '"
@@ -86,7 +90,7 @@ nnoremap <Leader>5 :tabn 5<CR>
 " Window切换
 function! Jump(i) abort
     if winnr('$') >= a:i
-	exe a:i . 'wincmd w'
+        exe a:i . 'wincmd w'
     endif
 endfunction
 nnoremap <Space>1 :call Jump(1)<CR>
@@ -96,15 +100,18 @@ nnoremap <Space>4 :call Jump(4)<CR>
 nnoremap <Space>5 :call Jump(5)<CR>
 
 " 普通模式
-nnoremap <Leader>h :nohl<CR>
-nnoremap  
-nnoremap  
+nnoremap  5
+nnoremap  5
 nnoremap  0
 nnoremap  $
 nnoremap <space>o  :<c-u>put =repeat(nr2char(10), v:count1)<cr><up>
 nnoremap <space>O  :<c-u>put! =repeat(nr2char(10), v:count1)<cr><down>
-nnoremap , v"+y
+nnoremap , vy
 nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+nnoremap <Leader>w :setl nowrap<CR>
+nnoremap <Leader>i :IndentGuidesToggle<CR>
+nnoremap <Leader>h :nohl<CR>
+
 
 " 插入模式
 inoremap  ^
@@ -126,3 +133,29 @@ if $TMUX != ''
 else
     set ttimeoutlen=50
 endif
+
+
+" vim插件的参数
+
+" startify配置
+function! StartifyEntryFormat()
+    return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
+endfunction
+
+" airline配置
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme="vice"  " night_owl papercolor vice solorized
+let g:indent_guides_enable_on_vim_startup=1 " 随 vim 自启动
+"let g:indent_guides_start_level=2 " 从第二层开始可视化显示缩进
+let g:indent_guides_guide_size=1 " 色块宽度
+" let g:indent_guides_auto_colors = 0
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
+
+call plug#begin('~/.vim/plugged')
+
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'jaxbot/selective-undo.vim'
+
+call plug#end()

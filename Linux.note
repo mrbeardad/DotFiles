@@ -143,6 +143,11 @@
     ▪new和old不要在同一目录下
     ▪n为去掉的/个数
 
+●curl -o File URL
+●sh -c 'curl -fsSL URL'
+
+●col -x ：将tab替换为等宽space
+
 ●sendEmail
     -s：	SMTP服务器
     -f：	发送者的邮箱
@@ -1068,6 +1073,7 @@ R：恢复
 配置一次连接所需要的信息
 Host
 HostName
+Port
 User
 IdentitiesOnly
 IdentityFile

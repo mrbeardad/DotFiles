@@ -4,7 +4,7 @@
 function pacman_cfg() {
     pacman -Qs aria2 | grep -q 'local/aria2'
     if [ $? -ne 0 ] ;then
-	pacman -S aria2c
+	pacman -S aria2
     fi
 
     grep -q -E '[^#].*XferCommand' /etc/pacman.conf
@@ -22,13 +22,13 @@ function pacman_cfg() {
 	' >> /etc/pacman.conf
     fi
 
-    grep -E '[^#].*aliyun' /etc/pacman.d/mirrorlist
+    grep -E '[^#].*ustc.edu.cn' /etc/pacman.d/mirrorlist
     if [ $? -ne 0 ] ;then
-	aliyun='Server = http://mirrors.aliyun.com/archlinux/$repo/os/$arch'
-	wangyiyun='Server = http://mirrors.163.com/archlinux/$repo/os/$arch'
-	zkdyun='Server = http://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch'
+	ustc='Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch'
+	tsinghua='Server = https://mirrors.tuna.tsinghua.edu.cn/manjaro/stable/$repo/$arch'
+	tencent='Server = https://mirrors.cloud.tencent.com/manjaro/stable/$repo/$arch'
 
-	sed -i "/Generated/a## China\n\n$aliyun\n\n$wangyiyun\n\n$zkdyun" /etc/pacman.d/mirrorlist
+	sed -i "/Generated/a## China\n\n$ustc\n\n$tsing\n\n$tencent" /etc/pacman.d/mirrorlist
     fi
 
     #安装pacman额外工具
@@ -50,7 +50,7 @@ function pacman_cfg() {
     else
 	pacman_contrib=''
     fi
-    pacman -S $yay $expac $pacman_contrib
+    pacman -S $yay $expac $pacman_contrib base-devel
 
     #启动定时清理软件包
     systemctl status paccache.timer | grep -q 'active'
@@ -63,7 +63,7 @@ function pacman_cfg() {
 function zsh_cfg() {
 
     #下载oh-my-zsh
-    yay -S oh-my-zsh-git oh-my-zsh-powerline-theme-git powerline-fonts zsh-syntax-highlighting zsh-autosuggestions autojump
+    yay -S oh-my-zsh-git  powerline-fonts zsh-syntax-highlighting zsh-autosuggestions autojump
 
     #修改.zshrc中ZSH_THEME HYPHEN_INSENSITIVE ENABLE_CORRECTION=  COMPLETION_WAITING_DOTS HIST_STAMPS plugins
     sed -r -i "/ZSH_THEME/s/=.*/=agnoster-time/;
@@ -74,14 +74,44 @@ function zsh_cfg() {
 
     #添加alias和man() 
     cat zshrc >> ~/.zshrc
-    cp zsh/agnoster-time.zsh-theme ~/.oh-my-zsh/themes/
+    cp zsh/*.zsh-theme ~/.oh-my-zsh/themes/
+    chsh -s /bin/zsh
 }
 
-#手动配置ssh与sshd
-#请看文件sshconfig
+#配置vim
+function vim_cfg() {
+
+    if [ ! -e ~/.vim ] ;then
+	mkdir ~/.vim
+    fi
+
+    if [ -e ~/.vim/vimrc ] ;then
+	mv ~/.vim/vimrc{,.bak}
+    elif [ -e ~/.vimrc ] ;then
+	mv ~/.vimrc{,.bak}
+    fi
+    mkdir ~/.vim/undo
+    cp vim/vimrc ~/.vim/vimrc
+    cp vim/gvimrc ~/.vim/gvimrc
+}
+
 #systemd edit sshd.socket
 #/etc/ssh/sshd_config
 #~/.ssh/{config,authorized_keys}
+function ssh_cfg() {
+
+    mv /etc/ssh/sshd_config{,.bak}
+    cp ssh/sshd_config /etc/ssh/sshd_config
+    mv ~/.ssh/ssh_config{,.bak}
+    cp  ssh/ssh_config ~/.ssh/ssh_config
+    echo -e "\e[31mNow you need to push your ~/.ssh/id_ecdsa.pub to your github account\e[0m"
+}
+
+#配置systemd-journald
+function journal_cfg() {
+
+    sed -i '/\[Journal\]/a\SystemMaxUse=50M' /etc/systemd/journald.conf
+}
 
 #配置tmux
 function tmux_cfg() {
@@ -119,28 +149,26 @@ function chfs_cfg() {
 #安装额外工具
 function extra_tool() {
 
-    yay -S sendEmail htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat
-    if [ ! -e ~/.cheat ]
+#CLI工具
+    yay -S sendemail htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat ntfs-3g
+    if [ ! -e ~/.cheat ] ;then
 	mkdir ~/.cheat
     cp Linux.note ~/.cheat
-
+    fi
+#搜狗拼音
+    yay -S fcitx-sogoupinyin fcitx-im fcitx-configtool
+    echo -e 'export GTK_IM_MODULE=fcitx\nexport GTK_IM_MODULE=fcitx\nexport XMODIFIERS="@im=fcitx"' > ~/.xprofile
+#WPS
+    yay -S wps-office ttf-wps-fonts
+    sed -i '1a\export XMODIFIERS="@im=fcitx"\nexport QT_IM_MODULE="fcitx"\n' /usr/bin/wps
+#百度网盘
+    yay -S baidunetdisk-bin
+#QQ
+    yay -S qq-linux
+#网易云音乐
+    yay -S netease-cloud-music
 }
 
-#配置vim
-function vim_cfg() {
-
-    if [ ! -e ~/.vim ] ;then
-	mkdir ~/.vim
-    fi
-
-    if [ -e ~/.vim/vimrc ] ;then
-	mv ~/.vim/vimrc{,.bak}
-    elif [ -e ~/.vimrc ] ;then
-	mv ~/.vimrc{,.bak}
-    fi
-    cp vim/vimrc ~/.vim/vimrc
-    cp vim/gvimrc ~/.vim/gvimrc
-}
 
 #function main() {
 
