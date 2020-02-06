@@ -1021,6 +1021,8 @@ i/info：reg，all
 ▪提取：xv
 ▪注：BSD风格：cmd  opts  lib.a  a.o
 
+●cscope -bqR
+
 ●OBJDUMP：-dx
 ●READELF
 ●GPROF

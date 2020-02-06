@@ -1,25 +1,195 @@
 set listchars+=eol:↵
 set gfn=Source\ Code\ Pro\ Black\ Italic\ 10.5
 set guioptions=agit
-set guicursor=n:block,i:hor10
+set guicursor=n:block,i:hor10,a:blinkon0
 set background=dark
-set ttimeoutlen=20
+set completeopt=menu,menuone
+packadd SpaceVim
+
+colorscheme SpaceVim
+
 set cursorline           " 高亮显示当前行
-" set cursorcolumn         " 高亮显示当前行，这选项可能导致光标移动的延迟
-" 离开窗口时关闭高亮行列
+" set cursorcolumn       " 高亮显示当前行，次选项可能导致光标移动的延迟
+" 切换窗口时自动关闭和打开高亮行列
 autocmd WinLeave * set nocul
 autocmd WinEnter * set cul
 
-colorscheme solarized
+"===============================
+" => 手动加载GVIM专用插件
+"===============================
+call plug#load('vim-startify',
+	    \ 'rainbow_parentheses.vim',
+            \ 'indentLine',
+            \ 'vim-cpp-enhanced-highlight',
+            \ 'tagbar',
+            \ 'nerdtree',
+            \ 'vim-nerdtree-syntax-highlight',
+            \ 'ultisnips',
+            \ 'vim-snippets',
+            \ 'asyncrun.vim',
+            \ 'ale',
+            \ 'youcompleteme',
+	    \)
 
-autocmd BufWritePost $MYGVIMRC source $MYGVIMRC
 
-" devicons插件的配置
-let g:webdevicons_enable_startify = 1
-let g:webdevicons_enable_airline_tabline = 1
-let g:webdevicons_enable_airline_statusline = 1
-let g:webdevicons_enable_vimfiler = 1
+"================================
+" => Startify配置  
+"================================
+function! StartifyEntryFormat()
+    return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
+endfunction
 
-" 手动加载pacman下载的只想用于gvim的插件
-source /usr/share/vim/vimfiles/startify.vim
 
+"================================
+" => Tagbar配置  
+"================================
+let g:tagbar_left=1
+let g:tagbar_width = 30
+noremap <silent> <F2> :TagbarToggle<CR>
+
+
+"================================
+" => NERDTree配置  
+"================================
+let NERDTreeMinimalUI=1 "NERDTree 子窗口中不显示冗余帮助信息
+let NERDTreeWinPos='right'
+noremap <silent> <F3> :NERDTreeToggle<CR>
+
+
+"================================
+" => Rainbow-Parentheses配置
+"================================
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
+
+"================================
+" => UltiSnnips配置  
+"================================
+" UltiSnips 的 tab 键与 YCM 冲突，重新设定
+let g:UltiSnipsJumpForwardTrigger="<M-n>"
+let g:UltiSnipsJumpBackwardTrigger="<M-b>"
+let g:UltiSnipsExpandTrigger="<M-m>"
+let g:UltiSnipsListSnippets="<M-l>"
+let g:ycm_use_ultisnips_completer = 1
+"function! g:UltiSnips_Complete()
+"    call UltiSnips#ExpandSnippet()
+"    if g:ulti_expand_res == 0
+"        if pumvisible()
+"            return "\<C-n>"
+"    else
+"        call UltiSnips#JumpForwards()
+"            if g:ulti_jump_forwards_res == 0
+"                return "\<TAB>"
+"            endif
+"        endif
+"    endif
+"    return ""
+"endfunction
+"
+"function! g:UltiSnips_Reverse()
+"    call UltiSnips#JumpBackwards()
+"    if g:ulti_jump_backwards_res == 0
+"        return "\<C-P>"
+"    endif
+"
+"    return ""
+"endfunction
+"if !exists("g:UltiSnipsJumpForwardTrigger")
+"    let g:UltiSnipsJumpForwardTrigger = "<tab>"
+"endif
+"if !exists("g:UltiSnipsJumpBackwardTrigger")
+"    let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+"endif
+"au InsertEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger     . " <C-R>=g:UltiSnips_Complete()<cr>"
+"au InsertEnter * exec "inoremap <silent> " .     g:UltiSnipsJumpBackwardTrigger . " <C-R>=g:UltiSnips_Reverse()<cr>"
+
+
+"================================
+" => YCM配置
+"================================
+let g:ycm_filetype_whitelist = { 
+        \ "c":1,
+        \ "cpp":1,
+        \ "vim":1,
+        \ "sh":1,
+        \ "zsh":1,
+        \ }
+let g:ycm_semantic_triggers =  {
+        \ 'c,cpp,python,java,sh': ['re!\w{2}'],
+        \ }
+let g:ycm_add_preview_to_completeopt = 0
+set completeopt=menu,menuone
+let g:ycm_use_clangd = 0
+let g:ycm_show_diagnostics_ui = 0
+let g:ycm_min_num_identifier_candidate_chars = 2
+let g:ycm_complete_in_comments=1
+let g:ycm_complete_in_strings=1
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_key_list_stop_completion = ['']
+let g:ycm_confirm_extra_conf=0
+let g:ycm_cache_omnifunc=0  " 禁止缓存匹配项，每次都重新生成匹配项
+let g:ycm_seed_identifiers_with_syntax=1 " 语法关键字补全
+let g:ycm_key_invoke_completion = '<c-z>'
+" let g:ycm_max_num_candidates = 20
+" let g:ycm_max_num_identifier_candidates = 20
+" highlight PMenu ctermfg=0 ctermbg=242 guifg=black guibg=#5f5f87
+" highlight PMenuSel ctermfg=242 ctermbg=8 guifg=darkgrey guibg=black
+nnoremap gp :YcmCompleter GetParent<CR>
+nnoremap gt :YcmCompleter GetType<CR>
+nnoremap jd :YcmCompleter GoToDeclaration<CR>
+nnoremap jD :YcmCompleter GoToDefinition<CR>
+
+
+"==========  ALE配置  ===========
+let g:ale_completion_enabled = 0
+let g:ale_linters = {
+      \   'cpp': ['g++', 'cppcheck', 'clang','clangcheck'],
+      \   'c': ['gcc', 'cppcheck', 'clang'],
+      \   'python': ['pylint'],
+      \   'sh': ['shell'],
+\}
+let g:ale_linters_explicit = 1
+" let g:ale_echo_delay = 20
+" let g:ale_lint_delay = 500
+" let g:ale_set_highlights = 0
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
+let g:ale_lint_on_enter = 0
+let g:ale_c_gcc_options = '-Wall -Wextra -O2 -std=c11'
+let g:ale_c_clang_options = '-Wall -Wextra -O2 -std=c11'
+let g:ale_c_cppcheck_options = '--enable=all -std=c11'
+let g:ale_cpp_gcc_options = '-Wall -Wextra -O2 -std=c++17'
+let g:ale_cpp_clang_options = '-Wall -Wextra -O2 -std=c++17'
+" let g:ale_cpp_cppcheck_options = '--enable=style --std=c++17'
+" let g:ale_cpp_clangcheck_options = '-p=c++17'
+let g:ale_sign_error = '✗'
+let g:ale_sign_warning = '⚡'
+let g:ale_echo_msg_error_str = '✗'
+let g:ale_echo_msg_warning_str = '⚡'
+let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
+hi! clear SpellBad
+hi! clear SpellCap
+hi! clear SpellRare
+hi! SpellBad gui=undercurl guisp=red
+hi! SpellCap gui=undercurl guisp=yellow
+hi! SpellRare gui=undercurl guisp=magenta
+nnoremap <silent> jb :ALENextWrap<CR>
+nnoremap <silent> jn :ALEPreviousWrap<CR>
+
+
+"================================
+" => Asyncrun配置
+"================================
+let g:asyncrun_open = 7
+" 任务结束时候响铃提醒
+let g:asyncrun_bell = 1
+" 设置 F10 打开/关闭 Quickfix 窗口
+if exist
+!mkdir -p /tmp/AsyncRun/TMPFILES
+nnoremap <silent> <F5> :call asyncrun#quickfix_toggle(6)<CR>
+nnoremap <silent> <space>lc :AsyncRun g++ -std=c++17 -O2 "$(VIM_FILEPATH)" -o "/tmp/$(VIM_FILENOEXT)"<CR>
+nnoremap <silent> <space>lr :AsyncRun -raw -cwd=$(VIM_FILEDIR) "/tmp/$(VIM_FILENOEXT)"<CR>

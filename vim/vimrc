@@ -1,54 +1,41 @@
-filetype plugin indent on   " 设置加载对应文件类型的插件
-syntax enable               " 开启语法高亮功能
-syntax on                   " 自动语法高亮
+" 在开头设置此项才能成功
+cs add ~/Projects/cscope.out
+filetype plugin indent on       " 设置加载对应文件类型的插件
+syntax enable                   " 开启语法高亮功能
+syntax on                       " 自动语法高亮
 
-set nocompatible            " 设置不兼容原始vi模式
-
-set ignorecase              " 搜索时忽略大小写
-set smartcase               " 搜索时有大写才大小写敏感
-set hlsearch                " 搜索高亮
-set incsearch               " 搜索时及时跳转
-set nowrapscan              " 搜索到头不自动折返再搜索
-
-set nu                      " 显示当前行号
-set rnu                     " 显示相对行号
-set laststatus=2            " 显示状态栏
-set noshowmode              " 不显示当前模式，Airline插件会显示模式
-set showcmd                 " 显示当前未完成命令的按键
-set cmdheight=2             " 设置命令行的高度
-set ruler                   " 显示光标当前位置
-set list                    " 显示空白符
-set listchars=tab:▸\ ,trail:·,extends:↷,precedes:↶  " 设置空白符如何显示
-
-set wildmenu                " 命令行补全文件名
-set wildignorecase          " 补全忽略大小写
-set showmatch               " 左括号匹配，无则响铃
-set matchtime=0             " 括号匹配时间，单位0.1s
-
-set wrap                    " 长行回绕而非超屏
-set linebreak               " 回绕时避免断词
-set scrolloff=7             " 保持5行始终在光标之下或之上
-
-set autochdir               " 自动切换工作目录
-set mouse=a                 " 启用鼠标
-set path=/usr/include/
-packadd SpaceVim
-
+set nocompatible                " 设置不兼容原始vi模式
+set ignorecase                  " 搜索时忽略大小写
+set smartcase                   " 搜索时有大写才大小写敏感
+set hlsearch                    " 搜索高亮
+set incsearch                   " 搜索时及时跳转
+set nowrapscan                  " 搜索到头不自动折返再搜索
+set nu                          " 显示当前行号
+set rnu                         " 显示相对行号
+set laststatus=2                " 显示状态栏
+set noshowmode                  " 不显示当前模式，Airline会显示
+set noruler                     " 不显示光标当前位置，Airline会显示
+set showcmd                     " 显示当前未完成命令的按键
+set cmdheight=1                 " 设置命令行的高度
+set list                        " 显示空白符
+set listchars=tab:▸\ ,trail:·,extends:↷,precedes:↶      " 设置空白符如何显示
+set lazyredraw                  " 关闭不必要的屏幕重绘
+set wildmenu                    " 命令行补全文件名
+set wildignorecase              " 补全忽略大小写
+set showmatch                   " 左括号匹配，无则响铃
+set matchtime=0                 " 括号匹配时间，单位0.1s
+set wrap                        " 长行回绕而非超屏
+" set linebreak                 " 回绕时避免断词
+set scrolloff=7                 " 保持5行始终在光标之下或之上
+set autochdir                   " 自动切换工作目录
+set mouse=a                     " 启用鼠标
+set path=/usr/include/          " 设置PATH目录方便跳转
 set whichwrap=<,>,[,]           " 允许插入模式与普通模式光标在从首尾跨行
 set backspace=indent,eol,start  " 允许<BS>键在插入模式删除：行首空白符、换行符、进入插入模式时光标之前的字符
 set virtualedit=block,onemore   " 光标可出现在无字符空间：块选取模式，其它模式最多只允许出现在最后一个字符之后的位置
-
 set hidden                      " 切换tab时自动隐藏当前buffer
 set previewheight=15            " 设置preview窗口的高度
-
-set viminfo='100,<50,s10,h,n$HOME/.vim/viminfo
-set history=1000
-set noswapfile
-set nobackup
-set undofile
-" set  undodir=$/HOME/.vim/undo
-
-set foldmethod=syntax           " 基于语法折叠
+set foldmethod=manual           " 设置折叠方式
 set nofoldenable                " 启动vim时不开启折叠
 set autoindent                  " 基于上行的缩进
 set tabstop=8                   " 默认的tab宽，不足则为空格
@@ -56,76 +43,18 @@ set softtabstop=4               " 键入的tab宽
 set shiftwidth=4                " 缩进的tab宽
 set expandtab                   " 用空格代替tab，:retab恢复本行
 
-" set background dark           " 背景色调
-" colorscheme ron               " 颜色主题
-if !exists("$MYGVIMRC")
-    colorscheme ron
-endif
 
 " 读取缓冲区时回到上次离开时的位置
-autocmd BufReadPost * '"
-" 写入vimrc时自动读取配置
-autocmd BufWritePost $MYVIMRC source $MYVIMRC
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" 写入vimrc时自动读取配置，增加++nested以解决Airline写回文件时导致的颜色失调问题，不自动reload gvimrc（卡顿）
+autocmd BufWritePost $MYVIMRC ++nested source $MYVIMRC
+
 " 读取vim命令行的输出到当前文件缓冲区
-command! -nargs=* Rcmd :let tmp=<q-args>|put =execute(tmp)
-" 普通模式与插入模式的行号切换
-autocmd InsertEnter set norn
-autocmd InsertLeave set rn
+command! -nargs=* Rcmd :let tmp=<q-args> | put =execute(tmp)
 
-
-
-" Buffer切换
-nnoremap <Space>n :bn<CR>
-nnoremap <Space>b :bp<CR>
-
-" Tab切换
-nnoremap <Leader>+ :tabn<CR>
-nnoremap <Leader>- :tabp<CR>
-nnoremap <Leader>1 :tabn 1<CR>
-nnoremap <Leader>2 :tabn 2<CR>
-nnoremap <Leader>3 :tabn 3<CR>
-nnoremap <Leader>4 :tabn 4<CR>
-nnoremap <Leader>5 :tabn 5<CR>
-
-" Window切换
-function! Jump(i) abort
-    if winnr('$') >= a:i
-        exe a:i . 'wincmd w'
-    endif
-endfunction
-nnoremap <Space>1 :call Jump(1)<CR>
-nnoremap <Space>2 :call Jump(2)<CR>
-nnoremap <Space>3 :call Jump(3)<CR>
-nnoremap <Space>4 :call Jump(4)<CR>
-nnoremap <Space>5 :call Jump(5)<CR>
-
-" 普通模式
-nnoremap  5
-nnoremap  5
-nnoremap  0
-nnoremap  $
-nnoremap <space>o  :<c-u>put =repeat(nr2char(10), v:count1)<cr><up>
-nnoremap <space>O  :<c-u>put! =repeat(nr2char(10), v:count1)<cr><down>
-nnoremap , vy
-nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
-nnoremap <Leader>w :setl nowrap<CR>
-nnoremap <Leader>i :IndentGuidesToggle<CR>
-nnoremap <Leader>h :nohl<CR>
-
-
-" 插入模式
-inoremap  ^
-inoremap  $
-inoremap  d^
-
-" 命令模式
-cnoremap  
-
-" 可视模式
-vnoremap  0
-vnoremap  $
-vnoremap  "+y
-
+" sudo写入文件
+command! W execute 'w !sudo tee % > /dev/null' <bar> edit!
 
 " 若外层为tmux，则可适当降低等待延迟，因为tmux已经处理了按键延迟的问题
 if $TMUX != ''
@@ -135,27 +64,221 @@ else
 endif
 
 
-" vim插件的参数
+"================================
+" => 设置临时文件
+"================================
+set viminfo='100,<50,s10,h,n$HOME/.vim/viminfo
+set history=1000
+set noswapfile
+set nobackup
+set undofile
 
-" startify配置
-function! StartifyEntryFormat()
-    return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
+
+"================================
+" => Buffer切换
+"================================
+nnoremap <silent> <space>n :bn<CR>
+nnoremap <silent> <space>b :bp<CR>
+
+
+"================================
+" => Tab切换
+"================================
+nnoremap <silent> <leader>n :tabnext<CR>
+nnoremap <silent> <leader>b :tabprevious<CR>
+nnoremap <silent> <leader>1 :tabnext 1<CR>
+nnoremap <silent> <leader>2 :tabnext 2<CR>
+nnoremap <silent> <leader>3 :tabnext 3<CR>
+nnoremap <silent> <leader>4 :tabnext 4<CR>
+nnoremap <silent> <leader>5 :tabnext 5<CR>
+
+
+"================================
+" => Window切换
+"================================
+function! Jump(i) abort
+    if winnr('$') >= a:i
+        exe a:i . 'wincmd w'
+    endif
 endfunction
+nnoremap <silent> <space>1 :call Jump(1)<CR>
+nnoremap <silent> <space>2 :call Jump(2)<CR>
+nnoremap <silent> <space>3 :call Jump(3)<CR>
+nnoremap <silent> <space>4 :call Jump(4)<CR>
+nnoremap <silent> <space>5 :call Jump(5)<CR>
 
-" airline配置
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme="vice"  " night_owl papercolor vice solorized
-let g:indent_guides_enable_on_vim_startup=1 " 随 vim 自启动
-"let g:indent_guides_start_level=2 " 从第二层开始可视化显示缩进
-let g:indent_guides_guide_size=1 " 色块宽度
-" let g:indent_guides_auto_colors = 0
-" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
-" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
 
+"================================
+" => 普通模式快捷键
+"================================
+nnoremap  7
+nnoremap  7
+nnoremap  0
+nnoremap  $
+nnoremap <silent> , vy
+nnoremap <silent> Y y$
+nnoremap <silent> <space>o  :<c-u>put =repeat(nr2char(10), v:count1)<CR><up>
+nnoremap <silent> <space>O  :<c-u>put! =repeat(nr2char(10), v:count1)<CR><down>
+nnoremap <silent> <Leader>h :nohl<CR>
+nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+
+function! ToggleWrap()
+    if &wrap == 1
+        setl nowrap
+    else
+        setl wrap
+    endif
+endfunction
+nnoremap <silent> <Leader>w :call ToggleWrap()<CR>
+
+function! ToggleVirtuledit()
+    if &Virtuledit =~ "all"
+        setl virtualedit=block,onemore
+    else
+        setl virtualedit=all
+    endif
+endfunction
+nnoremap <silent> <leader>v :call ToggleVirtuledit()<CR>
+
+
+"================================
+" => 插入模式快捷键
+"================================
+inoremap  <home>
+inoremap  <end>
+nnoremap  5
+nnoremap  5
+inoremap  d^
+inoremap  d$
+
+
+"================================
+" => 命令模式快捷键
+"================================
+cnoremap  
+
+
+"================================
+" => 可视模式快捷键
+"================================
+vnoremap  0
+vnoremap  $
+vnoremap  "+y
+
+
+"================================
+" => 终端VIM的配置
+"================================
+if !has("gui_running")
+
+    colorscheme ron
+
+    " 插入模式与普通模式的光标形状切换
+    let &t_SI = "\e[6 q"
+    let &t_EI = "\e[2 q"
+    " 其他选项（替换\ _ [后）的数字：
+    " Ps = 0  -> blinking block.
+    " Ps = 1  -> blinking block (default).
+    " Ps = 2  -> steady block.
+    " Ps = 3  -> blinking underline.
+    " Ps = 4  -> steady underline.
+    " Ps = 5  -> blinking bar (xterm).
+    " Ps = 6  -> steady bar (xterm).
+endif
+
+
+"================================
+" => Cscope快捷键
+"================================
+set cscopeprg=/usr/bin/cscope
+" set nocst
+set cscopequickfix=s-,c-,d-,i-,t-,e-,a-
+nnoremap  <silent> <space>cs :cscope find s  <c-r>=expand('<cword>')<cr><cr>
+nnoremap  <silent> <space>ca :cscope find a  <c-r>=expand('<cword>')<cr><cr>
+nnoremap  <silent> <space>cg :cscope find g  <c-r>=expand('<cword>')<cr><cr>
+nnoremap  <silent> <space>cc :cscope find c  <c-r>=expand('<cword>')<cr><cr>
+nnoremap  <silent> <space>ct :cscope find t  <c-r>=expand('<cword>')<cr><cr>
+nnoremap  <silent> <space>ce :cscope find e  <c-r>=expand('<cword>')<cr><cr>
+nnoremap  <silent> <space>cf :cscope find f  <c-r>=expand('<cfile>')<cr><cr>
+nnoremap  <silent> <space>ci :cscope find i ^<c-r>=expand('<cfile>')<cr>$<cr>
+nnoremap  <silent> <space>cd :cscope find d  <c-r>=expand('<cword>')<cr><cr>
+nnoremap  <silent> <space>cr :cd ~/Projects<CR>:AsyncRun cscope -qbR<CR>:call asyncrun#quickfix_toggle(6)<CR>:cs reset<CR>
+command! Csh :echo "
+            \ \n s   symbol    ：查找该符号的引用
+            \ \n g   global    ：查找该符号的定义
+            \ \n a   assign    ：查找该符号被赋值的位置
+            \ \n c   calls     ：查找调用当前函数的位置
+            \ \n d   depends   ：查找当前函数调用的函数
+            \ \n t   text      ：查找出现该字符串的位置
+            \ \n e   egrep     ：使用 egrep 搜索当前单词
+            \ \n f   file      ：打开文件名
+            \ \n i   includes  ：查询引入了当前文件的文件
+            \"
+
+
+"================================
+" => vim-plug配置
+"================================
 call plug#begin('~/.vim/plugged')
 
-Plug 'nathanaelkane/vim-indent-guides'
-Plug 'jaxbot/selective-undo.vim'
+Plug 'mhinz/vim-startify', { 'on': [] }
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'kien/rainbow_parentheses.vim', { 'on': [] }
+Plug 'Yggdroot/indentLine', { 'on': [] }
+Plug 'mbbill/undotree'
+Plug 'jiangmiao/auto-pairs'
+Plug 'octol/vim-cpp-enhanced-highlight', { 'on': [] }
+Plug 'majutsushi/tagbar', { 'on': [] }
+Plug 'preservim/nerdtree', { 'on': [] }
+Plug 'preservim/nerdcommenter'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on': [] }
+Plug 'SirVer/ultisnips', { 'on': [] }
+Plug 'honza/vim-snippets', { 'on': [] }
+Plug 'dense-analysis/ale', { 'on': [] }
+Plug 'https://gitee.com/mirrors/youcompleteme.git', { 'on': [] }
+Plug 'skywind3000/asyncrun.vim', { 'on': [] }
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-indent'
+Plug 'kana/vim-textobj-syntax'
+Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim', 'java'] }
+Plug 'sgur/vim-textobj-parameter'
+Plug 'vim-scripts/fcitx.vim'
+Plug 'ryanoasis/vim-devicons'
+Plug 'tpope/vim-fugitive'
+" Plug 'jaxbot/selective-undo.vim'
 
 call plug#end()
+
+
+"================================
+" => Devicons插件的配置
+"================================
+let g:webdevicons_enable_startify = 1
+let g:webdevicons_enable_airline_tabline = 1
+let g:webdevicons_enable_airline_statusline = 1
+let g:webdevicons_enable_nerdtree = 1
+
+
+"================================
+" => Airline配置
+"================================
+let g:airline_theme="behelit"   " night_owl papercolor vice solorized behelit
+let g:airline_powerline_fonts = 1
+let g:airline_detect_spell=0
+let g:airline_extensions = ['branch', 'tabline']
+let g:airline_filetype_overrides = { 'tagbar': [ 'Tagbar', '' ], 'undotree': ['UndoTree', ''] }
+
+
+
+"================================
+" => IndentLine配置
+"================================
+let g:indentLine_fileType = ['c', 'cpp']
+nnoremap <silent> <leader>il :IndentLinesToggle<CR>
+
+
+"================================
+" => Undotree配置
+"================================
+nnoremap <silent> <F4> :UndotreeToggle<CR>
