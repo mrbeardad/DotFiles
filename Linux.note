@@ -1186,76 +1186,110 @@ grm
 
 ●git mv
 gmv
+▪注：需要通过git mv来移动，不能马后炮
 
-●git restore
-grs(回溯)，grst(撤销)
+●git restore <path>
+grs(回溯W)，grst(撤销S)
 
 ●git status
-gst，gss
+gst，gss(左W右S)
 
 ●git diff
 gd，gds，gdt，gdts，gdtre
-▪模式
-[<path>]：比较W-S或S-B指定文件
+▪例：
+[<path>]：比较W-S或S-H指定文件
 <commit> [<path>]：比较W-C或S-C指定文件
 <commit> <commit> [<path>]：比较指定两个C的指定文件
 
 ●git commit
 gc，gc!，gca，gca!
+▪注：
+a代表直接W->H提交
+!代表覆盖上次提交
 
 ●git tag
 gt，gta，gtd
-gtl，gtv :查看标签
-git show TAG
-▪添加标签
+gtl，gtv
+gsh TAG
+▪例：
 git tag -a TAG -m 'discription'：强标签
 git tag TAG-lw：轻量标签
 
 ●git show
 gsh
 
-●git log
+●git log [<file>|<branch>|<commit>]
 glg，glola，glgga
 
 ●git checkout
-gco，gcb
+gco
+gcb，gct
 gcm，gcd
+▪例：
+git checkout -b <branch> <remote>/<branch>：创建、检出并跟踪
+git checkout --track <remote>/<branch>：本分支直接跟踪
 
-●git branch
+●git branch <branch>：会当前HEAD创建分支
 gb，gbav
 gbda：删除已合并的分支
 gbnm：查看未合并的分支
 
-●git merge
-gm，gmtvim，gma
+●git merge <branch>：合并<branch>到本分支
+gm，gmt，gma
 
 ●git rebase
 grb
 grba，grbs，grbc
-git rebase BCH
-git rebase 主BCH  被BAH
+▪例：
+git rebase <branch>：本分支变基到<branch>
+git rebase <主branch> <被branch>
 
 ●git remote
-gr，grv，grsh
+gr
+grv，grsh
 gra，grrm，grmv
-glr
-git remote add RPO URL
+glr(查看请求ref)
+▪例：
+git remote add <remote> URL
+▪流程：
+gra -> gcb|gct -> gf|gl
 
-●git fetch
-gf，gfa
+●git fetch [<remote>]
+gf
 
-●git pull
-gl，gup
+●git pull [<remote>]
+gl
 
 ●git push
 gp，gpd，gpta
-▪同步到remote
-git push RPO BCH：推送本地分支到远程同名分支
-git push RPO LBCH:RBCH
-git push RPO --delete BCH：销毁远程仓库某分支
-git push RPO TAG
+▪例：
+git push <remote> <本地branch>：推送本地分支<branch>到远程同名分支
+git push <remote> <本地ref>:<远程ref>
+git push <remote> --delete <branch>：销毁远程仓库某分支
+git push <remote> <tag>
 git push --tags
-git push RPO :refs/tags/tagname
+git push <remote> :refs/tags/tagname
+
+●git stach
+gsta，gstall(包括untraced)，gstp，gstl
+
+●git cherry-pick <commit>：复制(合并)目标commit到当前分支
+gcp，gcpa，gcpc
+
+●git bundle create <file> HEAD <branch>
+▪注：
+最好带上HEAD自动checkout
+可用git clone <file> [<dirname>]重建目录
+
+●git format-patch
+▪例：
+git format-patch <branch> -n    ：目标分支最近n次更新
+git format-patch <commit>       ：本分支自目标commit(不含)之后的更新
+git format-patch <commit1>..<commit2>   ：两个commit(包含)之间的更新
+
+●git apply
+▪例：
+git apply [--check|--stat] ：直接更新|确认是否冲突|确认哪些更改
 
 
 ○基础操作
