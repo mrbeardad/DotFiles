@@ -3,7 +3,7 @@ Description="Cut HTTP File Server"
 
 [Service]
 Type="simple"
-ExecStart=/usr/local/bin/chfs --path=/srv/chfs --port=80
+ExecStart=/usr/local/bin/chfs --path=/srv/chfs
 
 [Install]
 WantedBy="multi-user.target"

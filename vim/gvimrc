@@ -1,47 +1,39 @@
 set listchars+=eol:↵
-set gfn=Source\ Code\ Pro\ Black\ Italic\ 10.5
+set gfn=Source\ Code\ Pro\ Black\ Italic\ 10.5  " 命令行输入 set gfn=* 打开系统字体选择面板
+" set gfn=Hack\ Bold\ Italic\ 10
+" set gfn=IBM\ Plex\ Mono\ SemiBold\ Italic\ 10.5
 set guioptions=agit
 set guicursor=n:block,i:hor10,a:blinkon0
 set background=dark
-set completeopt=menu,menuone
-packadd SpaceVim
 
-colorscheme SpaceVim
+colorscheme palenight | let g:airline_theme="atomic"
+" 注意，以下后排注释为其余搭配的Airline主题，Airline的atomic主题会改变状态栏格式，不喜欢的可以把源码中的第55行开始的那段代码注释
+" colorscheme NeoSolarized | let g:airline_theme="atomic"     " angr, solarized, solarized_flood
+" colorscheme tender       | let g:airline_theme="tender"     " cool
+" colorscheme one          | let g:airline_theme="one"        " fruit_punch, fairyfloss
+" colorscheme palenight    | let g:airline_theme="fairyfloss" " palenight
+" colorscheme neodark      | let g:airline_theme="night_owl"  " neodark, behelit
+" colorscheme gruvbox      | let g:airline_theme="alduin"     " gruvbox, fairyfloss
 
 set cursorline           " 高亮显示当前行
 " set cursorcolumn       " 高亮显示当前行，次选项可能导致光标移动的延迟
+
 " 切换窗口时自动关闭和打开高亮行列
 autocmd WinLeave * set nocul
 autocmd WinEnter * set cul
 
-"===============================
-" => 手动加载GVIM专用插件
-"===============================
-call plug#load('vim-startify',
-	    \ 'rainbow_parentheses.vim',
-            \ 'indentLine',
-            \ 'vim-cpp-enhanced-highlight',
-            \ 'tagbar',
-            \ 'nerdtree',
-            \ 'vim-nerdtree-syntax-highlight',
-            \ 'ultisnips',
-            \ 'vim-snippets',
-            \ 'asyncrun.vim',
-            \ 'ale',
-            \ 'youcompleteme',
-	    \)
-
 
 "================================
-" => Startify配置  
+" => Startify配置
 "================================
+" 开启devicons图标
 function! StartifyEntryFormat()
     return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
 endfunction
 
 
 "================================
-" => Tagbar配置  
+" => Tagbar配置
 "================================
 let g:tagbar_left=1
 let g:tagbar_width = 30
@@ -49,11 +41,139 @@ noremap <silent> <F2> :TagbarToggle<CR>
 
 
 "================================
-" => NERDTree配置  
+" => NERDTree配置
 "================================
-let NERDTreeMinimalUI=1 "NERDTree 子窗口中不显示冗余帮助信息
+let NERDTreeMinimalUI=1     " NERDTree 子窗口中不显示冗余帮助信息
 let NERDTreeWinPos='right'
 noremap <silent> <F3> :NERDTreeToggle<CR>
+
+
+"================================
+" => UltiSnips配置  
+"================================
+" 设置<M-D>触发UltiSnips补全，解决UltiSnips与YCM按键冲突网上有教程加两个函数与映射解决，我更愿意如此
+" inoremap <silent> <m-d> <esc><right>:call UltiSnips#ExpandSnippet()<CR>
+let g:UltiSnipsExpandTrigger = '<m-d>'
+let g:UltiSnipsJumpBackwardTrigger = '<m-b>'
+let g:UltiSnipsJumpForwardTrigger = '<m-n>'
+
+
+"================================
+" => YCM配置
+"================================
+" 添加白名单，节省性能资源
+let g:ycm_filetype_whitelist = { 
+        \ "c":1,
+        \ "cpp":1,
+        \ "vim":1,
+        \ "sh":1,
+        \ "zsh":1,
+        \ }
+" 两个字符便触发语义补全，由此导致Snips无法显示在补全列表
+let g:ycm_semantic_triggers =  {
+        \ 'c,cpp,python,java,sh': ['re!\w{2}'],
+        \ }
+let g:ycm_add_preview_to_completeopt = 0    " 不显示预览窗口
+set completeopt=menu,menuone                " 不显示预览窗口
+let g:ycm_use_clangd = 0                    " 只用libclang不用clangd
+let g:ycm_show_diagnostics_ui = 0           " 不进行语法检测
+let g:ycm_confirm_extra_conf=0              " 自动确认 .ycm_confirm_extra_conf
+let g:ycm_cache_omnifunc=0                  " 禁止缓存匹配项，每次都重新生成匹配项
+let g:ycm_seed_identifiers_with_syntax=1    " 语法关键字补全
+let g:ycm_key_invoke_completion = '<c-c>'   " 按 <c-c> 手动触发语义补全
+let g:ycm_min_num_identifier_candidate_chars = 2
+let g:ycm_complete_in_comments=0
+let g:ycm_complete_in_strings=1
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_collect_identifiers_from_tags_files = 0
+let g:ycm_key_list_stop_completion = ['<CR>']
+" let g:ycm_max_num_candidates = 20
+" let g:ycm_max_num_identifier_candidates = 20
+" highlight PMenu ctermfg=0 ctermbg=242 guifg=black guibg=#5f5f87
+" highlight PMenuSel ctermfg=242 ctermbg=8 guifg=darkgrey guibg=black
+nnoremap gp :YcmCompleter GetParent<CR>
+nnoremap gt :YcmCompleter GetType<CR>
+nnoremap go :YcmCompleter GoTo<CR>
+
+
+"==========  ALE配置  ===========
+" 显示指定linters
+let g:ale_linters = {
+      \   'cpp': ['g++', 'cppcheck', 'clang', 'clang-check'],
+      \   'c': ['gcc', 'cppcheck', 'clang'],
+      \   'python': ['pylint'],
+      \   'sh': ['shell'],
+\}
+let g:ale_linters_explicit = 1
+let g:ale_completion_enabled = 0
+let g:ale_echo_delay = 20
+let g:ale_lint_delay = 500
+let g:ale_set_highlights = 0
+let g:ale_echo_msg_format = '[%linter%] %s  [%severity%]'
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
+let g:ale_lint_on_enter = 0
+let g:ale_c_gcc_options = '-Wall -Wextra -O2 -std=c11'
+let g:ale_c_clang_options = '-Wall -Wextra -O2 -std=c11'
+let g:ale_c_cppcheck_options = '--enable=all -std=c11'
+let g:ale_cpp_gcc_options = '-Wall -Wextra -O2 -std=c++17'
+let g:ale_cpp_clang_options = '-Wall -Wextra -O2 -std=c++17'
+let g:ale_cpp_cppcheck_options = '--enable=style --std=c++17'
+let g:ale_cpp_clangcheck_options = '-p=c++17'
+let g:ale_sign_error = '✗'
+let g:ale_sign_warning = '⚡'
+let g:ale_echo_msg_error_str = '✗'
+let g:ale_echo_msg_warning_str = '⚡'
+let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
+hi! clear SpellBad
+hi! clear SpellCap
+hi! clear SpellRare
+hi! SpellBad gui=undercurl guisp=red
+hi! SpellCap gui=undercurl guisp=yellow
+hi! SpellRare gui=undercurl guisp=magenta
+nnoremap <silent> gb :ALENextWrap<CR>
+nnoremap <silent> gn :ALEPreviousWrap<CR>
+
+
+"================================
+" => Asyncrun配置
+"================================
+let g:asyncrun_open = 7     " 非零则执行命令后开启quickfix窗口，窗口高度为该变量的值
+" let g:asyncrun_bell = 1   " 任务结束时候响铃提醒
+
+" 此句会造成gvim启动崩溃，故加在zshrc中
+" if !isdirectory('/tmp/AsyncRun')
+"     !mkdir -p /tmp/AsyncRun/TMPFILES
+" endif
+
+" function! Quick_C_R()
+"     let Quick_C_R_TIME = strftime('%M%H%S')
+"     let Quick_C_R_PATH_W = '/tmp/AsyncRun/TMPFILES/' . @%
+"     let Quick_C_R_PATH_R = '/tmp/AsyncRun/' . @% . '.' . Quick_C_R_TIME
+"     execute 'write!' Quick_C_R_PATH_W
+"     execute 'AsyncRun -mode=term -rows=10 g++ -std=c++17 -O3 -o ' Quick_C_R_PATH_R Quick_C_R_PATH_W '&& time ' Quick_C_R_PATH_R
+" endfunction
+" nnoremap <silent> <space>lr :call Quick_C_R()<CR>
+
+function! Quick_C_O()
+    let Quick_C_O_TIME = strftime('%M%S%H')
+    let Quick_C_O_FILE = expand('%:t')
+    let Quick_C_O_PATH_W = '/tmp/AsyncRun/TMPFILES/' . Quick_C_O_FILE
+    let Quick_C_O_PATH_R = '/tmp/AsyncRun/' . Quick_C_O_FILE . '.' . Quick_C_O_TIME
+    execute 'write!' Quick_C_O_PATH_W
+    execute 'AsyncRun g++ -std=c++17 -g -Og -fno-inline -o ' Quick_C_O_PATH_R Quick_C_O_PATH_W
+endfunction
+function! Quick_C_R()
+    let Quick_C_R_TIME = strftime('%M%H%S')
+    let Quick_C_R_FILE = expand('%:t')
+    let Quick_C_R_PATH_R = '/tmp/AsyncRun/' . Quick_C_R_FILE . '.' . Quick_C_R_TIME
+    execute 'write !g++ -std=c++17 -xc++ - -o ' . Quick_C_R_PATH_R
+    execute 'AsyncRun -mode=term -rows=10  time ' Quick_C_R_PATH_R
+endfunction
+nnoremap <silent> <space>lc :call Quick_C_O()<CR>
+nnoremap <silent> <space>lr :call Quick_C_R_L()<CR>
+nnoremap <silent> <space>lt :call asyncrun#quickfix_toggle(6)<CR>
+
 
 
 "================================
@@ -66,130 +186,23 @@ au Syntax * RainbowParenthesesLoadBraces
 
 
 "================================
-" => UltiSnnips配置  
+" => Echodoc配置
 "================================
-" UltiSnips 的 tab 键与 YCM 冲突，重新设定
-let g:UltiSnipsJumpForwardTrigger="<M-n>"
-let g:UltiSnipsJumpBackwardTrigger="<M-b>"
-let g:UltiSnipsExpandTrigger="<M-m>"
-let g:UltiSnipsListSnippets="<M-l>"
-let g:ycm_use_ultisnips_completer = 1
-"function! g:UltiSnips_Complete()
-"    call UltiSnips#ExpandSnippet()
-"    if g:ulti_expand_res == 0
-"        if pumvisible()
-"            return "\<C-n>"
-"    else
-"        call UltiSnips#JumpForwards()
-"            if g:ulti_jump_forwards_res == 0
-"                return "\<TAB>"
-"            endif
-"        endif
-"    endif
-"    return ""
-"endfunction
-"
-"function! g:UltiSnips_Reverse()
-"    call UltiSnips#JumpBackwards()
-"    if g:ulti_jump_backwards_res == 0
-"        return "\<C-P>"
-"    endif
-"
-"    return ""
-"endfunction
-"if !exists("g:UltiSnipsJumpForwardTrigger")
-"    let g:UltiSnipsJumpForwardTrigger = "<tab>"
-"endif
-"if !exists("g:UltiSnipsJumpBackwardTrigger")
-"    let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-"endif
-"au InsertEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger     . " <C-R>=g:UltiSnips_Complete()<cr>"
-"au InsertEnter * exec "inoremap <silent> " .     g:UltiSnipsJumpBackwardTrigger . " <C-R>=g:UltiSnips_Reverse()<cr>"
+let g:echodoc#enable_at_startup = 1
+autocmd VimEnter * EchoDocEnable
 
 
-"================================
-" => YCM配置
-"================================
-let g:ycm_filetype_whitelist = { 
-        \ "c":1,
-        \ "cpp":1,
-        \ "vim":1,
-        \ "sh":1,
-        \ "zsh":1,
-        \ }
-let g:ycm_semantic_triggers =  {
-        \ 'c,cpp,python,java,sh': ['re!\w{2}'],
-        \ }
-let g:ycm_add_preview_to_completeopt = 0
-set completeopt=menu,menuone
-let g:ycm_use_clangd = 0
-let g:ycm_show_diagnostics_ui = 0
-let g:ycm_min_num_identifier_candidate_chars = 2
-let g:ycm_complete_in_comments=1
-let g:ycm_complete_in_strings=1
-let g:ycm_collect_identifiers_from_comments_and_strings = 1
-let g:ycm_key_list_stop_completion = ['']
-let g:ycm_confirm_extra_conf=0
-let g:ycm_cache_omnifunc=0  " 禁止缓存匹配项，每次都重新生成匹配项
-let g:ycm_seed_identifiers_with_syntax=1 " 语法关键字补全
-let g:ycm_key_invoke_completion = '<c-z>'
-" let g:ycm_max_num_candidates = 20
-" let g:ycm_max_num_identifier_candidates = 20
-" highlight PMenu ctermfg=0 ctermbg=242 guifg=black guibg=#5f5f87
-" highlight PMenuSel ctermfg=242 ctermbg=8 guifg=darkgrey guibg=black
-nnoremap gp :YcmCompleter GetParent<CR>
-nnoremap gt :YcmCompleter GetType<CR>
-nnoremap jd :YcmCompleter GoToDeclaration<CR>
-nnoremap jD :YcmCompleter GoToDefinition<CR>
-
-
-"==========  ALE配置  ===========
-let g:ale_completion_enabled = 0
-let g:ale_linters = {
-      \   'cpp': ['g++', 'cppcheck', 'clang','clangcheck'],
-      \   'c': ['gcc', 'cppcheck', 'clang'],
-      \   'python': ['pylint'],
-      \   'sh': ['shell'],
-\}
-let g:ale_linters_explicit = 1
-" let g:ale_echo_delay = 20
-" let g:ale_lint_delay = 500
-" let g:ale_set_highlights = 0
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_lint_on_text_changed = 'normal'
-let g:ale_lint_on_insert_leave = 1
-let g:ale_lint_on_enter = 0
-let g:ale_c_gcc_options = '-Wall -Wextra -O2 -std=c11'
-let g:ale_c_clang_options = '-Wall -Wextra -O2 -std=c11'
-let g:ale_c_cppcheck_options = '--enable=all -std=c11'
-let g:ale_cpp_gcc_options = '-Wall -Wextra -O2 -std=c++17'
-let g:ale_cpp_clang_options = '-Wall -Wextra -O2 -std=c++17'
-" let g:ale_cpp_cppcheck_options = '--enable=style --std=c++17'
-" let g:ale_cpp_clangcheck_options = '-p=c++17'
-let g:ale_sign_error = '✗'
-let g:ale_sign_warning = '⚡'
-let g:ale_echo_msg_error_str = '✗'
-let g:ale_echo_msg_warning_str = '⚡'
-let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
-hi! clear SpellBad
-hi! clear SpellCap
-hi! clear SpellRare
-hi! SpellBad gui=undercurl guisp=red
-hi! SpellCap gui=undercurl guisp=yellow
-hi! SpellRare gui=undercurl guisp=magenta
-nnoremap <silent> jb :ALENextWrap<CR>
-nnoremap <silent> jn :ALEPreviousWrap<CR>
-
-
-"================================
-" => Asyncrun配置
-"================================
-let g:asyncrun_open = 7
-" 任务结束时候响铃提醒
-let g:asyncrun_bell = 1
-" 设置 F10 打开/关闭 Quickfix 窗口
-if exist
-!mkdir -p /tmp/AsyncRun/TMPFILES
-nnoremap <silent> <F5> :call asyncrun#quickfix_toggle(6)<CR>
-nnoremap <silent> <space>lc :AsyncRun g++ -std=c++17 -O2 "$(VIM_FILEPATH)" -o "/tmp/$(VIM_FILENOEXT)"<CR>
-nnoremap <silent> <space>lr :AsyncRun -raw -cwd=$(VIM_FILEDIR) "/tmp/$(VIM_FILENOEXT)"<CR>
+"===============================
+" => 手动加载GVIM专用插件
+"===============================
+call plug#load('vim-startify',
+	    \ 'rainbow_parentheses.vim',
+            \ 'indentLine',
+            \ 'vim-cpp-enhanced-highlight',
+            \ 'ultisnips',
+            \ 'vim-snippets',
+            \ 'asyncrun.vim',
+            \ 'ale',
+            \ 'youcompleteme',
+            \ 'echodoc.vim',
+	    \)

@@ -2,24 +2,16 @@
 
 #配置pacman
 function pacman_cfg() {
-    pacman -Qs aria2 | grep -q 'local/aria2'
-    if [ $? -ne 0 ] ;then
-	pacman -S aria2
-    fi
 
-    grep -q -E '[^#].*XferCommand' /etc/pacman.conf
+    grep -q -E '[^#]*XferCommand' /etc/pacman.conf
     if [ $? -ne 0 ] ;then
-	XferCommand1='/usr/bin/aria2c --allow-overwrite=true --continue=true --file-allocation=none --log-level=error'
-	XferCommand2=' --max-tries=2 --max-connection-per-server=2 --max-file-not-found=5 --min-split-size=5M --no-conf --remote-time=true --summary-interval=60 --timeout=5 --dir=/ --out %o %u'
-	sed -i "/#Color/s/#//; /\[options\]/aXferCommand = $XferCommand1$XferCommand2" /etc/pacman.conf
+	XferCommand='/usr/bin/aria2c --allow-overwrite=true --continue=true --file-allocation=none --log-level=error --max-tries=2 --max-connection-per-server=2 --max-file-not-found=5 --min-split-size=5M --no-conf --remote-time=true --summary-interval=60 --timeout=5 --dir=/ --out %o %u'
+	sudo sed -i "/#Color/s/#//; /\[options\]/aXferCommand = $XferCommand" /etc/pacman.conf
     fi
 
     grep -q '\[archlinuxcn\]' /etc/pacman.conf
     if [ $? -ne 0 ] ;then
-	echo '[archlinuxcn]
-	SigLevel = Optional TrustAll
-	Server = https://chinanet.mirrors.ustc.edu.cn/archlinuxcn/$arch
-	' >> /etc/pacman.conf
+	echo -e '[archlinuxcn]\nSigLevel = Optional TrustAll\nServer = https://chinanet.mirrors.ustc.edu.cn/archlinuxcn/$arch' >> /etc/pacman.conf
     fi
 
     grep -E '[^#].*ustc.edu.cn' /etc/pacman.d/mirrorlist
@@ -32,6 +24,13 @@ function pacman_cfg() {
     fi
 
     #安装pacman额外工具
+    pacman -Qs aria2 | grep -q 'local/aria2'
+    if [ $? -ne 0 ] ;then
+        aria2='aria2'
+    else
+        aria2=''
+    fi
+
     pacman -Qs yay | grep -q 'local/yay'
     if [ $? -ne 0 ] ;then
 	yay='yay'
@@ -50,12 +49,12 @@ function pacman_cfg() {
     else
 	pacman_contrib=''
     fi
-    pacman -S $yay $expac $pacman_contrib base-devel
+
+    pacman -S $aria2 $yay $expac $pacman_contrib base-devel
 
     #启动定时清理软件包
-    systemctl status paccache.timer | grep -q 'active'
     if [ $? -ne 0 ] ;then
-	systemctl enable --now paccache.timer
+	sudo systemctl enable --now paccache.timer
     fi
 }
 
@@ -76,6 +75,11 @@ function zsh_cfg() {
     cat zshrc >> ~/.zshrc
     cp zsh/*.zsh-theme ~/.oh-my-zsh/themes/
     chsh -s /bin/zsh
+    #添加Linux笔记，用seec和seep查询
+    if [ ! -e ~/.cheat ] ;then
+	mkdir ~/.cheat
+    cp Linux.note ~/.cheat
+    fi
 }
 
 #配置vim
@@ -90,28 +94,41 @@ function vim_cfg() {
     elif [ -e ~/.vimrc ] ;then
 	mv ~/.vimrc{,.bak}
     fi
-    mkdir ~/.vim/undo
-    cp vim/vimrc ~/.vim/vimrc
-    cp vim/gvimrc ~/.vim/gvimrc
+
+    if [ -e ~/.vim/gvimrc ] ;then
+	mv ~/.vim/gvimrc{,.bak}
+    elif [ -e ~/.gvimrc ] ;then
+	mv ~/.gvimrc{,.bak}
+    fi
+
+    cp -f vim/vimrc ~/.vim/vimrc
+    cp -f vim/gvimrc ~/.vim/gvimrc
+
+    yay -S gvim vim-plug cmake ctags gperf
+
+    echo -e '\e[32m Note:\e[m The plugin "YouCompleteMe" can be download form your Arch/Manjaro mirrors. You may need to modify you vimrc if do so.'
+     
+    echo -e ' And the plugin "LeaderF" can work with gtags, you can download it at http://tamacom.com/global/global-6.6.4.tar.gz ,and you need to compile it in your machine.'
+    echo -e ' How to do is written on the website, and donot forget to \e33m"sudo make install"'
+
+    echo -e '\e[32mStartup your vim and run the command ":PlugInstall"'
 }
 
-#systemd edit sshd.socket
-#/etc/ssh/sshd_config
-#~/.ssh/{config,authorized_keys}
 function ssh_cfg() {
 
     mv /etc/ssh/sshd_config{,.bak}
     cp ssh/sshd_config /etc/ssh/sshd_config
     mv ~/.ssh/ssh_config{,.bak}
     cp  ssh/ssh_config ~/.ssh/ssh_config
-    echo -e "\e[31mNow you need to push your ~/.ssh/id_ecdsa.pub to your github account\e[0m"
-}
+    sudo systemctl enable --now sshd.socket
+    echo -e "\e[33m Note:\e[m Now you need to push your ~/.ssh/id_ecdsa.pub to your github account"
+    echo -e 'To generate public private key, run command: \e[32mssh-keygen -t ecdsa -b 512 -C "yourname@youremail"'
 
-#配置systemd-journald
-function journal_cfg() {
-
+    #找不到好地方放，就放这儿吧，虽然跟ssh没多大关系
     sed -i '/\[Journal\]/a\SystemMaxUse=50M' /etc/systemd/journald.conf
+
 }
+
 
 #配置tmux
 function tmux_cfg() {
@@ -138,7 +155,7 @@ function chfs_cfg() {
 
     cd -
     cp chfs/chfs.{service,socket} /etc/systemd/system/
-    useradd -r -s/usr/bin/nologin chfs
+    chmod 755 /usr/local/bin/chfs
     mkdir /srv/chfs
     chmod 755 /srv/chfs
     systemctl daemon-reload
@@ -146,27 +163,23 @@ function chfs_cfg() {
     set +e
 }
 
-#安装额外工具
-function extra_tool() {
+#安装额外的CLI工具、桌面软件、GNOME扩展
+function extra() {
 
-#CLI工具
+    #CLI工具
     yay -S sendemail htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat ntfs-3g
-    if [ ! -e ~/.cheat ] ;then
-	mkdir ~/.cheat
-    cp Linux.note ~/.cheat
-    fi
-#搜狗拼音
-    yay -S fcitx-sogoupinyin fcitx-im fcitx-configtool
+
+    #百度网盘，QQ，网易云音乐，搜狗拼音，WPS
+    yay -S baidunetdisk-bin qq-linux netease-cloud-music fcitx-sogoupinyin fcitx-im fcitx-configtool wps-office ttf-wps-fonts flameshot google-chrome
+    #搜狗拼音配置
     echo -e 'export GTK_IM_MODULE=fcitx\nexport GTK_IM_MODULE=fcitx\nexport XMODIFIERS="@im=fcitx"' > ~/.xprofile
-#WPS
-    yay -S wps-office ttf-wps-fonts
+    #WPS配置
     sed -i '1a\export XMODIFIERS="@im=fcitx"\nexport QT_IM_MODULE="fcitx"\n' /usr/bin/wps
-#百度网盘
-    yay -S baidunetdisk-bin
-#QQ
-    yay -S qq-linux
-#网易云音乐
-    yay -S netease-cloud-music
+
+    #GNOME扩展
+    yay -S majave-gtk-theme breeze-hacked-cursor-theme-bin papirus-icon-theme adapta-gtk-theme-bin adobe-source-han-sans-cn-fonts tela-icon-theme-git coverflow-alt-tab system-monitor gnome-shell-extension-coverflow-alt-tab gnome-shell-extension-system-monitor-git
+    curl -o /usr/local/bin http://archibold.io/sh/archibold
+
 }
 
 
