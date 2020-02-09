@@ -101,13 +101,16 @@ function vim_cfg() {
 	mv ~/.gvimrc{,.bak}
     fi
 
-    cp -f vim/vimrc ~/.vim/vimrc
-    cp -f vim/gvimrc ~/.vim/gvimrc
+    if [ ! -e ~/.local/bin ] ;then
+        mkdir ~/.local/bin
+    fi
+    cp  vim/vimrc ~/.vim/vimrc
+    cp  vim/gvimrc ~/.vim/gvimrc
+    cp  bin/quickrun_time ~/.local/bin
 
     yay -S gvim vim-plug cmake ctags gperf
 
     echo -e '\e[32m Note:\e[m The plugin "YouCompleteMe" can be download form your Arch/Manjaro mirrors. You may need to modify you vimrc if do so.'
-     
     echo -e ' And the plugin "LeaderF" can work with gtags, you can download it at http://tamacom.com/global/global-6.6.4.tar.gz ,and you need to compile it in your machine.'
     echo -e ' How to do is written on the website, and donot forget to \e33m"sudo make install"'
 

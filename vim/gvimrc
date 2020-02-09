@@ -87,24 +87,22 @@ let g:ycm_complete_in_strings=1
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_tags_files = 0
 let g:ycm_key_list_stop_completion = ['<CR>']
-" let g:ycm_max_num_candidates = 20
-" let g:ycm_max_num_identifier_candidates = 20
-" highlight PMenu ctermfg=0 ctermbg=242 guifg=black guibg=#5f5f87
-" highlight PMenuSel ctermfg=242 ctermbg=8 guifg=darkgrey guibg=black
 nnoremap gp :YcmCompleter GetParent<CR>
 nnoremap gt :YcmCompleter GetType<CR>
 nnoremap go :YcmCompleter GoTo<CR>
 
 
-"==========  ALE配置  ===========
+"================================
+" => ALE配置
+"================================
 " 显示指定linters
-let g:ale_linters = {
-      \   'cpp': ['g++', 'cppcheck', 'clang', 'clang-check'],
-      \   'c': ['gcc', 'cppcheck', 'clang'],
-      \   'python': ['pylint'],
-      \   'sh': ['shell'],
-\}
-let g:ale_linters_explicit = 1
+" let g:ale_linters = {
+"       \   'cpp': ['g++', 'cppcheck', 'clang', 'clang-check'],
+"       \   'c': ['gcc', 'cppcheck', 'clang'],
+"       \   'python': ['pylint'],
+"       \   'sh': ['shell'],
+" \}
+" let g:ale_linters_explicit = 1
 let g:ale_completion_enabled = 0
 let g:ale_echo_delay = 20
 let g:ale_lint_delay = 500
@@ -122,8 +120,10 @@ let g:ale_cpp_cppcheck_options = '--enable=style --std=c++17'
 let g:ale_cpp_clangcheck_options = '-p=c++17'
 let g:ale_sign_error = '✗'
 let g:ale_sign_warning = '⚡'
+let g:ale_sign_info = '‼'
 let g:ale_echo_msg_error_str = '✗'
 let g:ale_echo_msg_warning_str = '⚡'
+let g:ale_echo_msg_info_str = '‼'
 let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
 hi! clear SpellBad
 hi! clear SpellCap
@@ -136,6 +136,18 @@ nnoremap <silent> gn :ALEPreviousWrap<CR>
 
 
 "================================
+" => Syntastic配置
+"================================
+" let g:syntastic_error_symbol='✗'
+" 设置警告符号
+" let g:syntastic_warning_symbol='‼'
+" 是否在打开文件时检查
+" let g:syntastic_check_on_open=0
+" 是否在保存文件后检查
+" let g:syntastic_check_on_wq=1
+
+
+"================================
 " => Asyncrun配置
 "================================
 let g:asyncrun_open = 7     " 非零则执行命令后开启quickfix窗口，窗口高度为该变量的值
@@ -143,7 +155,7 @@ let g:asyncrun_open = 7     " 非零则执行命令后开启quickfix窗口，窗
 
 " 此句会造成gvim启动崩溃，故加在zshrc中
 " if !isdirectory('/tmp/AsyncRun')
-"     !mkdir -p /tmp/AsyncRun/TMPFILES
+"     !mkdir /tmp/AsyncRun
 " endif
 
 " function! Quick_C_R()
@@ -154,24 +166,24 @@ let g:asyncrun_open = 7     " 非零则执行命令后开启quickfix窗口，窗
 "     execute 'AsyncRun -mode=term -rows=10 g++ -std=c++17 -O3 -o ' Quick_C_R_PATH_R Quick_C_R_PATH_W '&& time ' Quick_C_R_PATH_R
 " endfunction
 " nnoremap <silent> <space>lr :call Quick_C_R()<CR>
-
+let g:Quick_R_Args=''
 function! Quick_C_O()
     let Quick_C_O_TIME = strftime('%M%S%H')
     let Quick_C_O_FILE = expand('%:t')
-    let Quick_C_O_PATH_W = '/tmp/AsyncRun/TMPFILES/' . Quick_C_O_FILE
-    let Quick_C_O_PATH_R = '/tmp/AsyncRun/' . Quick_C_O_FILE . '.' . Quick_C_O_TIME
-    execute 'write!' Quick_C_O_PATH_W
-    execute 'AsyncRun g++ -std=c++17 -g -Og -fno-inline -o ' Quick_C_O_PATH_R Quick_C_O_PATH_W
+    let Quick_C_O_PATH = '/tmp/AsyncRun/' . Quick_C_O_FILE . '.' . Quick_C_O_TIME
+    execute 'write !g++ -std=c++17 -g -Og -fno-inline -xc++ - -o ' . Quick_C_O_PATH
+    execute 'AsyncRun echo "File has been compiled at ' . Quick_C_O_PATH .'"'
 endfunction
 function! Quick_C_R()
     let Quick_C_R_TIME = strftime('%M%H%S')
     let Quick_C_R_FILE = expand('%:t')
-    let Quick_C_R_PATH_R = '/tmp/AsyncRun/' . Quick_C_R_FILE . '.' . Quick_C_R_TIME
-    execute 'write !g++ -std=c++17 -xc++ - -o ' . Quick_C_R_PATH_R
-    execute 'AsyncRun -mode=term -rows=10  time ' Quick_C_R_PATH_R
+    let Quick_C_R_PATH = '/tmp/AsyncRun/' . Quick_C_R_FILE . '.' . Quick_C_R_TIME
+    execute 'write !g++ -std=c++17 -xc++ - -o ' . Quick_C_R_PATH
+    execute 'AsyncRun -mode=term -rows=16 quickrun_time ' . Quick_C_R_PATH . g:Quick_R_Args
 endfunction
+command! -nargs=1 QuickArgs let g:Quick_R_Args = <q-args>
 nnoremap <silent> <space>lc :call Quick_C_O()<CR>
-nnoremap <silent> <space>lr :call Quick_C_R_L()<CR>
+nnoremap <silent> <space>lr :call Quick_C_R()<CR><c-w><up>
 nnoremap <silent> <space>lt :call asyncrun#quickfix_toggle(6)<CR>
 
 
@@ -190,6 +202,19 @@ au Syntax * RainbowParenthesesLoadBraces
 "================================
 let g:echodoc#enable_at_startup = 1
 autocmd VimEnter * EchoDocEnable
+
+
+"================================
+" => Cpp_Enhanced_Highlight配置
+"================================
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_posix_standard = 1
+" let g:cpp_experimental_simple_template_highlight = 1  " which works in most cases, but can be a little slow on large files
+let g:cpp_experimental_template_highlight = 1           " which is a faster implementation but has some corner cases where it doesn't work.
+let g:cpp_concepts_highlight = 1
+let g:cpp_no_function_highlight = 1
 
 
 "===============================

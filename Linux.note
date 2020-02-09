@@ -1197,9 +1197,9 @@ gst，gss(左W右S)
 ●git diff
 gd，gds，gdt，gdts，gdtre
 ▪例：
-[<path>]：比较W-S或S-H指定文件
-<commit> [<path>]：比较W-C或S-C指定文件
-<commit> <commit> [<path>]：比较指定两个C的指定文件
+[<path>]：比较W-S或S-H
+<commit> [<path>]：比较W-C或S-C
+<commit> <commit> [<path>]：比较C-C
 
 ●git commit
 gc，gc!，gca，gca!
@@ -1208,7 +1208,7 @@ a代表直接W->H提交
 !代表覆盖上次提交
 
 ●git tag
-gt，gta，gtd
+gt
 gtl，gtv
 gsh TAG
 ▪例：
@@ -1241,7 +1241,7 @@ gm，gmt，gma
 grb
 grba，grbs，grbc
 ▪例：
-git rebase <branch>：本分支变基到<branch>
+git rebase <主branch>：本分支变基到<branch>
 git rebase <主branch> <被branch>
 
 ●git remote
@@ -1252,7 +1252,7 @@ glr(查看请求ref)
 ▪例：
 git remote add <remote> URL
 ▪流程：
-gra -> gcb|gct -> gf|gl
+gra -> gcb|gct -> gf|gl -> gco -> gc -> gm|grb -> gp
 
 ●git fetch [<remote>]
 gf
@@ -1265,6 +1265,7 @@ gp，gpd，gpta
 ▪例：
 git push <remote> <本地branch>：推送本地分支<branch>到远程同名分支
 git push <remote> <本地ref>:<远程ref>
+git push <remote> <本地branch>:<远程branch>
 git push <remote> --delete <branch>：销毁远程仓库某分支
 git push <remote> <tag>
 git push --tags
@@ -1288,6 +1289,7 @@ git format-patch <commit>       ：本分支自目标commit(不含)之后的更�
 git format-patch <commit1>..<commit2>   ：两个commit(包含)之间的更新
 
 ●git apply
+gap
 ▪例：
 git apply [--check|--stat] ：直接更新|确认是否冲突|确认哪些更改
 

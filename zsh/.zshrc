@@ -122,16 +122,15 @@ alias expactf='expac --timefmt="%Y-%m-%d %T" "%l\t%n" | sort'
 alias gmv='git mv'
 alias grst='git restore --staged'
 alias gdtre='git diff-tree'
-alias gdt='git difftool --tool=gvimdiff3'
+alias gdt='git difftool --tool=vimdiff3'
 alias gdts='git difftool --staged --tool=vimdiff3'
 alias gmt='git difftool --staged --tool=vimdiff3'
 alias gt='git tag'
 alias gbav='git branch -a -vv'
 alias gct='git checkout --track'
 alias glr='git ls-remote'
-alias gpd='git push -d'
 alias gpt='git push --tags'
-alias gfp='git format-patch '
+alias gfp='git format-patch'
 
 function seec() {
     if [[ -n "$1" && "$1" == "-l" ]] ;then
@@ -164,5 +163,5 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 #为gvim中自定义的Quick_C_R函数执行，若在gvimrc中执行会导致gvim崩溃
 if [ ! -e /tmp/AsyncRun/TMPFILES ] ;then
-    mkdir -p /tmp/AsyncRun/TMPFILES
+    mkdir /tmp/AsyncRun
 fi

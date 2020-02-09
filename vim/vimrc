@@ -24,8 +24,8 @@ set showmatch                   " 左括号匹配，无则响铃
 set matchtime=0                 " 括号匹配时间，单位0.1s
 set nowrap                      " 长行超屏而非回绕，用<leader>w切换
 " set linebreak                 " 回绕时避免断词
-set scrolloff=1               " 保持5行始终在光标之下或之上
-" set autochdir                 " 自动切换工作目录
+set scrolloff=0                 " 保持n行始终在光标之下或之上
+set autochdir                   " 自动切换工作目录
 set mouse=a                     " 启用鼠标
 set path=/usr/include/c++/9.2.0,. " 设置PATH目录方便跳转
 set whichwrap=<,>,[,]           " 允许插入模式与普通模式光标在从首尾跨行
@@ -72,12 +72,12 @@ set undofile
 "================================
 nnoremap <silent> <space>n :bn<CR>
 nnoremap <silent> <space>b :bp<CR>
-nnoremap <silent> 1 :b 1<CR>
-nnoremap <silent> 2 :b 2<CR>
-nnoremap <silent> 3 :b 3<CR>
-nnoremap <silent> 4 :b 4<CR>
-nnoremap <silent> 5 :b 5<CR>
-nnoremap <silent> 6 :b 6<CR>
+nnoremap <silent> <esc>1 :b 1<CR>
+nnoremap <silent> <esc>2 :b 2<CR>
+nnoremap <silent> <esc>3 :b 3<CR>
+nnoremap <silent> <esc>4 :b 4<CR>
+nnoremap <silent> <esc>5 :b 5<CR>
+nnoremap <silent> <esc>6 :b 6<CR>
 
 
 "================================
@@ -106,6 +106,7 @@ nnoremap <silent> <space>3 :call Jump(3)<CR>
 nnoremap <silent> <space>4 :call Jump(4)<CR>
 nnoremap <silent> <space>5 :call Jump(5)<CR>
 nnoremap <silent> <space>6 :call Jump(6)<CR>
+nnoremap <silent> <tab> :wincmd w<CR>
 
 
 "================================
@@ -295,14 +296,14 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on':  'NERDTreeToggle' } " �
 Plug 'preservim/nerdcommenter'                          " 按 <leader>cc 注释该行代码，按 <leader>cu 取消注释
 Plug 'SirVer/ultisnips', { 'on': [] }                   " 输入代码片段缩写后按 <M-D> 自动补全完整代码，可以按snips的语法自己添加片段
 Plug 'honza/vim-snippets', { 'on': [] }                 " 上述插件的代码片段
-Plug 'dense-analysis/ale', { 'on': [] }                 " 动态语法检测，需要自己修改配置，本配置默认用于C/C++
+Plug 'dense-analysis/ale', { 'on': [] }                 " 动态语法检测，需要自己修改配置，本配置默认用于C/C++，目前(2020-2)ALE还有bug，cppcheck与clangtidy的提示不显示
 Plug 'https://gitee.com/mirrors/youcompleteme.git', { 'on': [] } " 基于标签和语义的代码补全，需要自己修改配置，本配置默认用于C/C++，该项目较大且下载速度较慢，Arch/Manjaro的源里有该插件vim-youcompleteme，若源码安装需要进入安装目录执行./install.py
 Plug 'Shougo/echodoc.vim', { 'on': [] }                 " ycm补全后在原本命令行的位置显示函数参数提示
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh', 'on': 'Leaderf' }       " 快速搜索文件 <leader>fz，标识符 <leader>ft，代码内容 <leader>fc，函数 <leader>ff 等等
 Plug 'vim-scripts/fcitx.vim'                            " 若使用fcitx中文输入法框架，如搜狗输入法，此插件会在离开插入模式进入普通模式时自动切换会英文输入法
 Plug 'ryanoasis/vim-devicons'                           " 会其他插件提供文件类型图形符号，官方推荐使用nerd字体
 Plug 'tpope/vim-fugitive'                               " 集成git到vim
-Plug 'skywind3000/asyncrun.vim', { 'on': [] }           " 异步执行外部命令，配置后用于快速编译并执行当前C++代码，<space>lr编译并执行，<space>lc只编译用于gdb调试
+Plug 'skywind3000/asyncrun.vim', { 'on': [] }           " 异步执行外部命令，配置后用于快速编译并执行当前C++代码，<space>lr编译并执行，用命令QuickArgs设置运行参数，<space>lc只编译用于gdb调试
 Plug 'kana/vim-textobj-user'                            " 此五个插件用于自定义文本对象，比如 dii 删除同缩进的代码，dif 删除函数内容，di, 删除函数参数
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-syntax'
