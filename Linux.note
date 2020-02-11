@@ -775,6 +775,7 @@
 ▪ListenSequentialPacket：监听UNIX socket
 ▪Accept=no：不为每个连接都产生实例
 ▪FreeBind=yes：在指定IP可用前监听它， 出于健壮性考虑， 当你希望将套接字绑定到特定的IP地址时应该设置此项，否则网络未及时启动时socket将无法启动
+▪注：可能希望在[Unit]设置Conflicts=foo.service
 
     ○GRUB配置
 ▪/etc/default/grub
@@ -1774,6 +1775,7 @@ FILE1或FILE2可以为-，代表此文件从管道读取
 ▪模式
     支持!/pattern/与类vim范围
     支持\<与\>元字符
+    支持/pattern/I忽略大小写
 ▪语句块
     块内操作用分号分隔，块间也需要分号分隔
     a; i; c; r; w;操作只能单独存在，不能在块中

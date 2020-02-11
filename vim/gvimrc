@@ -6,7 +6,7 @@ set guioptions=agit
 set guicursor=n:block,i:hor10,a:blinkon0
 set background=dark
 
-colorscheme palenight | let g:airline_theme="atomic"
+colorscheme one            | let g:airline_theme=" fairyfloss"
 " 注意，以下后排注释为其余搭配的Airline主题，Airline的atomic主题会改变状态栏格式，不喜欢的可以把源码中的第55行开始的那段代码注释
 " colorscheme NeoSolarized | let g:airline_theme="atomic"     " angr, solarized, solarized_flood
 " colorscheme tender       | let g:airline_theme="tender"     " cool
@@ -96,12 +96,12 @@ nnoremap go :YcmCompleter GoTo<CR>
 " => ALE配置
 "================================
 " 显示指定linters
-" let g:ale_linters = {
-"       \   'cpp': ['g++', 'cppcheck', 'clang', 'clang-check'],
-"       \   'c': ['gcc', 'cppcheck', 'clang'],
-"       \   'python': ['pylint'],
-"       \   'sh': ['shell'],
-" \}
+let g:ale_linters = {
+      \   'cpp': ['clang', 'clangd', 'clangtidy', 'cppcheck'],
+      \   'c': ['gcc', 'cppcheck'],
+      \   'python': ['pylint'],
+      \   'sh': ['shell'],
+\}
 " let g:ale_linters_explicit = 1
 let g:ale_completion_enabled = 0
 let g:ale_echo_delay = 20
@@ -112,12 +112,9 @@ let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
 let g:ale_lint_on_enter = 0
 let g:ale_c_gcc_options = '-Wall -Wextra -O2 -std=c11'
-let g:ale_c_clang_options = '-Wall -Wextra -O2 -std=c11'
 let g:ale_c_cppcheck_options = '--enable=all -std=c11'
-let g:ale_cpp_gcc_options = '-Wall -Wextra -O2 -std=c++17'
-let g:ale_cpp_clang_options = '-Wall -Wextra -O2 -std=c++17'
-let g:ale_cpp_cppcheck_options = '--enable=style --std=c++17'
-let g:ale_cpp_clangcheck_options = '-p=c++17'
+let g:ale_cpp_clang_options = '-Wall -Wextra -std=c++17'
+let g:ale_cpp_cppcheck_options = '--enable=all --std=c++17'
 let g:ale_sign_error = '✗'
 let g:ale_sign_warning = '⚡'
 let g:ale_sign_info = '‼'
@@ -131,8 +128,8 @@ hi! clear SpellRare
 hi! SpellBad gui=undercurl guisp=red
 hi! SpellCap gui=undercurl guisp=yellow
 hi! SpellRare gui=undercurl guisp=magenta
-nnoremap <silent> gb :ALENextWrap<CR>
-nnoremap <silent> gn :ALEPreviousWrap<CR>
+nnoremap <silent> jn :ALENextWrap<CR>
+nnoremap <silent> jb :ALEPreviousWrap<CR>
 
 
 "================================
@@ -158,30 +155,22 @@ let g:asyncrun_open = 7     " 非零则执行命令后开启quickfix窗口，窗
 "     !mkdir /tmp/AsyncRun
 " endif
 
-" function! Quick_C_R()
-"     let Quick_C_R_TIME = strftime('%M%H%S')
-"     let Quick_C_R_PATH_W = '/tmp/AsyncRun/TMPFILES/' . @%
-"     let Quick_C_R_PATH_R = '/tmp/AsyncRun/' . @% . '.' . Quick_C_R_TIME
-"     execute 'write!' Quick_C_R_PATH_W
-"     execute 'AsyncRun -mode=term -rows=10 g++ -std=c++17 -O3 -o ' Quick_C_R_PATH_R Quick_C_R_PATH_W '&& time ' Quick_C_R_PATH_R
-" endfunction
-" nnoremap <silent> <space>lr :call Quick_C_R()<CR>
 let g:Quick_R_Args=''
 function! Quick_C_O()
     let Quick_C_O_TIME = strftime('%M%S%H')
     let Quick_C_O_FILE = expand('%:t')
     let Quick_C_O_PATH = '/tmp/AsyncRun/' . Quick_C_O_FILE . '.' . Quick_C_O_TIME
-    execute 'write !g++ -std=c++17 -g -Og -fno-inline -xc++ - -o ' . Quick_C_O_PATH
+    execute 'write !g++ -std=c++17 -g -Og -fno-inline -I. -xc++ - -o ' . Quick_C_O_PATH
     execute 'AsyncRun echo "File has been compiled at ' . Quick_C_O_PATH .'"'
 endfunction
 function! Quick_C_R()
     let Quick_C_R_TIME = strftime('%M%H%S')
     let Quick_C_R_FILE = expand('%:t')
     let Quick_C_R_PATH = '/tmp/AsyncRun/' . Quick_C_R_FILE . '.' . Quick_C_R_TIME
-    execute 'write !g++ -std=c++17 -xc++ - -o ' . Quick_C_R_PATH
+    execute 'write !g++ -std=c++17 -I. -xc++ - -o ' . Quick_C_R_PATH
     execute 'AsyncRun -mode=term -rows=16 quickrun_time ' . Quick_C_R_PATH . g:Quick_R_Args
 endfunction
-command! -nargs=1 QuickArgs let g:Quick_R_Args = <q-args>
+command! -nargs=1 QuickrunArgs let g:Quick_R_Args = <q-args>
 nnoremap <silent> <space>lc :call Quick_C_O()<CR>
 nnoremap <silent> <space>lr :call Quick_C_R()<CR><c-w><up>
 nnoremap <silent> <space>lt :call asyncrun#quickfix_toggle(6)<CR>

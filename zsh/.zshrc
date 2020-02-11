@@ -137,7 +137,7 @@ function seec() {
 	grep -i ● ~/.cheat/Linux.note
 	return $?
     fi
-    sed -n "/●.*$1/,/^$/p" ~/.cheat/Linux.note
+    sed -n "/●.*$1/I,/^$/p" ~/.cheat/Linux.note
 }
 
 function seep() {
@@ -145,7 +145,7 @@ function seep() {
 	grep -i ○ ~/.cheat/Linux.note
 	return $?
     fi
-    sed -n "/○.*$1/,/^$/p" ~/.cheat/Linux.note
+    sed -n "/○.*$1/I,/^$/p" ~/.cheat/Linux.note
 }
 
 function man() {
