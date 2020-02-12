@@ -142,10 +142,10 @@ function seec() {
 
 function seep() {
     if [[ -n "$1" && "$1" == "-l" ]] ;then
-	grep -i ○ ~/.cheat/Linux.note
+	grep -i ○ ~/.cheat/{Linux.note,Markdown.note}
 	return $?
     fi
-    sed -n "/○.*$1/I,/^$/p" ~/.cheat/Linux.note
+    sed -n "/○.*$1/I,/^$/p" ~/.cheat/{Linux.note,Markdown.note}
 }
 
 function man() {
@@ -162,6 +162,6 @@ source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 #为gvim中自定义的Quick_C_R函数执行，若在gvimrc中执行会导致gvim崩溃
-if [ ! -e /tmp/AsyncRun/TMPFILES ] ;then
+if [ ! -e /tmp/AsyncRun ] ;then
     mkdir /tmp/AsyncRun
 fi

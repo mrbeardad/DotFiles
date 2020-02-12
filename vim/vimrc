@@ -117,7 +117,7 @@ nnoremap  10
 nnoremap  10
 nnoremap  <home>
 nnoremap  <end>
-nnoremap <silent> m yl
+nnoremap <silent> , yl
 nnoremap <silent> Y y$
 nnoremap <silent> <space>o  :<c-u>put =repeat(nr2char(10), v:count1)<CR><up>
 nnoremap <silent> <space>O  :<c-u>put! =repeat(nr2char(10), v:count1)<CR><down>
@@ -141,6 +141,16 @@ function! ToggleVirtuledit()
     endif
 endfunction
 nnoremap <silent> <leader>v :call ToggleVirtuledit()<CR>
+
+function! ToggleExpandtab()
+    if &expandtab == 1
+        setl noexpandtab
+    else
+        setl expandtab
+    endif
+endfunction
+nnoremap <silent> <leader>t :call ToggleExpandtab()<CR>
+
 
 
 "================================
@@ -277,40 +287,52 @@ command! Csh :echo "
             \"
 
 
+"================================
+" => Markdown配置
+"================================
+let g:instant_markdown_autostart = 0
+nnoremap <slient> <C-M> :InstantMarkdownPreview<CR>
+
 
 "================================
 " => vim-plug配置
 "================================
 call plug#begin('~/.vim/plugged')
 
-Plug 'mhinz/vim-startify', { 'on': [] }                 " 无参数时vim的引导界面
-Plug 'vim-airline/vim-airline'                          " 状态栏与标签栏插件
-Plug 'vim-airline/vim-airline-themes'                   " 上述插件颜色主题
-Plug 'kien/rainbow_parentheses.vim', { 'on': [] }       " 彩虹颜色显示嵌套括号
-Plug 'Yggdroot/indentLine', { 'on': [] }                " 缩进线，增强代码缩进的视觉化，按 <leader>il 打开或关闭
-Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }      " 撤销数可视化，引入分支的概念，类似git一样跳转与撤销，按 <F4> 打开或关闭
-Plug 'jiangmiao/auto-pairs'                             " 自动补全结对符，括号、引号之类的，有时会影响正常编辑，按 <leader>ap 打开或关闭
-Plug 'octol/vim-cpp-enhanced-highlight', { 'on': [] }   " C++代码的语法高亮增强版，包括来模板、重载、新标准关键字之类
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }      " 显示代码中所有的标识符，函数、类、类成员、宏之类的，按 <F2> 打开或关闭，可以在本vimrc中打开查看按键映射，用户命令
-Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' }  " 显示文件层次结构，选择打开文件或切换目录，按 <F3> 打开或关闭
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on':  'NERDTreeToggle' } " 上述插件语法高亮增强
-Plug 'preservim/nerdcommenter'                          " 按 <leader>cc 注释该行代码，按 <leader>cu 取消注释
-Plug 'SirVer/ultisnips', { 'on': [] }                   " 输入代码片段缩写后按 <M-D> 自动补全完整代码，可以按snips的语法自己添加片段
-Plug 'honza/vim-snippets', { 'on': [] }                 " 上述插件的代码片段
-Plug 'dense-analysis/ale', { 'on': [] }                 " 动态语法检测，需要自己修改配置，本配置默认用于C/C++。cppcheck的bug解决(2020-2-3)，详见https://github.com/dense-analysis/ale/issues/2994，clangtidy错误无法显示的问题可以用仓库中vim/clangtidy.vim替换你的ale/ale_linters/cpp/clangtidy.vim
-Plug 'https://gitee.com/mirrors/youcompleteme.git', { 'on': [] } " 基于标签和语义的代码补全，需要自己修改配置，本配置默认用于C/C++，该项目较大且下载速度较慢，Arch/Manjaro的源里有该插件vim-youcompleteme，若源码安装需要进入安装目录执行./install.py
-Plug 'Shougo/echodoc.vim', { 'on': [] }                 " ycm补全后在原本命令行的位置显示函数参数提示
-Plug 'Yggdroot/LeaderF', { 'do': './install.sh', 'on': 'Leaderf' }       " 快速搜索文件 <leader>fz，标识符 <leader>ft，代码内容 <leader>fc，函数 <leader>ff 等等
-Plug 'vim-scripts/fcitx.vim'                            " 若使用fcitx中文输入法框架，如搜狗输入法，此插件会在离开插入模式进入普通模式时自动切换会英文输入法
-Plug 'ryanoasis/vim-devicons'                           " 会其他插件提供文件类型图形符号，官方推荐使用nerd字体
-Plug 'tpope/vim-fugitive'                               " 集成git到vim
-Plug 'skywind3000/asyncrun.vim', { 'on': [] }           " 异步执行外部命令，配置后用于快速编译并执行当前C++代码，<space>lr编译并执行，用命令QuickrunArgs设置运行参数，<space>lc只编译用于gdb调试
-Plug 'kana/vim-textobj-user'                            " 此五个插件用于自定义文本对象，比如 dii 删除同缩进的代码，dif 删除函数内容，di, 删除函数参数
-Plug 'kana/vim-textobj-indent'
+Plug 'mhinz/vim-startify', { 'on': [] }                                     " 无参数时vim的引导界面
+Plug 'tpope/vim-fugitive'                                                   " 集成git到vim
+Plug 'vim-airline/vim-airline'                                              " 状态栏与标签栏插件
+Plug 'vim-airline/vim-airline-themes'                                       " 上述插件颜色主题
+Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' }                      " 显示文件层次结构，选择打开文件或切换目录，按 <F3> 打开或关闭
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on':  'NERDTreeToggle' } " NERDTree插件语法高亮增强
+Plug 'ryanoasis/vim-devicons'                                               " 会其他插件提供文件类型图形符号，官方推荐使用nerd字体
+Plug 'kien/rainbow_parentheses.vim', { 'on': [] }                           " 彩虹颜色显示嵌套括号
+Plug 'jiangmiao/auto-pairs'                                                 " 自动补全结对符，括号、引号之类的，有时会影响正常编辑，按 <leader>ap 打开或关闭
+Plug 'preservim/nerdcommenter'                                              " 按 <leader>cc 注释该行代码，按 <leader>cu 取消注释
+Plug 'Yggdroot/indentLine', { 'on': [] }                                    " 缩进线，增强代码缩进的视觉化，按 <leader>il 打开或关闭
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }                          " 撤销数可视化，引入分支的概念，类似git一样跳转与撤销，按 <F4> 打开或关闭
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }                          " 显示代码中所有的标识符，函数、类、类成员、宏之类的，按 <F2> 打开或关闭，可以在本vimrc中打开查看按键映射，用户命令
+Plug 'vim-scripts/fcitx.vim'                                                " 若使用fcitx中文输入法框架，如搜狗输入法，此插件会在离开插入模式进入普通模式时自动切换会英文输入法
+
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+" Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }
+
+Plug 'octol/vim-cpp-enhanced-highlight', { 'for': 'cpp' }                   " C++语言的语法高亮增强
+Plug 'dense-analysis/ale', { 'on': [] }                                     " 动态语法检测，需要自己修改配置，本配置默认用于C/C++。cppcheck的bug解决(2020-2-3)，详见https://github.com/dense-analysis/ale/issues/2994，clangtidy错误无法显示的问题可以用仓库中vim/clangtidy.vim替换你的ale/ale_linters/cpp/clangtidy.vim
+Plug 'SirVer/ultisnips', { 'for': ['cpp', 'c', 'markdown', 'snippets'] }    " 输入代码片段缩写后按 <C-S> 自动补全完整代码，可以按snips的语法自己添加片段
+Plug 'honza/vim-snippets', { 'for': ['cpp', 'c', 'markdown', 'snippets'] }  " 上述插件的官方代码片段，包括了很多种编程语言
+Plug 'https://gitee.com/mirrors/youcompleteme.git', { 'on': [] }            " 基于标签和语义的代码补全，需要自己修改配置，本配置默认用于C/C++，该项目较大且下载速度较慢，Arch/Manjaro的源里有该插件vim-youcompleteme，若源码安装需要进入安装目录执行./install.py
+Plug 'Shougo/echodoc.vim', { 'on': [] }                                     " ycm补全后在原本命令行的位置显示函数参数提示
+Plug 'Yggdroot/LeaderF', { 'do': './install.sh', 'on': 'Leaderf' }          " 快速搜索文件 <leader>fz，标识符 <leader>ft，代码内容 <leader>fc，函数 <leader>ff 等等
+Plug 'skywind3000/asyncrun.vim', { 'on': [] }                               " 异步执行外部命令，配置后用于快速编译并执行当前C++代码，<space>lr编译并执行，用命令QuickrunArgs设置运行参数，<space>lc只编译用于gdb调试
+
+Plug 'kana/vim-textobj-user'                                                " 此五个插件用于自定义文本对象，比如 dii 删除同缩进的代码，dif 删除函数内容，di, 删除函数参数
 Plug 'kana/vim-textobj-syntax'
+Plug 'kana/vim-textobj-indent'
 Plug 'sgur/vim-textobj-parameter'
 Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim', 'java'] }
-Plug 'jacoborus/tender.vim'                             " 以下是支持真色的配色方案
+
+Plug 'jacoborus/tender.vim'                                                 " 以下是支持真色的颜色主题
 Plug 'rakr/vim-one'
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'KeitaNakamura/neodark.vim'

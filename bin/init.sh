@@ -20,7 +20,7 @@ function pacman_cfg() {
 	tsinghua='Server = https://mirrors.tuna.tsinghua.edu.cn/manjaro/stable/$repo/$arch'
 	tencent='Server = https://mirrors.cloud.tencent.com/manjaro/stable/$repo/$arch'
 
-	sed -i "/Generated/a## China\n\n$ustc\n\n$tsing\n\n$tencent" /etc/pacman.d/mirrorlist
+	sed -i "/Generated/a## China\n\n$tencent\n\n$tsing\n\n$ustc" /etc/pacman.d/mirrorlist
     fi
 
     #安装pacman额外工具
@@ -78,7 +78,7 @@ function zsh_cfg() {
     #添加Linux笔记，用seec和seep查询
     if [ ! -e ~/.cheat ] ;then
 	mkdir ~/.cheat
-    cp Linux.note ~/.cheat
+    cp Linux.note Markdown.note ~/.cheat
     fi
 }
 
@@ -152,7 +152,7 @@ function tmux_cfg() {
 function chfs_cfg() {
     set -e
     cd /opt
-    curl -o chfs-linux-amd64-2.0.zip https://iscute.cn/tar/chfs/2.0/chfs-linux-amd64-2.0.zip
+    curl -o chfs-linux-amd64-2.0.zip https://iscute.cn/tar/chfs/1.8/chfs-linux-amd64-1.8.zip
     unzip chfs-linux-amd64-2.0.zip
     cp chfs-linux-amd64-2.0 /usr/local/bin
 
@@ -187,6 +187,38 @@ function extra() {
 
 
 #function main() {
+
+for option in $@ ;do
+    case $option in
+        "--list"): echo '
+$ ./bin/init.sh {option}
+
+{option} can be as follows
+--help  list all options
+--all   install all configurations
+pacman  download some packages and modify ***pacman.conf*** and ***mirrorlist***
+zsh     install zsh, oh-my-zsh, and my ***.zshrc*** and two zsh-theme
+tmux    install tmux, a small tmux plugin, and my ***.tmux.conf***
+ssh     it provide a ***ssh_config*** template to use github ssh key when you run `git push`, and modify sshd_config  on your host
+chfs    download and install chfs (Cute Http File Server)
+vim     configure your vim like IDE for C/C++
+extra   download a lot of packages that I want (maybe you think the same?)' ;;
+
+        "--all"):   pacman_cfg; zsh_cfg; tmux_cfg; ssh_cfg; chfs_cfg; vim_cfg; extra ;;
+        "pacman"):  pacman_cfg ;;
+        "zsh"):     zsh_cfg ;;
+        "tmux"):    tmux_cfg ;;
+        "ssh"):     ssh_cfg ;;
+        "chfs"):    chfs_cfg ;;
+        "vim"):     vim_cfg ;;
+        "extra"):   extra ;;
+        *):         echo 'run
+            \e[33m$ \e[32m./bin/init.sh --help\e[m
+            to get usage'
+    esac
+done
+
+
 
 
 #}

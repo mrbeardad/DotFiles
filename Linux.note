@@ -1886,7 +1886,7 @@ FILE1或FILE2可以为-，代表此文件从管道读取
 
 ○普通模式
 ▪操作：d，c，y
-▪移动：0，^，$，w，W，b，B，e，f，F，%，)，}，gg，G
+▪移动：0，^，$，w，W，b，B，e，f，F，,，;，%，)，}，gg，G
 ▪对象：（i/a）w，s，p，(，{，[，<，"，'，`
 ▪删除：x，s，D，C，dd，S
 ▪修改：r，~，gu，gU，J
@@ -2067,7 +2067,7 @@ FILE1或FILE2可以为-，代表此文件从管道读取
 ▪set autochdir：自动切换工作目录
 ▪set encoding：设置字符编码
 
-○变量
+○vim变量
 ▪变量作用域
     g:var - 全局
     a:var - 函数参数
@@ -2088,7 +2088,7 @@ FILE1或FILE2可以为-，代表此文件从管道读取
 ▪有序列表：[00，'10'，[20，21]]
 ▪无序字典：{'key':'value'，}
 
-○函数
+○vim函数
 ▪调用：
     :call Func(args)
     :echo Funcname(args)
@@ -2098,11 +2098,64 @@ FILE1或FILE2可以为-，代表此文件从管道读取
 ▪dict：
     self：将函数引用装入字典，self指代该字典
 
-○语句
+○vim语句
     ▪if语句
     ▪for语句
     ▪while语句
     ▪try-catch语句
 
-○特性
+○vim特性
     ▪foo_{val}_bar：先计算val后字符替换
+
+○Makefile
+▪规则：
+    ▪格式：
+    <target>：<prerequisites>
+    tab] <command>
+    ▪前置条件与命令至少要有一个存在
+▪目标：默认执行第一个目标
+    ▪文件(默认)：
+    依赖前置条件(也是一系列目标)生成目标文件
+    ▪伪目标(用`.PHONY:<target>`指定)：
+    用于表示该目标不是文件，无条件执行
+▪前置条件：用空格分隔
+    ▪依赖文件：
+    若依赖文件存在且时间戳晚于目标文件，则不生成目标文件
+    ▪依赖伪目标：
+    直接执行伪目标
+▪命令：
+    ▪前导符用`.RECIPEPREFIX = {char}`指定
+    ▪每行命令在单独shell中，用`.ONESHELL:`解决
+▪语法
+    ▪`#`：注释
+    ▪`@`：关闭回响，默认回响每行命令与注释
+    ▪支持通配符
+    ▪支持变量：用$(var)引用，shell变量用$$var
+    ▪内置变量：$(CC)代指编译器
+
+○CMake：CMakeLists.txt
+▪CMake 最低版本号要求
+    cmake_minimum_required (VERSION 2.8)
+▪项目信息
+    project (Demo1)
+▪指定生成目标
+    add_executable(Demo main.cc)
+▪查找当前目录下的所有源文件，并将名称保存到变量
+    aux_source_directory(. DIR_SRCS)
+▪指定生成目标
+    add_executable(Demo ${DIR_SRCS})
+▪把当前文件夹下的源码列表存到变量 SRCS 中
+    file( GLOB SRCS *.c *.cpp *.cc *.h *.hpp )
+▪把源码编译成一个二进制这里的 ${PROJECT_NAME} 就是 CPP，是在第一行设置的
+    add_executable( ${PROJECT_NAME} ${SRCS} )
+▪添加 math 子目录，在子目录执行cmake
+    add_subdirectory(math)
+▪指定生成目标
+    add_executable(Demo main.cc)
+▪添加链接库
+    target_link_libraries(Demo MathFunctions)
+▪制作链接库
+    add_library( 动态链接库名称  SHARED  源码列表 )
+    add_library( 静态链接库名称  STATIC  源码列表 )
+    add_executable( 二进制文件名  源码列表 )
+    target_link_libraries( 二进制文件名  动静态库名 )

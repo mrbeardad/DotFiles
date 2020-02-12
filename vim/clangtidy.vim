@@ -53,12 +53,14 @@ call ale#Set('cpp_clangtidy_options', '')
 function! ale_linters#cpp#clangtidy#GetCommand(buffer) abort
     let l:cd_command = 'clang-tidy'
     let l:compile_commands_option = ale#handlers#cppcheck#GetCompileCommandsOptions(a:buffer)
-    let l:buffer_path_include = ''
+    let l:buffer_path_include = empty(l:compile_commands_option)
+    \   ? ale#handlers#cppcheck#GetBufferPathIncludeOptions(a:buffer)
+    \   : ''
 
     return l:cd_command
     \   . ale#Pad(ale#Var(a:buffer, 'cpp_clangtidy_options'))
+    \   . ' %t' . ' -- '
     \   . l:buffer_path_include
-    \   . ' %t'
 endfunction
 
 call ale#linter#Define('cpp', {

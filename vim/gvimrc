@@ -30,6 +30,33 @@ autocmd WinEnter * set cul
 function! StartifyEntryFormat()
     return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
 endfunction
+let g:ascii = [
+            \ '                                       ^   ',
+            \ '                                _     /|   ',
+            \ '                              _( \_/)/ /   ',
+            \ '                              ,((((^/\/    ',
+            \ '                              ((((  (*~\   ',
+            \ '                           ,((((( ,     \  ',
+            \ '        ,,,_              ,(((((  /"._  ,`,',
+            \ '       ((((\\ ,...       ,((((   /    `-.-`',
+            \ '       )))  ;`    `"`"`""((((   (          ',
+            \ '     (((  /            ((      \           ',
+            \ '       )) |                      |         ',
+            \ '      ((  |        .       "     |         ',
+            \ '      ))  \     _ `      `t   ,.`)         ',
+            \ '      (   |   y;- -,-""-"-.\   \/          ',
+            \ '     )   / ./  ) /          `\  \          ',
+            \ '         |./   ( (           / /`          ',
+            \ '         ||     \\          //`|           ',
+            \ '         ||      \\       _//`||           ',
+            \ '         ||       ))     |_/  ||           ',
+            \ '         \_\     |_/          ||           ',
+            \ '         ``"                  \_\          ',
+            \ '                              ``"          ',
+            \ ]
+let g:startify_custom_header =
+          \ 'startify#pad(g:ascii + startify#fortune#boxed())'
+
 
 
 "================================
@@ -53,7 +80,7 @@ noremap <silent> <F3> :NERDTreeToggle<CR>
 "================================
 " 设置<M-D>触发UltiSnips补全，解决UltiSnips与YCM按键冲突网上有教程加两个函数与映射解决，我更愿意如此
 " inoremap <silent> <m-d> <esc><right>:call UltiSnips#ExpandSnippet()<CR>
-let g:UltiSnipsExpandTrigger = '<m-d>'
+let g:UltiSnipsExpandTrigger = '<c-s>'
 let g:UltiSnipsJumpBackwardTrigger = '<m-b>'
 let g:UltiSnipsJumpForwardTrigger = '<m-n>'
 
@@ -97,7 +124,7 @@ nnoremap go :YcmCompleter GoTo<CR>
 "================================
 " 显示指定linters
 let g:ale_linters = {
-      \   'cpp': ['clang', 'clangd', 'clangtidy', 'cppcheck'],
+      \   'cpp': ['clangtidy', 'gcc', 'cppcheck'],
       \   'c': ['gcc', 'cppcheck'],
       \   'python': ['pylint'],
       \   'sh': ['shell'],
@@ -113,14 +140,15 @@ let g:ale_lint_on_insert_leave = 1
 let g:ale_lint_on_enter = 0
 let g:ale_c_gcc_options = '-Wall -Wextra -O2 -std=c11'
 let g:ale_c_cppcheck_options = '--enable=all -std=c11'
-let g:ale_cpp_clang_options = '-Wall -Wextra -std=c++17'
+let g:ale_cpp_gcc_options = '-Wall -Wextra -std=c++17'
 let g:ale_cpp_cppcheck_options = '--enable=all --std=c++17'
+let g:ale_cpp_clangtidy_options = '-extra-arg=-std=c++17'
 let g:ale_sign_error = '✗'
-let g:ale_sign_warning = '⚡'
-let g:ale_sign_info = '‼'
+let g:ale_sign_warning = '‼'
+let g:ale_sign_info = '⚡'
 let g:ale_echo_msg_error_str = '✗'
-let g:ale_echo_msg_warning_str = '⚡'
-let g:ale_echo_msg_info_str = '‼'
+let g:ale_echo_msg_warning_str = '‼'
+let g:ale_echo_msg_info_str = '⚡'
 let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
 hi! clear SpellBad
 hi! clear SpellCap
@@ -130,6 +158,7 @@ hi! SpellCap gui=undercurl guisp=yellow
 hi! SpellRare gui=undercurl guisp=magenta
 nnoremap <silent> jn :ALENextWrap<CR>
 nnoremap <silent> jb :ALEPreviousWrap<CR>
+nnoremap <silent> <space>a :ALEDetail<CR>
 
 
 "================================
@@ -160,7 +189,7 @@ function! Quick_C_O()
     let Quick_C_O_TIME = strftime('%M%S%H')
     let Quick_C_O_FILE = expand('%:t')
     let Quick_C_O_PATH = '/tmp/AsyncRun/' . Quick_C_O_FILE . '.' . Quick_C_O_TIME
-    execute 'write !g++ -std=c++17 -g -Og -fno-inline -I. -xc++ - -o ' . Quick_C_O_PATH
+    execute 'write !g++ -std=c++17 -ggdb -Og -g -fno-inline -I. -xc++ - -o ' . Quick_C_O_PATH
     execute 'AsyncRun echo "File has been compiled at ' . Quick_C_O_PATH .'"'
 endfunction
 function! Quick_C_R()
@@ -212,11 +241,8 @@ let g:cpp_no_function_highlight = 1
 call plug#load('vim-startify',
 	    \ 'rainbow_parentheses.vim',
             \ 'indentLine',
-            \ 'vim-cpp-enhanced-highlight',
-            \ 'ultisnips',
-            \ 'vim-snippets',
-            \ 'asyncrun.vim',
             \ 'ale',
             \ 'youcompleteme',
             \ 'echodoc.vim',
+            \ 'asyncrun.vim',
 	    \)
