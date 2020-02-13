@@ -70,9 +70,8 @@ $ ./bin/init.sh {options}
 
 * 修改 *~/.ssh/ssh_config*，这是个用于github SSH 的配置模板，这样你把仓库URL协议改为
 git@github.com:*Username/Repository* 就可以直接直接`git push`而无需输入密码  
-<br>
-当然，你需要把把私钥放到 *~/.ssh/id_ecdsa* ，若想用其他文件则修改前面提到的那个文件  
-若是没有公私钥对，那就生成一对吧：
+<br>当然，你需要把把私钥放到 *~/.ssh/id_ecdsa* ，若想用其他文件则修改前面提到的那个文件  
+若是没有公私钥对，那就生成一对吧：  
 ```
   $ ssh-keygen -t ecdsa -b 512 -C "注释"
 ```
