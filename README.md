@@ -3,7 +3,7 @@
 故有些东西不会尽如人意
 
 [README-en.md](README-en.md)  
-[学习资源](learning-resource)  
+[学习资源](learning-resource.md)  
 ***
 ![ocean misses dreams and night](ocean-3605547_1920.jpg)
 
