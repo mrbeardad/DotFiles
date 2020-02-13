@@ -2,8 +2,9 @@
 整个仓库的建立都是一个为个人在学习的过程，这些也都为我自己所需所用所愿而写，
 故有些东西不会尽如人意
 
-[README-en.md](https://github.com/mrbeardad/DotFiles/README-en.md)
-![ocean misses dreams and night](https://github.com/mrbeardad/DotFiles/ocean-3605547_1920.jpg)
+[README-en.md](README-en.md)
+[学习资源](learning-resource)
+![ocean misses dreams and night](ocean-3605547_1920.jpg)
 
 
 # 安装
