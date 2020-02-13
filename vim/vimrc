@@ -72,12 +72,6 @@ set undofile
 "================================
 nnoremap <silent> <space>n :bn<CR>
 nnoremap <silent> <space>b :bp<CR>
-nnoremap <silent> <esc>1 :b 1<CR>
-nnoremap <silent> <esc>2 :b 2<CR>
-nnoremap <silent> <esc>3 :b 3<CR>
-nnoremap <silent> <esc>4 :b 4<CR>
-nnoremap <silent> <esc>5 :b 5<CR>
-nnoremap <silent> <esc>6 :b 6<CR>
 nnoremap <silent> <c-w>x :bd<CR>
 
 
@@ -86,11 +80,6 @@ nnoremap <silent> <c-w>x :bd<CR>
 "================================
 nnoremap <silent> <leader>n :tabnext<CR>
 nnoremap <silent> <leader>b :tabprevious<CR>
-nnoremap <silent> <leader>1 :tabnext 1<CR>
-nnoremap <silent> <leader>2 :tabnext 2<CR>
-nnoremap <silent> <leader>3 :tabnext 3<CR>
-nnoremap <silent> <leader>4 :tabnext 4<CR>
-nnoremap <silent> <leader>5 :tabnext 5<CR>
 
 
 "================================

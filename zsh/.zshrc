@@ -132,30 +132,44 @@ alias glr='git ls-remote'
 alias gpt='git push --tags'
 alias gfp='git format-patch'
 
-function seec() {
+function seec()
+{
     if [[ -n "$1" && "$1" == "-l" ]] ;then
-	grep -i ● ~/.cheat/Linux.note
-	return $?
+        grep -i ● ~/.cheat/*
+        return $?
     fi
-    sed -n "/●.*$1/I,/^$/p" ~/.cheat/Linux.note
+
+    if [[ -n "$1" && "$1" == "-e" ]] ;then
+        sed -r -n "/●($2)/I,/^$/p" ~/.cheat/*
+        return $?
+    fi
+
+    sed -r -n "/●.*($1)/I,/^$/p" ~/.cheat/*
 }
 
-function seep() {
+function seep()
+{
     if [[ -n "$1" && "$1" == "-l" ]] ;then
-	grep -i ○ ~/.cheat/{Linux.note,Markdown.note}
-	return $?
+        grep -i ○ ~/.cheat/*
+        return $?
     fi
-    sed -n "/○.*$1/I,/^$/p" ~/.cheat/{Linux.note,Markdown.note}
+
+    if [[ -n "$1" && "$1" == "-e" ]] ;then
+        sed -r -n "/●($2)/I,/^$/p" ~/.cheat/*
+        return $?
+    fi
+
+    sed -r -n "/○.*($1)/I,/^$/p" ~/.cheat/*
 }
 
 function man() {
         LESS_TERMCAP_md=$'\e[01;34m' \
-	LESS_TERMCAP_me=$'\e[0m' \
-	LESS_TERMCAP_se=$'\e[0m' \
-	LESS_TERMCAP_so=$'\e[01;46;30m' \
-	LESS_TERMCAP_ue=$'\e[0m' \
-	LESS_TERMCAP_us=$'\e[01;32m' \
-	command man "$@"
+        LESS_TERMCAP_me=$'\e[0m' \
+        LESS_TERMCAP_se=$'\e[0m' \
+        LESS_TERMCAP_so=$'\e[01;46;30m' \
+        LESS_TERMCAP_ue=$'\e[0m' \
+        LESS_TERMCAP_us=$'\e[01;32m' \
+        command man "$@"
 }
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

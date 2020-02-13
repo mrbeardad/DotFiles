@@ -975,7 +975,9 @@
 ▪指定机器：-m32  -m64
 ▪指定程序规模：-mcmodel=medium/large
 代码数据段默认32位跳转
-▪报错： -Werror  -Wall  -Wextra
+▪开启标准库debug模式：-D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC
+▪报错： -Werror  -Wall  -Wextra -Wconversion -Wfloat-equal
+
 
 ●GBD  <exec-file> <core-dump> PID
 ▪coredump设置
@@ -1031,12 +1033,6 @@ i/info：reg，all
 ●STRACE
 ●PMAP
 
-●CMAKE
-●CTAGS：-R --c++-kinds=
-+p+l+x+c+d+e+f+g+m+n+s+t+u+v --fields=+liaS --extra=+q --language-force=c
-
-GCC配套的标准库，libstdc++和libsupc++ 两个子库
-clang配套的标准库，libc++和 libc++abi，头文件安装到v1
 
 
 

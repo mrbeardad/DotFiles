@@ -79,9 +79,8 @@ noremap <silent> <F3> :NERDTreeToggle<CR>
 " => UltiSnips配置  
 "================================
 " 设置<M-D>触发UltiSnips补全，解决UltiSnips与YCM按键冲突网上有教程加两个函数与映射解决，我更愿意如此
-" inoremap <silent> <m-d> <esc><right>:call UltiSnips#ExpandSnippet()<CR>
-let g:UltiSnipsExpandTrigger = '<c-s>'
-let g:UltiSnipsJumpBackwardTrigger = '<m-b>'
+let g:UltiSnipsExpandTrigger = '<c-c>'
+let g:UltiSnipsJumpBackwardTrigger = '<m-p>'
 let g:UltiSnipsJumpForwardTrigger = '<m-n>'
 
 
@@ -107,7 +106,7 @@ let g:ycm_show_diagnostics_ui = 0           " 不进行语法检测
 let g:ycm_confirm_extra_conf=0              " 自动确认 .ycm_confirm_extra_conf
 let g:ycm_cache_omnifunc=0                  " 禁止缓存匹配项，每次都重新生成匹配项
 let g:ycm_seed_identifiers_with_syntax=1    " 语法关键字补全
-let g:ycm_key_invoke_completion = '<c-c>'   " 按 <c-c> 手动触发语义补全
+let g:ycm_key_invoke_completion = '<c-z>'   " 按 <c-c> 手动触发语义补全
 let g:ycm_min_num_identifier_candidate_chars = 2
 let g:ycm_complete_in_comments=0
 let g:ycm_complete_in_strings=1
@@ -129,7 +128,8 @@ let g:ale_linters = {
       \   'python': ['pylint'],
       \   'sh': ['shell'],
 \}
-" let g:ale_linters_explicit = 1
+let g:ale_linters_explicit = 1
+let g:ale_disable_lsp = 1
 let g:ale_completion_enabled = 0
 let g:ale_echo_delay = 20
 let g:ale_lint_delay = 500
@@ -140,7 +140,7 @@ let g:ale_lint_on_insert_leave = 1
 let g:ale_lint_on_enter = 0
 let g:ale_c_gcc_options = '-Wall -Wextra -O2 -std=c11'
 let g:ale_c_cppcheck_options = '--enable=all -std=c11'
-let g:ale_cpp_gcc_options = '-Wall -Wextra -std=c++17'
+let g:ale_cpp_gcc_options = '-Wall -Wextra -Wconversion -Wfloat-equal -O2 -std=c++17'
 let g:ale_cpp_cppcheck_options = '--enable=all --std=c++17'
 let g:ale_cpp_clangtidy_options = '-extra-arg=-std=c++17'
 let g:ale_sign_error = '✗'
@@ -162,18 +162,6 @@ nnoremap <silent> <space>a :ALEDetail<CR>
 
 
 "================================
-" => Syntastic配置
-"================================
-" let g:syntastic_error_symbol='✗'
-" 设置警告符号
-" let g:syntastic_warning_symbol='‼'
-" 是否在打开文件时检查
-" let g:syntastic_check_on_open=0
-" 是否在保存文件后检查
-" let g:syntastic_check_on_wq=1
-
-
-"================================
 " => Asyncrun配置
 "================================
 let g:asyncrun_open = 7     " 非零则执行命令后开启quickfix窗口，窗口高度为该变量的值
@@ -189,7 +177,7 @@ function! Quick_C_O()
     let Quick_C_O_TIME = strftime('%M%S%H')
     let Quick_C_O_FILE = expand('%:t')
     let Quick_C_O_PATH = '/tmp/AsyncRun/' . Quick_C_O_FILE . '.' . Quick_C_O_TIME
-    execute 'write !g++ -std=c++17 -ggdb -Og -g -fno-inline -I. -xc++ - -o ' . Quick_C_O_PATH
+    execute 'write !g++ -std=c++17 -ggdb -Og -g -fno-inline -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -I. -xc++ - -o ' . Quick_C_O_PATH
     execute 'AsyncRun echo "File has been compiled at ' . Quick_C_O_PATH .'"'
 endfunction
 function! Quick_C_R()

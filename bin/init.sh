@@ -108,7 +108,7 @@ function vim_cfg() {
     cp  vim/gvimrc ~/.vim/gvimrc
     cp  bin/quickrun_time ~/.local/bin
 
-    yay -S gvim vim-plug cmake ctags gperf
+    yay -S gvim vim-plug cmake ctags gperf vim-instant-markdown
 
     echo -e '\e[32m Note:\e[m The plugin "YouCompleteMe" can be download form your Arch/Manjaro mirrors. You may need to modify you vimrc if do so.'
     echo -e ' And the plugin "LeaderF" can work with gtags, you can download it at http://tamacom.com/global/global-6.6.4.tar.gz ,and you need to compile it in your machine.'
@@ -120,7 +120,7 @@ function vim_cfg() {
 function ssh_cfg() {
 
     mv /etc/ssh/sshd_config{,.bak}
-    cp ssh/sshd_config /etc/ssh/sshd_config
+    sudo cp ssh/sshd_config /etc/ssh/sshd_config
     mv ~/.ssh/ssh_config{,.bak}
     cp  ssh/ssh_config ~/.ssh/ssh_config
     sudo systemctl enable --now sshd.socket
@@ -144,7 +144,7 @@ function tmux_cfg() {
 	mv ~/.tmux.conf{,.bak}
     fi
 
-    cp tmux/.tmux.conf ~/.tmux/.tmux.conf
+    cp tmux/.tmux.conf ~/.tmux.conf
     yay -S tmux-resurrect-git
 }
 
@@ -170,7 +170,7 @@ function chfs_cfg() {
 function extra() {
 
     #CLI工具
-    yay -S sendemail htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat ntfs-3g
+    yay -S sendemail htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat ntfs-3g archlinuxcn/cppman-git
 
     #百度网盘，QQ，网易云音乐，搜狗拼音，WPS
     yay -S baidunetdisk-bin qq-linux netease-cloud-music fcitx-sogoupinyin fcitx-im fcitx-configtool wps-office ttf-wps-fonts flameshot google-chrome
