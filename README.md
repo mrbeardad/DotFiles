@@ -1,5 +1,5 @@
 # 写在前面
-整个仓库的建立都是一个为个人在学习的过程，这些也都为我自己所需所用所愿而写，
+整个仓库的建立都是一个我个人在学习的过程，这些也都为我自己所需所用所愿而写，
 故有些东西不会尽如人意
 
 [README-en.md](README-en.md)  
@@ -66,8 +66,7 @@ $ ./bin/init.sh {options}
 * 修改 */etc/sshd/sshd_conf* 更改sshd的端口号为50000，本来想设置为只允许私钥登录，
 结果手机上的JuiceSSH总是没法识别我笔记本上生成的私钥，JuiceSSH上生成的公钥在电脑上识别。
 要是有朋友知道提个issue嘛  
-<br>
-脚本会自动启动*sshd.socket*
+<br>脚本会自动启动*sshd.socket*
 
 * 修改 *~/.ssh/ssh_config*，这是个用于github SSH 的配置模板，这样你把仓库URL协议改为
 git@github.com:*Username/Repository* 就可以直接直接`git push`而无需输入密码  
