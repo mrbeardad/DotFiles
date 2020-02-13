@@ -64,7 +64,7 @@ $ ./bin/init.sh {options}
 
 #### ssh
 * 修改 */etc/sshd/sshd_conf* 更改sshd的端口号为50000，本来想设置为只允许私钥登录，
-结果手机上的JuiceSSH总是没法识别我笔记本上生成的私钥，JuiceSSH上生成的公钥在电脑上识别。
+结果手机上的JuiceSSH总是没法识别我笔记本上生成的私钥，JuiceSSH上生成的公钥在电脑上也不识别。
 要是有朋友知道提个issue嘛  
 <br>脚本会自动启动*sshd.socket*
 
@@ -87,7 +87,7 @@ git@github.com:*Username/Repository* 就可以直接直接`git push`而无需输
 ***
 
 #### extra
-* 这个选项提供了许多我需要的软件，或许能也需要？包括QQ、网易云音乐、WPS等等桌面应用和
+* 这个选项提供了许多我需要的软件，或许你也需要？包括QQ、网易云音乐、WPS等等桌面应用和
 CLI工具
 
 ***
