@@ -48,5 +48,13 @@
 ## 其他笔记
 * [CS:APP笔记](http://note.youdao.com/noteshare?id=a79ac5e0f8a508c38899caac0ea89c74)
 * [C++Primer笔记](http://note.youdao.com/noteshare?id=0f0235f3c461debf10f5a79515329f96)
-* [C++特性笔记](http://note.youdao.com/noteshare?id=7e236a03f9b1f9338a46c792fb7c2a19)
+* [C++特性总结](http://note.youdao.com/noteshare?id=7e236a03f9b1f9338a46c792fb7c2a19)
 * [C++标准库](http://note.youdao.com/noteshare?id=59c95a25f6c344322126434c04419ee1)
+* [ArchLinux安装](Arch.note)
+* [Gnome调教日记](Gnome.note)
+* [Manjaro安装](Manjaro.note)  
+>注：Manjaro的映像文件去中科大源下载桌面完全版，
+我前几次安装就因为这问题老是挂掉，换了映像后就没事了，好像是显卡问题  
+注：Manjaro安装时选择no-free的双显卡问题其实有bug，笔记里写了解决方案，
+CSDN搜`Manjaro双显卡`，第一栏就是原处
+* [LFS中文版](https://lctt.github.io/LFS-BOOK)

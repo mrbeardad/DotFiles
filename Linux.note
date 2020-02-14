@@ -144,7 +144,8 @@
     ▪n为去掉的/个数
 
 ●curl -o File URL
-●sh -c 'curl -fsSL URL'
+●curl -fsSL URL | bash
+●curl -fsSL URL | bash -s -- {-opt}
 
 ●col -x ：将tab替换为等宽space
 

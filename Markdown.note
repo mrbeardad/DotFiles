@@ -13,9 +13,10 @@ ___粗斜体文本___
 <u>带下划线文本</u>
 ~~删除线~~
 <kbd>Ctrl</kbd>
-<br>换行：<space><space><CR>或<CR><CR>
+<br>换行：<space><space><CR>或<CR><CR>(后者同时也会结束一些标签)
 &nbsp;空格：一个以上空格与制表缩为一个空格
 &emsp;制表
+
 ○字体：<font face="微软雅黑" color=red size=10>context</font>
 
 ○分割线(n)：至少三个标签符号且无除了空格之外的其他字符

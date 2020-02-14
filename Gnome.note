@@ -1,0 +1,52 @@
+
+Gnome调教日记
+
+○安装桌面软件
+●flameshot：快捷键命令为"flameshot gui"
+●gnome-terminal透明度版本
+●baidunetdisk-bin
+●qq-linux
+●netease-cloud-music
+●wps-office ttf_wps-fonts
+●fcitx-sogoupinyin fcitx-im fcitx-configtool
+▪注：后两者需额外配置
+
+○Setting
+●Universal Access》Seeing》Cursor Size
+●Sound》Alert Sound
+●Power》Power Saving》Blank Screen、Wi-Fi、Bluetooth、Automatic Suspend
+●Device》Displays》Night Light
+●Device》Keyboard Shortcuts
+放大，还原，最小，关闭，截图，终端，输入法
+●Device》Mouse&Touchpad》Mouse、Touchpad
+●Detail》Users》头像、Automatic Login
+
+○Tweak
+●下载gnome-tweak-tool  
+●Top Bar》
+●Window Titlebar》
+
+○Gnome插件：https://extensions.gnome.org
+●下载gnome-shell-extensions
+●UserTheme
+●dash-to-dock
+●dash-to-panel
+●coverflow-alt-tab
+●removable-drive-menu
+●system-monitor
+
+○Gnome主题：https://www.gnome-look.org
+窗口：mojave-gtk-theme
+光标：breeze-hacked-cusor-theme-bin
+图标：tela-icon-theme-git、papirus-icon-theme
+界面：adapta-gtk-theme
+字体：adobe-source-han-sans-cn-font ttf-ibm-plex
+
+○gdm背景
+●curl -L -O http://archibold.io/sh/archibold
+●archibold login-background MyBackground
+
+○chrome
+  ●yay  -S  google-chrome
+  ●github clone google-access-helper
+  ●登录账户同步配置

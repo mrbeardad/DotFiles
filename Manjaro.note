@@ -1,0 +1,69 @@
+
+Manjaro安装日记
+
+○刻录映像
+sudo dd bs=4M if=/path/to/manjaro.iso of=/dev/sdb status=progress oflag=sync
+○启动：no-free
+○配置源
+##  清华大学(ipv4,ipv6,http,https)
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
+## 中科大(ipv4, ipv6, http, https)
+Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch
+## 浙江大学
+Server = https://mirrors.zju.edu.cn/archlinuxcn/$arch
+## 腾讯云 (ipv4, https)
+Server = https://mirrors.cloud.tencent.com/archlinuxcn/$arch
+## 163网易 (ipv4, http, https)
+Server = https://mirrors.163.com/archlinux-cn/$arch
+○分区
+○同步时间与设置时区
+○联网
+○launcher
+
+○重启
+
+○配置/etc/systemd/journald.conf
+○关闭bluetooth. target
+○同步时间并设置rtc
+○下载ntfs-3g
+○下载中文字体
+○配置git
+
+○配置pacman
+●下载yay、aria2、expac、pacman_contrib
+●安装pacman. conf与mirrorlist
+●安装并启动paccache. timer
+
+○配置vim
+●下载gvim
+●安装vimrc
+
+○配置tmux
+●下载tmux、tmux-resurrect
+
+○配置zsh
+●下载oh-my-zsh-git、zsh-syntax-highlighting、zsh-autosuggestions、autojump、powerline-fonts
+●安装Linux. note与zsh-theme
+●更改默认shell
+
+○配置ssh
+●安装sshd_config与ssh_config
+●安装并启动sshd.socket
+
+○安装chfs
+●下载chfs
+●安装chfs. server与chfs. socket
+
+○安装额外CLI工具
+●sendEmail htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat
+
+○NVIDIA驱动
+●安装依赖
+yay -S virtualgl lib32-virtualgl lib32-primus primu
+●重装bumblebee
+打开Manjaro-setting -> Hardware Configguration -> 独显选项中打勾的那栏，右键点击重装
+●重启
+●测试
+glxgears：这是集显
+optirun glxgears：这是独显，FPS正常应该在600以上，我的是GF MX150
+

@@ -100,8 +100,10 @@ CLI工具
 * 仓库中的vim目录里面还有3个文件，**cppcheck.vim**和**clangtidy**是ALE插件的脚本，我修改
 了内容让它们俩能正常的进行语法检测报错，**.ycm_extra_conf.py**是youcompleteme的C++配置，
 移到工程目录下起作用；
-* <font color=red>NOTE: </font>vim-instant-markdown插件依赖有点麻烦，我用的AUR里的。
-* <font color=red>NOTE: </font>我配置的即使编译并运行C++代码的快捷键，依赖仓库里的
+* <font color=red>NOTE: </font>这套配置依赖vim-plug插件管理器
+* <font color=red>NOTE: </font>Leaderf插件的运行还需要[gtags](https://www.gnu.org/software/global/download.html)
+* <font color=red>NOTE: </font>vim-instant-markdown插件依赖有点麻烦，我用的AUR里的
+* <font color=red>NOTE: </font>我配置的即时编译并运行C++代码的快捷键，依赖仓库里的
 bin/quickrun_time，其实就是time命令，不过shell的time输出难看我就重新写了一个，有彩蛋哦
 （●。●）～
 * **自定义命令**：
