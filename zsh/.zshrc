@@ -132,35 +132,21 @@ alias glr='git ls-remote'
 alias gpt='git push --tags'
 alias gfp='git format-patch'
 
-function seec()
+function see()
 {
     if [[ -n "$1" && "$1" == "-l" ]] ;then
-        grep -i ● ~/.cheat/*
+        grep -iE '●|○' ~/.cheat/*
         return $?
     fi
 
     if [[ -n "$1" && "$1" == "-e" ]] ;then
-        sed -r -n "/●($2)/I,/^$/p" ~/.cheat/*
+        sed -r -n "/(●|○)($2)/I,/^$/p" ~/.cheat/*
         return $?
     fi
 
-    sed -r -n "/●.*($1)/I,/^$/p" ~/.cheat/*
+    sed -r -n "/(●|○).*($1)/I,/^$/p" ~/.cheat/*
 }
 
-function seep()
-{
-    if [[ -n "$1" && "$1" == "-l" ]] ;then
-        grep -i ○ ~/.cheat/*
-        return $?
-    fi
-
-    if [[ -n "$1" && "$1" == "-e" ]] ;then
-        sed -r -n "/●($2)/I,/^$/p" ~/.cheat/*
-        return $?
-    fi
-
-    sed -r -n "/○.*($1)/I,/^$/p" ~/.cheat/*
-}
 
 function man() {
         LESS_TERMCAP_md=$'\e[01;34m' \

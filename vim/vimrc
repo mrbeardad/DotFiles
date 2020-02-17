@@ -245,7 +245,7 @@ set cscopeprg=/usr/local/bin/gtags-cscope
 set cscopequickfix=s-,c-,d-,i-,t-,e-,a-
 set nocst
 nnoremap <silent> <leader>ff :Leaderf function --all<CR>
-nnoremap <silent> <leader>ft :Leaderf Buftag --all<CR>
+nnoremap <silent> <leader>ft :Leaderf buftag --all<CR>
 nnoremap <silent> <leader>fz :Leaderf <CR>
 nnoremap <silent> <leader>fg :Leaderf gtags<CR>
 nnoremap <silent> <leader>fc :Leaderf gtags --grep<CR>
@@ -280,7 +280,6 @@ command! Csh :echo "
 " => Markdown配置
 "================================
 let g:instant_markdown_autostart = 0
-nnoremap <slient> <C-M> :InstantMarkdownPreview<CR>
 
 
 "================================
@@ -304,16 +303,16 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }                          " �
 Plug 'vim-scripts/fcitx.vim'                                                " 若使用fcitx中文输入法框架，如搜狗输入法，此插件会在离开插入模式进入普通模式时自动切换会英文输入法
 
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
-" Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }
+" Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }                   " 即时预览Markdown文件渲染结果
 
 Plug 'octol/vim-cpp-enhanced-highlight', { 'for': 'cpp' }                   " C++语言的语法高亮增强
 Plug 'dense-analysis/ale', { 'on': [] }                                     " 动态语法检测，需要自己修改配置，本配置默认用于C/C++。cppcheck的bug解决(2020-2-3)，详见https://github.com/dense-analysis/ale/issues/2994，clangtidy错误无法显示的问题可以用仓库中vim/clangtidy.vim替换你的ale/ale_linters/cpp/clangtidy.vim
 Plug 'SirVer/ultisnips', { 'for': ['cpp', 'c', 'markdown', 'snippets'] }    " 输入代码片段缩写后按 <C-S> 自动补全完整代码，可以按snips的语法自己添加片段
-Plug 'honza/vim-snippets', { 'for': ['cpp', 'c', 'markdown', 'snippets'] }  " 上述插件的官方代码片段，包括了很多种编程语言
+" Plug 'honza/vim-snippets', { 'for': ['cpp', 'c', 'markdown', 'snippets'] }" 上述插件的官方代码片段，包括了很多种编程语言
 Plug 'https://gitee.com/mirrors/youcompleteme.git', { 'on': [] }            " 基于标签和语义的代码补全，需要自己修改配置，本配置默认用于C/C++，该项目较大且下载速度较慢，Arch/Manjaro的源里有该插件vim-youcompleteme，若源码安装需要进入安装目录执行./install.py
 Plug 'Shougo/echodoc.vim', { 'on': [] }                                     " ycm补全后在原本命令行的位置显示函数参数提示
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh', 'on': 'Leaderf' }          " 快速搜索文件 <leader>fz，标识符 <leader>ft，代码内容 <leader>fc，函数 <leader>ff 等等
-Plug 'skywind3000/asyncrun.vim', { 'on': [] }                               " 异步执行外部命令，配置后用于快速编译并执行当前C++代码，<space>lr编译并执行，用命令QuickrunArgs设置运行参数，<space>lc只编译用于gdb调试
+" Plug 'skywind3000/asyncrun.vim', { 'on': [] }                             " 异步执行外部命令
 
 Plug 'kana/vim-textobj-user'                                                " 此五个插件用于自定义文本对象，比如 dii 删除同缩进的代码，dif 删除函数内容，di, 删除函数参数
 Plug 'kana/vim-textobj-syntax'

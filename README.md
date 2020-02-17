@@ -24,7 +24,7 @@ $ ./bin/init.sh {options}
 * `--help` ：列出此列表
 * `--all` ：应用所有选项
 * `pacman`： 配置pacman，会更改 */etc/pacman.conf* 和 */etc/pacman.d/mirrorlist*
-* `zsh` ：安装oh-my-zsh，并提供了函数 *seec* 与 *seep* 用于我平时查笔记
+* `zsh` ：安装oh-my-zsh，并提供了函数 *see* 用于我平时查笔记，-l选项列出所有知识点(命令与概念，输出那是相当不人性化 :cry: )，-e选项精准查询
 * `tmux` ：安装tmux
 * `ssh` ：修改 */etc/sshd/sshd_config* 和 *~/.ssh/ssh_config*
 * `chfs` ：下载并安装chfs(Cute Http File Server)
@@ -147,12 +147,12 @@ bin/quickrun_time，其实就是time命令，不过shell的time输出难看我�
         * \<leader>cu：快速取消注释
         * 提供额外文本对象：`f`函数，`i`缩进，`,`函数参数
     * 搜索工程
-        * <leader>fz：搜寻文件
-        * <leader>ff：在所有缓冲区中搜寻函数
-        * <leader>ft：在所有缓冲区中搜寻标识符
-        * <leader>fg：利用gtags搜寻标识符
-        * <leader>fc：利用gtags搜寻内容
-        * <leader>fu：手动更新gtags
+        * \<leader>fz：搜寻文件
+        * \<leader>ff：在所有缓冲区中搜寻函数
+        * \<leader>ft：在所有缓冲区中搜寻标识符
+        * \<leader>fg：利用gtags搜寻标识符
+        * \<leader>fc：利用gtags搜寻内容
+        * \<leader>fu：手动更新gtags
     * 跳转标识符
         * gd：跳转定义，基于gtags的标签
         * gr：跳转引用，基于gtags的标签
@@ -162,8 +162,9 @@ bin/quickrun_time，其实就是time命令，不过shell的time输出难看我�
         * jn：跳转下一个ALE语法提示
         * jb：跳转上一个ALE语法提示
     * 编译运行
-        * <space>lr：快速编译并执行该c++程序
-        * <space>lc：只编译用于gdb调试
+        * \<space>lr：快速编译并执行该c++程序
+        * \<space>ld：只编译用于gdb调试
+        * \<space>lc：用clang优化编译
     * NERDTree
         * p：父目录
         * P：顶目录
