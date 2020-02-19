@@ -78,7 +78,7 @@ function zsh_cfg() {
     #添加Linux笔记，用seec和seep查询
     if [ ! -e ~/.cheat ] ;then
 	mkdir ~/.cheat
-    cp Linux.note Markdown.note ~/.cheat
+    cp cheat/* ~/.cheat
     fi
 }
 

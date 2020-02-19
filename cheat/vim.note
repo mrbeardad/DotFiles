@@ -1,0 +1,273 @@
+
+○窗口：
+▪使所有窗口等高等宽：^W=
+▪设置当前窗口：
+    减少/增加高度：^W -、^W +
+    减少/增加当前窗口宽度：^W <、^W >
+    设置高度/宽度 ：{高}^W _ 、{宽}^W |
+▪操作窗口：
+    ^W c：:close
+    ^W o：:only
+    ^W s：:sp
+    ^W v：:vs
+
+○标签页：
+▪常用命令
+    :tabe，:tabn，:tabp，:tabd
+
+○缓冲区：已激活、已列出、已载入、未命名
+▪查看：:ls
+    %当前/#轮换，a激活/h隐藏，=只读，+已更改
+▪常用命令
+    :ene，:e，:bd，:bn，:bp，:qa，:wa
+▪参数列表
+    :args，:arga，:argd
+    :argdo
+
+○插入模式
+▪进入：i，a，I，A，o，O
+▪特殊字符：(命令模式也适用)
+    ^V+特殊字符（MS下^Q）
+    ^V+字符编码：0，x，u，U
+    ^K+二合字符
+    查看：:digraphs，ga，g8
+▪暂入普通模式：^O
+▪粘贴：^R + 寄存器
+▪删除：^W、^U
+
+○可视模式：
+▪进入：v，^V
+▪移动：
+    o：到对角线端点
+    O：块选取模式下，到同行的另一个端点
+▪全行插入：
+    I/A：块选取模式下，插入到选取块的左/右
+
+○替换模式
+▪进入：R
+▪退出：<Esc>
+
+○普通模式
+▪操作：d，c，y
+▪移动：0，^，$，w，W，b，B，e，f，F，,，;，%，)，}，gg，G
+▪对象：（i/a）w，s，p，(，{，[，<，"，'，`
+▪删除：x，s，D，C，dd，S
+▪修改：r，~，gu，gU，J
+▪粘贴：p，P
+▪换页：^F，^D，^E，^B，^U，^Y
+▪撤销：u，^R，g-，g+
+▪g命令：
+    gq：排版
+    gQ：进入Ex模式，:vi退出
+
+○命令模式
+▪进入：:
+▪外部命令：!cmd
+    利用r/w，读取外部命令结果/提供给外部命令输入
+▪外部过滤：{范围}!cmd
+    选中区域作过滤器输入和输出(覆盖)
+▪:g：模式匹配执行命令，默认范围整个文件
+▪:g!：匹配不包含的行
+▪:s：模式匹配字符替换，默认范围本行，
+    s_flags：e不报错，g全替换，i忽略大小写，
+▪:r/w：范围表示read到范围行后，write指定范围
+▪:X：设置密码，为空解除
+▪:saveas：以新文件名保存
+▪^F：命令历史窗口(<CR>执行，^C退出)
+
+○范围
+▪先输入数字后再键入:冒号
+▪%：整个文件
+▪0：第一行行前
+▪$：最后一行
+▪ .：当前行
+▪ -/+n：当前行前/后n行
+▪ 'm：标签行
+▪/^foo/+1：模式匹配行
+▪/foo//bar//quux/：多次模式匹配行
+▪?^$?+1：前向匹配行
+
+○寄存器
+▪查看：:reg
+▪使用：" + □ + y/p
+▪寄存器：
+    用户：a-z和A-Z（大写用来向寄存器添加）
+    系统：*(选择区) 和 +(剪切板)
+    只读：%文件、. 修改、: 命令、/搜索
+    数字：0为最近一次复制，1-9最近1-9次删除
+
+○宏录制
+▪录制：q+□+操作+q
+▪使用：@+□，@@
+▪特殊：. 执行上次修改操作
+
+○标记与跳转
+▪查看：:marks 与 :jumps
+▪标记：m + 字母
+▪跳转：' + 标记
+▪标记：
+    用户：字母（大写全局）
+    上次跳转：'
+    上次修改：.
+    上次修改或复制：[或]
+    上次插入：^
+    上次关闭："
+    返回较旧跳转：CTRL-O（全局）
+    返回较新跳转：CTRL-I（全局）
+
+○快速查找
+▪*和#：当前单词，前向和后向
+▪/和?：正向和反向正则匹配
+▪gd和gD：函数内/外查找声明
+▪K：快速查找help
+
+○元数据文件
+▪swap文件
+    set noswapfile
+▪backup文件
+    set nobackup
+▪undo文件
+    set undofile
+    set undodir=$HOME/.vim/undo
+▪viminfo文件
+    set viminfo='100,<50,s10,h,n$HOME/.vim/viminfo
+    set history=1000
+    保存标记文件数、寄存器保存行数、寄存器最大字节、启动时关闭hlsearch、viminfo文件名、搜索/命令/输入历史
+▪session文件
+    :makesession mysession.vim
+    :source mysession.vim
+
+○代码缩进
+▪配置：
+    filetype indent on：自适应不同语言缩进
+    set autoindent：基于上行缩进
+    set expandtab：空格代替tab，:retab恢复本行tab
+    set tabstop=8：默认的tab宽，不足则为空格
+    set softtabstop=4：键入的tab宽
+    set shiftwidth=4：缩进的tab宽
+
+○代码折叠
+▪配置
+    set foldmethod=syntax：基于语法折叠
+    set nofoldenable：启动vim时不开启折叠
+▪常用命令：
+    za：切换折叠状态
+    zM：折叠所有代码
+    zR：取消所有折叠
+
+○基于Tags跳转
+▪配置：
+    set tags=./.tags;,.tags
+▪操作：
+    ^}：直接本窗口跳转
+    ^W } ：打开preview窗口跳转
+    g]：显示跳转选项
+○基于Cscope跳转
+▪配置：
+    cs add ~/Projects/.cscope.out
+    set nocst
+    set cscopequickfix=
+    set csre
+▪操作
+    cs find s/g/d/c/a 符号
+
+○文件跳转
+▪配置：
+    set path= ：vim搜寻文件名，**表示递归搜索
+▪操作：
+    gf ：还可下载URL
+
+○命令别名
+▪形式：:command oldcmd Newcmd
+▪参数：-nargs=0/1/*/?/+ 
+    <args>：用命令别名的参数代替该位置
+    <q-args>："str \'str\' "
+    <f-args>："str","str"
+▪默认范围：-range/-range=%
+
+○自动命令
+▪形式：:autocmd [group] {events} {file_pattern} [nested] {command}
+▪查询：不加{command}
+
+○键映射
+▪映射按键若局部冲突会导致vim等待
+▪映射<leader>：let mapleader="\\"
+▪禁用映射：映射到<nop>
+▪<silent>、<buffer>、<expr>
+
+配置
+○runtimepath目录结构
+▪查看：:scriptnames
+▪:filetype plugin indent on
+    加载filetype.vim与script.vim：/ftdetect/*.vim
+    加载ftplugin.vim：/ftplugin/
+    加载indent.vim：/indent/*.vim
+▪:syntax enable，:syntax on
+    加载/syntax/*.vim
+▪:set loadplugins
+    加载/plugin/*.vim
+▪:set packpath=，:packadd，:helptags doc/
+    /pack/foo/start/bar/类vim目录/
+    /pack/foo/opt/bar/类vim目录/
+▪/autoload/*.vim
+    存放自动载入的函数，调用时使用
+    :call dirname#filename#funcname()
+▪/ftplugin/
+    <filetype>.vim
+    <filetype>_<name>.vim
+    <filetype>/<name>.vim
+
+
+○其他配置
+▪set textwidth= ：每行宽度
+▪set sidescroll=：长行未回绕时每次右移几格
+▪set autowrite ：切换自动保存
+▪set gcr=a:block-blinkon0：禁止光标闪烁
+▪set spell：拼写检测
+▪set modeline=：在加载文件时首尾搜索配置
+▪set fileformats=unix,dos,mac
+▪set key=：为空取消密码
+▪set autochdir：自动切换工作目录
+▪set encoding：设置字符编码
+
+○vim变量
+▪变量作用域
+    g:var - 全局
+    a:var - 函数参数
+    l:var - 函数局部变量
+    b:var - buffer 局部变量
+    w:var - window 局部变量
+    t:var   - tab 局部变量
+    s:var - 当前脚本内可见的局部变量
+    v:var - Vim 预定义的内部变量
+▪$环境变量，&选项值
+▪整数：32为有符型，支持八/十/十六进制
+▪浮点数：支持科学记数法
+▪字符串：
+    NULL结尾，支持转义序列，且有" 与 ' 形式
+    用 . 连接字符串与变量替换
+    非零数字开头会转换为非零子串对应的数值，否则为0
+▪函数引用：大写首字母
+▪有序列表：[00，'10'，[20，21]]
+▪无序字典：{'key':'value'，}
+
+○vim函数
+▪调用：
+    :call Func(args)
+    :echo Funcname(args)
+    let My=function("Func")，call(Myfunc，[])
+▪range：
+    a:firstline，a:lastline
+▪dict：
+    self：将函数引用装入字典，self指代该字典
+
+○vim语句
+    ▪if语句
+    ▪for语句
+    ▪while语句
+    ▪try-catch语句
+
+○vim特性
+    ▪foo_{val}_bar：先计算val后字符替换
+
+

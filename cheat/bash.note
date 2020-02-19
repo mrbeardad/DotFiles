@@ -1,0 +1,460 @@
+BASH基础
+●bash选项set
+-u：不存在变量报错并停止
+-e：出错就停止
+-o pipefail：管道命令中有一个出错也停止，默认管道命令行的返回值为最后一个命令的返回值
+-x：调试
+-n：语法检测
+-c：模拟命令行
+
+○bash快捷键
+^A：行首
+^E：行尾
+^U：删除前面字符
+^K：删除后面字符
+^W：删除前面单词
+^Y：粘贴前面删除
+^D：删除光标前的字符，或者退出会话(EOF)
+^C：结束当前命令(signal 2)
+^Z：暂停当前命令(signal 18)
+^L：清屏并重新显示
+^R：历史命令反向搜索
+^S：历史命令正向搜索
+^G：退出当前编辑或搜索
+^T：交换前后两个字符
+^V：输入字符字面量
+^_ ：撤销，有的终端映射为 CTRL+/ 或 CTRL+7
+^X ^X：光标在当前位置和行首来回跳转 
+
+○bash基本操作
+●exit
+●wait
+●sleep
+●exec
+●source
+●history {N}
+●alias/unalias
+●stty  size：显示终端size
+●reset：重置因读取二进制文件导致的乱码
+
+○特殊字符
+
+○通配符：
+*：任意长度的任意字符
+**：递归目录(zsh)
+?：一个任意字符
+[^ - ]：序列中一个可能的字符
+{ , }：序列中的字符展开
+{ .. }：序列中的字符展开
+
+○括号
+(cmd;cmd)：子shell中执行，
+((expr,expr))：C风格表达式
+[ ]：test命令别名[，最后一个参数为]
+[[ ]]：shell关键字，支持=~模糊字符匹配，通配符字符匹配(关闭对文件的通配符扩展)，逻辑运算符
+{cmd;cmd}：当前shell中执行
+
+○~扩展：
+~：家目录
+~+：当前目录
+~-：上次目录
+
+○!扩展：
+!#：当前命令
+!!：上一条命令
+!-n：上n条命令
+!^：上一条命令的第一个单词
+!$：上一条命令的最后一个单词
+!:n：上一条命令的第n个单词
+!:n-$：上一条命令的第n个单词到最后一个单词
+
+○$扩展：
+$$：当前shell的PID
+$!：上次后台进程的进程号
+$?：上次命令返回值
+$*：所有参数(聚合)字符串
+$@：所有参数(分离)数组
+$#：参数个数
+$N：第N个参数，从0开始
+$(<file)：扩展为file文件的内容
+$(cmd)：扩展为cmd的标准输出，同`cmd`
+$((expr,expr))、$[expr,expr]：C风格表达式
+$'escap'：输出转义字符
+$varname、${varname}：变量扩展
+
+○空白符：参数分隔符，\n为执行命令行
+○: ：nop
+○! ：将后面的命令返回结果逻辑非
+○#：注释
+○命令间：
+; ：顺序执行
+&&：逻辑与执行
+||：逻辑或执行
+| ：管道才能连接命令成一个进程组
+&：后台执行，只能在命令行最后，且对于上述前3个分隔的命令行，只有最后一个命令为后台执行，使用(cmd;cmd)与{cmd;cmd}可对其整体进行&
+
+○I/O重定向
+< file：重定向标准输入到file
+<< EOF：从标准输入读取直到EOF(不含EOF)
+<<< string：将string作用标准输入内容
+<(cmd)：将cmd的标准输出的fd作为参数
+> file：重定向标准输出到file(截断)
+>> file：同上(追加)
+1>&2：脚本用echo输出标准错误
+2>&1：将标准错误也纳入管道
+2> file：重定向标准错误到file
+&> file：重定向标准错误与标准输出到file
+▪注：倒数1、2与倒数3、4不能合用
+
+○转义字符
+\：转义所有特殊字符
+" "：只保留$扩展、!扩展、" 的功能
+' '：只保留 ' 的功能
+
+●test
+▪逻辑运算符
+    !、&&、||
+▪字符串比较
+    =~、==、!=、<、>
+    -n：不为空
+    -z：为空
+▪算术比较
+    -eq、-ne、-gt、-ge、-lt、-le
+▪文件判断
+    -e：存在
+    -s：大小不为0
+    -f：普通文件
+    -d：目录
+    -L：符号链接
+    -b：块文件
+    -c：字符文件
+    -S：socket
+    -p：pipe
+    -r：可读
+    -w：可写
+    -x：可执行
+    -u：SUID
+    -g：SGID
+    -k：SBIT
+    -O：onwer为EUID
+    -G：group为EGID
+    -nt：file1比file2新(mtime)
+    -ef：两文件为同一文件的硬连接
+
+○正则表达式
+^：行首
+$：行尾
+. ：除\n外任意字符
+[^ - ]：匹配序列中的一个字符
+*：前一个字符匹配0-∞次
++：前一个字符匹配1-∞次
+?：前一个字符匹配0/1次
+{n}：前一个字符匹配n次
+{n,m}：前一个字符匹配n-m次
+{n,}：前一个字符匹配至少n次
+{,m}：前一个字符最多匹配m次
+(pattern)：形成子表达式，可被当做“前一个字符”
+pattern1|pattern2：匹配左/右整体，用(pattern)将其限制在局部
+[[:alnum:]]、[[:punct:]]、[[:xdigit:]]
+\d：数字
+\D：非数字
+\s：空白符
+\S：非空白符
+\w：字词(字母、数字、下划线)
+\W：非字词
+C风格转义字符：需要支持ECMAScript语法
+
+○变量
+▪定义变量
+var=val
+array[0]=valA
+array=([0]=valA [1]=valB [2]=valC)
+array=(valA valB valC)
+▪读取变量
+$#var：字符串长度
+$+var：变量存在为1，否则为0
+${array[i]}：取得数组中的元素
+${array[@]}：取得数组中所有元素
+${#array[@]}：取得数组的长度
+${#array[i]}：取得数组中某个变量的长度
+${varname:-word}：若不为空则返回变量，否则返回 word
+${varname:=word}：若不为空则返回变量，否则赋值成 word 并返回
+${varname:?message}：若不为空则返回变量，否则打印错误信息并退出
+${varname:+word}：若不为空则返回 word，否则返回 null
+${varname:offset:len}：取得字符串的子字符串
+▪注：zsh中数组下标从1开始，且无需${arr[i]}中的花括号
+▪注：shell变量默认都是字符串
+▪注：字符串变量所有空白符等特殊字符，使用时应该用双引号包含
+
+●env
+●export
+●declare
+-r：设置变量为只读，+r取消
+-p：查看变量
+○环境变量
+HOME
+USER
+LOGNAME
+UID、EUID、GID、EGID
+PATH
+MAIL
+PWD
+SHELL
+TERM
+HISTSIZE
+HOSTNAME：zsh中为HOST
+RANDOM：0 ~ 32767
+FUNCNAME
+LINENO
+
+BASH脚本
+○函数
+▪定义
+function  funcname()
+{
+statements
+return val
+}
+▪调用
+funcname  arg1  arg2
+()funcname arg1 arg2
+
+○语句
+▪分支
+    if   ;then
+    elif   ;then
+    fi
+▪循环(for-in)
+    for  i  in  List ; do
+    done
+▪循环(for-loop)
+    for (( ; ; )) ; do
+    done
+▪循环(while/until)
+    while/until ; do
+    done
+▪选择
+    select  i  in  List ; do
+    done
+    ▪输出PS3，死循环选择，一般嵌套case语句，选择数字并将对应List中字符串赋值给i
+▪多分支
+    case  $i  in
+    v1)    ;&
+    v2|v3)  ;;
+    *)  ;;
+    esac
+●控制跳转
+    continue、break
+
+○命令
+●eval  \$$var
+将参数中的$some_val解析后当做命令指针
+
+●getopts  "xy:"  var
+$OPTARG为选项参数
+
+●read  VAR
+-p：提示符
+-t：限时
+-n：读取字符数
+-s：关闭回显
+
+●trap
+cmd sig1 sig2：在脚本中设置信号处理命令
+"" sig1 sig2：在脚本中屏蔽某信号
+- sig1 sig2：恢复默认信号处理行为
+
+●xargs  CMD
+原理：将管道中的字符串的分隔符替换为空格后，作为CMD的参数
+-0：保留空白符不被替换，空白符前有\时也会保留
+-e：直到遇到此单词停止
+-p：每个单词都提醒用户
+-n：一次给予多少个参数
+
+●tee  FILE
+-a：追加而非截断
+
+●sort
+-f：忽略大小写
+-b：忽略行前空白
+-M：月份名称排序
+-n：数值排序
+-r：反向排位(降序)
+-u：删除相同行
+-t：指定分隔符
+-k n,m：指定比较第n-m域
+field定义：blank开始到non-blank尾结束
+
+●uniq
+-i：忽略大小写
+-c：计数
+-f：指定从哪个域开始比较(从0开始)
+
+●join  -1 N1 FILE1 -2 N2 FILE2
+-i：忽略大小写
+-t：指定分隔符
+N1、N2：指定两文件比较的域
+FILE1或FILE2可以为-，代表此文件从管道读取
+
+●paste FILE1  FILE2
+-t：指定分隔符
+
+●cut
+-d：指定分隔符
+-f：指定截取的域，可使用逗号与减号
+-c n-m：指定取出第n-m个字符
+
+●wc
+-l：行数
+-w：单词数
+-m：字符数
+
+编辑三剑客
+●grep
+-E：扩展正则表达式
+-A：显示之后几行
+-B：显示之前几行
+-C：显示之前和之后几行
+-i：忽略大小写
+-n：显示行号
+-c：计数
+-v：反向，显示不匹配的
+-q：静默模式
+
+●awk
+-F：分隔符，支持[]通配符
+-f：读取脚本文件
+-v  var=val
+▪例：
+    awk '模式{语句块;} 模式{语句块;}' FILE
+▪模式：
+    BEGIN、END、!/pattern/、rlt-expr
+    ▪支持/pattern1/&&/pattern2/与$N~/pattern/
+    ▪BEGIN执行在打开文件前，故无需文件输入
+▪变量：C风格变量
+    定义：var=val，arr[i]=val，map[key]=val
+▪内置变量
+    ARGC
+    ARGV
+    RS：行分隔符(默认\n)
+    FS：字段分隔符(默认blank)
+    ORS：输出的行分隔符(默认\n)
+    OFS：输出的字段分隔符(默认 , )
+    NR：行数
+    FNR：当前文件的行数
+    NF：字段数
+    OFMT：数字输出格式(默认%.6g)
+    IGNORECASE：为true则忽略大小写
+    $N：第N个字段，0为整行
+▪运算符
+    ^：求幂
+    ~：模糊匹配
+    ~!：模糊不匹配
+    空格：字符连接
+    in：确认数组键值
+    | ：管道
+    <、>、>>：重定向，关系运算符要用括号以区分
+▪关键字
+    ▪print：逗号替换为OFS，默认带\n
+    print "$1:\t"$1,$2
+    ▪printf：参数类似C中printf函数
+    printf "$1:%s\n",$1
+    ▪next：读取下一行并回到脚本开始处重新执行
+    ▪delete：删除数组元素
+    ▪break/continue
+    ▪getline
+    "cmd" | getline var ：若不加变量则直接赋值给$0
+    getline var < "file" ：同上
+▪语句
+    ▪C风格语句
+    ▪for( i in arr )
+    ▪函数
+    ▪srand(); rand()
+    前者默认以时间作种，后者返回0-1的浮点数
+    ▪length(string); length(array)
+    检查字符串与数组的长度
+    ▪sub(/pattern/, "string", var); gsub(...)
+    将var中匹配的pattern替换为string，后者全部替换
+    ▪index(var, "string")
+    string在var中出现的位置(1开始)，无则返回0
+    ▪substr(var, pos, length)
+    截取子串，从pos开始的length个字符(1开始)，无length则到结尾
+    ▪tolower(s); toupper(s)
+    ▪注意
+    变量无需声明，初值为空，参与运算时置0；
+    数组下标从1开始；
+    数组键值为字符串时需引号，否则键值in替换当做变量
+    参与运算时数组下标自动建立，故检查下标是否存在用in；
+    关系运算符要两边都是数字才进行数值比较；
+
+●sed
+-f：指定脚本文件
+-i：修改原文件
+-n：仅显示处理结果，只有a i c r p操作才输出
+-r：支持扩展正则表达式
+▪例：
+    sed '模式{语句块;}; 模式{语句块;}' FILE
+▪模式
+    支持!/pattern/与类vim范围
+    支持\<与\>元字符
+    支持/pattern/I忽略大小写
+▪语句块
+    块内操作用分号分隔，块间也需要分号分隔
+    a; i; c; r; w;操作只能单独存在，不能在块中
+    替换模式：
+    ▪支持转义字符
+    ▪&代表match，\N代表match[N]
+    ▪替换标记：无g全部，Ng第N个
+▪操作
+    a\与i\：行后与行前添加字符串
+    c\：会把所有匹配行转换成只有一个字符串
+    s/pattern/replace/g
+    d：删除匹配行
+    r/w file：读取file到行后，写入匹配行到file
+    n：跳转到下一行，执行后续操作
+    =：行前打印行号
+    q：退出
+    N：读取下一行至模板块，形成多行组，并将行号改为新加行的行号
+    P/D操作：分别用于多行组，打印与删除第一行
+    h：拷贝模板块到缓冲区(模板块即当前处理的行)
+    H：追加模板块到缓冲区
+    g：获得内存缓冲区的内容替代当前行
+    G：获得内存缓冲区的内容追加到当前行后
+
+
+●pacman
+▪更新数据库
+    ▪-Sy：同步源
+    ▪-Fy：同步基础数据
+▪查询软件包
+    ▪-Ss：模糊搜索远程数据库
+    ▪-Si：从远程数据库获取目的包的详细信息
+    ▪-Sl：列出目的仓库所有包
+    ▪-Qs：模糊搜索本地数据库
+    ▪-Qi：从本地数据库获取目的包的详细信息
+    ▪-Qc：查看目的包更新日志
+    ▪-Qg：查看软件包组中的包
+    ▪-Ql：查看目的包的文件安装路径
+    ▪-Qo：查询目的文件所属包
+    ▪-Qu：查询所有需要升级的包
+▪安装软件包
+    ▪-S：远程下载并安装，若以安装则用本地包重装
+    ▪-Sw：只下载软件包
+    ▪-U：安装已下载的软件包
+    ▪-Su：更新软件包
+▪删除软件包
+    缓存位于：/var/cache/pacman/pkg/
+    ▪-R：删除目的包
+    ▪-Rc：还包括依赖它的包
+    ▪-Rs：还包括只被它依赖的包
+    ▪-Rn：还包括其配置文件
+    ▪-Sc：清理未安装的软件包
+    ▪-Scc：清理所有软件包与数据库
+▪从iso文件安装软件包
+    ▪mount  -o  ro,loop  /path/to/iso  /mnt/iso
+    ▪/etc/pacman.conf
+    [custom]     #添加在其他仓库之前
+    Server = file:///mnt/iso/arch/pkg
+    ▪pacman  -Sy
+
+

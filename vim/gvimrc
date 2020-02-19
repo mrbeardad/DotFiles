@@ -6,7 +6,7 @@ set guioptions=agit
 set guicursor=n:block,i:hor10,a:blinkon0
 set background=dark
 
-colorscheme one            | let g:airline_theme=" fairyfloss"
+colorscheme one            | let g:airline_theme="base16_harmonic16"
 " 注意，以下后排注释为其余搭配的Airline主题，Airline的atomic主题会改变状态栏格式，不喜欢的可以把源码中的第55行开始的那段代码注释
 " colorscheme NeoSolarized | let g:airline_theme="atomic"     " angr, solarized, solarized_flood
 " colorscheme tender       | let g:airline_theme="tender"     " cool

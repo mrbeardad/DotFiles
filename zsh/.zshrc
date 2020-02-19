@@ -134,17 +134,25 @@ alias gfp='git format-patch'
 
 function see()
 {
-    if [[ -n "$1" && "$1" == "-l" ]] ;then
-        grep -iE '●|○' ~/.cheat/*
-        return $?
+    if [[ "$1" == "-l" ]] ;then
+        if [[ -n "$2" ]] ;then
+            grep -iE '●|○' ~/.cheat/$2
+        else
+            grep -iE '●|○' ~/.cheat/*
+        fi
+    elif [[ "$1" == "-e" ]] ;then
+        if [[ -n "$3" ]] ;then
+            sed -rn "/(●|○)($2)/I,/^$/p" ~/.cheat/$3
+        else
+            sed -rn "/(●|○)($2)/I,/^$/p" ~/.cheat/*
+        fi
+    else
+        if [[ -n "$2" ]] ;then
+            sed -rn "/(●|○).*($1)/I,/^$/p" ~/.cheat/$2
+        else
+            sed -rn "/(●|○).*($1)/I,/^$/p" ~/.cheat/*
+        fi
     fi
-
-    if [[ -n "$1" && "$1" == "-e" ]] ;then
-        sed -r -n "/(●|○)($2)/I,/^$/p" ~/.cheat/*
-        return $?
-    fi
-
-    sed -r -n "/(●|○).*($1)/I,/^$/p" ~/.cheat/*
 }
 
 

@@ -1,0 +1,463 @@
+●gcc
+▪优化级别：-O1  -O2  -O3
+▪编译程度：-E(.i)  -S(.s)  -c(.o)  -o
+▪指定标准：-std=c11
+▪使用AVX指令：-mavx2
+▪并发库：-lpthread
+▪制作动态库：-shared  -fpic
+▪调用链接器：-rdynamic  -ldl
+▪链接库打桩：-Wl,--wrap,func
+▪定义宏：-Dmacros_define
+▪指定inclide目录：-I
+▪指定lib目录：-L -lxxx（库名省略lib、.a、.so）
+▪GPROF剖析：-pg（最好也加下述参数）
+▪调试：-Og  -g  -fno-inline
+▪指定机器：-m32  -m64
+▪指定程序规模：-mcmodel=medium/large
+代码数据段默认32位跳转
+▪开启标准库debug模式：-D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC
+▪报错： -Werror  -Wall  -Wextra -Wconversion -Wfloat-equal
+
+
+●gbd  <exec-file> <core-dump> PID
+▪coredump设置
+    ulimit -c ulimit
+    echo '/home/core/core.%e.%p' > /proc/sys/kernel/core_pattern
+▪断点：
+    b/break：<func>，<*addr>，<linenum>，<if-condition>
+    watch：<value>，<if-condition>
+    catch：<event>
+    d/delete，disable，enable，clear
+    i/info b
+▪运行：
+    set args，show args，path
+    r/run：I/O重定向
+    c/continue
+    s/step，si/stepi
+    n/next，ni/nexti
+    u/until：结束循环，行号
+    f/finish
+    k/kill
+    q/quit
+▪调试：
+    p/print：val，$reg，express，"%s", addr，*arr@lenth
+    x ：addr
+    <formate>：/n字节/u类型/[bhwg]位长
+    i/info：locals，args，stack，frame，program
+    whatis：value
+    display：每次单步后打印变量
+    handle  <signal>  <keyword>
+▪界面：
+    la/layout：src，asm，reg，sp
+    l/list：lineno，funcname
+    disas：func，addr
+    i/info：reg，all
+
+●ar：
+▪r：替换，d：删除，t：显示
+▪c：创建，s：符号，u：更新，v：详述
+▪创建：rscv
+▪显示：tv
+▪追加：rsv
+▪更新：rsuv
+▪删除：dsv
+▪提取：xv
+▪注：BSD风格：cmd  opts  lib.a  a.o
+
+●objdump -d
+●readelf
+●gprof
+●ldd -V
+●strace
+●pmap
+
+
+
+
+●tmux
+    ▪ls
+    ▪new -s <session-name>
+    ▪a -t <session-name>
+    ▪kill-session -t <session-name>
+    ▪kill-server
+    ▪source-file
+    ▪-S socketfile
+    ▪-S socketfile a
+▪join-pane -s session:window.pane
+将目标pane加入当前window
+▪快捷键：prefix设为Alt-w
+    d(卸离)，D(选择卸离)，:(命令模式)，shift+鼠标(选取)
+    ▪window：
+    c(创建)，&(关闭)，(重名win)，.(重编号)
+    ▪切换windows：
+    p/n(前后)，0~9(编号)，f(搜索)，w(选择)
+    ▪pane：
+    "(sp)，%(vs)，x(关闭)，z(最大化)，
+    !(新窗口打开)，q(显示编号并切换)
+▪插件：tmux-resurrect(备份快照)
+S：保存
+R：恢复
+
+○SSH
+●ssh -p <port> user@host
+●ssh-keygen -t ecdsa -b 512 -C "注释"
+交互时可添加密码短语对私钥加密，每次用时需输入密码短语
+●ssh-keygen -f ~/.ssh/id_ecdsa -p
+更改密码短语
+●ssh-copy-id -i mypub -p port user@host
+
+○客户端配置~/.ssh/config
+配置一次连接所需要的信息
+Host
+HostName
+Port
+User
+IdentitiesOnly
+IdentityFile
+
+○服务端配置/etc/ssh/sshd_config
+改port
+限root
+强pub
+systemd unit配置
+sshd.service或
+sshd.socket与sshd@.service
+[socket]
+ListenStream=
+FreeBind=true
+Accept=no
+
+○git概念
+▪纳入git管理的目录
+    工作区：untraced，new，deleted，modified
+    暂存区：traced , new，deleted，modified
+    仓库：tags，branches(local & remote)
+▪操作
+    ▪初始化git管理目录，跟踪文件并同步至暂存区
+    ▪工->暂，将工作区的各种变更同步到暂存区
+    ▪暂->工，回溯工作区，或撤销暂存区
+    ▪工/暂->仓库：提交到本地HEAD分支
+    ▪标签：建立、销毁
+    ▪分支：建立、切换、合并、销毁
+    为某个特性或bug新建分支，成熟后合并入master
+    为某个remote仓库新建分支，以跟踪和隔离
+    ▪远程仓库：克隆、拉取、合并、推送
+    跟踪分支建立后需要手动拉取以同步
+    push时若与远程仓库目标分支冲突(未同步)则失败
+    remote有自己的branch与tag，push时注意相对应
+▪分支模型
+    ▪抽象模型：每个分支的修改与开发进度相互独立
+    ▪commit信息：
+    作者、提交者、日期、校验、描述、指针、"快照"
+    ▪每个commit指针指向其父commit且可能有多个
+    ▪本地分支指针，指向该分支对应的commit
+    ▪本地HEAD指针，指向当前分支对应的commit
+    ▪远程仓库的指针，本地不可修改只能合并，通过拉取更新
+    ▪合并操作：快进，递归
+    原理：将两分支相对共同祖先的变更合并，若对同一个文件均有变更则冲突
+    ▪变基操作：将分支完全并入以简化commit历史
+    原理：将本分支相对共同祖先的各个变更作用于目标分支而形成各个commit，并删除该分支历史
+    注意：因为删除历史的缘故
+    不要rebase已经发布了的分支commit
+    rebase分支的分支应该使用--onto选项，以免将分支上的另一个子分支的历史改变
+▪注：所有分支操作应保证工作区干净
+▪工作流程
+    贡献者
+    ▪将目标项目仓库fork到自己的公开站点
+    ▪从自己站点clone项目到本地进行线下开发修改
+    ▪本地master分支跟踪origin/master
+    ▪设置upstream/master连接项目发布点
+    ▪完成后push到自己的公开站点
+    ▪向发布点发送pull request
+    ▪若冲突则同步upstream再合并、修改、推送
+    维护者
+    ▪为贡献者仓库添加remote仓库并fetch到本地
+    ▪若贡献太多，则配置remote仓库的refs
+    ▪审查、修改、合并后push到项目发布点
+
+○git配置
+▪/etc/gitconfig
+git config --system
+▪~/.gitconfig
+git config --global
+▪~/.git/config
+git config --local
+▪选项
+    user.name
+    user.email
+    core.editor
+    credential.helper  cache
+▪配置refs
+    [remote "RPO"]
+    url = URL
+    fetch = +refs/heads/*:refs/remote/origin/*
+    fetch = +refs/pull/*/head:refs/remote/origin/pr/*
+
+○.gitignore
+▪所有空行或者以 ＃ 开头的行都会被 Git 忽略
+▪可以使用标准的 glob 模式匹配
+▪匹配模式可以以（/）开头防止递归
+▪匹配模式可以以（/）结尾指定目录
+▪要忽略指定模式以外的文件或目录，可以在模式前加上惊叹号（!）取反
+
+○.git目录
+▪description：gitweb程序使用
+▪config：仓库配置
+▪objects：所有对象(数据、树、提交、标签)
+▪HEAD：当前checkout的指针
+▪index：暂存区
+▪refs/：指向分支的提交对象的指针
+    refs/heads/*：本地分支引用
+    refs/tags/*：本地标签引用
+    refs/remote/RPO/*：远程仓库的分支引用
+
+●git add
+ga，gaa
+
+●git rm
+grm
+
+●git mv
+gmv
+▪注：需要通过git mv来移动，不能像grm一样可以马后炮
+
+●git restore <path>
+grs(回溯W)，grst(撤销S)
+
+●git status
+gst，gss(左W右S)
+
+●git diff
+gd，gds，gdt，gdts，gdtre
+▪例：
+[<path>]：比较W-S或S-H
+<commit> [<path>]：比较W-C或S-C
+<commit> <commit> [<path>]：比较C-C
+
+●git commit
+gc，gc!，gca，gca!
+▪注：
+a代表直接W->H提交
+!代表覆盖上次提交
+
+●git tag
+gt
+gtl，gtv
+gsh TAG
+▪例：
+git tag -a TAG -m 'discription'：强标签
+git tag TAG-lw：轻量标签
+
+●git show
+gsh
+
+●git log [<file>|<branch>|<commit>]
+glg，glola，glgga
+
+●git checkout
+gco
+gcb，gct
+gcm，gcd
+▪例：
+git checkout -b <branch> <remote>/<branch>：创建、检出并跟踪
+git checkout --track <remote>/<branch>：本分支直接跟踪
+
+●git branch <branch>：会当前HEAD创建分支
+gb，gbav
+gbda：删除已合并的分支
+gbnm：查看未合并的分支
+
+●git merge <branch>：合并<branch>到本分支
+gm，gmt，gma
+
+●git rebase
+grb
+grba，grbs，grbc
+▪例：
+git rebase <主branch>：本分支变基到<branch>
+git rebase <主branch> <被branch>
+
+●git remote
+gr
+grv，grsh
+gra，grrm，grmv
+glr(查看请求ref)
+▪例：
+git remote add <remote> URL
+▪流程：
+gra -> gcb|gct -> gf|gl -> gco -> gc -> gm|grb -> gp
+
+●git fetch [<remote>]
+gf
+
+●git pull [<remote>]
+gl
+
+●git push
+gp，gpd，gpta
+▪例：
+git push <remote> <本地branch>：推送本地分支<branch>到远程同名分支
+git push <remote> <本地ref>:<远程ref>
+git push <remote> <本地branch>:<远程branch>
+git push <remote> --delete <branch>：销毁远程仓库某分支
+git push <remote> <tag>
+git push --tags
+git push <remote> :refs/tags/tagname
+
+●git stach
+gsta，gstall(包括untraced)，gstp，gstl
+
+●git cherry-pick <commit>：复制(合并)目标commit到当前分支
+gcp，gcpa，gcpc
+
+●git bundle create <file> HEAD <branch>
+▪注：
+最好带上HEAD自动checkout
+可用git clone <file> [<dirname>]重建目录
+
+●git format-patch
+▪例：
+git format-patch <branch> -n    ：目标分支最近n次更新
+git format-patch <commit>       ：本分支自目标commit(不含)之后的更新
+git format-patch <commit1>..<commit2>   ：两个commit(包含)之间的更新
+
+●git apply
+gap
+▪例：
+git apply [--check|--stat] ：直接更新|确认是否冲突|确认哪些更改
+
+
+○git基础操作
+▪初始化：git init
+▪跟踪文件：git add
+▪同步到暂存区：git add|rm|mv
+▪回溯与撤销：git restore [--staged]
+▪查看状态：git status [-s]
+▪-s选项，左工右暂
+▪查看变更：
+git diff [--staged]
+git difftool --tool=gvimdiff3  [--staged]
+git diff-tree ABCH BBCH
+▪模式
+[<path>]：比较工-暂或暂-仓指定文件
+<commit> [<path>]：比较工-C或暂-C指定文件
+<commit> <commit> [<path>]：比较指定C的指定文件
+▪提交至仓库本分支：git commit
+额外 -m 选项将参数设为提交描述(隔空行为详述)
+额外 -a 选项跳过暂存区，直接从工作区到仓库
+额外 --amend 选项表示覆盖上次提交
+▪查看提交日志：
+git log  查看提交日志
+git log -p -2  查看近两次提交日志
+git log (--online) --decorate --graph --all  查看分支
+
+○git标签
+▪查看标签：
+git tag -v
+git tag -l 'v1.8.*'
+git show TAG
+▪添加标签
+git tag -a TAG -m 'discription'：强标签
+git tag TAG-lw：轻量标签
+git tag -a TAG '某次提交的校验值'
+▪删除标签
+git tag -d TAG
+
+○git分支
+▪查看
+git branch -avv
+额外 --merged/--no-merged 选项确认是否合并
+▪创建
+git branch BCH
+git checkout -b BCH
+▪切换
+git checkout BCH：还可以切换都某次提交，注意暂存工作区
+▪合并
+git merge BCH
+git mergetool
+git merge --abort
+▪变基
+git rebase BCH
+git rebase RBBCH  DEBAH
+git rebase --abort/--skip/--continue
+▪销毁
+git branch -d/D BCH
+
+○git远程仓库
+▪克隆完整远程仓库：
+git clone URL  Dirname
+▪查看
+git remote -v
+git remote show RPO
+git ls-remote RPO：查看引用，包括pull request
+▪配置remote
+git remote add RPO URL 
+git remote rename RPO NewRPO
+git remote rm RPO
+▪跟踪remote
+git checkout -b LBCH RPO/RBCH
+git checkout --track RPO/BCH
+▪同步remote
+▪同步到本地
+git fetch  RPO/--all：只抓取到本地(推荐)
+git pull  RPO：自动合并分支
+▪同步到remote
+git push  RPO BCH：推送本地分支到远程同名分支
+git push RPO LBCH:RBCH
+git push RPO --delete BCH：销毁远程仓库某分支
+git push RPO TAG
+git push --tags
+git push RPO :refs/tags/tagname
+
+○Makefile
+▪规则：
+    ▪格式：
+    <target>：<prerequisites>
+    <tab> <command>
+    ▪前置条件与命令至少要有一个存在
+▪目标：默认执行第一个目标
+    ▪文件(默认)：
+    依赖前置条件(也是一系列目标)生成目标文件
+    ▪伪目标(用`.PHONY:<target>`指定)：
+    用于表示该目标不是文件，无条件执行
+▪前置条件：用空格分隔
+    ▪依赖文件：
+    若依赖文件存在且时间戳晚于目标文件，则不生成目标文件
+    ▪依赖伪目标：
+    直接执行伪目标
+▪命令：
+    ▪前导符用`.RECIPEPREFIX = {char}`指定，默认<tab>
+    ▪每行命令在单独shell中，用`.ONESHELL:`则在同一个shell中
+▪语法
+    ▪`#`：注释
+    ▪`@`：关闭回响，默认回响每行命令与注释
+    ▪支持通配符
+    ▪支持变量：用$(var)引用，shell变量用$$var
+    ▪内置变量：$(CC)代指编译器
+
+○CMake：CMakeLists.txt
+▪CMake 最低版本号要求
+    cmake_minimum_required (VERSION 2.8)
+▪项目信息
+    project (Demo1)
+▪指定生成目标
+    add_executable(Demo main.cc)
+▪查找当前目录下的所有源文件，并将名称保存到变量
+    aux_source_directory(. DIR_SRCS)
+▪指定生成目标
+    add_executable(Demo ${DIR_SRCS})
+▪把当前文件夹下的源码列表存到变量 SRCS 中
+    file( GLOB SRCS *.c *.cpp *.cc *.h *.hpp )
+▪把源码编译成一个二进制这里的 ${PROJECT_NAME} 就是 CPP，是在第一行设置的
+    add_executable( ${PROJECT_NAME} ${SRCS} )
+▪添加 math 子目录，在子目录执行cmake
+    add_subdirectory(math)
+▪指定生成目标
+    add_executable(Demo main.cc)
+▪添加链接库
+    target_link_libraries(Demo MathFunctions)
+▪制作链接库
+    add_library( 动态链接库名称  SHARED  源码列表 )
+    add_library( 静态链接库名称  STATIC  源码列表 )
+    add_executable( 二进制文件名  源码列表 )
+    target_link_libraries( 二进制文件名  动静态库名 )
