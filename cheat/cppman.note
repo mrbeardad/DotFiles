@@ -1,0 +1,736 @@
+异常处理
+
+○标准库异常
+exception <exception>
+    bad_cast <typeinfo>             ：多态引用的转换失败
+    bad_typeid <typeinfo>           ：目标为含有虚函数的类型的空指针
+    bad_weak_ptr <memory>           ：构造weak_ptr失败
+    bad_function_call <functional>  ：调用无目标的function类
+    bad_alloc <new>                 ：内存申请失败
+    bad_array_new_length <new>      ：传给new的size不在有效范围
+    logic_error <stdexcept>
+        domain_error    ：数学库
+        invalid_argument：bitset构造参数无效
+        length_error    ：容器size超出限制
+        out_of_range    ：数组类型的无效索引
+        future_error <future>：异步
+    runtime_error <stdexcept>
+        range_error     ：wide string与byte string转换出错
+        overflow_error  ：bitset转换为整型溢出
+        underflow_error ：算术下溢
+        system_error <system_error>：并发
+            ios::failure：stream出错
+○基本使用
+    ▪.what()：根部基类exception的虚函数，返回const char*，异常类销毁后该C-string也不复存在
+    ▪.code()：返回error_code类对象
+○error_code&error_condition
+    ▪区别：可移植性，前者由编译器定义(OS相关)，后者为默认标准
+    ▪error_code：
+        .category().name()
+        .value()
+        .message()
+        .default_error_condition()
+        .default_error_condition().category().name()
+        .default_error_condition().value()
+        .default_error_condition().message()
+    ▪对比信息：重载了与枚举值的比较运算符
+        errc：<cerrno>
+        io_errc：<ios>
+        future_errc：<future>
+○异常挂起
+    ▪current_exception() 返回exception_ptr对象
+    ▪rethrow_exception(eptr) 重新抛出exception_ptr对象
+○构造异常类
+    ▪logic_error和runtime_error
+        (const string&)
+        (const char*)
+    ▪system_error
+        (error_code)
+        (error_code，const string&)
+        (error_code，const char*)
+        ▪提供make_error_code(errc)构造error_code
+
+C头文件
+
+○常用C头文件
+▪<cstddef>：常用基础类型的定义
+▪<cstdlib>：程序退出处理
+▪<cstring>：内存底层操作
+▪<cctype>：字符比较
+▪<ctime>：日期时间输出函数
+▪<cmath>：数学库
+▪<cassert>：调试
+▪
+○调试：<cassert>
+    ▪assert(expr)：若为false则报错并终止程序
+    ▪static_assert(expr, message)：可选描述文字
+    ▪NDEGUG：#define 之后退出调试模式
+    ▪编译器预处理宏：
+    __func__、__FILE__、__LINE__、__TIME__、__DATE__
+
+○选项处理：<unistd.h>短版 <getopt.h>长版
+    ▪getopt(argc，argv，optstring)
+        ▪参数optstring：
+            t: 代表必有参数，"紧跟"或"间隔"都被视为参数
+            t::代表可选参数，只识别"紧跟"为参数
+        ▪返回int表示选项字符，-1表示结束
+        ▪全局变量：
+            optarg：指向选项的参数，无对应则返回?
+            optind：指向处理的argv索引
+    ▪getopt_long(argc, argv, optstring, longopt, longindex)
+        ▪参数longopt：struct option*，最后一个必须全0
+            const char *name：参数名称 
+            int has_arg     ：no/required/optional_argrument
+            int *flag       ：不为NULL则*flag=val且返回0
+            int val         ：指定匹配到该选项时返回的int值
+        ▪参数longidx：int*，传入一个int指针存放lopt下标
+        ▪规则同上，不过"紧跟"用=区别与选项，而且长选项可不用完整输入
+    ▪getopt_long_only(参数同上)
+        ▪区别：-opt会优先解析为长选项，不符合再为短
+
+○SIMD：<immintrin.h>
+▪利用alignas(32)对齐数组
+▪向量寄存器抽象类型： __m256，__m256d，__m256i
+▪加载到向量寄存器：
+    _mm256_load_ps( float* )
+    _mm256_load_pd( dounle* )
+    _mm256_load_epi256( __m256i* )
+▪SIMD运算：
+    _mm256_OP_ps( __m256, __m256 )
+    _mm256_OP_pd( __m256d, __m256d )
+    _mm256_OP_epi32( __m256i, __m256i )
+    _mm256_OP_epi64( __m256i, __m256i )
+▪存储回内存：
+    _mm256_store_ps( float* , __m256)
+    _mm256_store_pd( dounle* , __m256d )
+    _mm256_store_epi256( int* , __m256i )
+
+通用工具
+
+○pair：<utility>
+▪构造
+    ▪支持不同实例隐式类型转换
+    ▪支持移动语义
+    ▪逐块式构造：
+    std::piecewise_constructor避免与构造tuple冲突
+▪比较：字典比较
+
+○tuple：<tuple>
+▪构造
+    ▪支持不同实例隐式类型转换
+    ▪支持移动语义
+    ▪支持由pair转换
+▪读取
+    get<N>(t)与get<T>(t)
+    tuple_size<TT>::value
+    tuple_element<N，TT>::type
+▪比较：字典比较
+
+○any：<any>
+▪构造：
+    ▪默认构造：构造为nullptr
+    ▪支持移动构造
+    ▪就地构造：std::in_place_type<>
+▪读取：
+    .has_value()
+    .type().name()
+    any_cast<T&>()
+▪修改：
+    .operator=()
+    .emplace<>()
+    .reset()
+▪比较： 比较index值
+
+○variant：<variant>
+▪构造：
+    ▪默认构造：构造第一个类型
+    std::monostate类作占位符避免无默认构造函数
+    ▪逐块式(唯一)构造：匹配最佳的模板参数类型
+    char*匹配数值类型比string更佳
+    ▪支持移动构造
+    ▪就地构造：
+    std::in_place_type<>与std::in_place_index<>
+▪读取：
+    .index()
+    get<T>(vrt)与get<N>(vrt)
+    get_if<T>(&vrt)与get_if<N>(&vrt)
+    ▪注：get<>错误匹配类型会抛出异常
+    ▪注：get_if<>错误匹配类型返回空指针
+▪修改：
+    .operator=()
+    .emplace<T>()与.emplace<N>()
+▪访问：
+    ▪visit(func，vrt)
+    func为能接受所有vrt模板参数类型的重载可调用
+
+○optional：<optional>
+▪构造：
+    ▪默认构造：构造为std::nullopt
+    ▪逐块式(唯一)构造
+    ▪支持移动构造
+    ▪就地构造：std::in_place
+▪读取与修改：
+    ▪operator bool()
+    ▪operator*()，operator->()
+    ▪.value()：nullopt则抛出异常
+    ▪.value_or(type_val)：nullopt则返回type_val
+
+○shared_ptr：<memory>
+▪构造：
+    shared_ptr<T>(new_ptr，deleter)
+    make_shared<>()：目标与引用计数一次分配
+    拷贝构造：更新引用计数
+▪读取：
+    operator*()与operator->()
+    .use_count()
+▪修改：
+    .reset()
+    .reset(ptr)
+    .reset(ptr，del)
+▪类型转换：
+    static_pointer_cast<>()
+    dynamic_pointer_cast<>()
+    const_pointer_cast<>()
+    .operator bool()
+▪错误问题： 循环依赖 多组指向
+
+○weak_ptr：<memory>
+▪作用：
+    解决shared_ptr循环依赖
+    只能弱引用分享，不参与销毁共享对象
+▪构造： weak_ptr<T>(sp)
+▪读取：
+    operator*()与operator->()
+    .expired()：返回是否为空
+
+○unique_ptr：<memory>
+▪作用：自动安全的释放资源
+▪构造：
+    ▪unique_ptr<T，Del>(ptr，del)
+    del默认为delete表达式
+    ▪支持移动构造，拒绝拷贝构造
+▪读取： .get()
+▪修改：
+    .reset()
+    .reset(ptr)
+
+
+○numeric_limits：<limits>
+▪作用：提供类型的算术信息
+▪知识点：
+十进制转浮点数：因为十进制可能需要更多位来表示而导致精度丢失，因此只有[(N)/log2(10)]d个十进制数字能确定
+
+○TypeTrait：<type_traits>
+▪类型判断式
+▪类型关系检验
+▪类型修饰符
+▪常用：decay<T>
+▪使用：
+    ▪::value返回std::true_type或std::false_type
+    ▪::type返回修饰后的类型
+    ▪typetrait_t<T>代替 typename typetrait<T>::type
+▪技巧：
+    ▪通过包装函数处理/过滤类型后调用工具函数
+    利用::value调用重载工具
+    利用::type转换类型传递给模板同时修改参数类型
+
+○reference_wrapper：<functional>
+▪构造： ref()与cref()
+▪转换： 提供到目标引用的转换from&to
+▪读取： .get()：返回目标引用才能调用成员函数
+
+○function：<functional>
+▪运行时能够统一可调用类型的三种形式
+
+○ratio：<ratio>
+▪构造：预定义ratio类型
+▪读取： 模板非类型参数作分子(.num)与分母(.den)
+▪运算： 编译期运算、比较、化简、报错 (::type与::value)
+
+○Clock和Timer：<chrono>
+▪duration
+    ▪构造：time_point相减、预定义字面值
+    ▪读取：.count()、::rep、::period
+    ▪算术运算：会隐式转换为更高精度
+    ▪类型转换：转为粗精度直接截断数值
+    duration_cast<>()
+▪Clock
+    ▪构造：预定义system_clock、steady_clock等
+    ▪读取：
+        ::now()
+        ::duration、::time_point
+        system_clock提供::from_time_t()与::to_time_t()
+▪time_point<Clock、duration>
+    ▪构造：
+        默认构造为epoch
+        Clock::now()获取
+        time_point与duration运算
+        注：由Clock提供Epoch，duration可相对为负值
+    ▪算术运算
+    ▪关系运算
+    ▪类型转换：time_point_cast<C，D>()
+▪<ctime>：
+    获取当前时间：time(time_t*)
+    返回 tm* ：localtime(time*)、gmtime(time*)
+▪<iomanip>：
+    get_time(tm*，fmt)
+    put_time(tm*，fmt)
+
+STL
+
+○STL组件
+▪容器：序列、关联、无序
+    ▪异常发生：容器reallocate，元素的copy与move
+    ▪异常处理：容器保证reallocate安全；对于元素产生的异常，随机访问容器无法恢复，节点式容器保证安全
+▪迭代器：输出、输入、单向、双向、随机
+▪泛型算法：搜索比较、更替复制、涂写删除
+
+○array：<array>
+▪特点：
+    随机访问
+    高效栈内存
+    *容量固定
+▪构造：
+    array未定义构造函数，只能使用聚合类初始化
+
+○vector：<vector>
+▪特点：
+    随机访问
+    尾部高效增删元素
+    *reallocate时迭代器失效
+▪与string不同，vector不能用.reserve()缩减容量
+
+○deque：<deque>
+▪特点：
+    随机访问
+    *访问元素多一步骤
+    头尾高效增删元素
+    reallocate更快速
+    自动缩减容量
+    容量极限更大
+    *增删元素时可致迭代器失效
+
+○list：<list>
+▪特点：
+    双向访问
+    随处高效增删元素
+    节点保证元素安全
+▪技巧： 需要提供反向迭代器并应该避免边界检查，故可能实现为环式（.end()与.rend()指向自己）
+
+○forward_list：<forward_list>
+▪特点：
+    *单向访问
+    随处高效增删元素
+    内存消耗更低
+    节点保证元素安全
+▪技巧： 无需提供反向迭代器，故无需环式，只要将最后元素*next设为nullptr（.before_begin()指向自己， .end()设为nullptr)
+
+○Associated：<set>、<map>
+▪特点：
+    自动排序
+    高效搜索
+    *插入元素较慢
+▪严格弱序： 非对称，可传递，非自反，等效传递
+▪修改：
+    不可修改key值和比较准则从而打乱顺序破坏结构
+    新插入的元素排在后面其他等价元素后面
+▪map下标运算符：自动隐式构造元素
+
+○Unordered：<unordered_set>、<unordered_map>
+▪特点：
+    更高效搜索与安插
+    *rehashing使迭代器失效
+▪bucket接口
+▪hash函数
+
+○stack：<stack>
+▪默认deque
+▪操作：
+    .push()
+    .pop()
+    .top()
+
+○queue：<queue>
+▪默认deque
+▪操作：
+    .push()
+    .pop()
+    .front()
+    .back()
+○priority_queue：<queue>
+▪默认vector
+▪利用heap算法（完全二叉树）
+▪操作：
+    .push()
+    .pop()
+    .top()
+
+○容器操作
+●构造：
+    默认：all
+    拷贝：all
+    移动：all
+    (num)：v，d，l，fl
+    (num，value)：s，v，d，l，fl
+    (initializer-list)：all
+    (beg，end)：all-a
+    ▪注：除了拷贝与移动之外其他对于A与U都可加额外参数(cmpPred)与(bnum，hasher，eqPred)
+
+●赋值：
+    .operator=()：all
+    .fill(v)：a
+    .assign(initializer-list)：all-a-A-U
+    .assign(beg，end)：all-a-A-U
+    .assign(num，value)：all-a-A-U
+
+●访问：
+    .at(idx)：S
+    .at(key)：Map
+    .operator[](idx)：S
+    .operator[](key)：Map(自动创建key)
+    .front()：a，v，d，l，fl
+    .back()：a，v，d，l
+    .date()：a，s，v
+    .begin()，.cbegin()，.end()，cend()：all
+    .rbegin()，.crbegin()，.rend()，crend()：all-U
+
+●插入：
+    .insert(pos，value)：all
+    .insert(pos，num，val)：s，v，d，l
+    .insert(pos，initializer-list)：s，v，d，l
+    .insert(pos，beg，end)：s，v，d，l
+    .insert(value)：A，U(非multi返回pair<i，bool>)
+    .insert(initializer-list)：A，U
+    .insert(beg，end)：A，U
+    .emplace(...)：A，U(非multi返回pair<iter，bool>)
+    .emplace(pos，args)：v，d，l
+    .emplace_hint(pos，args)：A，U
+    .emplace_back(v)：v，d，l
+    .emplace_front(v)：d，l，fl
+    .push_back(v)：s，v，d，l
+    .push_front(v)：d，l，fl
+
+●删除：
+    .erase(v)：A，U(返回删除个数)
+    .erase(pos)：all-fl
+    .erase(beg，end)：all-fl
+    .pop_back()：s，v，d，l
+    .pop_front()：d，l，fl
+    .clear()：all
+
+●大小：
+.empty()：all
+.size()：all-fl
+.max_size()：all
+.resize(num)，.resize(num，v)：s，v，d，l，fl
+.capacity()：s，v
+.reserve(num)：s，v，U(v不能缩小)
+.shrink_to_fit()：s，v，d
+
+●比较：
+    相等比较：all
+    非相等比较：all-U
+
+●A与U特有：
+    .count(v)：A，U
+    .find(v)：A，U
+    .lower_bound(v)：A
+    .upper_bound(v)：A
+    .equal_range(v)：A
+
+●U特有：bucket接口
+    .bucket_count()，.max_bucket_count()
+    .load_factor()，.max_load_factor()
+    .max_load_factor(float)
+    .rehash(bnum)
+    .bucket(val)
+    .bucket_size(bucktidx)
+    .begin(bucketidx) .cbegin(bucketidx)
+    .end(bucketidx) .cend(bucketidx)
+
+●l与fl特有
+    .remove(v)
+    .remove_if(op)
+    .sort()，.sort(op)
+    .unique()，.unique(op)
+    .splice(pos，source，sourcePos)
+    .splice(pos，source，sourceBeg，sourceEnd)
+    .merge(source)，.merge(source，cmpPred)
+    .reverse()
+
+○迭代器辅助函数：<iterator>
+    ▪next(iter，n=1)
+    ▪prev(iter，n=1)
+    ▪distance(iter1，iter2)
+    ▪iter_swap(iter1，iter2)
+
+○反向迭代器
+▪获取：容器的成员函数
+    .rbegin()，.rend()，.crbegin()，.crend()
+▪提供 .base()转换为正常迭代器(+1)
+
+○插入迭代器
+▪获取：通过泛型函数
+    back_inserter(c)
+    front_inserter(c)
+    inserter(c，pos)
+
+○流迭代器
+▪获取：类模板构造
+    istream_iterator<>(istream)：默认构造为end
+    ostream_iterator<>(ostream，delim='')：c-char*
+▪注： 只是通过I/O操作符实现，而非底层I/O，迭代器保存上次读取的值
+
+○流缓冲区迭代器
+▪获取：类模板构造
+    istreambuf_iteratot<char>：参数 ()、(istrm)、(ibuf_ptr)
+    ostreambuf_iteratot<char>：参数 (ostrm)、(obuf_ptr)
+
+○移动迭代器
+▪获取：泛型函数获取
+    make_move_iterator(iter)
+▪作算法源区间，需要保证元素只能处理一次
+
+○泛型算法：<algorithm>、<numeric>、<execution>
+▪默认by value传递谓词，算法并不保证在类内保存状态的谓词能正确运作(拷贝谓词导致重置状态)
+▪获取谓词状态：
+    谓词指向外部状态
+    显式指定模板实参为reference
+    利用for_each()算法的返回值
+▪并行算法：第一参数为std::execution::par
+
+常用设施
+
+○bitset：<bitset>
+    ▪方便访问指定位
+    ▪构造：() (ull) (string) (cstring)
+    ▪操作：
+        .any() .all() .none() .count() .size()
+        .set()      .set(pos, v=true)
+        .reset()    .reset(pos)
+        .flip()     .flip(pos)
+        b[pos].flip()
+    ▪转换：
+        .to_ulong()
+        .to_ullong()
+        .to_string(zero, one)
+
+
+○string：<string>
+▪构造、.assign()、.append()     ：(s)、(s，i)、(s，i，l)、(c)、(c，l)、(char)、(n，char)
+▪operator= operator+ operator+= ：(s)、(c)、(char)
+▪关系运算符                     ：(s)、(c)
+▪.insert()                      ：pos + 目标（除了single char）
+▪.replace()                     ：范围+ 目标
+▪.substr()                      ：范围
+▪.find()
+ .rfind()
+ .find_first_of()
+ .find_first_not_of()
+ .find_last_of()
+ .find_last_not_of()            ：(s) (s,i) (c) (c,i) (c,i,l) (char) (char,i)
+▪.compare()                     ：范围+目标(除了single char、num chars)
+▪.copy(buf, length, idx)
+▪getline(istrm, string)
+▪stoi() stol() stoul() stof() stod() ：(str, idx=nullptr, base=10)
+▪to_string(val)
+▪参数：
+    范围：(i，l)、(b，e)
+    目标：(s)、(s，i)、(s，i，l)、(c)、(c，l)、(char)、(n，char)
+
+○string_view：<string_view>
+▪原理：只是string或C-string的引用，没有数据的拥有权，只含有元数据
+▪目的：高效的提供string接口的拷贝操作，尤其.substr()，当需要const string时改用string_view
+▪注意：所有拷贝共享一个底层数据
+▪构造：(string) (string_view) (cstring) (cstring, len)
+●额外提供：.remove_prefix和.remove_suffix缩减视图范围
+
+○正则表达式：<regex>
+▪组件：
+    regex
+    sregex_iterator，sregex_token_iterator
+    smatch，ssub_match
+    regex_search()，regex_match()
+    regex_replace()：$& $n
+    regex_contants： 标志用于控制regex、match、replace行为
+▪regex：(seq，regex_contants::icase)
+▪sregex_iterator：(b，e，regex) 默认初始化为end
+▪sregex_token_iterator：(b，e，r，-1) 保存匹配间的子字符串
+▪smatch： 存放ssub_match的容器
+    .size() .empty() .prefix() .suffix()
+    .begin() .cbegin() .end() .cend()
+    .length(n) .position(n) .str(n) .operator[]
+    .format(dest, fmt, flag)
+    .format(fmt, flag)
+▪ssub_match： 指向表达式匹配到的子表达式
+    .operator basic_string()
+
+○iostream：<iostream>
+▪状态与异常： 注意，当stream会反复使用时，注意要恢复其状态
+    .good() .eof() .faile() .bad() .rdstate()
+    .clear() .clear(state) .setstate(state)
+    .excptions(flags)：设定触发异常的flag
+    .exceptions()：返回触发异常的flag，无则返回ios::goodbit
+▪底层I/O：
+    .get() .get(char) .get(char*, count, delim='\n')
+    .getline(char*, count, delim='\n')：读取包括delim
+    .read(char*, count)：count代表指定读取的字符，而非极限
+    .readsome(char*, count)：返回读取字符数，只从缓冲区中读取，而不陷入系统调用
+    .gcount()：返回上次读取字符数
+    .ignore(count=1, delim=)
+    .peek()：返回下个字符，但不移动iterator
+    .unget()：把上次读取的字符放回（回移iterator）
+    .putback(char)：放回指定字符
+    .put(char)
+    .write(char*, count)
+    .flush()
+▪随机访问：
+    .tellg() .tellp()
+    .seekg(pos) .seekp(pos)
+    .seekg(offset, rpos) .seekp(offset, rpos)：rpos可以是ios::beg ios::end ios::cur
+▪I/O运算符与操作符：后者实质是接受stream的函数对象
+▪预定义I/O运算符：
+    整型：
+        [0-9]*，[0-8]*，
+        ((0(x|X))|[0-9a-fA-F])[0-9a-fA-F]*
+    浮点型：
+        [0-9]+\.?[0-9]*(e[+-]?[0-9]+)?  ，
+        \.[0-9]+(e[+-]?[0-9]+)?
+    其他：bool，char，char*，void*，string，streambuf*，bitset，complex
+▪关联stream：
+    以.tie()和.tie(ostream&)关联，在I/O该stream时冲刷关联的ostream
+    以.rdbuf()和.rdbuf(streambuf*)关联，对同一缓冲区建立多个stream对象
+    以.copyfmt()传递所有格式信息
+▪关于性能
+    ios::sync_with_stdio(false)：关闭C-stream同步与多线程同步机制
+    cin.tie(nullptr)：关闭cin与cout的关联
+▪国际化
+    .imbue(locale) .getloc()
+    .widen(char)   .narrow(c, default)
+
+○操作符：<iomanip>
+    endl  ends  flush  (no)unitbuf
+    setw(n) setfill(c) left right internal
+    (no)boolalpha
+    (no)showpos：正号
+    (no)uppercase
+    oct dec hex (no)showbase
+    (no)showpoint
+    precison(v), .precision() .precision(v)
+
+○fstream：<fstream>
+▪构造：(filename, flag=)
+▪成员：.open(filename, flag=) .close() .is_open()
+▪flags：
+    in
+    out
+    app
+    in|out：文件必须存在
+    in|out|trunc：自动创建
+    in|app
+    in|out|app
+
+○stringstream：<sstream>
+▪构造：(string)
+▪成员：.str() .str(string)
+
+○streambuf：<streambuf>
+▪销毁问题：basic_i/ostream析构时不会销毁，其他stream析构时只是不销毁.rdbuf()得到的
+▪高效非格式化I/O：
+    streambuf_iterator：不通过stream对象直接I/O缓冲区
+    streambuf*：利用stream.rdbuf()获取后直接调用I/O运算符与另一个流缓冲区对接，注意输入时需要std::noskipws
+
+○locale：<locale>
+▪locale：封装了多个facet用于多方面信息本地化
+▪facet：数值、货币、时间、编码
+▪locale的构造：
+    默认："C"
+    智能：""
+    自定义："zh_CN.UTF-8[@modifier]"
+▪提供.name()和::global(locale)
+
+○Stream库总览：<iofwd>
+▪组件：
+    streambuf(系统I/O并缓存数据，提供位置信息)
+    locale(包含facet将I/O进行进行本地格式化)
+    stream(封装上述两者，提供状态、格式化信息)
+    centry(帮助stream每次I/O预处理与后处理)
+    操作符(提供调整stream的便捷方法)
+    std::ios(定义了一些标志位)
+
+●字符处理：
+    <cctype>：字符分类
+    <codecvt>：字符编码转换器
+    例：
+    ▪wbuffer_convert<codecvt_utf8<wchar_t>> wbuf_utf8(stream.rdbuf())
+     wistream utf8(&wbuf_utf8)
+    ▪wstring_convert<codecvt_utf8<wchar_t>> convertor
+     .to_bytes() .from_bytes() 参数：(char) (char*) (string) (beg, end)
+
+○随机数生成器：<random>
+▪引擎：默认初始化的种子都一样
+    .seed() .seed(result_type)
+▪分布：产生指定分布类型与范围的随机数
+▪例：
+    default_random_engine e ;
+    uniform_int_distribution di(min=0, max=INTMAX) ;
+    uniform_real_distribution dr(min=0, max=1.0) ;
+    bernoulli_distribution db(p=0.5) ;返回bool
+    binomial_distribution dbi(n=1, p=0.5) ;二项分布
+    normal_distribution dn(u=0, o=1) ;正态分布
+    cout << distribution(engine) << endl ;
+
+并发
+
+○线程：<thread> <future>
+▪async(launch::async, func, args...)： 封装并启动线程函数，将其返回值存到shared data
+    发射策略：launch:: async | deferred
+▪future<>和shared_future<>： 可获取shared_data，还包括状态，句柄，异常
+    等待状态：future_status:: deferred | timeout | ready
+    .valid()
+    .get() .wait()：此两函数会启动deferred
+    .wait_for(duration) .wait_until(time_point)
+    .share()
+▪this_thread::
+    get_id()
+    sleep_for(dur)
+    sleep_until(tp)
+    yield()
+
+○并发问题
+    ▪访问共享数据： 数据竞争、数据销毁
+    ▪编译器优化： 访存优化、顺序优化
+
+○互斥锁：<mutex>
+▪mutex及其变种：
+    ▪用法：在全局中声明
+        mutex、       recursive_mutex
+        timed_mutex、 timed_recursive_mutex
+        shared_mutex、shared_timed_mutex
+    ▪成员：
+        .lock() .try_lock() .unlock()
+        .try_lock_for() .try_lock_until()
+▪lock函数：
+    lock(mutex...)：避免死锁
+    try_lock(mutex...)：保证加锁次序
+    once_flag类型、call_once(once_flag, func, args...)
+▪mutex托管：
+    用法：mutex做模板类型，mutex对象做构造参数(可能还有其他参数)，在块作用域中初始化
+    lock_guard<> ：adopt_lock
+    unique_lock<>：adopt_lock(已锁)、defer_lock(不锁)、try_lock(试锁)、duration、time_point
+    shared_lock<>
+▪提供原子性操作原理：
+    读取mutex - 判断mutex - 上锁或阻塞
+    解锁-唤醒
+
+○条件量：<condition_variable>
+    ▪依赖于unique_lock<>提供保护区，在全局中声明
+    ▪成员：
+        .wait(ul, pred) .wait_for(ul, dur, func) .wait_until(ul, dur, func)
+            等待状态：cv_status:: time_out | no_timeout
+        .notify_one() .notify_all()
+        notify_all_at_thread_exit(cv, ul) 应该在保护区外使用notify...()
+    ▪提供原子性操作：
+    解锁-阻塞
+    唤醒
+

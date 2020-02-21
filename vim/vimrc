@@ -105,7 +105,7 @@ nnoremap <silent> <tab> :wincmd w<CR>
 "================================
 nnoremap  10
 nnoremap  10
-nnoremap  <home>
+nnoremap  ^
 nnoremap  <end>
 nnoremap <silent> , yl
 nnoremap <silent> Y y$
@@ -169,33 +169,6 @@ vnoremap <c-c> "+y
 
 
 "================================
-" => 终端VIM的配置
-"================================
-if !has("gui_running")
-
-    " 写入vimrc时自动读取配置，增加++nested以解决Airline写回文件时导致的颜色失调问题，与Airline的random主题冲突
-    " autocmd BufWritePost $MYVIMRC ++nested source $MYVIMRC
-
-    set autochdir
-    let g:airline_theme="random"
-    colorscheme ron
-
-    " 插入模式与普通模式的光标形状切换
-    let &t_SI = "\e[6 q"
-    let &t_EI = "\e[2 q"
-    " 其他选项（替换\ _ [后）的数字：
-    " Ps = 0  -> blinking block.
-    " Ps = 1  -> blinking block (default).
-    " Ps = 2  -> steady block.
-    " Ps = 3  -> blinking underline.
-    " Ps = 4  -> steady underline.
-    " Ps = 5  -> blinking bar (xterm).
-    " Ps = 6  -> steady bar (xterm).
-
-endif
-
-
-"================================
 " => AutoPairs配置
 "================================
 " 自带的切换快捷键在tmux中用不了
@@ -230,6 +203,7 @@ nnoremap <silent> <F4> :UndotreeToggle<CR>
 let g:airline_powerline_fonts = 1
 let g:airline_detect_spell=0
 let g:airline_extensions = ['branch', 'tabline']
+let g:airline_theme="base16_harmonic16"
 
 
 "================================
@@ -281,6 +255,33 @@ command! Csh :echo "
 " => Markdown配置
 "================================
 let g:instant_markdown_autostart = 0
+
+
+"================================
+" => 终端VIM的配置
+"================================
+if !has("gui_running")
+
+    " 写入vimrc时自动读取配置，增加++nested以解决Airline写回文件时导致的颜色失调问题，与Airline的random主题冲突
+    " autocmd BufWritePost $MYVIMRC ++nested source $MYVIMRC
+
+    set autochdir
+    let g:airline_theme="random"
+    colorscheme ron
+
+    " 插入模式与普通模式的光标形状切换
+    let &t_SI = "\e[6 q"
+    let &t_EI = "\e[2 q"
+    " 其他选项（替换\ _ [后）的数字：
+    " Ps = 0  -> blinking block.
+    " Ps = 1  -> blinking block (default).
+    " Ps = 2  -> steady block.
+    " Ps = 3  -> blinking underline.
+    " Ps = 4  -> steady underline.
+    " Ps = 5  -> blinking bar (xterm).
+    " Ps = 6  -> steady bar (xterm).
+
+endif
 
 
 "================================

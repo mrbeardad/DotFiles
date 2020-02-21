@@ -147,9 +147,9 @@ function see()
         fi
     elif [[ "$1" == "-e" ]] ;then
         if [[ -n "$3" ]] ;then
-            sed -rn "/(●|○)($2)/I,/^$/p" ~/.cheat/$3.note
+            sed -rn "/(●|○)($2)[\W]*$/I,/^$/p" ~/.cheat/$3.note
         else
-            sed -rn "/(●|○)($2)/I,/^$/p" ~/.cheat/*
+            sed -rn "/(●|○)($2)[\W]*$/I,/^$/p" ~/.cheat/*
         fi
     else
         if [[ -n "$2" ]] ;then

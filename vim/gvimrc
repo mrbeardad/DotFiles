@@ -6,8 +6,9 @@ set guioptions=agit
 set guicursor=n:block,i:hor10,a:blinkon0
 set background=dark
 
-colorscheme one            | let g:airline_theme="base16_harmonic16"
+colorscheme one
 " 注意，以下后排注释为其余搭配的Airline主题，Airline的atomic主题会改变状态栏格式，不喜欢的可以把源码中的第55行开始的那段代码注释
+" 注意，let g:airline_theme应该放在Airline加载前
 " colorscheme NeoSolarized | let g:airline_theme="atomic"     " angr, solarized, solarized_flood
 " colorscheme tender       | let g:airline_theme="tender"     " cool
 " colorscheme one          | let g:airline_theme="one"        " fruit_punch, fairyfloss
@@ -127,6 +128,7 @@ let g:ale_linters = {
       \   'sh': ['shell'],
 \}
 let g:ale_linters_explicit = 1
+let g:ale_sign_column_always = 1
 let g:ale_disable_lsp = 1
 let g:ale_completion_enabled = 0
 let g:ale_echo_delay = 20
