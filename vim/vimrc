@@ -1,44 +1,44 @@
-filetype plugin indent on       " 设置加载对应文件类型的插件
-syntax enable                   " 开启语法高亮功能
-syntax on                       " 自动语法高亮
+filetype plugin indent on         " 设置加载对应文件类型的插件
+syntax enable                     " 开启语法高亮功能
+syntax on                         " 自动语法高亮
 
-set nocompatible                " 设置不兼容原始vi模式
-set ignorecase                  " 搜索时忽略大小写
-set smartcase                   " 搜索时有大写才大小写敏感
-set hlsearch                    " 搜索高亮
-set incsearch                   " 搜索时及时跳转
-set nowrapscan                  " 搜索到头不自动折返再搜索
-set nu                          " 显示当前行号
-set rnu                         " 显示相对行号
-set laststatus=2                " 显示状态栏
-set noshowmode                  " 不显示当前模式，Airline会显示
-set noruler                     " 不显示光标当前位置，Airline会显示
-set showcmd                     " 显示当前未完成命令的按键
-set cmdheight=1                 " 设置命令行的高度
-set list                        " 显示空白符
-set listchars=tab:▸\ ,trail:·,extends:↷,precedes:↶      " 设置空白符如何显示
-set lazyredraw                  " 关闭不必要的屏幕重绘
-set wildmenu                    " 命令行补全文件名
-set wildignorecase              " 补全忽略大小写
-set showmatch                   " 左括号匹配，无则响铃
-set matchtime=0                 " 括号匹配时间，单位0.1s
-set nowrap                      " 长行超屏而非回绕，用<leader>w切换
-" set linebreak                 " 回绕时避免断词
-set scrolloff=1                 " 保持n行始终在光标之下或之上
-set autochdir                   " 自动切换工作目录
-set mouse=a                     " 启用鼠标
+set nocompatible                  " 设置不兼容原始vi模式
+set ignorecase                    " 搜索时忽略大小写
+set smartcase                     " 搜索时有大写才大小写敏感
+set hlsearch                      " 搜索高亮
+set incsearch                     " 搜索时及时跳转
+set nowrapscan                    " 搜索到头不自动折返再搜索
+set nu                            " 显示当前行号
+set rnu                           " 显示相对行号
+set laststatus=2                  " 显示状态栏
+set noshowmode                    " 不显示当前模式，Airline会显示
+set noruler                       " 不显示光标当前位置，Airline会显示
+set showcmd                       " 显示当前未完成命令的按键
+set cmdheight=1                   " 设置命令行的高度
+set lazyredraw                    " 关闭不必要的屏幕重绘
+set wildmenu                      " 命令行补全文件名
+set wildignorecase                " 补全忽略大小写
+set showmatch                     " 左括号匹配，无则响铃
+set matchtime=0                   " 括号匹配时间，单位0.1s
+set nowrap                        " 长行超屏而非回绕，用<leader>w切换
+" set linebreak                   " 回绕时避免断词
+set scrolloff=1                   " 保持n行始终在光标之下或之上
+set autochdir                     " 自动切换工作目录
+set mouse=a                       " 启用鼠标
+set whichwrap=<,>,[,]             " 允许插入模式与普通模式光标在从首尾跨行
+set backspace=indent,eol,start    " 允许<BS>键在插入模式删除：行首空白符、换行符、进入插入模式时光标之前的字符
+set virtualedit=block,onemore     " 光标可出现在无字符空间：块选取模式，其它模式最多只允许出现在最后一个字符之后的位置
+set hidden                        " 切换tab时自动隐藏当前buffer
+set foldmethod=indent             " 设置折叠方式
+set nofoldenable                  " 启动vim时不开启折叠
+set autoindent                    " 基于上行的缩进
+set tabstop=8                     " 默认的tab宽，不足则为空格
+set softtabstop=4                 " 键入的tab宽
+set shiftwidth=4                  " 缩进的tab宽
+set expandtab                     " 用空格代替tab，:retab恢复本行
 set path=/usr/include/c++/9.2.0,. " 设置PATH目录方便跳转
-set whichwrap=<,>,[,]           " 允许插入模式与普通模式光标在从首尾跨行
-set backspace=indent,eol,start  " 允许<BS>键在插入模式删除：行首空白符、换行符、进入插入模式时光标之前的字符
-set virtualedit=block,onemore   " 光标可出现在无字符空间：块选取模式，其它模式最多只允许出现在最后一个字符之后的位置
-set hidden                      " 切换tab时自动隐藏当前buffer
-set foldmethod=indent           " 设置折叠方式
-set nofoldenable                " 启动vim时不开启折叠
-set autoindent                  " 基于上行的缩进
-set tabstop=8                   " 默认的tab宽，不足则为空格
-set softtabstop=4               " 键入的tab宽
-set shiftwidth=4                " 缩进的tab宽
-set expandtab                   " 用空格代替tab，:retab恢复本行
+set list                          " 显示空白符
+set listchars=tab:▸\ ,trail:·,extends:↷,precedes:↶      " 设置空白符如何显示
 
 "读取缓冲区时回到上次离开时的位置
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -106,7 +106,7 @@ nnoremap <silent> <tab> :wincmd w<CR>
 nnoremap  10
 nnoremap  10
 nnoremap  ^
-nnoremap  <end>
+nnoremap  $
 nnoremap <silent> , yl
 nnoremap <silent> Y y$
 nnoremap <silent> <space>o  :<c-u>put =repeat(nr2char(10), v:count1)<CR><up>

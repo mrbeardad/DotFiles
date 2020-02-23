@@ -8,7 +8,7 @@ set background=dark
 
 colorscheme one
 " 注意，以下后排注释为其余搭配的Airline主题，Airline的atomic主题会改变状态栏格式，不喜欢的可以把源码中的第55行开始的那段代码注释
-" 注意，let g:airline_theme应该放在Airline加载前
+" 注意，let g:airline_theme应该放在Airline加载前，本配置在vimrc中
 " colorscheme NeoSolarized | let g:airline_theme="atomic"     " angr, solarized, solarized_flood
 " colorscheme tender       | let g:airline_theme="tender"     " cool
 " colorscheme one          | let g:airline_theme="one"        " fruit_punch, fairyfloss
@@ -71,7 +71,7 @@ noremap <silent> <F2> :TagbarToggle<CR>
 "================================
 let NERDTreeMinimalUI=1     " NERDTree 子窗口中不显示冗余帮助信息
 let NERDTreeWinPos='right'
-noremap <silent> <F3> :NERDTreeToggle<CR>
+noremap <silent> <F3> :NERDTreeToggle<CR>:wincmd p<CR>
 
 
 "================================
@@ -108,8 +108,8 @@ let g:ycm_seed_identifiers_with_syntax=1    " 语法关键字补全
 let g:ycm_key_invoke_completion = '<c-z>'   " 按 <c-c> 手动触发语义补全
 let g:ycm_min_num_identifier_candidate_chars = 2
 let g:ycm_complete_in_comments=0
-let g:ycm_complete_in_strings=1
-let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_complete_in_strings=0
+let g:ycm_collect_identifiers_from_comments_and_strings = 0
 let g:ycm_collect_identifiers_from_tags_files = 0
 let g:ycm_key_list_stop_completion = ['<CR>']
 nnoremap gp :YcmCompleter GetParent<CR>
@@ -159,27 +159,35 @@ hi! SpellCap gui=undercurl guisp=yellow
 hi! SpellRare gui=undercurl guisp=magenta
 nnoremap <silent> jn :ALENextWrap<CR>
 nnoremap <silent> jb :ALEPreviousWrap<CR>
-nnoremap <silent> <space>a :ALEDetail<CR><c-w><down>
+nnoremap <silent> <space>a :ALEDetail<CR>:wincmd p<cr>
 
 
 "================================
 " => Asyncrun配置
 "================================
-let g:asyncrun_open = 7     " 非零则执行命令后开启quickfix窗口，窗口高度为该变量的值
+" let g:asyncrun_open = 7     " 非零则执行命令后开启quickfix窗口，窗口高度为该变量的值
 " let g:asyncrun_bell = 1   " 任务结束时候响铃提醒
 
 " 此句会造成gvim启动崩溃，故加在zshrc中
-" if !isdirectory('/tmp/AsyncRun')
-"     !mkdir /tmp/AsyncRun
+" if !isdirectory('/tmp/QuickRun')
+"     !mkdir /tmp/QuickRun
 " endif
 
+
+"================================
+" => QuickRun配置
+"================================
 let g:QuickRunArgs=''
+let g:QuickRunBufnr=0
 command! -nargs=1 QuickrunArgs let g:Quick_R_Args = <q-args>
 function! QuickRun(mode)
     let QuickRun_TIME = strftime('%M%H')
     let QuickRun_FILE = expand('%:t')
-    let QuickRun_PATH = '/tmp/AsyncRun/' . QuickRun_FILE . '.' . QuickRun_TIME
+    let QuickRun_PATH = '/tmp/QuickRun/' . QuickRun_FILE . '.' . QuickRun_TIME
     write
+    if g:QuickRunBufnr !=0 && bufexists(g:QuickRunBufnr)
+        execute 'bd ' . g:QuickRunBufnr
+    endif
     rightbelow 15 split
     if a:mode == 0
         execute 'term ++noclose ++norestore ++curwin sh -c "echo -e \"\\e[1;32m[Compile] ' . QuickRun_PATH .
@@ -190,9 +198,11 @@ function! QuickRun(mode)
                     \ '\\e[m\" && g++ -std=c++17 -ggdb -Og -g -fno-inline -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -I. -o ' .
                     \ QuickRun_PATH . ' ' . expand('%') . '"'
     endif
+    let g:QuickRunBufnr=bufnr('%')
+    wincmd p
 endfunction
-nnoremap <silent> <space>lr :call QuickRun(0)<CR><c-w><c-w>
-nnoremap <silent> <space>ld :call QuickRun(1)<CR><c-w><c-w>
+nnoremap <silent> <space>lr :call QuickRun(0)<CR>
+nnoremap <silent> <space>ld :call QuickRun(1)<CR>
 nnoremap <silent> <space>lc :execute '!clang++ -std=c++17 -O3 -o ' . expand('%:r') . ' ' . expand('%')<CR>
 
 
