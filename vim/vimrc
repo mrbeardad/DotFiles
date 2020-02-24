@@ -48,7 +48,7 @@ command! -nargs=* Rcmd :let tmp=<q-args> | put =execute(tmp)
 
 " sudo写入文件
 command! W execute 'w !sudo tee % > /dev/null'
-nnoremap <silent> <c-w>W !sudo tee % > /dev/null<CR>l<CR>
+nnoremap <silent> <c-w>W :w !sudo tee % > /dev/null<CR>l<CR>
 
 " 若外层为tmux，则可适当降低等待延迟，因为tmux已经处理了按键延迟的问题
 if $TMUX != ''

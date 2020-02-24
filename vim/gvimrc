@@ -142,7 +142,7 @@ let g:ale_c_gcc_options = '-Wall -Wextra -O2 -std=c11'
 let g:ale_c_cppcheck_options = '--enable=all -std=c11'
 let g:ale_cpp_gcc_options = '-Wall -Wextra -O2 -std=c++17'
 let g:ale_cpp_cppcheck_options = '--enable=warning,style,performance,portability,information --std=c++17'
-let g:ale_cpp_clang_options = '-Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-padded -Wno-old-style-cast -O2 -std=c++17'
+let g:ale_cpp_clang_options = '-Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-pedantic -Wno-padded -Wno-old-style-cast -O2 -std=c++17'
 let g:ale_cpp_clangtidy_options = '-extra-arg=-std=c++17'
 let g:ale_sign_error = '✗'
 let g:ale_sign_warning = '‼'
@@ -179,7 +179,7 @@ nnoremap <silent> <space>a :ALEDetail<CR>:wincmd p<cr>
 "================================
 let g:QuickRunArgs=''
 let g:QuickRunBufnr=0
-command! -nargs=1 QuickrunArgs let g:Quick_R_Args = <q-args>
+command! -nargs=1 QuickrunArgs let g:QuickRunArgs = <q-args>    " 设置你运行的程序的参数，在参数“最后”可添加 -o {file}和 -i {file}设置运行时I/O重定向，-o代表shell中的'>'，-i代表shell中的'<'
 function! QuickRun(mode)
     let QuickRun_TIME = strftime('%M%H')
     let QuickRun_FILE = expand('%:t')

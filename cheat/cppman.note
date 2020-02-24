@@ -718,6 +718,36 @@ STL
     normal_distribution dn(u=0, o=1) ;正态分布
     cout << distribution(engine) << endl ;
 
+○数学库：<cmath>
+pow(double_x, double_y)：x**y
+exp(double_x)：e**x
+exp2(double_x)：2**x
+exp10(double_x)：10**x
+sqrt(double)
+log(double_N)：loge(N)
+log2(double_N)：log2(N)
+log10(double_N)：log10(N)
+cos()
+sin()
+tan()
+acos()
+asin()
+atan()
+ceil(double d)：大于d的最小整数
+floor(double d)：小于d的最大整数
+fmod(x, y)：浮点数的x%y
+frexp(double, int*)：将double拆分成整数(int*)和浮点数(返回值)
+abs(x)：x的绝对值，重载了整形和浮点型
+div(x, y)：x除以y的商(div_t.quot)和余数(div_t.rem)
+
+○<cstdlib>
+    EXIT_SUCCESS
+    EXIT_FAILURE
+    exit(status)
+    atexit(void (*func)())
+    quick_exit(status)
+    at_quick_exit(void (*func)())
+
 并发
 
 ○线程：<thread> <future>

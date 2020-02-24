@@ -45,6 +45,8 @@ endsnippet
 snippet maina
 int main(int argc, char* argv[])
 {
+    ios::sync_with_stdio(false) ;
+    cin.tie(nullptr) ;
     $1
 
     return 0 ;
@@ -57,7 +59,7 @@ if (${1:true}) {
 }
 endsnippet
 
-snippet ife
+snippet ifel
 if (${1:true}) {
     ${2:${VISUAL}}
 } else {
@@ -79,8 +81,14 @@ endsnippet
 
 snippet do
 do {
-	${0:${VISUAL}}
+    ${0:${VISUAL}}
 } while (${1:/* condition */});
+endsnippet
+
+snippet while
+while ({${1:/* conditon */}) {
+    ${2:${VISUAL}}
+}
 endsnippet
 
 snippet getopt
@@ -265,11 +273,10 @@ for (int ${2:i} = 0; $2 < ${1:count}; $2${3:++}) {
 }
 endsnippet
 
-
 # range-based
 snippet forr
-for (${1:auto} ${2:i} : ${3:container}) {
-    ${4}
+for (auto& ${0:i} : ${1:container}) {
+    ${2}
 }
 endsnippet
 
@@ -292,3 +299,19 @@ try {
 }
 endsnippet
 
+snippet init
+#include <iostream>
+#include <string>
+
+using namespace std ;
+
+int main()
+{
+    ios::sync_with_stdio(false) ;
+    cin.tie(nullptr) ;
+
+    $1
+
+    return 0 ;
+}
+endsnippet
