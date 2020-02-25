@@ -132,7 +132,7 @@ let g:ale_sign_column_always = 1
 let g:ale_disable_lsp = 1
 let g:ale_completion_enabled = 0
 let g:ale_echo_delay = 20
-let g:ale_lint_delay = 500
+"let g:ale_lint_delay = 500
 let g:ale_set_highlights = 0
 let g:ale_echo_msg_format = '[%linter%] %s  [%severity%]'
 let g:ale_lint_on_text_changed = 'normal'
@@ -142,7 +142,7 @@ let g:ale_c_gcc_options = '-Wall -Wextra -O2 -std=c11'
 let g:ale_c_cppcheck_options = '--enable=all -std=c11'
 let g:ale_cpp_gcc_options = '-Wall -Wextra -O2 -std=c++17'
 let g:ale_cpp_cppcheck_options = '--enable=warning,style,performance,portability,information --std=c++17'
-let g:ale_cpp_clang_options = '-Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-pedantic -Wno-padded -Wno-old-style-cast -O2 -std=c++17'
+let g:ale_cpp_clang_options = '-Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-pedantic -Wno-missing-prototype -Wno-padded -Wno-old-style-cast -O2 -std=c++17'
 let g:ale_cpp_clangtidy_options = '-extra-arg=-std=c++17'
 let g:ale_sign_error = '✗'
 let g:ale_sign_warning = '‼'
@@ -168,11 +168,6 @@ nnoremap <silent> <space>a :ALEDetail<CR>:wincmd p<cr>
 " let g:asyncrun_open = 7     " 非零则执行命令后开启quickfix窗口，窗口高度为该变量的值
 " let g:asyncrun_bell = 1   " 任务结束时候响铃提醒
 
-" 此句会造成gvim启动崩溃，故加在zshrc中
-" if !isdirectory('/tmp/QuickRun')
-"     !mkdir /tmp/QuickRun
-" endif
-
 
 "================================
 " => QuickRun配置
@@ -183,6 +178,9 @@ let g:QuickRunBufnr=0
 command! -nargs=1 QuickrunArgs let g:QuickRunArgs = <q-args>
 command! -nargs=1 QuickrunRedirect let g:QuickRunRedirect = <q-args>
 function! QuickRun(mode)
+    if !isdirectory('/tmp/QuickRun') 
+        !mkdir /tmp/QuickRun
+    endif
     let QuickRun_TIME = strftime('%M%H')
     let QuickRun_FILE = expand('%:t')
     let QuickRun_PATH = '/tmp/QuickRun/' . QuickRun_FILE . '.' . QuickRun_TIME
@@ -193,7 +191,7 @@ function! QuickRun(mode)
     rightbelow 15 split
     if a:mode == 0
         execute 'term ++noclose ++norestore ++curwin sh -c "echo -e \"\\e[1;32m[Compile] ' . QuickRun_PATH .
-                    \ '\\e[m\" && g++ -std=c++17 -O3 -I. -o ' . QuickRun_PATH .' ' . expand('%') .
+                    \ '\\e[m\" && g++ -std=c++17 -O2 -I. -o ' . QuickRun_PATH .' ' . expand('%') .
                     \ ' && quickrun_time ' . g:QuickRunRedirect . ' ' . QuickRun_PATH . ' ' . g:QuickRunArgs . '"'
     else
         execute 'term ++noclose ++norestore ++curwin sh -c "echo -e \"\\e[1;32m[Compile] ' . QuickRun_PATH .

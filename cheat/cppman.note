@@ -739,6 +739,7 @@ fmod(x, y)：浮点数的x%y
 frexp(double, int*)：将double拆分成整数(int*)和浮点数(返回值)
 abs(x)：x的绝对值，重载了整形和浮点型
 div(x, y)：x除以y的商(div_t.quot)和余数(div_t.rem)
+gcd(m, n)：欧几里得算法求最大公因数<numeric>
 
 ○<cstdlib>
     EXIT_SUCCESS
