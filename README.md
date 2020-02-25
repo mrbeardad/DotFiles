@@ -82,7 +82,7 @@ git@github.com:*Username/Repository* 就可以直接直接`git push`而无需输
 * 这是一个简单的局域网web，我一般用于手机与电脑传传文件啥的，当然能也可以用QQ，不过装wine
 的话听说有点卡(没试过0.0)，QQ for Linux功能又太少(具体多少呢?你下个看看0.0)
 * 直接用手机访问电脑的ip就行，端口是默认的，要改的话需要修改chfs.service和chfs.socket，
-看一下应该就知道咋改就不多说来，不会的话装了我的zsh配置然后`seep 'unit|service|socket'`
+看一下应该就知道咋改就不多说来，不会的话装了我的zsh配置然后`see 'unit|service|socket'`
 
 ***
 
@@ -110,7 +110,9 @@ bin/quickrun_time，其实就是time命令，不过shell的time输出难看我�
     * Rcmd：读取vim-cmd-output到当前buffer
     * W：sudo写回文件，解决权限问题
     * Csh：查看cscope简短帮助，容易忘记嘛
-    * QuickrunArgs：设置<kbd>space</kbd>+<kbd>l</kbd>+<kbd>r</kbd>运行时传给你的程序的参数，在<font color=green>参数最后</font>可以添加额外参数来I/O重定向，`-o`同`>`，`-i`同`<`
+    * QuickrunArgs：设置<kbd>space</kbd>+<kbd>l</kbd>+<kbd>r</kbd>运行时传给你的程序的参数
+    * QuickrunRedirect：设置<kbd>space</kbd>+<kbd>l</kbd>+<kbd>r</kbd>运行时的I/O重定向  
+例：`:QuickrunRedirect -o <filename1> -i <filename2>`表示将stdout重定向到filename1并将stdin重定向到filename2
 * **自定义快捷键**
     * 插入模式：
         * \<c-a>：行首

@@ -178,8 +178,10 @@ nnoremap <silent> <space>a :ALEDetail<CR>:wincmd p<cr>
 " => QuickRun配置
 "================================
 let g:QuickRunArgs=''
+let g:QuickRunRedirect=''
 let g:QuickRunBufnr=0
-command! -nargs=1 QuickrunArgs let g:QuickRunArgs = <q-args>    " 设置你运行的程序的参数，在参数“最后”可添加 -o {file}和 -i {file}设置运行时I/O重定向，-o代表shell中的'>'，-i代表shell中的'<'
+command! -nargs=1 QuickrunArgs let g:QuickRunArgs = <q-args>
+command! -nargs=1 QuickrunRedirect let g:QuickRunRedirect = <q-args>
 function! QuickRun(mode)
     let QuickRun_TIME = strftime('%M%H')
     let QuickRun_FILE = expand('%:t')
@@ -192,7 +194,7 @@ function! QuickRun(mode)
     if a:mode == 0
         execute 'term ++noclose ++norestore ++curwin sh -c "echo -e \"\\e[1;32m[Compile] ' . QuickRun_PATH .
                     \ '\\e[m\" && g++ -std=c++17 -O3 -I. -o ' . QuickRun_PATH .' ' . expand('%') .
-                    \ ' && quickrun_time ' . QuickRun_PATH . ' ' . g:QuickRunArgs . '"'
+                    \ ' && quickrun_time ' . g:QuickRunRedirect . ' ' . QuickRun_PATH . ' ' . g:QuickRunArgs . '"'
     else
         execute 'term ++noclose ++norestore ++curwin sh -c "echo -e \"\\e[1;32m[Compile] ' . QuickRun_PATH .
                     \ '\\e[m\" && g++ -std=c++17 -ggdb -Og -g -fno-inline -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -I. -o ' .
