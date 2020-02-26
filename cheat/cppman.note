@@ -1,6 +1,3 @@
-异常处理
-------------
-
 ○标准库异常
 exception <exception>
 ├───bad_cast             <typeinfo>    ：多态引用的转换失败
@@ -26,27 +23,26 @@ exception <exception>
     └───system_error     <system_error>：并发
         │
         └───ios::failure               ：stream出错
-○成员
+▪成员
     ▪[31m.[mwhat()：根部基类exception的虚函数，返回const char*，异常类销毁后该C-string也不复存在
     ▪[31m.[mcode()：返回error_code类对象
-○error_code & error_condition
-    ▪区别：可移植性，前者由编译器定义(OS相关)，后者为默认标准
+▪error_code 与 error_condition 区别：可移植性，前者由编译器定义(OS相关)，后者为默认标准
     ▪error_code成员：
-        [31m.[mcategory()[31m.[mname()
-        [31m.[mvalue()
-        [31m.[mmessage()
-        [31m.[mdefault_error_condition()
-        [31m.[mdefault_error_condition()[31m.[mcategory()[31m.[mname()
-        [31m.[mdefault_error_condition()[31m.[mvalue()
-        [31m.[mdefault_error_condition()[31m.[mmessage()
+        ▪[31m.[mcategory()[31m.[mname()
+        ▪[31m.[mvalue()
+        ▪[31m.[mmessage()
+        ▪[31m.[mdefault_error_condition()
+        ▪[31m.[mdefault_error_condition()[31m.[mcategory()[31m.[mname()
+        ▪[31m.[mdefault_error_condition()[31m.[mvalue()
+        ▪[31m.[mdefault_error_condition()[31m.[mmessage()
     ▪比较：重载了与领域枚举值的比较运算符
         errc        ：<cerrno>
         io_errc     ：<ios>
         future_errc ：<future>
-○异常挂起
+▪异常挂起
     ▪current_exception()    ：返回exception_ptr对象
     ▪rethrow_exception(eptr)：重新抛出exception_ptr对象
-○异常类构造参数
+▪异常类构造参数
     ▪logic_error和runtime_error
         (const string&)
         (const char*)
@@ -56,33 +52,21 @@ exception <exception>
         (error_code, const char*)
         ▪注：提供make_error_code(errc)构造error_code
 
-C头文件
-------------
-
-○常用C头文件
-▪<cstddef>：常用基础类型的定义
-▪<cstdlib>：程序退出处理
-▪<cstring>：内存底层操作
-▪<cctype> ：字符比较
-▪<ctime>  ：日期时间输出函数
-▪<cmath>  ：数学库
-▪<cassert>：调试
-
 ○调试：<cassert>
-    ▪assert(expr)
+    ▪assert(expr)               ：false则执行，expr为int constexpr
     ▪static_assert(expr, message)
     ▪#define NDEGUG
     ▪编译器预处理宏：
     __func__、__FILE__、__LINE__、__TIME__、__DATE__
 
-○选项处理：<unistd.h>短版 <getopt.h>长版
+○选项处理：<unistd.h>短版，<getopt.h>长版
     ▪getopt(argc，argv，optstring)
         ▪参数optstring：
             t: 代表必有参数，"紧跟"或"间隔"都被视为参数
             t::代表可选参数，只识别"紧跟"为参数
-        ▪返回int：表示选项字符，-1表示结束
+        ▪返回int：表示选项字符，'?'表示无此选项，-1表示结束
         ▪全局变量：
-            optarg：指向选项的参数，无对应则返回`?`
+            optarg：指向选项的参数
             optind：指向处理的argv数组的索引
     ▪getopt_long(argc, argv, optstring, option*, int*)
         ▪参数option*：最后一个struct option必须全0
@@ -111,9 +95,6 @@ C头文件
     _mm256_store_ps( float* , __m256)
     _mm256_store_pd( dounle* , __m256d )
     _mm256_store_epi256( int* , __m256i )
-
-通用工具
-------------
 
 ○pair：<utility>
 ▪构造
@@ -169,11 +150,10 @@ C头文件
     ▪注：get_if<>错误匹配类型返回空指针
 ▪修改：
     ▪operator=()
-    ▪.emplace<T>()
-    ▪.emplace<N>()
+    ▪[31m.[memplace<T>()
+    ▪[31m.[memplace<T>()
 ▪访问：
-    ▪visit(func，vrt)
-        func为能接受所有vrt模板参数类型的重载可调用
+    ▪visit(func，vrt)：func为能接受所有vrt模板参数类型的重载可调用
 
 ○optional：<optional>
 ▪构造：
@@ -185,7 +165,7 @@ C头文件
     ▪operator bool()
     ▪operator*()
     ▪operator->()
-    ▪[31m.[mvalue()：nullopt则抛出异常
+    ▪[31m.[mvalue()           ：nullopt则抛出异常
     ▪[31m.[mvalue_or(type_val)：nullopt则返回type_val
 
 ○shared_ptr：<memory>
@@ -231,15 +211,18 @@ C头文件
     ▪[31m.[mreset(ptr)
 
 ○numeric_limits：<limits>
-▪作用：提供类型的算术信息
-▪知识点：
-十进制转浮点数：因为十进制可能需要更多位来表示而导致精度丢失，因此只有[(N)/log2(10)]d个十进制数字能确定
+▪使用：
+    ▪::lowest() ：负数
+    ▪::min()    ：正数
+    ▪::max()
+    ▪::infinity()
+    ▪::quiet_NaN()
 
 ○TypeTrait：<type_traits>
 ▪类型判断式
 ▪类型关系检验
 ▪类型修饰符
-▪常用：decay<T>
+▪常用：decay_t<T>
 ▪使用：
     ▪::value返回std::true_type或std::false_type
     ▪::type返回修饰后的类型
@@ -292,8 +275,6 @@ C头文件
 ▪<iomanip>：
     get_time(tm*，fmt)
     put_time(tm*，fmt)
-
-STL
 
 ○STL组件
 ▪容器：序列、关联、无序
@@ -384,30 +365,30 @@ STL
 
 ○容器操作
 ●构造：
-    ▪默认           ：all
-    ▪(initializer-list)：all
-    ▪(beg，end)     ：all-a
-    ▪拷贝           ：all
-    ▪移动           ：all
-    ▪(num)          ：v，d，l，fl
-    ▪(num，value)   ：s，v，d，l，fl
+    ▪默认               ：all
+    ▪(initializer-list) ：all
+    ▪(beg，end)         ：all-a
+    ▪拷贝               ：all
+    ▪移动               ：all
+    ▪(num)              ：v，d，l，fl
+    ▪(num，value)       ：s，v，d，l，fl
     ▪注：前三条对于A与U都可加额外参数(..., cmpPred)与(..., bnum，hasher，eqPred)
 
 ●赋值：
-    ▪.operator=()：all
-    ▪[31m.[mfill(v)：a
+    ▪.operator=()                       ：all
+    ▪[31m.[mfill(v)                 ：a
     ▪[31m.[massign(initializer-list)：all-a-A-U
-    ▪[31m.[massign(beg，end)：all-a-A-U
-    ▪[31m.[massign(num，value)：all-a-A-U
+    ▪[31m.[massign(beg，end)        ：all-a-A-U
+    ▪[31m.[massign(num，value)      ：all-a-A-U
 
 ●访问：
-    ▪[31m.[mat(idx)       ：S
-    ▪[31m.[mat(key)       ：Map
-    ▪operator[](idx)：S
-    ▪operator[](key)：Map(自动创建key)
-    ▪[31m.[mfront()       ：a，v，d，l，fl
-    ▪[31m.[mback()        ：a，v，d，l
-    ▪[31m.[mdate()        ：a，s，v
+    ▪[31m.[mat(idx)         ：S
+    ▪[31m.[mat(key)         ：Map
+    ▪operator[](idx)            ：S
+    ▪operator[](key)            ：Map(自动创建key)
+    ▪[31m.[mfront()         ：a，v，d，l，fl
+    ▪[31m.[mback()          ：a，v，d，l
+    ▪[31m.[mdate()          ：a，s，v
     ▪[31m.[mbegin()，[31m.[mcbegin()，[31m.[mend()，cend()    ：all
     ▪[31m.[mrbegin()，[31m.[mcrbegin()，[31m.[mrend()，crend()：all-U-fl
 
@@ -479,7 +460,7 @@ STL
     ▪[31m.[munique(op)
     ▪[31m.[msplice(pos，source，sourcePos)
     ▪[31m.[msplice(pos，source，sourceBeg，sourceEnd)
-    ▪[31m.[mmerge(source)，[31m.[mmerge(source，cmpPred)
+    ▪[31m.[mmerge(source)、[31m.[mmerge(source，cmpPred)
     ▪[31m.[mreverse()
 
 ○迭代器辅助函数：<iterator>
@@ -523,7 +504,106 @@ STL
     ▪利用for_each()算法的返回值
 ▪并行算法：第一参数为std::execution::par
 
-常用设施
+○其它算法
+for_each(b, e, op1)               ：返回op(以改动过的)拷贝
+count(b, e, v)
+count_if(b, e, op1)
+min_element(b, e, op2 = lower_to)   ：返回第一个最小值
+max_element(b, e, op2 = lower_to)   ：返回第一个最大值
+minmax_element(b, e, op2 = lower_to)：返回第一个最小值和最后一个最大值
+
+○搜索算法：返回第一个位置
+▪find(b, e, v)                                       ：相当于string::find()，利用反向迭代器则相当于string::rfind()
+▪find_if(b, e, op1)
+▪find_if_not(b, e, op1)
+▪search_n(b, e, count, v, op2 = equal_to)              ：op2(elem, v)
+▪search(b, e, searchB, searchE, op2 = equal_to)        ：相当于string::find()
+▪find_end(b, e, searchB, searchE, op2 = equal_to)      ：相当于string::rfind()
+▪find_first_of(b, e, searchB, searchE, op2 = equal_to) ：相当于string::find_first_of()，利用反向迭代器则相当于string::find_last_of()
+▪adjacent_find(b, e, op2 = equal_to)                   ：搜索一对连续相等的元素，返回第一个位置
+
+○更易算法：返回dest更易区间的尾后迭代器
+▪move(b, e, destB)
+▪move_backward(b, e, destE)         ：调用std::move(element)
+▪copy(b, e, destB)                  ：子区间前移
+▪copy_backward(b, e, destE)         ：子区间后移
+▪copy_if(b, e, destB, op1)
+▪copy_n(b, size, destB)
+▪transform(b, e, destB, op1)        ：将op1(sourceElem)返回结果写入destB
+▪transform(b1, e1, b2, destB, op2)  ：将op2(srcElem1, srcElem2)返回结果写入destB
+▪swap_ranges(b, e, destB)
+▪replace(b, e, oldV, newV)
+▪replace_if(b, e, op1, newV)
+▪replace_copy(b, e, destB)
+▪replace_copy_if(b, e, destB, op1, newV)
+▪remove(b, e, v)
+▪remove_if(b, e, op1)
+▪remove_copy(b, e, destB, v)
+▪remove_copy_if(b, e, destB, op1)
+▪unique(b, e, op2=equal_to)         ：需要先排序
+▪unique_copy(b, e, destB, op2 = equal_to)
+▪fill(b, e, v)
+▪fill_n(b, num, v)
+▪generate(b, e, op0)
+▪generate(b, num, op0)
+▪iota(b, e, T)                      ：赋值T, T+1, T+2, ...
+
+○变序算法
+▪reverse(b, e)
+▪reverse_copy(b, e, destB)
+▪rotate(b, newB, e)                 ：返回原本的begin现在的位置
+▪rotate_copy(b, newB, e, destB)
+▪next_permutation(b, e, op = lower_to)
+▪prev_permutation(b, e, op = lower_to)
+▪shuffle(b, e, randomEngine)
+▪partition(b, e, op1)
+▪stable_partition(b, e, op1)
+▪partition_copy(b, e, destTrueB, destFalseB, op1)
+▪sort(b, e, op2 = lower_to)
+▪stable_sort(b, e, op2 = lower_to)
+▪partition_sort(b, partE, e, op = lower_to)
+▪partition_sort_copy(b, partE, e, op2 = lower_to)
+▪nth_element(b, nth, e, op2 = lower_to)
+▪make_heap(b, e, op2 = lower_to)
+▪push_heap(b, e, op2 = lower_to)
+▪pop_heap(b, e, op2 = lower_to)
+▪sort_heap(b, e, op2 = lower_to)
+
+○已排序区间算法
+▪binary_search(b, e, v, op2 = lower_to)
+▪includes(b1, e1, b2, e2, op2 = equal_to)         ：2区间是否为1区间的子序列
+▪lower_bound(b, e, v, op2 = lower_to)
+▪upper_bound(b, e, v, op2 = lower_to)
+▪equal_range(b, e, v, op2 = lower_to)
+▪merge(b1, e1, b2, e2, destB, op2 = lower_to)
+▪set_union(b1, e1, b2, e2, destB, op2 = lower_to)
+▪set_intersection(b1, e1, b2, e2, destB, op2 = lower_to)
+▪set_difference(b1, e1, b2, e2, destB, op2 = lower_to)
+▪set_symmetric_difference(b1, e1, b2, e2, destB, op2 = lower_to)：并集去交集
+▪inplace_merge(b1, b2, e2 ,op)：将同一个集合中的两部分合并，两部分都有序
+
+○数值算法：<numeric>
+▪accumulate(b, e, initV, op2 = add)
+▪inner_product(b1, e1, b2, e2, initV, op2 = add, op2 = multiply)
+▪partial_sum(b, e, destB, op2 = add)            ：a1, a1+a2, a1+a2+a3,
+▪adjacent_difference(b, e, destB, op2 = reduce) ：a1, a2-a1, a3-a2,
+
+○区间检验算法：
+▪is_sorted(b, e, op2 = lower_to)
+▪is_sorted_until(b, e, op2 = lower_to)：返回已排序区间的尾后迭代器
+▪is_heap(b, e, op2 = lower_to)
+▪is_heap_until(b, e, op2 = lower_to)
+▪is_partitioned(b, e, op1)            ：确认使op1为ture的元素都在前面
+▪partition_point(b, e, op1)           ：返回第一个使op1为false的元素的位置
+▪all_of(b, e, op1)
+▪any_of(b, e, op1)
+▪none_of(b, e, op1)
+
+○区间比较算法：
+▪equal(b, e, cmpB, op2 = equal_to)
+▪is_permutation(b, e, b2, op2 = equal_to)：检测前一个区间的元素是否为后者元素的子集，顺序无所谓
+▪mismatch(b, e, cmpB, op2 = equal_to)：查找第一个不相同的元素，返回pair存储两个区间的不同点的迭代器
+▪lexicographical(b1, e1, b2, e2, op = equal_to)：比较两区间字典序
 
 ○bitset：<bitset>
     ▪方便访问指定位
@@ -654,7 +734,7 @@ STL
     ▪(no)uppercase
     ▪oct dec hex (no)showbase
     ▪(no)showpoint
-    ▪precison(v), [31m.[mprecision() [31m.[mprecision(v)
+    ▪setprecision(v), [31m.[mprecision() [31m.[mprecision(v)
 
 ○fstream：<fstream>
 ▪构造：(filename, flag=)

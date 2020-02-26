@@ -113,6 +113,9 @@ nnoremap <silent> <space>o  :<c-u>put =repeat(nr2char(10), v:count1)<CR><up>
 nnoremap <silent> <space>O  :<c-u>put! =repeat(nr2char(10), v:count1)<CR><down>
 nnoremap <silent> <Leader>h :nohl<CR>
 nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+" 使用/与?搜索时n/N始终向下/上搜索
+nnoremap <expr> n  'Nn'[v:searchforward]
+nnoremap <expr> N  'nN'[v:searchforward]
 
 function! ToggleWrap()
     if &wrap == 1
