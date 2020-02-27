@@ -19,10 +19,10 @@
 ▪报错： -Werror  -Wall  -Wextra -Wconversion -Wfloat-equal
 
 
-●gbd  <exec-file> <core-dump> PID
+●gdb  <exec-file> <core-dump> PID
 ▪coredump设置
-    ulimit -c ulimit
-    echo '/home/core/core.%e.%p' > /proc/sys/kernel/core_pattern
+    ulimit -c unlimited
+    echo '/path/to/coredir/core.%e.%p' > /proc/sys/kernel/core_pattern
 ▪断点：
     b/break：<func>，<*addr>，<linenum>，<if-condition>
     watch：<value>，<if-condition>
@@ -175,7 +175,7 @@ Accept=no
     ▪若贡献太多，则配置remote仓库的refs
     ▪审查、修改、合并后push到项目发布点
 
-○git配置
+○git config
 ▪/etc/gitconfig
 git config --system
 ▪~/.gitconfig
@@ -186,7 +186,8 @@ git config --local
     user.name
     user.email
     core.editor
-    credential.helper  cache
+    credential.helper cache ：托管私钥的密码短语
+    core.excludesfile ~/.gitignore
 ▪配置refs
     [remote "RPO"]
     url = URL

@@ -135,7 +135,7 @@ let g:ale_echo_delay = 20
 "let g:ale_lint_delay = 500
 let g:ale_set_highlights = 0
 let g:ale_echo_msg_format = '[%linter%] %s  [%severity%]'
-let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 1
 let g:ale_lint_on_enter = 0
 let g:ale_c_gcc_options = '-Wall -Wextra -O2 -std=c11'
@@ -177,7 +177,7 @@ let g:QuickRunRedirect=''
 let g:QuickRunBufnr=0
 command! -nargs=1 QuickrunArgs let g:QuickRunArgs = <q-args>
 command! -nargs=1 QuickrunRedirect let g:QuickRunRedirect = <q-args>
-function! QuickRun(mode)
+function! QuickRun()
     if !isdirectory('/tmp/QuickRun') 
         !mkdir /tmp/QuickRun
     endif
@@ -189,21 +189,15 @@ function! QuickRun(mode)
         execute 'bd ' . g:QuickRunBufnr
     endif
     rightbelow 15 split
-    if a:mode == 0
-        execute 'term ++noclose ++norestore ++curwin sh -c "echo -e \"\\e[1;32m[Compile] ' . QuickRun_PATH .
-                    \ '\\e[m\" && g++ -std=c++17 -O2 -I. -o ' . QuickRun_PATH .' ' . expand('%') .
-                    \ ' && quickrun_time ' . g:QuickRunRedirect . ' ' . QuickRun_PATH . ' ' . g:QuickRunArgs . '"'
-    else
-        execute 'term ++noclose ++norestore ++curwin sh -c "echo -e \"\\e[1;32m[Compile] ' . QuickRun_PATH .
-                    \ '\\e[m\" && g++ -std=c++17 -ggdb -Og -g -fno-inline -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -I. -o ' .
-                    \ QuickRun_PATH . ' ' . expand('%') . '"'
-    endif
+    execute 'term ++noclose ++norestore ++curwin sh -c "echo -e \"\\e[1;32m[Compile] ' . QuickRun_PATH .
+                \ '\\e[m\" && g++ -std=c++17 -O2 -I. -o ' . QuickRun_PATH .' ' . expand('%') .
+                \ ' && quickrun_time ' . g:QuickRunRedirect . ' ' . QuickRun_PATH . ' ' . g:QuickRunArgs . '"'
     let g:QuickRunBufnr=bufnr('%')
     wincmd p
 endfunction
-nnoremap <silent> <space>lr :call QuickRun(0)<CR>
-nnoremap <silent> <space>ld :call QuickRun(1)<CR>
-nnoremap <silent> <space>lc :execute '!clang++ -std=c++17 -O3 -o ' . expand('%:r') . ' ' . expand('%')<CR>
+nnoremap <silent> <space>lr :call QuickRun()<CR>
+nnoremap <silent> <space>ld :execute '!clang++ -std=c++17 -ggdb -Og -g -fno-inline -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
+nnoremap <silent> <space>lc :execute '!clang++ -std=c++17 -O3 -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
 
 
 

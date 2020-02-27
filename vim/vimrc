@@ -223,7 +223,7 @@ set cscopeprg=/usr/local/bin/gtags-cscope
 set cscopequickfix=s-,c-,d-,i-,t-,e-,a-
 set nocst
 nnoremap <silent> <leader>ff :Leaderf function --all<CR>
-nnoremap <silent> <leader>ft :Leaderf buftag --all<CR>
+nnoremap <silent> <leader>ft :Leaderf bufTag --all<CR>
 nnoremap <silent> <leader>fz :Leaderf <CR>
 nnoremap <silent> <leader>fg :Leaderf gtags<CR>
 nnoremap <silent> <leader>fc :Leaderf gtags --grep<CR>
