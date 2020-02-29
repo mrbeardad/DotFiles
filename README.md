@@ -108,8 +108,8 @@ bin/quickrun_time，其实就是time命令，不过shell的time输出难看我�
 （●。●）～
 * **自定义命令**：
     * Rcmd：读取vim-cmd-output到当前buffer
-    * W：sudo写回文件，解决权限问题
     * Csh：查看cscope简短帮助，容易忘记嘛
+    * Lfh：Leaderf快捷键帮助
     * QuickrunArgs：设置<kbd>space</kbd>+<kbd>l</kbd>+<kbd>r</kbd>运行时传给你的程序的参数
     * QuickrunRedirect：设置<kbd>space</kbd>+<kbd>l</kbd>+<kbd>r</kbd>运行时的I/O重定向  
 例：`:QuickrunRedirect -o <filename1> -i <filename2>`表示将stdout重定向到filename1并将stdin重定向到filename2
@@ -137,25 +137,26 @@ bin/quickrun_time，其实就是time命令，不过shell的time输出难看我�
         * \<space>O：在该行上添加一空行
         * \<leader>w：切换wrap(长行是否回绕)
         * \<leader>v：切换virtualedit(光标是否可出现在无字符区域)
+        * \<leader>t：切换expandtab是否用空格代替tab
+        * \<leader>h：切换搜索高亮
     * 插件相关
-        * \<leader>ap：开关Auto-Pairs
-        * \<leader>il：开关Indentline
+        * \<leader>p：开关Auto-Pairs
         * \<F2>：开关Tagbar
         * \<F3>：开关NERDTree
         * \<F4>：开关UndoTree
         * \<c-c>：触发UltiSnips
-        * \<m-n>：到下一个UltiSnips的替换位置
-        * \<m-p>：到上一个UltiSnips的替换位置
+        * \<m-m>：到下一个UltiSnips的替换位置
+        * \<m-b>：到上一个UltiSnips的替换位置
         * \<leader>cc：快速注释代码
         * \<leader>cu：快速取消注释
         * 提供额外文本对象：`f`函数，`i`缩进，`,`函数参数
     * 搜索工程
-        * \<leader>fz：搜寻文件
-        * \<leader>ff：在所有缓冲区中搜寻函数
-        * \<leader>ft：在所有缓冲区中搜寻标识符
-        * \<leader>fg：利用gtags搜寻标识符
-        * \<leader>fc：利用gtags搜寻内容
-        * \<leader>fu：手动更新gtags
+        * \<space>fz：搜寻文件
+        * \<space>ff：在所有缓冲区中搜寻函数
+        * \<space>ft：在所有缓冲区中搜寻标识符
+        * \<space>fg：利用gtags搜寻标识符
+        * \<space>fc：利用gtags搜寻内容
+        * \<space>fu：手动更新gtags
     * 跳转标识符
         * gd：跳转定义，基于gtags的标签
         * gr：跳转引用，基于gtags的标签

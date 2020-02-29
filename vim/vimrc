@@ -1,6 +1,4 @@
 filetype plugin indent on         " 设置加载对应文件类型的插件
-syntax enable                     " 开启语法高亮功能
-syntax on                         " 自动语法高亮
 
 set nocompatible                  " 设置不兼容原始vi模式
 set ignorecase                    " 搜索时忽略大小写
@@ -21,10 +19,11 @@ set wildignorecase                " 补全忽略大小写
 set showmatch                     " 左括号匹配，无则响铃
 set matchtime=0                   " 括号匹配时间，单位0.1s
 set nowrap                        " 长行超屏而非回绕，用<leader>w切换
-" set linebreak                   " 回绕时避免断词
+set linebreak                     " 回绕时避免断词
 set scrolloff=1                   " 保持n行始终在光标之下或之上
 set autochdir                     " 自动切换工作目录
 set mouse=a                       " 启用鼠标
+set ttimeoutlen=50                " 快捷键延迟
 set whichwrap=<,>,[,]             " 允许插入模式与普通模式光标在从首尾跨行
 set backspace=indent,eol,start    " 允许<BS>键在插入模式删除：行首空白符、换行符、进入插入模式时光标之前的字符
 set virtualedit=block,onemore     " 光标可出现在无字符空间：块选取模式，其它模式最多只允许出现在最后一个字符之后的位置
@@ -46,17 +45,6 @@ autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "norm
 " 读取vim命令行的输出到当前文件缓冲区
 command! -nargs=* Rcmd :let tmp=<q-args> | put =execute(tmp)
 
-" sudo写入文件
-command! W execute 'w !sudo tee % > /dev/null'
-nnoremap <silent> <c-w>W :w !sudo tee % > /dev/null<CR>l<CR>
-
-" 若外层为tmux，则可适当降低等待延迟，因为tmux已经处理了按键延迟的问题
-if $TMUX != ''
-    set ttimeoutlen=20
-else
-    set ttimeoutlen=50
-endif
-
 
 "================================
 " => 设置临时文件
@@ -69,7 +57,7 @@ set undofile
 
 
 "================================
-" => Buffer切换
+" => Buffer操作
 "================================
 nnoremap <silent> <space>n :bn<CR>
 nnoremap <silent> <space>b :bp<CR>
@@ -77,14 +65,14 @@ nnoremap <silent> <c-w>x :bd<CR>
 
 
 "================================
-" => Tab切换
+" => Tab操作
 "================================
 nnoremap <silent> <leader>n :tabnext<CR>
 nnoremap <silent> <leader>b :tabprevious<CR>
 
 
 "================================
-" => Window切换
+" => Window操作
 "================================
 function! Jump(i) abort
     if winnr('$') >= a:i
@@ -109,13 +97,21 @@ nnoremap  ^
 nnoremap  $
 nnoremap <silent> , yl
 nnoremap <silent> Y y$
-nnoremap <silent> <space>o  :<c-u>put =repeat(nr2char(10), v:count1)<CR><up>
-nnoremap <silent> <space>O  :<c-u>put! =repeat(nr2char(10), v:count1)<CR><down>
 nnoremap <silent> <Leader>h :nohl<CR>
+
+" sudo写入文件
+nnoremap <silent> <c-w>W :w !sudo tee % > /dev/null<CR>l<CR>
+
+" 快速编辑宏
 nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+
 " 使用/与?搜索时n/N始终向下/上搜索
 nnoremap <expr> n  'Nn'[v:searchforward]
 nnoremap <expr> N  'nN'[v:searchforward]
+
+" 快速添加空行
+nnoremap <silent> <space>o  :<c-u>put =repeat(nr2char(10), v:count1)<CR><up>
+nnoremap <silent> <space>O  :<c-u>put! =repeat(nr2char(10), v:count1)<CR><down>
 
 function! ToggleWrap()
     if &wrap == 1
@@ -143,7 +139,6 @@ function! ToggleExpandtab()
     endif
 endfunction
 nnoremap <silent> <leader>t :call ToggleExpandtab()<CR>
-
 
 
 "================================
@@ -174,8 +169,8 @@ vnoremap <c-c> "+y
 "================================
 " => AutoPairs配置
 "================================
-" 自带的切换快捷键在tmux中用不了
-nnoremap <leader>ap :call AutoPairsToggle()<CR>
+" 自带的切换快捷键在终端中用不了
+nnoremap <leader>p :call AutoPairsToggle()<CR>
 
 
 "================================
@@ -191,7 +186,6 @@ let g:webdevicons_enable_nerdtree = 1
 " => IndentLine配置
 "================================
 let g:indentLine_fileType = ['c', 'cpp']
-nnoremap <silent> <leader>il :IndentLinesToggle<CR>
 
 
 "================================
@@ -205,8 +199,8 @@ nnoremap <silent> <F4> :UndotreeToggle<CR>
 "================================
 let g:airline_powerline_fonts = 1
 let g:airline_detect_spell=0
-let g:airline_extensions = ['branch', 'tabline']
-let g:airline_theme="base16_harmonic16"
+let g:airline_extensions = ['branch', 'tabline', 'tagbar']
+let g:airline_theme="neodark"
 
 
 "================================
@@ -219,18 +213,18 @@ let g:Lf_WildIgnore = {
         \ 'dir': ['.svn', '.git'],
         \ 'file': ['.root', '*.bak', '*.save', '*.exe', '*.o', '*.so']
         \}
-set cscopeprg=/usr/local/bin/gtags-cscope
-set cscopequickfix=s-,c-,d-,i-,t-,e-,a-
-set nocst
-nnoremap <silent> <leader>ff :Leaderf function --all<CR>
-nnoremap <silent> <leader>ft :Leaderf bufTag --all<CR>
-nnoremap <silent> <leader>fz :Leaderf <CR>
-nnoremap <silent> <leader>fg :Leaderf gtags<CR>
-nnoremap <silent> <leader>fc :Leaderf gtags --grep<CR>
-nnoremap <silent> <leader>fu :Leaderf gtags --update<CR>
+nnoremap <silent> <space>ff :Leaderf function --all<CR>
+nnoremap <silent> <space>ft :Leaderf bufTag --all<CR>
+nnoremap <silent> <space>fz :Leaderf <CR>
+nnoremap <silent> <space>fg :Leaderf gtags<CR>
+nnoremap <silent> <space>fc :Leaderf gtags --grep<CR>
+nnoremap <silent> <space>fu :Leaderf gtags --update<CR>
 nnoremap <silent> gr :Leaderf! gtags -r  <c-r>=expand('<cword>')<cr> --auto-jump<cr>
 nnoremap <silent> gd :Leaderf! gtags -d  <c-r>=expand('<cword>')<cr> --auto-jump<cr>
 nnoremap <silent> gs :Leaderf! gtags -s  <c-r>=expand('<cword>')<cr> --auto-jump<cr>
+set cscopeprg=/usr/local/bin/gtags-cscope
+set cscopequickfix=s-,c-,d-,i-,t-,e-,a-
+set nocst
 nnoremap <silent> <space>ca :cscope find a  <c-r>=expand('<cword>')<cr><cr>
 nnoremap <silent> <space>cg :cscope find g  <c-r>=expand('<cword>')<cr><cr>
 nnoremap <silent> <space>cc :cscope find c  <c-r>=expand('<cword>')<cr><cr>
@@ -239,7 +233,7 @@ nnoremap <silent> <space>ce :cscope find e  <c-r>=expand('<cword>')<cr><cr>
 nnoremap <silent> <space>cf :cscope find f  <c-r>=expand('<cfile>')<cr><cr>
 nnoremap <silent> <space>ci :cscope find i ^<c-r>=expand('<cfile>')<cr>$<cr>
 nnoremap <silent> <space>cd :cscope find d  <c-r>=expand('<cword>')<cr><cr>
-command! Csh :echo "
+command! Csh :echo "PREFIX: <space>c
             \ \n s   symbol    ：查找该符号的引用
             \ \n g   global    ：查找该符号的定义
             \ \n a   assign    ：查找该符号被赋值的位置
@@ -252,10 +246,18 @@ command! Csh :echo "
             \ 快捷键以 <space>c 开头加上述字母
             \ 需要时请手动cs add <gtags_db_file>，此文件会由Leaderf自动生成在~/.LfCache/gtags/\%path\%to\%project\%root/GTAGS
             \"
+command! Lfh :echo "PREFIX: <space>f
+            \ \n f      ：搜索函数
+            \ \n t      ：搜索符号
+            \ \n z      ：搜索文件
+            \ \n g      ：通过gtags搜索
+            \ \n c      ：通过gtag的内容查找
+            \ \n u      ：手动更新gtags
+            \"
 
 
 "================================
-" => Markdown配置
+" => instant-markdown配置
 "================================
 let g:instant_markdown_autostart = 0
 
@@ -325,8 +327,7 @@ Plug 'kana/vim-textobj-indent'
 Plug 'sgur/vim-textobj-parameter'
 Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim', 'java'] }
 
-Plug 'jacoborus/tender.vim'                                                 " 以下是支持真色的颜色主题
-Plug 'rakr/vim-one'
+Plug 'rakr/vim-one'                                                         " 以下是支持真色的颜色主题
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'KeitaNakamura/neodark.vim'
 Plug 'iCyMind/NeoSolarized'

@@ -2,22 +2,20 @@ set listchars+=eol:↵
 set gfn=Source\ Code\ Pro\ Black\ Italic\ 10.5  " 命令行输入 set gfn=* 打开系统字体选择面板
 " set gfn=Hack\ Bold\ Italic\ 10
 " set gfn=IBM\ Plex\ Mono\ SemiBold\ Italic\ 10.5
-set guioptions=agit
+set guioptions=agitd
 set guicursor=n:block,i:hor10,a:blinkon0
-set background=dark
 
-colorscheme one
+colorscheme palenight
 " 注意，以下后排注释为其余搭配的Airline主题，Airline的atomic主题会改变状态栏格式，不喜欢的可以把源码中的第55行开始的那段代码注释
 " 注意，let g:airline_theme应该放在Airline加载前，本配置在vimrc中
-" colorscheme NeoSolarized | let g:airline_theme="atomic"     " angr, solarized, solarized_flood
-" colorscheme tender       | let g:airline_theme="tender"     " cool
+" colorscheme NeoSolarized | let g:airline_theme="atomic"     " angr, solarized, solarized_flood, cool
 " colorscheme one          | let g:airline_theme="one"        " fruit_punch, fairyfloss
-" colorscheme palenight    | let g:airline_theme="fairyfloss" " palenight
+" colorscheme palenight    | let g:airline_theme="fairyfloss" " palenight, base16_harmonic16
 " colorscheme neodark      | let g:airline_theme="night_owl"  " neodark, behelit
 " colorscheme gruvbox      | let g:airline_theme="alduin"     " gruvbox, fairyfloss
 
 set cursorline           " 高亮显示当前行
-" set cursorcolumn       " 高亮显示当前行，次选项可能导致光标移动的延迟
+" set cursorcolumn       " 高亮显示当前行，此选项可能导致光标移动的延迟
 
 " 切换窗口时自动关闭和打开高亮行列
 autocmd WinLeave * set nocul
@@ -57,7 +55,6 @@ let g:startify_custom_header =
           \ 'startify#pad(g:ascii + startify#fortune#boxed())'
 
 
-
 "================================
 " => Tagbar配置
 "================================
@@ -72,6 +69,11 @@ noremap <silent> <F2> :TagbarToggle<CR>
 let NERDTreeMinimalUI=1     " NERDTree 子窗口中不显示冗余帮助信息
 let NERDTreeWinPos='right'
 noremap <silent> <F3> :NERDTreeToggle<CR>:wincmd p<CR>
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
+let g:NERDTreeHighlightFolders = 1
+let g:NERDTreeHighlightFoldersFullName = 1
 
 
 "================================
@@ -131,8 +133,8 @@ let g:ale_linters_explicit = 1
 let g:ale_sign_column_always = 1
 let g:ale_disable_lsp = 1
 let g:ale_completion_enabled = 0
-let g:ale_echo_delay = 20
-"let g:ale_lint_delay = 500
+" let g:ale_echo_delay = 20
+" let g:ale_lint_delay = 500
 let g:ale_set_highlights = 0
 let g:ale_echo_msg_format = '[%linter%] %s  [%severity%]'
 let g:ale_lint_on_text_changed = 'never'
@@ -198,7 +200,6 @@ endfunction
 nnoremap <silent> <space>lr :call QuickRun()<CR>
 nnoremap <silent> <space>ld :execute '!clang++ -std=c++17 -ggdb -Og -g -fno-inline -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
 nnoremap <silent> <space>lc :execute '!clang++ -std=c++17 -O3 -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
-
 
 
 "================================

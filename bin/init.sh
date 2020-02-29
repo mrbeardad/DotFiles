@@ -128,7 +128,7 @@ function ssh_cfg() {
     echo -e 'To generate public private key, run command: \e[32mssh-keygen -t ecdsa -b 512 -C "yourname@youremail"'
 
     #找不到好地方放，就放这儿吧，虽然跟ssh没多大关系
-    sed -i '/\[Journal\]/a\SystemMaxUse=0.5%' /etc/systemd/journald.conf
+    sed -i '/\[Journal\]/a\SystemMaxUse=50M' /etc/systemd/journald.conf
 
 }
 
