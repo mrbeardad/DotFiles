@@ -135,7 +135,7 @@ let g:ale_disable_lsp = 1
 let g:ale_completion_enabled = 0
 " let g:ale_echo_delay = 20
 " let g:ale_lint_delay = 500
-let g:ale_set_highlights = 0
+let g:ale_set_highlights = 1
 let g:ale_echo_msg_format = '[%linter%] %s  [%severity%]'
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 1
@@ -144,7 +144,7 @@ let g:ale_c_gcc_options = '-Wall -Wextra -O2 -std=c11'
 let g:ale_c_cppcheck_options = '--enable=all -std=c11'
 let g:ale_cpp_gcc_options = '-Wall -Wextra -O2 -std=c++17'
 let g:ale_cpp_cppcheck_options = '--enable=warning,style,performance,portability,information --std=c++17'
-let g:ale_cpp_clang_options = '-Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-pedantic -Wno-missing-prototype -Wno-padded -Wno-old-style-cast -O2 -std=c++17'
+let g:ale_cpp_clang_options = '-Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-pedantic -Wno-missing-prototypes -Wno-padded -Wno-old-style-cast -O2 -std=c++17'
 let g:ale_cpp_clangtidy_options = '-extra-arg=-std=c++17'
 let g:ale_sign_error = '✗'
 let g:ale_sign_warning = '‼'
@@ -177,23 +177,30 @@ nnoremap <silent> <space>a :ALEDetail<CR>:wincmd p<cr>
 let g:QuickRunArgs=''
 let g:QuickRunRedirect=''
 let g:QuickRunBufnr=0
+let g:QuickRun_PATH=''
 command! -nargs=1 QuickrunArgs let g:QuickRunArgs = <q-args>
 command! -nargs=1 QuickrunRedirect let g:QuickRunRedirect = <q-args>
 function! QuickRun()
     if !isdirectory('/tmp/QuickRun') 
         !mkdir /tmp/QuickRun
     endif
-    let QuickRun_TIME = strftime('%M%H')
-    let QuickRun_FILE = expand('%:t')
-    let QuickRun_PATH = '/tmp/QuickRun/' . QuickRun_FILE . '.' . QuickRun_TIME
-    write
-    if g:QuickRunBufnr !=0 && bufexists(g:QuickRunBufnr)
+    if g:QuickRunBufnr != 0 && bufexists(g:QuickRunBufnr)
         execute 'bd ' . g:QuickRunBufnr
     endif
-    rightbelow 15 split
-    execute 'term ++noclose ++norestore ++curwin sh -c "echo -e \"\\e[1;32m[Compile] ' . QuickRun_PATH .
-                \ '\\e[m\" && g++ -std=c++17 -O2 -I. -o ' . QuickRun_PATH .' ' . expand('%') .
-                \ ' && quickrun_time ' . g:QuickRunRedirect . ' ' . QuickRun_PATH . ' ' . g:QuickRunArgs . '"'
+    if &modified == 0 && g:QuickRun_PATH =~ expand('%:t')
+        rightbelow 15 split
+        execute 'term ++noclose ++norestore ++curwin sh -c "echo -e \"\\e[1;33mRerunning last compiled program!\\e[m\" && quickrun_time '
+                    \ . g:QuickRunRedirect . ' ' . g:QuickRun_PATH . ' ' . g:QuickRunArgs . '"'
+    else
+        write
+        rightbelow 15 split
+        let QuickRun_TIME = strftime('%M%H')
+        let QuickRun_FILE = expand('%:t')
+        let g:QuickRun_PATH = '/tmp/QuickRun/' . QuickRun_FILE . '.' . QuickRun_TIME
+        execute 'term ++noclose ++norestore ++curwin sh -c "echo -e \"\\e[1;32m[Compile] ' . g:QuickRun_PATH .
+                    \ '\\e[m\" && g++ -std=c++17 -O2 -I. -o ' . g:QuickRun_PATH .' ' . expand('%') .
+                    \ ' && quickrun_time ' . g:QuickRunRedirect . ' ' . g:QuickRun_PATH . ' ' . g:QuickRunArgs . '"'
+    endif
     let g:QuickRunBufnr=bufnr('%')
     wincmd p
 endfunction

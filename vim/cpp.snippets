@@ -3,7 +3,7 @@ snippet inc
 endsnippet
 
 snippet incm
-#include "${1:test}.hpp"
+#include "${1:myheader}.hpp"
 endsnippet
 
 snippet incb
@@ -32,13 +32,13 @@ struct ${1:StructName}
 endsnippet
 
 snippet if
-if (${1:true}) {
+if ( ${1:true} ) {
     ${0:${VISUAL}}
 }
 endsnippet
 
 snippet ifel
-if (${1:true}) {
+if ( ${1:true} ) {
     ${2:${VISUAL}}
 } else {
     ${0}
@@ -46,7 +46,7 @@ if (${1:true}) {
 endsnippet
 
 snippet elif
-else if (${1:true}) {
+else if ( ${1:true} ) {
     ${0:${VISUAL}}
 }
 endsnippet
@@ -60,37 +60,37 @@ endsnippet
 snippet do
 do {
     ${0:${VISUAL}}
-} while (${1:true}) ;
+} while ( ${1:true} ) ;
 endsnippet
 
 snippet while
-while ({${1:/* conditon */}) {
+while ( {${1:true} ) {
     ${2:${VISUAL}}
 }
 endsnippet
 
 snippet getopt
 int choice ;
-while (true)
+while ( true )
 {
     /* struct option {
-    *   const char* name ; (long option name)
-    *   int      has_arg ; (no_argument, required_argument, optional_argument)
-    *   int        *flag ; (function return val when flag==NULL)
-    *   int          val ; (function return a int to represent this long option)
-    * };
-    */
+     *	   const char* name ; // (long option name)
+     *     int      has_arg ; // (no_argument, required_argument, optional_argument)
+     *     int        *flag ; // (function return val when flag==NULL)
+     *     int          val ; // (function return a int to represent this long option)
+     * } ;
+     */
     static option long_options[] =
     {
-        {"version", no_argument, 0, 'v'},
-        {"help",    no_argument, 0, 'h'},
-        {${1:struct_option}},
-        {0,0,0,0}
+        { "version", no_argument, 0, 'v' },
+        { "help",    no_argument, 0, 'h' },
+        { ${1:struct_option} },
+        { 0, 0, 0, 0 }
     } ;
-    int option_index = 0 ;
+    int option_index{ 0 } ;
     choice = getopt_long( argc, argv, "vh", long_options, &option_index ) ;
-    if (choice == -1)
-        break;
+    if ( choice == -1 )
+        break ;
     switch( choice ) {
         case 'v':
             $2
@@ -105,8 +105,8 @@ while (true)
     }
 }
 // Deal with non-option arguments here
-if (optind < argc) {
-    while (optind < argc) {
+if ( optind < argc ) {
+    while ( optind < argc ) {
         $0
     }
 }
@@ -264,7 +264,7 @@ endsnippet
 
 # lambda (multi-line)
 snippet lld
-[${1}](${2}){
+[${1}] (${2}) {
     ${3}
 } ;
 endsnippet
@@ -306,7 +306,7 @@ int main()
 endsnippet
 
 snippet maina
-int main(int argc, char* argv[])
+int main( int argc, char* argv[] )
 {
     ios::sync_with_stdio(false) ;
     cin.tie(nullptr) ;

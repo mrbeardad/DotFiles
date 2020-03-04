@@ -150,6 +150,7 @@ inoremap <c-u> <c-o>d^
 inoremap <c-k> <c-o>d$
 inoremap <c-d> <c-o>10<c-e>
 inoremap <c-b> <c-o>10<c-y>
+inoremap <c-]> <c-o>%
 
 
 "================================
