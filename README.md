@@ -18,7 +18,7 @@ $ cd DotFiles
 ```
 然后执行
 ```
-$ ./bin/init.sh {options}
+$ ./init.sh {options}
 ```
 其中，`{options}`选项可以是：  
 * `--help` ：列出此列表
@@ -104,7 +104,8 @@ CLI工具
 * <font color=red> NOTE: </font>Leaderf插件的运行还需要[gtags](https://www.gnu.org/software/global/download.html)
 * <font color=red> NOTE: </font>vim-instant-markdown插件依赖有点麻烦，我用的AUR里的
 * <font color=red> NOTE: </font>我配置的即时编译并运行C++代码的快捷键，依赖仓库里的
-bin/quickrun_time，其实就是time命令，不过shell的time输出难看我就重新写了一个，有彩蛋哦
+vim/time.cpp，其实就是time命令的作用，不过shell的time输出难看我就重新写了一个，
+执行`g++ -O3 -o ~/.local/bin/quickrun_time vim/time.cpp`即可
 （●。●）～
 * **自定义命令**：
     * Rcmd：读取vim-cmd-output到当前buffer

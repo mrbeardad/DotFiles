@@ -45,7 +45,6 @@ autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "norm
 " 读取vim命令行的输出到当前文件缓冲区
 command! -nargs=* Rcmd :let tmp=<q-args> | put =execute(tmp)
 
-
 "================================
 " => 设置临时文件
 "================================
@@ -55,25 +54,14 @@ set noswapfile
 set nobackup
 set undofile
 
-
 "================================
-" => Buffer操作
+" => Buffer、Tab、Window操作
 "================================
 nnoremap <silent> <space>n :bn<CR>
 nnoremap <silent> <space>b :bp<CR>
 nnoremap <silent> <c-w>x :bd<CR>
-
-
-"================================
-" => Tab操作
-"================================
 nnoremap <silent> <leader>n :tabnext<CR>
 nnoremap <silent> <leader>b :tabprevious<CR>
-
-
-"================================
-" => Window操作
-"================================
 function! Jump(i) abort
     if winnr('$') >= a:i
         exe a:i . 'wincmd w'
@@ -87,14 +75,13 @@ nnoremap <silent> <space>5 :call Jump(5)<CR>
 nnoremap <silent> <space>6 :call Jump(6)<CR>
 nnoremap <silent> <tab> :wincmd w<CR>
 
-
 "================================
 " => 普通模式快捷键
 "================================
-nnoremap  10
-nnoremap  10
-nnoremap  ^
-nnoremap  $
+nnoremap <silent> <c-d> 10<c-e>
+nnoremap <silent> <c-b> 10<c-y>
+nnoremap <silent> <c-a> ^
+nnoremap <silent> <c-e> $
 nnoremap <silent> , yl
 nnoremap <silent> Y y$
 nnoremap <silent> <Leader>h :nohl<CR>
@@ -102,7 +89,7 @@ nnoremap <silent> <Leader>h :nohl<CR>
 " sudo写入文件
 nnoremap <silent> <c-w>W :w !sudo tee % > /dev/null<CR>l<CR>
 
-" 快速编辑宏
+" 快速编辑宏，连按两次
 nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
 " 使用/与?搜索时n/N始终向下/上搜索
@@ -123,7 +110,7 @@ endfunction
 nnoremap <silent> <Leader>w :call ToggleWrap()<CR>
 
 function! ToggleVirtuledit()
-    if &Virtuledit =~ "all"
+    if &virtuledit =~ "all"
         setl virtualedit=block,onemore
     else
         setl virtualedit=all
@@ -140,7 +127,6 @@ function! ToggleExpandtab()
 endfunction
 nnoremap <silent> <leader>t :call ToggleExpandtab()<CR>
 
-
 "================================
 " => 插入模式快捷键
 "================================
@@ -152,12 +138,10 @@ inoremap <c-d> <c-o>10<c-e>
 inoremap <c-b> <c-o>10<c-y>
 inoremap <c-]> <c-o>%
 
-
 "================================
 " => 命令模式快捷键
 "================================
 cnoremap <c-a> <c-b>
-
 
 "================================
 " => 可视模式快捷键
@@ -166,13 +150,11 @@ vnoremap <c-a> 0
 vnoremap <c-e> $
 vnoremap <c-c> "+y
 
-
 "================================
 " => AutoPairs配置
 "================================
 " 自带的切换快捷键在终端中用不了
 nnoremap <leader>p :call AutoPairsToggle()<CR>
-
 
 "================================
 " => Devicons配置
@@ -182,18 +164,15 @@ let g:webdevicons_enable_airline_tabline = 1
 let g:webdevicons_enable_airline_statusline = 1
 let g:webdevicons_enable_nerdtree = 1
 
-
 "================================
 " => IndentLine配置
 "================================
 let g:indentLine_fileType = ['c', 'cpp']
 
-
 "================================
 " => Undotree配置
 "================================
 nnoremap <silent> <F4> :UndotreeToggle<CR>
-
 
 "================================
 " => Airline配置
@@ -201,8 +180,7 @@ nnoremap <silent> <F4> :UndotreeToggle<CR>
 let g:airline_powerline_fonts = 1
 let g:airline_detect_spell=0
 let g:airline_extensions = ['branch', 'tabline', 'tagbar']
-let g:airline_theme="neodark"
-
+let g:airline_theme="night_owl"
 
 "================================
 " => LeaderF配置
@@ -256,22 +234,45 @@ command! Lfh :echo "PREFIX: <space>f
             \ \n u      ：手动更新gtags
             \"
 
-
 "================================
 " => instant-markdown配置
 "================================
 let g:instant_markdown_autostart = 0
 
+"================================
+" => Tagbar配置
+"================================
+let g:tagbar_left=1
+let g:tagbar_width = 30
+noremap <silent> <F2> :TagbarToggle<CR>
+
+"================================
+" => NERDTree配置
+"================================
+let NERDTreeMinimalUI=1     " NERDTree 子窗口中不显示冗余帮助信息
+let NERDTreeWinPos='right'
+noremap <silent> <F3> :NERDTreeToggle<CR>:wincmd p<CR>
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
+let g:NERDTreeHighlightFolders = 1
+let g:NERDTreeHighlightFoldersFullName = 1
+
+"================================
+" => Rainbow-Parentheses配置
+"================================
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
 
 "================================
 " => 终端VIM的配置
 "================================
 if !has("gui_running")
-
     " 写入vimrc时自动读取配置，增加++nested以解决Airline写回文件时导致的颜色失调问题，与Airline的random主题冲突
     " autocmd BufWritePost $MYVIMRC ++nested source $MYVIMRC
 
-    set autochdir
     let g:airline_theme="random"
     colorscheme ron
 
@@ -286,7 +287,6 @@ if !has("gui_running")
     " Ps = 4  -> steady underline.
     " Ps = 5  -> blinking bar (xterm).
     " Ps = 6  -> steady bar (xterm).
-
 endif
 
 
@@ -302,15 +302,15 @@ Plug 'vim-airline/vim-airline-themes'                                       " �
 Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' }                      " 显示文件层次结构，选择打开文件或切换目录，按 <F3> 打开或关闭
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on':  'NERDTreeToggle' } " NERDTree插件语法高亮增强
 Plug 'ryanoasis/vim-devicons'                                               " 会其他插件提供文件类型图形符号，官方推荐使用nerd字体
-Plug 'kien/rainbow_parentheses.vim', { 'on': [] }                           " 彩虹颜色显示嵌套括号
+Plug 'kien/rainbow_parentheses.vim'                                         " 彩虹颜色显示嵌套括号
 Plug 'jiangmiao/auto-pairs'                                                 " 自动补全结对符，括号、引号之类的，有时会影响正常编辑，按 <leader>ap 打开或关闭
 Plug 'preservim/nerdcommenter'                                              " 按 <leader>cc 注释该行代码，按 <leader>cu 取消注释
-Plug 'Yggdroot/indentLine', { 'on': [] }                                    " 缩进线，增强代码缩进的视觉化，按 <leader>il 打开或关闭
+Plug 'Yggdroot/indentLine'                                                  " 缩进线，增强代码缩进的视觉化，按 <leader>il 打开或关闭
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }                          " 撤销数可视化，引入分支的概念，类似git一样跳转与撤销，按 <F4> 打开或关闭
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }                          " 显示代码中所有的标识符，函数、类、类成员、宏之类的，按 <F2> 打开或关闭，可以在本vimrc中打开查看按键映射，用户命令
 Plug 'vim-scripts/fcitx.vim'                                                " 若使用fcitx中文输入法框架，如搜狗输入法，此插件会在离开插入模式进入普通模式时自动切换会英文输入法
 
-Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }                       " 对markdown的基本支持
 " Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }                   " 即时预览Markdown文件渲染结果
 
 Plug 'octol/vim-cpp-enhanced-highlight', { 'for': 'cpp' }                   " C++语言的语法高亮增强
@@ -320,7 +320,7 @@ Plug 'SirVer/ultisnips', { 'for': ['cpp', 'c', 'markdown', 'snippets'] }    " �
 Plug 'https://gitee.com/mirrors/youcompleteme.git', { 'on': [] }            " 基于标签和语义的代码补全，需要自己修改配置，本配置默认用于C/C++，该项目较大且下载速度较慢，Arch/Manjaro的源里有该插件vim-youcompleteme，若源码安装需要进入安装目录执行./install.py
 Plug 'Shougo/echodoc.vim', { 'on': [] }                                     " ycm补全后在原本命令行的位置显示函数参数提示
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh', 'on': 'Leaderf' }          " 快速搜索文件 <leader>fz，标识符 <leader>ft，代码内容 <leader>fc，函数 <leader>ff 等等
-" Plug 'skywind3000/asyncrun.vim', { 'on': [] }                             " 异步执行外部命令
+" Plug 'skywind3000/asyncrun.vim'                                           " 异步执行外部命令
 
 Plug 'kana/vim-textobj-user'                                                " 此五个插件用于自定义文本对象，比如 dii 删除同缩进的代码，dif 删除函数内容，di, 删除函数参数
 Plug 'kana/vim-textobj-syntax'

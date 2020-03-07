@@ -4,8 +4,10 @@ set gfn=Source\ Code\ Pro\ Black\ Italic\ 10.5  " 命令行输入 set gfn=* 打�
 " set gfn=IBM\ Plex\ Mono\ SemiBold\ Italic\ 10.5
 set guioptions=agitd
 set guicursor=n:block,i:hor10,a:blinkon0
+set cursorline           " 高亮显示当前行
+" set cursorcolumn       " 高亮显示当前行，此选项可能导致光标移动的延迟
 
-colorscheme palenight
+colorscheme neodark
 " 注意，以下后排注释为其余搭配的Airline主题，Airline的atomic主题会改变状态栏格式，不喜欢的可以把源码中的第55行开始的那段代码注释
 " 注意，let g:airline_theme应该放在Airline加载前，本配置在vimrc中
 " colorscheme NeoSolarized | let g:airline_theme="atomic"     " angr, solarized, solarized_flood, cool
@@ -14,13 +16,9 @@ colorscheme palenight
 " colorscheme neodark      | let g:airline_theme="night_owl"  " neodark, behelit
 " colorscheme gruvbox      | let g:airline_theme="alduin"     " gruvbox, fairyfloss
 
-set cursorline           " 高亮显示当前行
-" set cursorcolumn       " 高亮显示当前行，此选项可能导致光标移动的延迟
-
 " 切换窗口时自动关闭和打开高亮行列
 autocmd WinLeave * set nocul
 autocmd WinEnter * set cul
-
 
 "================================
 " => Startify配置
@@ -54,36 +52,13 @@ let g:ascii = [
 let g:startify_custom_header =
           \ 'startify#pad(g:ascii + startify#fortune#boxed())'
 
-
 "================================
-" => Tagbar配置
-"================================
-let g:tagbar_left=1
-let g:tagbar_width = 30
-noremap <silent> <F2> :TagbarToggle<CR>
-
-
-"================================
-" => NERDTree配置
-"================================
-let NERDTreeMinimalUI=1     " NERDTree 子窗口中不显示冗余帮助信息
-let NERDTreeWinPos='right'
-noremap <silent> <F3> :NERDTreeToggle<CR>:wincmd p<CR>
-let g:NERDTreeFileExtensionHighlightFullName = 1
-let g:NERDTreeExactMatchHighlightFullName = 1
-let g:NERDTreePatternMatchHighlightFullName = 1
-let g:NERDTreeHighlightFolders = 1
-let g:NERDTreeHighlightFoldersFullName = 1
-
-
-"================================
-" => UltiSnips配置  
+" => UltiSnips配置
 "================================
 " 设置<C-C>触发UltiSnips补全，解决UltiSnips与YCM按键冲突网上有教程加两个函数与映射解决，我更愿意如此
 let g:UltiSnipsExpandTrigger = '<c-c>'
 let g:UltiSnipsJumpBackwardTrigger = '<M-b>'
 let g:UltiSnipsJumpForwardTrigger = '<M-m>'
-
 
 "================================
 " => YCM配置
@@ -107,7 +82,7 @@ let g:ycm_show_diagnostics_ui = 0           " 不进行语法检测
 let g:ycm_confirm_extra_conf=0              " 自动确认 .ycm_confirm_extra_conf
 let g:ycm_cache_omnifunc=0                  " 禁止缓存匹配项，每次都重新生成匹配项
 let g:ycm_seed_identifiers_with_syntax=1    " 语法关键字补全
-let g:ycm_key_invoke_completion = '<c-z>'   " 按 <c-c> 手动触发语义补全
+let g:ycm_key_invoke_completion = '<c-z>'   " 按 <c-z> 手动触发语义补全
 let g:ycm_min_num_identifier_candidate_chars = 2
 let g:ycm_complete_in_comments=0
 let g:ycm_complete_in_strings=0
@@ -118,7 +93,6 @@ nnoremap gp :YcmCompleter GetParent<CR>
 nnoremap gt :YcmCompleter GetType<CR>
 nnoremap go :YcmCompleter GoTo<CR>
 
-
 "================================
 " => ALE配置
 "================================
@@ -126,15 +100,12 @@ nnoremap go :YcmCompleter GoTo<CR>
 let g:ale_linters = {
       \   'cpp': ['clang', 'clangtidy', 'gcc', 'cppcheck'],
       \   'c': ['gcc', 'cppcheck'],
-      \   'python': ['pylint'],
       \   'sh': ['shell'],
-\}
+      \}
 let g:ale_linters_explicit = 1
 let g:ale_sign_column_always = 1
 let g:ale_disable_lsp = 1
 let g:ale_completion_enabled = 0
-" let g:ale_echo_delay = 20
-" let g:ale_lint_delay = 500
 let g:ale_set_highlights = 1
 let g:ale_echo_msg_format = '[%linter%] %s  [%severity%]'
 let g:ale_lint_on_text_changed = 'never'
@@ -163,13 +134,11 @@ nnoremap <silent> jn :ALENextWrap<CR>
 nnoremap <silent> jb :ALEPreviousWrap<CR>
 nnoremap <silent> <space>a :ALEDetail<CR>:wincmd p<cr>
 
-
 "================================
 " => Asyncrun配置
 "================================
 " let g:asyncrun_open = 7     " 非零则执行命令后开启quickfix窗口，窗口高度为该变量的值
 " let g:asyncrun_bell = 1   " 任务结束时候响铃提醒
-
 
 "================================
 " => QuickRun配置
@@ -208,22 +177,11 @@ nnoremap <silent> <space>lr :call QuickRun()<CR>
 nnoremap <silent> <space>ld :execute '!clang++ -std=c++17 -ggdb -Og -g -fno-inline -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
 nnoremap <silent> <space>lc :execute '!clang++ -std=c++17 -O3 -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
 
-
-"================================
-" => Rainbow-Parentheses配置
-"================================
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
-
-
 "================================
 " => Echodoc配置
 "================================
 let g:echodoc#enable_at_startup = 1
 autocmd VimEnter * EchoDocEnable
-
 
 "================================
 " => Cpp_Enhanced_Highlight配置
@@ -234,16 +192,13 @@ let g:cpp_class_decl_highlight = 1
 let g:cpp_posix_standard = 1
 " let g:cpp_experimental_simple_template_highlight = 1  " which works in most cases, but can be a little slow on large files
 let g:cpp_experimental_template_highlight = 1           " which is a faster implementation but has some corner cases where it doesn't work.
-let g:cpp_concepts_highlight = 1
-let g:cpp_no_function_highlight = 1
-
+" let g:cpp_concepts_highlight = 1
+" let g:cpp_no_function_highlight = 1
 
 "===============================
 " => 手动加载GVIM专用插件
 "===============================
 call plug#load('vim-startify',
-	    \ 'rainbow_parentheses.vim',
-            \ 'indentLine',
             \ 'ale',
             \ 'youcompleteme',
             \ 'echodoc.vim',

@@ -329,6 +329,8 @@ gap
 ▪例：
 git apply [--check|--stat] ：直接更新|确认是否冲突|确认哪些更改
 
+●git彻底删除文件
+git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch [32mpath-to-your-remove-file[m' --prune-empty --tag-name-filter cat -- --all
 
 ○git基础操作
 ▪初始化：git init
