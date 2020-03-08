@@ -18,24 +18,16 @@ $ cd DotFiles
 ```
 然后执行
 ```
-$ ./init.sh {options}
+$ ./init.sh
 ```
-其中，`{options}`选项可以是：  
-* `--help` ：列出此列表
-* `--all` ：应用所有选项
-* `pacman`： 配置pacman，会更改 */etc/pacman.conf* 和 */etc/pacman.d/mirrorlist*
-* `zsh` ：安装oh-my-zsh，并提供了函数 *see* 用于我平时查笔记，-l选项列出所有知识点(命令与概念，输出那是相当不人性化 :cry: )，-e选项精准查询
-* `tmux` ：安装tmux
-* `ssh` ：修改 */etc/sshd/sshd_config* 和 *~/.ssh/ssh_config*
-* `chfs` ：下载并安装chfs(Cute Http File Server)
-* `vim` ：修改 *~/.vim/vimrc* 和 *~/.vim/gvimrc*
-* `extra` ：一些我需要为额外的软件包
+这只脚本会对我对Manjaro进行各种各样的配置，包括pacman, ssh, tmux, zsh, vim和一些系统设置；  
+此外，还会下载各种软件包，包括桌面软件，如QQ, 网易云音乐等，和一些命令行工具；  
+当然还有各种gnome插件和主题。
 
 ***
 
 #### pacman
 * 下载yay以使用AUR；
-* 联用aria2c；
 * 修改源为腾讯云，并添加腾讯云的archlinuxcn源
 
 ***

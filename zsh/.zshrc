@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/usr/share/oh-my-zsh
+export ZSH="/usr/share/oh-my-zsh/"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -66,9 +66,9 @@ HIST_STAMPS="yyyy-mm-dd"
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
+# Example format: plugins=(git cp extract autojump)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git cp extract autojump)
+plugins=(git cp history extract autojump)
 
 
 # User configuration
@@ -79,6 +79,7 @@ plugins=(git cp extract autojump)
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
+export EDITOR='vim'
 # if [[ -n $SSH_CONNECTION ]]; then
 #   export EDITOR='vim'
 # else
@@ -97,12 +98,13 @@ plugins=(git cp extract autojump)
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-ZSH_CACHE_DIR=$HOME/.oh-my-zsh-cache
+ZSH_CACHE_DIR=$HOME/.cache/oh-my-zsh
 if [[ ! -d $ZSH_CACHE_DIR ]]; then
   mkdir $ZSH_CACHE_DIR
 fi
 
 source $ZSH/oh-my-zsh.sh
+
 alias l='ls -lah  --time-style="+%Y %m-%d %H:%M:%S "'
 alias l.='ls -ladh  --time-style="+%Y %m-%d %H:%M:%S " .*'
 alias ll='ls -lh  --time-style="+%Y %m-%d %H:%M:%S "'
@@ -161,8 +163,8 @@ function see()
     fi
 }
 
-
-function man() {
+function man()
+{
         LESS_TERMCAP_md=$'\e[01;34m' \
         LESS_TERMCAP_me=$'\e[0m' \
         LESS_TERMCAP_se=$'\e[0m' \
