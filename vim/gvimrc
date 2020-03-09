@@ -1,7 +1,6 @@
-set listchars+=eol:↵
+set listchars=tab:▸\ ,trail:∙,eol:↵,extends:↷,precedes:↶      " 设置空白符如何显示
+set ambiwidth=double    " 解决devicon只显示一半图标的问题
 set gfn=Source\ Code\ Pro\ Black\ Italic\ 10.5  " 命令行输入 set gfn=* 打开系统字体选择面板
-" set gfn=Hack\ Bold\ Italic\ 10
-" set gfn=IBM\ Plex\ Mono\ SemiBold\ Italic\ 10.5
 set guioptions=agitd
 set guicursor=n:block,i:hor10,a:blinkon0
 set cursorline           " 高亮显示当前行
@@ -60,38 +59,6 @@ let g:UltiSnipsExpandTrigger = '<c-c>'
 let g:UltiSnipsJumpBackwardTrigger = '<M-b>'
 let g:UltiSnipsJumpForwardTrigger = '<M-m>'
 
-"================================
-" => YCM配置
-"================================
-" 添加白名单，节省性能资源
-let g:ycm_filetype_whitelist = { 
-        \ "c":1,
-        \ "cpp":1,
-        \ "vim":1,
-        \ "sh":1,
-        \ "zsh":1,
-        \ }
-" 两个字符便触发语义补全，由此导致Snips无法显示在补全列表
-let g:ycm_semantic_triggers =  {
-        \ 'c,cpp,python,java,sh': ['re!\w{2}'],
-        \ }
-let g:ycm_add_preview_to_completeopt = 0    " 不显示预览窗口
-set completeopt=menu,menuone                " 不显示预览窗口
-let g:ycm_use_clangd = 0                    " 只用libclang不用clangd
-let g:ycm_show_diagnostics_ui = 0           " 不进行语法检测
-let g:ycm_confirm_extra_conf=0              " 自动确认 .ycm_confirm_extra_conf
-let g:ycm_cache_omnifunc=0                  " 禁止缓存匹配项，每次都重新生成匹配项
-let g:ycm_seed_identifiers_with_syntax=1    " 语法关键字补全
-let g:ycm_key_invoke_completion = '<c-z>'   " 按 <c-z> 手动触发语义补全
-let g:ycm_min_num_identifier_candidate_chars = 2
-let g:ycm_complete_in_comments=0
-let g:ycm_complete_in_strings=0
-let g:ycm_collect_identifiers_from_comments_and_strings = 0
-let g:ycm_collect_identifiers_from_tags_files = 0
-let g:ycm_key_list_stop_completion = ['<CR>']
-nnoremap gp :YcmCompleter GetParent<CR>
-nnoremap gt :YcmCompleter GetType<CR>
-nnoremap go :YcmCompleter GoTo<CR>
 
 "================================
 " => ALE配置
@@ -200,6 +167,6 @@ let g:cpp_experimental_template_highlight = 1           " which is a faster impl
 "===============================
 call plug#load('vim-startify',
             \ 'ale',
-            \ 'youcompleteme',
             \ 'echodoc.vim',
 	    \)
+

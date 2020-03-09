@@ -53,6 +53,7 @@ set history=500
 set noswapfile
 set nobackup
 set undofile
+set undodir=~/.cache/vim/undo
 
 "================================
 " => Buffer、Tab、Window操作
@@ -192,6 +193,27 @@ let g:Lf_WildIgnore = {
         \ 'dir': ['.svn', '.git'],
         \ 'file': ['.root', '*.bak', '*.save', '*.exe', '*.o', '*.so']
         \}
+command! Csh :echo "PREFIX: \<space\>c
+            \ \n s   symbol    ：查找该符号的引用
+            \ \n g   global    ：查找该符号的定义
+            \ \n a   assign    ：查找该符号被赋值的位置
+            \ \n c   calls     ：查找调用当前函数的位置
+            \ \n d   depends   ：查找当前函数调用的函数
+            \ \n i   includes  ：查询引入了当前文件的文件
+            \ \n f   file      ：打开文件名
+            \ \n t   text      ：查找出现该字符串的位置
+            \ \n e   egrep     ：使用 egrep 搜索当前单词
+            \ \n 需要时请手动cs add <gtags_db_file>，此文件会由Leaderf自动生成在~/.LfCache/gtags/\%path\%to\%project\%root/GTAGS
+            \"
+command! Lfh :echo "PREFIX: \<space\>f
+            \ \n f      ：搜索函数
+            \ \n t      ：搜索符号
+            \ \n z      ：搜索文件
+            \ \n g      ：通过gtags搜索
+            \ \n c      ：通过gtag的内容查找
+            \ \n u      ：手动更新gtags
+            \"
+nnoremap <silent> <space>fh :Lfh<CR>
 nnoremap <silent> <space>ff :Leaderf function --all<CR>
 nnoremap <silent> <space>ft :Leaderf bufTag --all<CR>
 nnoremap <silent> <space>fz :Leaderf <CR>
@@ -204,6 +226,7 @@ nnoremap <silent> gs :Leaderf! gtags -s  <c-r>=expand('<cword>')<cr> --auto-jump
 set cscopeprg=/usr/local/bin/gtags-cscope
 set cscopequickfix=s-,c-,d-,i-,t-,e-,a-
 set nocst
+nnoremap <silent> <space>ch :Csh<cr>
 nnoremap <silent> <space>ca :cscope find a  <c-r>=expand('<cword>')<cr><cr>
 nnoremap <silent> <space>cg :cscope find g  <c-r>=expand('<cword>')<cr><cr>
 nnoremap <silent> <space>cc :cscope find c  <c-r>=expand('<cword>')<cr><cr>
@@ -212,27 +235,6 @@ nnoremap <silent> <space>ce :cscope find e  <c-r>=expand('<cword>')<cr><cr>
 nnoremap <silent> <space>cf :cscope find f  <c-r>=expand('<cfile>')<cr><cr>
 nnoremap <silent> <space>ci :cscope find i ^<c-r>=expand('<cfile>')<cr>$<cr>
 nnoremap <silent> <space>cd :cscope find d  <c-r>=expand('<cword>')<cr><cr>
-command! Csh :echo "PREFIX: <space>c
-            \ \n s   symbol    ：查找该符号的引用
-            \ \n g   global    ：查找该符号的定义
-            \ \n a   assign    ：查找该符号被赋值的位置
-            \ \n c   calls     ：查找调用当前函数的位置
-            \ \n d   depends   ：查找当前函数调用的函数
-            \ \n i   includes  ：查询引入了当前文件的文件
-            \ \n f   file      ：打开文件名
-            \ \n t   text      ：查找出现该字符串的位置
-            \ \n e   egrep     ：使用 egrep 搜索当前单词
-            \ 快捷键以 <space>c 开头加上述字母
-            \ 需要时请手动cs add <gtags_db_file>，此文件会由Leaderf自动生成在~/.LfCache/gtags/\%path\%to\%project\%root/GTAGS
-            \"
-command! Lfh :echo "PREFIX: <space>f
-            \ \n f      ：搜索函数
-            \ \n t      ：搜索符号
-            \ \n z      ：搜索文件
-            \ \n g      ：通过gtags搜索
-            \ \n c      ：通过gtag的内容查找
-            \ \n u      ：手动更新gtags
-            \"
 
 "================================
 " => instant-markdown配置
@@ -258,13 +260,39 @@ let g:NERDTreePatternMatchHighlightFullName = 1
 let g:NERDTreeHighlightFolders = 1
 let g:NERDTreeHighlightFoldersFullName = 1
 
+
 "================================
-" => Rainbow-Parentheses配置
+" => YCM配置
 "================================
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
+" 添加白名单，节省性能资源
+let g:ycm_filetype_whitelist = { 
+        \ "c":1,
+        \ "cpp":1,
+        \ "vim":1,
+        \ "sh":1,
+        \ "zsh":1,
+        \ }
+" 两个字符便触发语义补全，由此导致Snips无法显示在补全列表
+let g:ycm_semantic_triggers =  {
+        \ 'c,cpp,python,java,sh': ['re!\w{2}'],
+        \ }
+let g:ycm_add_preview_to_completeopt = 0    " 不显示预览窗口
+set completeopt=menu,menuone                " 不显示预览窗口
+let g:ycm_use_clangd = 0                    " 只用libclang不用clangd
+let g:ycm_show_diagnostics_ui = 0           " 不进行语法检测
+let g:ycm_confirm_extra_conf=0              " 自动确认 .ycm_confirm_extra_conf
+let g:ycm_cache_omnifunc=0                  " 禁止缓存匹配项，每次都重新生成匹配项
+let g:ycm_seed_identifiers_with_syntax=1    " 语法关键字补全
+let g:ycm_key_invoke_completion = '<c-z>'   " 按 <c-z> 手动触发语义补全
+let g:ycm_min_num_identifier_candidate_chars = 2
+let g:ycm_complete_in_comments=0
+let g:ycm_complete_in_strings=0
+let g:ycm_collect_identifiers_from_comments_and_strings = 0
+let g:ycm_collect_identifiers_from_tags_files = 0
+let g:ycm_key_list_stop_completion = ['<CR>']
+nnoremap gp :YcmCompleter GetParent<CR>
+nnoremap gt :YcmCompleter GetType<CR>
+nnoremap go :YcmCompleter GoTo<CR>
 
 "================================
 " => 终端VIM的配置
@@ -289,7 +317,6 @@ if !has("gui_running")
     " Ps = 6  -> steady bar (xterm).
 endif
 
-
 "================================
 " => vim-plug配置
 "================================
@@ -309,6 +336,7 @@ Plug 'Yggdroot/indentLine'                                                  " �
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }                          " 撤销数可视化，引入分支的概念，类似git一样跳转与撤销，按 <F4> 打开或关闭
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }                          " 显示代码中所有的标识符，函数、类、类成员、宏之类的，按 <F2> 打开或关闭，可以在本vimrc中打开查看按键映射，用户命令
 Plug 'vim-scripts/fcitx.vim'                                                " 若使用fcitx中文输入法框架，如搜狗输入法，此插件会在离开插入模式进入普通模式时自动切换会英文输入法
+Plug 'easymotion/vim-easymotion'
 
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }                       " 对markdown的基本支持
 " Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }                   " 即时预览Markdown文件渲染结果
@@ -317,7 +345,7 @@ Plug 'octol/vim-cpp-enhanced-highlight', { 'for': 'cpp' }                   " C+
 Plug 'dense-analysis/ale', { 'on': [] }                                     " 动态语法检测，需要自己修改配置，本配置默认用于C/C++。cppcheck的bug解决(2020-2-3)，详见https://github.com/dense-analysis/ale/issues/2994，clangtidy错误无法显示的问题可以用仓库中vim/clangtidy.vim替换你的ale/ale_linters/cpp/clangtidy.vim
 Plug 'SirVer/ultisnips', { 'for': ['cpp', 'c', 'markdown', 'snippets'] }    " 输入代码片段缩写后按 <C-S> 自动补全完整代码，可以按snips的语法自己添加片段
 " Plug 'honza/vim-snippets', { 'for': ['cpp', 'c', 'markdown', 'snippets'] }" 上述插件的官方代码片段，包括了很多种编程语言
-Plug 'https://gitee.com/mirrors/youcompleteme.git', { 'on': [] }            " 基于标签和语义的代码补全，需要自己修改配置，本配置默认用于C/C++，该项目较大且下载速度较慢，Arch/Manjaro的源里有该插件vim-youcompleteme，若源码安装需要进入安装目录执行./install.py
+" Plug 'https://gitee.com/mirrors/youcompleteme.git', { 'on': [] }            " 基于标签和语义的代码补全，需要自己修改配置，本配置默认用于C/C++，该项目较大且下载速度较慢，Arch/Manjaro的源里有该插件vim-youcompleteme，若源码安装需要进入安装目录执行./install.py
 Plug 'Shougo/echodoc.vim', { 'on': [] }                                     " ycm补全后在原本命令行的位置显示函数参数提示
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh', 'on': 'Leaderf' }          " 快速搜索文件 <leader>fz，标识符 <leader>ft，代码内容 <leader>fc，函数 <leader>ff 等等
 " Plug 'skywind3000/asyncrun.vim'                                           " 异步执行外部命令
@@ -336,3 +364,19 @@ Plug 'crusoexia/vim-monokai'
 Plug 'morhetz/gruvbox'
 
 call plug#end()
+
+"================================
+" => Easymotion配置
+"================================
+nmap f <Plug>(easymotion-overwin-f2)
+nmap <space>el <Plug>(easymotion-overwin-line)
+nmap <space>ew <Plug>(easymotion-overwin-w)
+hi EasyMotionShade ctermbg=none ctermfg=grey
+
+"================================
+" => Rainbow-Parentheses配置
+"================================
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces

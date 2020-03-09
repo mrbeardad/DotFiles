@@ -649,7 +649,7 @@ minmax_element(b, e, op2 = lower_to)：返回第一个最小值和最后一个�
 ○string_view：<string_view>
 ▪原理：只是string或C-string的引用，没有数据的拥有权，只含有元数据
 ▪目的：高效的提供string接口的拷贝操作，尤其[31m.[msubstr()，当需要const string时改用string_view
-▪注意：所有拷贝共享一个底层数据
+▪注意：所有拷贝共享一个底层数据，所以.substr().data()会导致错误（因为'\0'只在最后才有）
 ▪构造：(string) (string_view) (cstring) (cstring, len)
 ●额外提供：.remove_prefix和.remove_suffix缩减视图范围
 
@@ -779,6 +779,7 @@ minmax_element(b, e, op2 = lower_to)：返回第一个最小值和最后一个�
 ●字符处理：
     <cctype>：字符分类
     <codecvt>：字符编码转换器
+    <locale>：转换宽字符需要此头文件
     例：
     ▪wbuffer_convert<codecvt_utf8<wchar_t>> wbuf_utf8(stream[31m.[mrdbuf())
      wistream utf8(&wbuf_utf8)

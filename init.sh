@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# 
+#配置ssh
 function ssh_cfg() {
     sudo cp -f ssh/sshd_config /etc/ssh/sshd_config
     cp -f ssh/ssh_config ~/.ssh/ssh_config
     sudo systemctl enable --now sshd.socket
+    sudo cp ssh/motd /etc/motd
     echo -e "\e[33m Note:\e[m Now you need to push your ~/.ssh/id_ecdsa.pub to your github account"
     echo -e 'To generate public private key, run command: \e[32mssh-keygen -t ecdsa -b 521 -C "yourname@youremail"'
 }
@@ -14,14 +15,6 @@ function ssh_cfg() {
 function zsh_cfg() {
     #下载oh-my-zsh
     yay -S oh-my-zsh-git powerline-fonts zsh-syntax-highlighting zsh-autosuggestions autojump
-
-    #修改.zshrc中ZSH_THEME HYPHEN_INSENSITIVE ENABLE_CORRECTION=  COMPLETION_WAITING_DOTS HIST_STAMPS plugins
-    sed -r -i "/ZSH_THEME/s/=.*/=\"agnoster-time\"/;
-    /HYPHEN_INSENSITIVE/s/# //;
-    /COMPLETION_WAITING_DOTS/s/# //;
-    /HIST_STAMPS/{s/# //; s/=.*/=\"yyyy-mm-dd\"/};
-    /^plugins=/s/=.*/=(git cp extract autojump)/;
-    /Preferred editor/a export EDITOR='vim'" ~/.zshrc
 
     #添加alias和man()
     cp -f zsh/.zshrc ~/.zshrc
@@ -105,7 +98,7 @@ function extra_cfg() {
     sudo chmod 755 /opt/bin
 
     #CLI工具
-    yay -S sendemail htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat ntfs-3g archlinuxcn/cppman-git
+    yay -S sendemail htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat ntfs-3g archlinuxcn/cppman-git gdb
 
     #百度网盘，QQ，网易云音乐，搜狗拼音，WPS
     yay -S baidunetdisk-bin deepin.com.qq.im wqy-microhei netease-cloud-music vlc fcitx-sogoupinyin fcitx-im fcitx-configtool wps-office ttf-wps-fonts flameshot google-chrome
@@ -115,7 +108,7 @@ function extra_cfg() {
     sed -i '1a\export XMODIFIERS="@im=fcitx"\nexport QT_IM_MODULE="fcitx"\n' /usr/bin/wps
 
     #GNOME扩展
-    yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin breeze-hacked-cursor-theme ttf-google-fonts-git tela-icon-theme-git gnome-shell-extension-coverflow-alt-tab gnome-shell-extension-system-monitor-git
+    yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git ttf-google-fonts-git tela-icon-theme-git gnome-shell-extension-coverflow-alt-tab gnome-shell-extension-system-monitor-git
 }
 
 
@@ -155,10 +148,16 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 echo -e "\e[33mNow you may need to change your grub theme"
 echo "\e[33mNow you may need to change your X-server to wayland"
 
+# Nvidia driver
+yay -S bumblebee virtualgl lib32-virtualgl lib32-primus primu
+sudo systemctl enable --now bumblebee
+sudo gpasswd -A beardad bumblebee
+
 ssh_cfg
 zsh_cfg
 vim_cfg
 tmux_cfg
 extra_cfg
+echo "Now you may need to apply these patches."
 # }
 
