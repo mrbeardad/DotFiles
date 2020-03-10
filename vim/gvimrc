@@ -1,9 +1,9 @@
-set listchars=tab:▸\ ,trail:∙,eol:↵,extends:↷,precedes:↶      " 设置空白符如何显示
-set ambiwidth=double    " 解决devicon只显示一半图标的问题
-set gfn=Source\ Code\ Pro\ Black\ Italic\ 10.5  " 命令行输入 set gfn=* 打开系统字体选择面板
-set guioptions=agitd
+set listchars=tab:▸\ ,trail:∙,eol:↵,extends:↷,precedes:↶    " 设置空白符如何显示
+set ambiwidth=double                                        " 解决devicon只显示一半图标的问题
+set gfn=Source\ Code\ Pro\ Black\ Italic\ 10.5              " 命令行输入 set gfn=* 打开系统字体选择面板
+set guioptions=agitd                                        " 不显示菜单
 set guicursor=n:block,i:hor10,a:blinkon0
-set cursorline           " 高亮显示当前行
+set cursorline                                              " 高亮显示当前行
 " set cursorcolumn       " 高亮显示当前行，此选项可能导致光标移动的延迟
 
 colorscheme neodark
@@ -18,6 +18,15 @@ colorscheme neodark
 " 切换窗口时自动关闭和打开高亮行列
 autocmd WinLeave * set nocul
 autocmd WinEnter * set cul
+
+function! ToggleAmbiwidth()
+    if &ambiwidth == bouble
+        set ambiwidth=single
+    else
+        set ambiwidth=double
+    endif
+endfunction
+nnoremap <silent> <leader>a :call ToggleAmbiwidth()<cr>
 
 "================================
 " => Startify配置

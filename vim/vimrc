@@ -38,12 +38,8 @@ set expandtab                     " 用空格代替tab，:retab恢复本行
 set path=/usr/include/c++/9.2.0,. " 设置PATH目录方便跳转
 set list                          " 显示空白符
 set listchars=tab:▸\ ,trail:·,extends:↷,precedes:↶      " 设置空白符如何显示
-
 "读取缓冲区时回到上次离开时的位置
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-
-" 读取vim命令行的输出到当前文件缓冲区
-command! -nargs=* Rcmd :let tmp=<q-args> | put =execute(tmp)
 
 "================================
 " => 设置临时文件
@@ -143,6 +139,9 @@ inoremap <c-]> <c-o>%
 " => 命令模式快捷键
 "================================
 cnoremap <c-a> <c-b>
+
+" 读取vim命令行的输出到当前文件缓冲区
+command! -nargs=* Rcmd :let tmp=<q-args> | put =execute(tmp)
 
 "================================
 " => 可视模式快捷键
@@ -265,7 +264,7 @@ let g:NERDTreeHighlightFoldersFullName = 1
 " => YCM配置
 "================================
 " 添加白名单，节省性能资源
-let g:ycm_filetype_whitelist = { 
+let g:ycm_filetype_whitelist = {
         \ "c":1,
         \ "cpp":1,
         \ "vim":1,
@@ -278,7 +277,7 @@ let g:ycm_semantic_triggers =  {
         \ }
 let g:ycm_add_preview_to_completeopt = 0    " 不显示预览窗口
 set completeopt=menu,menuone                " 不显示预览窗口
-let g:ycm_use_clangd = 0                    " 只用libclang不用clangd
+let g:ycm_use_clangd = 1                    " 是否用clangd
 let g:ycm_show_diagnostics_ui = 0           " 不进行语法检测
 let g:ycm_confirm_extra_conf=0              " 自动确认 .ycm_confirm_extra_conf
 let g:ycm_cache_omnifunc=0                  " 禁止缓存匹配项，每次都重新生成匹配项
@@ -293,6 +292,13 @@ let g:ycm_key_list_stop_completion = ['<CR>']
 nnoremap gp :YcmCompleter GetParent<CR>
 nnoremap gt :YcmCompleter GetType<CR>
 nnoremap go :YcmCompleter GoTo<CR>
+
+"================================
+" => NERDCommenter配置
+"================================
+let g:NERDCreateDefaultMappings=0
+nmap <silent> <leader>cc <plug>NERDCommenterToggle
+nmap <silent> <leader>ca <plug>NERDCommenterAppend
 
 "================================
 " => 终端VIM的配置
@@ -380,3 +386,4 @@ au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+
