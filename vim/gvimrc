@@ -150,8 +150,10 @@ function! QuickRun()
     wincmd p
 endfunction
 nnoremap <silent> <space>lr :call QuickRun()<CR>
-nnoremap <silent> <space>ld :execute '!clang++ -std=c++17 -ggdb -Og -g -fno-inline -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
-nnoremap <silent> <space>lc :execute '!clang++ -std=c++17 -O3 -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
+nnoremap <silent> <space>lt :execute 'bd ' g:QuickRunBufnr<cr>
+nnoremap <silent> <space>ld :w<cr>:execute '!g++ -std=c++17 -g3 -fno-inline -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
+nnoremap <silent> <space>lc :w<cr>:execute '!clang++ -std=c++17 -O3 -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
+nnoremap <silent> <space>li <c-w>v<c-w><right>30<c-w>\|:e /tmp/QuickRun/input<cr>:wincmd p<cr>
 
 "================================
 " => Echodoc配置

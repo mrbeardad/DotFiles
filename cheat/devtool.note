@@ -53,6 +53,36 @@
     disas：func，addr
     i/info：reg，all
 
+●lldb <exe> [-c <core>] [-p <pid>]
+▪断点：
+    b：<查看>  <linenum>  <function>  0x<address>  <filename>:<linenum>  <module>`<function>  /regex/
+    br：disable|enable|delete|read|write
+    w：set var <var>
+    w：modify -c '<condition>'
+▪设置：
+    env：<查看>  <env-var>=<value>
+    settings： set|show  target.run-args|target.run-input-path|target.run-output-path
+▪运行：
+    r：<以/bin/sh的语法格式启动程序>
+    c：
+    s：[-e <linenum>]
+    n：
+    j：0x<address>
+    finish：
+    kill：
+    q：
+▪调试：
+    p：打印
+    e：赋值
+    l：源码
+    bt：调用栈
+    f：[framenum]
+    thread info
+    t [threadnum]
+    dis：反汇编
+    reg：寄存器
+
+
 ●ar：
 ▪r：替换，d：删除，t：显示
 ▪c：创建，s：符号，u：更新，v：详述
