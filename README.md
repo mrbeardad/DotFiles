@@ -1,6 +1,5 @@
 # 写在前面
-整个仓库的建立都是一个我个人在学习的过程，这些也都为我自己所需所用所愿而写，
-故有些东西不会尽如人意
+整个仓库的建立都是一个我个人在学习的过程，这些也都为我自己所需所用所愿而写，故有些东西不会尽如人意
 
 [README-en.md](README-en.md)  
 [学习资源](learning-resource.md)  
@@ -20,15 +19,14 @@ $ cd DotFiles
 ```
 $ ./init.sh
 ```
-这只脚本会对我对Manjaro进行各种各样的配置，包括pacman, ssh, tmux, zsh, vim和一些系统设置；  
-此外，还会下载各种软件包，包括桌面软件，如QQ, 网易云音乐等，和一些命令行工具；  
-当然还有各种gnome插件和主题。
+这只脚本会对我的Manjaro进行各种配置，包括pacman, ssh, tmux, zsh, vim等等；  
+此外，还会下载各种软件包，如TIM, WPS，和一些命令行工具等等；  当然还有各种gnome插件和主题。
 
 ***
 
 #### pacman
-* 下载yay以使用AUR；
-* 修改源为腾讯云，并添加腾讯云的archlinuxcn源
+* 下载yay(AUR助手)和一些其他工具
+* 修改源为国内源，并添加archlinuxcn源
 
 ***
 
@@ -48,6 +46,7 @@ $ ./init.sh
     * <kbd>v</kbd> 竖直切分panes
     * <kbd>r</kbd> 重载配置
     * <kbd>b</kbd> 上一个window
+    * <kbd>n</kbd> 下一个window
     * <kbd>Ctrl</kbd>+<kbd>S</kbd> 保存会话
     * <kbd>Ctrl</kbd>+<kbd>R</kbd> 恢复会话
     * 其他按键都为**前缀** + **默认按键**
@@ -85,20 +84,17 @@ CLI工具
 ***
 
 #### vim
-* 这才是重头戏嘛，这配置搞了好久的。各个插件总是这样那样的问题，不过最后还是调教的顺手啦。
-不过我这配置是用来写C++和Markdown的，其他语言的话得自己改配置了，主要就是我让一些插件
-只在C++文件中工作。插件的详情可以直接打开vimrc看，我写了注释；
+* 这才是重头戏嘛，这配置搞了好久的。此配置是用来写C++的，
+其他语言的话得自己改配置了，主要就是我让一些插件 只在C++文件中工作。
+插件的详情可以直接打开vimrc看，我写了注释；
 
-* 仓库中的vim目录里面还有3个文件，**cppcheck.vim**和**clangtidy**是ALE插件的脚本，我修改
-了内容让它们俩能正常的进行语法检测报错，**.ycm_extra_conf.py**是youcompleteme的C++配置，
+* 仓库中的vim目录里面还有3个文件，**cppcheck.vim**和**clangtidy.vim**是ALE插件的脚本，
+我修改了内容让它们俩能正常的进行语法检测报错，**.ycm_extra_conf.py**是youcompleteme的C++配置，
 移到工程目录下起作用；
 * <font color=red> NOTE: </font>这套配置依赖vim-plug插件管理器
 * <font color=red> NOTE: </font>Leaderf插件的运行还需要[gtags](https://www.gnu.org/software/global/download.html)
-* <font color=red> NOTE: </font>vim-instant-markdown插件依赖有点麻烦，我用的AUR里的
-* <font color=red> NOTE: </font>我配置的即时编译并运行C++代码的快捷键，依赖仓库里的
-vim/time.cpp，其实就是time命令的作用，不过shell的time输出难看我就重新写了一个，
-执行`g++ -O3 -o ~/.local/bin/quickrun_time vim/time.cpp`即可
-（●。●）～
+* <font color=red> NOTE: </font>QuickRun配置的即时编译并运行C++代码，依赖仓库里的vim/time.cpp  
+执行`g++ -O3 -o ~/.local/bin/quickrun_time vim/time.cpp`编译即可
 * **自定义命令**：
     * Rcmd：读取vim-cmd-output到当前buffer
     * Csh：查看cscope简短帮助，容易忘记嘛
@@ -106,7 +102,16 @@ vim/time.cpp，其实就是time命令的作用，不过shell的time输出难看�
     * QuickrunArgs：设置<kbd>space</kbd>+<kbd>l</kbd>+<kbd>r</kbd>运行时传给你的程序的参数
     * QuickrunRedirect：设置<kbd>space</kbd>+<kbd>l</kbd>+<kbd>r</kbd>运行时的I/O重定向  
 例：`:QuickrunRedirect -o <filename1> -i <filename2>`表示将stdout重定向到filename1并将stdin重定向到filename2
-* **自定义快捷键**
+* **快捷键**
+    * buffer, window, tab切换
+        * \<leader>n：下一个tab
+        * \<leader>b：上一个tab
+        * \<space>n：下一个buffer
+        * \<space>b：上一个buffer
+        * \<c-w>W：sudo写入文件
+        * \<c-w>x：删除当前buffer
+        * \<tab>：切换窗口
+        * \<space>数字：切换窗口
     * 插入模式：
         * \<c-a>：行首
         * \<c-e>：行尾
@@ -114,12 +119,12 @@ vim/time.cpp，其实就是time命令的作用，不过shell的time输出难看�
         * \<c-k>：删除至行尾
         * \<c-d>：下滚10行
         * \<c-b>：上滚10行
+        * \<c-]>：匹配括号
     * 可视模式：
-        * <c-c>：复制选中区域到系统剪切板
+        * \<c-a>：行首
+        * \<c-e>：行尾
+        * \<y>：复制选中区域到系统剪切板
     * 普通模式
-        * \<space>n：下一个buffer
-        * \<space>b：上一个buffer
-        * \<space>n：切换到第n个window，n为1-6
         * \<c-d>：下滚10行
         * \<c-b>：上滚10行
         * \<c-a>：行首
@@ -128,20 +133,22 @@ vim/time.cpp，其实就是time命令的作用，不过shell的time输出难看�
         * Y：复制光标到行尾的字符
         * \<space>o：在该行下添加一空行
         * \<space>O：在该行上添加一空行
-        * \<leader>w：切换wrap(长行是否回绕)
-        * \<leader>v：切换virtualedit(光标是否可出现在无字符区域)
-        * \<leader>t：切换expandtab是否用空格代替tab
-        * \<leader>h：切换搜索高亮
+        * \<leader>h：关闭搜索高亮
+        * \<leader>m：快速编辑宏，连按两次
+        * \<leader>w：切换&wrap，长行是否回绕
+        * \<leader>l：切换&breakline，回绕是否断词
+        * \<leader>v：切换&virtualedit，光标是否可出现在无字符区域
+        * \<leader>t：切换&expandtab，是否用空格代替tab
+        * \<leader>a：切换&ambiwidth，字符的宽度
     * 插件相关
-        * \<leader>p：开关Auto-Pairs
         * \<F2>：开关Tagbar
         * \<F3>：开关NERDTree
         * \<F4>：开关UndoTree
         * \<c-c>：触发UltiSnips
         * \<m-m>：到下一个UltiSnips的替换位置
         * \<m-b>：到上一个UltiSnips的替换位置
-        * \<leader>cc：快速注释代码
-        * \<leader>cu：快速取消注释
+        * {range}\<leader>cc：注释或取消注释代码
+        * \<leader>ca：在尾部添加注释
         * 提供额外文本对象：`f`函数，`i`缩进，`,`函数参数
     * 搜索工程
         * \<space>fz：搜寻文件
@@ -156,19 +163,10 @@ vim/time.cpp，其实就是time命令的作用，不过shell的time输出难看�
         * gs：跳转无定义的引用，基于gtags的标签
         * go：跳转声明或定义，基于ycm的语义
         * gt：获取对象类型，基于ycm的语义
-        * jn：跳转下一个ALE语法提示
-        * jb：跳转上一个ALE语法提示
+        * gn：跳转下一个ALE语法提示
+        * gb：跳转上一个ALE语法提示
     * 编译运行
         * \<space>lr：快速编译并执行该c++程序
         * \<space>ld：只编译用于gdb调试
         * \<space>lc：用clang优化编译
-    * NERDTree
-        * p：父目录
-        * P：顶目录
-        * I：显示隐藏文件
-        * \<cr>：打开文件/目录
-        * t：新tab打开文件
-        * x：关闭目录
-        * u：切换顶目录为其父目录
-        * C：切换顶目录为此目录
 

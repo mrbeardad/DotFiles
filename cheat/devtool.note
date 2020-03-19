@@ -24,34 +24,42 @@
     ulimit -c unlimited
     echo '/path/to/coredir/core.%e.%p' > /proc/sys/kernel/core_pattern
 ▪断点：
-    b/break：<func>，<*addr>，<linenum>，<if-condition>
-    watch：<value>，<if-condition>
-    catch：<event>
-    d/delete，disable，enable，clear
-    i/info b
+    b/break     ：<func>，<linenum>，<if CONDITION>，*<addr>
+    w/watch     ：<value>
+    catch       ：syscall|signal|exception
+    d/delete
+    disable
+    enable
+    info b
+    save b FILE
+    source FILE
 ▪运行：
-    set args，show args，path
-    r/run：I/O重定向
+    set|show    ：args|path|env
+    r/run       ：<args>
     c/continue
-    s/step，si/stepi
-    n/next，ni/nexti
-    u/until：结束循环，行号
-    f/finish
     k/kill
     q/quit
 ▪调试：
-    p/print：val，$reg，express，"%s", addr，*arr@lenth
-    x ：addr
-    <formate>：/n字节/u类型/[bhwg]位长
-    i/info：locals，args，stack，frame，program
-    whatis：value
-    display：每次单步后打印变量
-    handle  <signal>  <keyword>
+    s/step      ：<N>
+    n/next      ：<N>
+    u/until     ：<line-num>
+    finish
+    return      ：<ret-val>
+    bt
+    f/frame     ：<frame-num>
+▪调试子进程：
+    set follow-fork-mode child
+▪调试多线程：
+    i thread
+    thread <thread-num>
+▪打印：
+    i locals
+    p/print     ：<val>，<expr>，"%s",addr
+    whatis      ：<value>
+    display     ：每次单步后打印变量
 ▪界面：
-    la/layout：src，asm，reg，sp
-    l/list：lineno，funcname
-    disas：func，addr
-    i/info：reg，all
+    la/layout   ：src，asm，reg，sp
+    l/list      ：lineno，funcname
 
 ●lldb <exe> [-c <core>] [-p <pid>]
 ▪断点：
@@ -118,7 +126,7 @@
 ▪快捷键：prefix设为Alt-w
     d(卸离)，D(选择卸离)，:(命令模式)，shift+鼠标(选取)
     ▪window：
-    c(创建)，&(关闭)，(重名win)，.(重编号)
+    c(创建)，&(关闭)，,(重名win)，.(重编号)
     ▪切换windows：
     p/n(前后)，0~9(编号)，f(搜索)，w(选择)
     ▪pane：
@@ -337,7 +345,7 @@ git push <remote> <tag>
 git push --tags
 git push <remote> :refs/tags/tagname
 
-●git stach
+●git stash
 gsta，gstall(包括untraced)，gstp，gstl
 
 ●git cherry-pick <commit>：复制(合并)目标commit到当前分支

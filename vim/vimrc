@@ -18,7 +18,7 @@ set wildmenu                      " 命令行补全文件名
 set wildignorecase                " 补全忽略大小写
 set showmatch                     " 左括号匹配，无则响铃
 set matchtime=0                   " 括号匹配时间，单位0.1s
-set nowrap                        " 长行超屏而非回绕，用<leader>w切换
+set nowrap                        " 长行超屏而非回绕
 set linebreak                     " 回绕时避免断词
 set scrolloff=1                   " 保持n行始终在光标之下或之上
 set autochdir                     " 自动切换工作目录
@@ -28,7 +28,7 @@ set whichwrap=<,>,[,]             " 允许插入模式与普通模式光标在�
 set backspace=indent,eol,start    " 允许<BS>键在插入模式删除：行首空白符、换行符、进入插入模式时光标之前的字符
 set virtualedit=block,onemore     " 光标可出现在无字符空间：块选取模式，其它模式最多只允许出现在最后一个字符之后的位置
 set hidden                        " 切换tab时自动隐藏当前buffer
-set foldmethod=indent             " 设置折叠方式
+set foldmethod=syntax             " 设置折叠方式
 set nofoldenable                  " 启动vim时不开启折叠
 set autoindent                    " 基于上行的缩进
 set tabstop=8                     " 默认的tab宽，不足则为空格
@@ -38,14 +38,18 @@ set expandtab                     " 用空格代替tab，:retab恢复本行
 set path=/usr/include/c++/9.2.0,. " 设置PATH目录方便跳转
 set list                          " 显示空白符
 set listchars=tab:▸\ ,trail:·,extends:↷,precedes:↶      " 设置空白符如何显示
-"读取缓冲区时回到上次离开时的位置
+
+" 读取缓冲区时回到上次离开时的位置
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+" 读取vim命令行的输出到当前文件缓冲区
+command! -nargs=* Rcmd :let tmp=<q-args> | put =execute(tmp)
 
 "================================
 " => 设置临时文件
 "================================
-set viminfo='100,<50,s10,h,n$HOME/.vim/viminfo
 set history=500
+set viminfo='100,<50,s10,h
+set viminfofile=~/.cache/vim/viminfo
 set noswapfile
 set nobackup
 set undofile
@@ -54,11 +58,11 @@ set undodir=~/.cache/vim/undo
 "================================
 " => Buffer、Tab、Window操作
 "================================
+nnoremap <silent> <leader>n :tabnext<CR>
+nnoremap <silent> <leader>b :tabprevious<CR>
 nnoremap <silent> <space>n :bn<CR>
 nnoremap <silent> <space>b :bp<CR>
 nnoremap <silent> <c-w>x :bd<CR>
-nnoremap <silent> <leader>n :tabnext<CR>
-nnoremap <silent> <leader>b :tabprevious<CR>
 function! Jump(i) abort
     if winnr('$') >= a:i
         exe a:i . 'wincmd w'
@@ -73,6 +77,29 @@ nnoremap <silent> <space>6 :call Jump(6)<CR>
 nnoremap <silent> <tab> :wincmd w<CR>
 
 "================================
+" => 插入模式快捷键
+"================================
+inoremap <c-a> <home><C-Right>
+inoremap <c-e> <end>
+inoremap <c-u> <c-o>d^
+inoremap <c-k> <c-o>d$
+inoremap <c-d> <c-o>10<c-e>
+inoremap <c-b> <c-o>10<c-y>
+inoremap <c-]> <c-o>%
+
+"================================
+" => 命令模式快捷键
+"================================
+cnoremap <c-a> <c-b>
+
+"================================
+" => 可视模式快捷键
+"================================
+vnoremap <c-a> 0
+vnoremap <c-e> $
+vnoremap <y> "+y
+
+"================================
 " => 普通模式快捷键
 "================================
 nnoremap <silent> <c-d> 10<c-e>
@@ -81,21 +108,28 @@ nnoremap <silent> <c-a> ^
 nnoremap <silent> <c-e> $
 nnoremap <silent> , yl
 nnoremap <silent> Y y$
-nnoremap <silent> <Leader>h :nohl<CR>
 
 " sudo写入文件
 nnoremap <silent> <c-w>W :w !sudo tee % > /dev/null<CR>l<CR>
-
 " 快速编辑宏，连按两次
 nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
-
 " 使用/与?搜索时n/N始终向下/上搜索
 nnoremap <expr> n  'Nn'[v:searchforward]
 nnoremap <expr> N  'nN'[v:searchforward]
-
 " 快速添加空行
 nnoremap <silent> <space>o  :<c-u>put =repeat(nr2char(10), v:count1)<CR><up>
 nnoremap <silent> <space>O  :<c-u>put! =repeat(nr2char(10), v:count1)<CR><down>
+" 关闭高亮
+nnoremap <silent> <Leader>h :nohl<CR>
+
+function! ToggleLinebreak()
+    if &linebreak == 1
+        setl nolinebreak
+    else
+        setl linebreak
+    endif
+endfunction
+nnoremap <silent> <leader>l :call ToggleLinebreak<cr>
 
 function! ToggleWrap()
     if &wrap == 1
@@ -124,31 +158,48 @@ function! ToggleExpandtab()
 endfunction
 nnoremap <silent> <leader>t :call ToggleExpandtab()<CR>
 
-"================================
-" => 插入模式快捷键
-"================================
-inoremap <c-a> <home><C-Right>
-inoremap <c-e> <end>
-inoremap <c-u> <c-o>d^
-inoremap <c-k> <c-o>d$
-inoremap <c-d> <c-o>10<c-e>
-inoremap <c-b> <c-o>10<c-y>
-inoremap <c-]> <c-o>%
+function! ToggleAmbiwidth()
+    if &ambiwidth == 'double'
+        set ambiwidth=single
+    else
+        set ambiwidth=double
+    endif
+endfunction
+nnoremap <silent> <leader>a :call ToggleAmbiwidth()<CR>
+
+"================================================ 插件配置 ======================================================
 
 "================================
-" => 命令模式快捷键
+" => Airline配置
 "================================
-cnoremap <c-a> <c-b>
+let g:airline_theme="night_owl"     " AirlineTheme for Gvim
+let g:airline_powerline_fonts = 1
+let g:airline_detect_spell=0
+let g:airline_extensions = ['branch', 'tabline', 'tagbar']
 
-" 读取vim命令行的输出到当前文件缓冲区
-command! -nargs=* Rcmd :let tmp=<q-args> | put =execute(tmp)
+"================================
+" => NERDTree配置
+"================================
+let NERDTreeMinimalUI=1
+let NERDTreeWinPos='right'
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
+let g:NERDTreeHighlightFolders = 1
+let g:NERDTreeHighlightFoldersFullName = 1
+noremap <silent> <F3> :NERDTreeToggle<CR>:wincmd p<CR>
 
 "================================
-" => 可视模式快捷键
+" => Tagbar配置
 "================================
-vnoremap <c-a> 0
-vnoremap <c-e> $
-vnoremap <c-c> "+y
+let g:tagbar_left=1
+let g:tagbar_width = 30
+noremap <silent> <F2> :TagbarToggle<CR>
+
+"================================
+" => Undotree配置
+"================================
+nnoremap <silent> <F4> :UndotreeToggle<CR>
 
 "================================
 " => AutoPairs配置
@@ -170,24 +221,23 @@ let g:webdevicons_enable_nerdtree = 1
 let g:indentLine_fileType = ['c', 'cpp']
 
 "================================
-" => Undotree配置
+" => NERDCommenter配置
 "================================
-nnoremap <silent> <F4> :UndotreeToggle<CR>
+let g:NERDCreateDefaultMappings=0
+nmap <silent> <leader>cc <plug>NERDCommenterToggle
+nmap <silent> <leader>ca <plug>NERDCommenterAppend
 
 "================================
-" => Airline配置
+" => instant-markdown配置
 "================================
-let g:airline_powerline_fonts = 1
-let g:airline_detect_spell=0
-let g:airline_extensions = ['branch', 'tabline', 'tagbar']
-let g:airline_theme="night_owl"
+let g:instant_markdown_autostart = 0
 
 "================================
 " => LeaderF配置
 "================================
 let g:Lf_WindowHeight = 0.2
 let g:Lf_GtagsAutoGenerate = 1
-let g:Lf_RootMarkers = ['.git', '.svn', '.root']    " 有这些文件或目录的目录即判定为项目根目录，并为项目中所有符合规定的文件生成gtags
+let g:Lf_RootMarkers = ['.git', '.svn', '.root']
 let g:Lf_WildIgnore = {
         \ 'dir': ['.svn', '.git'],
         \ 'file': ['.root', '*.bak', '*.save', '*.exe', '*.o', '*.so']
@@ -236,31 +286,6 @@ nnoremap <silent> <space>ci :cscope find i ^<c-r>=expand('<cfile>')<cr>$<cr>
 nnoremap <silent> <space>cd :cscope find d  <c-r>=expand('<cword>')<cr><cr>
 
 "================================
-" => instant-markdown配置
-"================================
-let g:instant_markdown_autostart = 0
-
-"================================
-" => Tagbar配置
-"================================
-let g:tagbar_left=1
-let g:tagbar_width = 30
-noremap <silent> <F2> :TagbarToggle<CR>
-
-"================================
-" => NERDTree配置
-"================================
-let NERDTreeMinimalUI=1     " NERDTree 子窗口中不显示冗余帮助信息
-let NERDTreeWinPos='right'
-noremap <silent> <F3> :NERDTreeToggle<CR>:wincmd p<CR>
-let g:NERDTreeFileExtensionHighlightFullName = 1
-let g:NERDTreeExactMatchHighlightFullName = 1
-let g:NERDTreePatternMatchHighlightFullName = 1
-let g:NERDTreeHighlightFolders = 1
-let g:NERDTreeHighlightFoldersFullName = 1
-
-
-"================================
 " => YCM配置
 "================================
 " 添加白名单，节省性能资源
@@ -273,7 +298,7 @@ let g:ycm_filetype_whitelist = {
         \ }
 " 两个字符便触发语义补全，由此导致Snips无法显示在补全列表
 let g:ycm_semantic_triggers =  {
-        \ 'c,cpp,python,java,sh': ['re!\w{2}'],
+        \ 'c,cpp,sh': ['re!\w{2}'],
         \ }
 let g:ycm_add_preview_to_completeopt = 0    " 不显示预览窗口
 set completeopt=menu,menuone                " 不显示预览窗口
@@ -294,21 +319,63 @@ nnoremap gt :YcmCompleter GetType<CR>
 nnoremap go :YcmCompleter GoTo<CR>
 
 "================================
-" => NERDCommenter配置
+" => Cpp_Enhanced_Highlight配置
 "================================
-let g:NERDCreateDefaultMappings=0
-nmap <silent> <leader>cc <plug>NERDCommenterToggle
-nmap <silent> <leader>ca <plug>NERDCommenterAppend
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_posix_standard = 1
+" let g:cpp_experimental_simple_template_highlight = 1  " which works in most cases, but can be a little slow on large files
+let g:cpp_experimental_template_highlight = 1           " which is a faster implementation but has some corner cases where it doesn't work.
+" let g:cpp_concepts_highlight = 1
+" let g:cpp_no_function_highlight = 1
+
+"================================
+" => UltiSnips配置
+"================================
+" 设置<C-C>触发UltiSnips补全，解决UltiSnips与YCM按键冲突网上有教程加两个函数与映射解决，我更愿意如此
+let g:UltiSnipsExpandTrigger = '<c-c>'
+let g:UltiSnipsJumpBackwardTrigger = '<m-b>'
+let g:UltiSnipsJumpForwardTrigger = '<m-m>'
+
+"================================
+" => Startify配置
+"================================
+function! StartifyEntryFormat()     " 开启devicons图标
+    return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
+endfunction
+let g:ascii = [
+            \ '                                       ^   ',
+            \ '                                _     /|   ',
+            \ '                              _( \_/)/ /   ',
+            \ '                              ,((((^/\/    ',
+            \ '                              ((((  (*~\   ',
+            \ '                           ,((((( ,     \  ',
+            \ '        ,,,_              ,(((((  /"._  ,`,',
+            \ '       ((((\\ ,...       ,((((   /    `-.-`',
+            \ '       )))  ;`    `"`"`""((((   (          ',
+            \ '     (((  /            ((       \          ',
+            \ '      ((  |        .       "     \         ',
+            \ '      ))  \     _ `      `t   ,.`)         ',
+            \ '      (   |   y;- -,-""-"-.\   \/          ',
+            \ '     )   / ./  ) /.         `\  \          ',
+            \ '         |./   ( (           / /`          ',
+            \ '         ||     \\          //`|           ',
+            \ '         ||     _")       _//`||           ',
+            \ '         ||    |_/       |_/  ||           ',
+            \ '         \_\                  ||           ',
+            \ '         ``"                  \_\          ',
+            \ ]
+let g:startify_custom_header =
+          \ 'startify#pad(g:ascii + startify#fortune#boxed())'
 
 "================================
 " => 终端VIM的配置
 "================================
 if !has("gui_running")
-    " 写入vimrc时自动读取配置，增加++nested以解决Airline写回文件时导致的颜色失调问题，与Airline的random主题冲突
-    " autocmd BufWritePost $MYVIMRC ++nested source $MYVIMRC
 
-    let g:airline_theme="random"
     colorscheme ron
+    let airline_theme='random'
 
     " 插入模式与普通模式的光标形状切换
     let &t_SI = "\e[6 q"
@@ -321,6 +388,10 @@ if !has("gui_running")
     " Ps = 4  -> steady underline.
     " Ps = 5  -> blinking bar (xterm).
     " Ps = 6  -> steady bar (xterm).
+
+    " 写入vimrc时自动读取配置，增加++nested以解决Airline写回文件时导致的颜色失调问题，与Airline的random主题冲突
+    " autocmd BufWritePost $MYVIMRC ++nested source $MYVIMRC
+
 endif
 
 "================================
@@ -328,56 +399,65 @@ endif
 "================================
 call plug#begin('~/.vim/plugged')
 
-Plug 'mhinz/vim-startify', { 'on': [] }                                     " 无参数时vim的引导界面
+Plug 'mhinz/vim-startify'                                                   " 无目标文件时vim的引导界面
 Plug 'tpope/vim-fugitive'                                                   " 集成git到vim
 Plug 'vim-airline/vim-airline'                                              " 状态栏与标签栏插件
 Plug 'vim-airline/vim-airline-themes'                                       " 上述插件颜色主题
-Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' }                      " 显示文件层次结构，选择打开文件或切换目录，按 <F3> 打开或关闭
+Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' }                      " 显示文件层次结构，选择打开文件或切换目录，按 <F3> 开关
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on':  'NERDTreeToggle' } " NERDTree插件语法高亮增强
-Plug 'ryanoasis/vim-devicons'                                               " 会其他插件提供文件类型图形符号，官方推荐使用nerd字体
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }                          " 撤销树可视化，引入分支的概念，类似git一样跳转与撤销，按 <F4> 开关
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }                          " 显示代码中所有的标识符（函数、类、类成员、宏之类的），按 <F2> 开关
+Plug 'ryanoasis/vim-devicons'                                               " 为其他插件提供文件类型图形符号，官方推荐使用nerd字体
 Plug 'kien/rainbow_parentheses.vim'                                         " 彩虹颜色显示嵌套括号
-Plug 'jiangmiao/auto-pairs'                                                 " 自动补全结对符，括号、引号之类的，有时会影响正常编辑，按 <leader>ap 打开或关闭
-Plug 'preservim/nerdcommenter'                                              " 按 <leader>cc 注释该行代码，按 <leader>cu 取消注释
-Plug 'Yggdroot/indentLine'                                                  " 缩进线，增强代码缩进的视觉化，按 <leader>il 打开或关闭
-Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }                          " 撤销数可视化，引入分支的概念，类似git一样跳转与撤销，按 <F4> 打开或关闭
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }                          " 显示代码中所有的标识符，函数、类、类成员、宏之类的，按 <F2> 打开或关闭，可以在本vimrc中打开查看按键映射，用户命令
-Plug 'vim-scripts/fcitx.vim'                                                " 若使用fcitx中文输入法框架，如搜狗输入法，此插件会在离开插入模式进入普通模式时自动切换会英文输入法
-Plug 'easymotion/vim-easymotion'
-
+Plug 'jiangmiao/auto-pairs'                                                 " 自动补全结对符（括号、引号之类的），有时会影响正常编辑，按 <m-p> 或 <leader>p 开关，按 <m-e> 快速用结对符包裹字符
+Plug 'preservim/nerdcommenter'                                              " 按 <leader>cc 注释或取消注释该行代码，可以指定行数
+Plug 'Yggdroot/indentLine'                                                  " 缩进线，增强代码缩进的视觉化
+Plug 'vim-scripts/fcitx.vim'                                                " 若使用fcitx中文输入法框架，此插件会在离开插入模式进入普通模式时自动切换会英文输入法
+Plug 'easymotion/vim-easymotion'                                            " 快速移动光标，快捷键 f 与 <leader><leader>l 与 <leader><leader>w
+Plug 'terryma/vim-multiple-cursors'                                         " 多光标编辑，<c-n>选择，<c-x>跳过，<space>m选择全部
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }                       " 对markdown的基本支持
-" Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }                   " 即时预览Markdown文件渲染结果
-
+" Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }                   " 即时预览Markdown文件渲染结果，该插件存在一些依赖，可以安装AUR版本
 Plug 'octol/vim-cpp-enhanced-highlight', { 'for': 'cpp' }                   " C++语言的语法高亮增强
-Plug 'dense-analysis/ale', { 'on': [] }                                     " 动态语法检测，需要自己修改配置，本配置默认用于C/C++。cppcheck的bug解决(2020-2-3)，详见https://github.com/dense-analysis/ale/issues/2994，clangtidy错误无法显示的问题可以用仓库中vim/clangtidy.vim替换你的ale/ale_linters/cpp/clangtidy.vim
-Plug 'SirVer/ultisnips', { 'for': ['cpp', 'c', 'markdown', 'snippets'] }    " 输入代码片段缩写后按 <C-S> 自动补全完整代码，可以按snips的语法自己添加片段
-" Plug 'honza/vim-snippets', { 'for': ['cpp', 'c', 'markdown', 'snippets'] }" 上述插件的官方代码片段，包括了很多种编程语言
-" Plug 'https://gitee.com/mirrors/youcompleteme.git', { 'on': [] }            " 基于标签和语义的代码补全，需要自己修改配置，本配置默认用于C/C++，该项目较大且下载速度较慢，Arch/Manjaro的源里有该插件vim-youcompleteme，若源码安装需要进入安装目录执行./install.py
-Plug 'Shougo/echodoc.vim', { 'on': [] }                                     " ycm补全后在原本命令行的位置显示函数参数提示
+Plug 'dense-analysis/ale', { 'on': [] }                                     " 动态语法检测，需要自己修改配置，本配置默认用于C/C++，cppcheck和clangtidy的bug可以用仓库中vim/{clangtidy,cppcheck}.vim替换你的ale/ale_linters/cpp/{clangtidy,cppcheck}.vim
+Plug 'SirVer/ultisnips', { 'for': ['cpp', 'c', 'markdown', 'snippets'] }    " 输入代码片段缩写后按 <C-c> 自动补全完整代码，可以按snips的语法自己添加片段
+" Plug 'https://gitee.com/mirrors/youcompleteme.git', { 'on': [] }          " 基于标签和语义的代码补全，需要自己修改配置，本配置默认用于C/C++，该插件较大且需要手动编译安装，可以安装AUR版本
+Plug 'Shougo/echodoc.vim', { 'for': ['c', 'cpp'] }                          " ycm补全函数后输入左括号则在原本命令行的位置显示函数参数提示
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh', 'on': 'Leaderf' }          " 快速搜索文件 <leader>fz，标识符 <leader>ft，代码内容 <leader>fc，函数 <leader>ff 等等
-" Plug 'skywind3000/asyncrun.vim'                                           " 异步执行外部命令
-
 Plug 'kana/vim-textobj-user'                                                " 此五个插件用于自定义文本对象，比如 dii 删除同缩进的代码，dif 删除函数内容，di, 删除函数参数
 Plug 'kana/vim-textobj-syntax'
 Plug 'kana/vim-textobj-indent'
 Plug 'sgur/vim-textobj-parameter'
-Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim', 'java'] }
+Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim'] }
 
-Plug 'rakr/vim-one'                                                         " 以下是支持真色的颜色主题
+" 以下是支持真色的颜色主题
+Plug 'rakr/vim-one'
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'KeitaNakamura/neodark.vim'
 Plug 'iCyMind/NeoSolarized'
 Plug 'crusoexia/vim-monokai'
 Plug 'morhetz/gruvbox'
+Plug 'liuchengxu/space-vim-dark'
+Plug 'lukelarsen/neospace-theme'
 
 call plug#end()
 
 "================================
+" => Echodoc配置
+"================================
+let g:echodoc#enable_at_startup = 1
+
+"================================
 " => Easymotion配置
 "================================
+let g:EasyMotion_smartcase = 1
 nmap f <Plug>(easymotion-overwin-f2)
-nmap <space>el <Plug>(easymotion-overwin-line)
-nmap <space>ew <Plug>(easymotion-overwin-w)
+nmap <leader><leader>l <Plug>(easymotion-overwin-line)
 hi EasyMotionShade ctermbg=none ctermfg=grey
+
+"================================
+" => Multiple-cursor配置
+"================================
+nnoremap <space>m :call multiple_cursors#select_all('n',1)<cr>
 
 "================================
 " => Rainbow-Parentheses配置
@@ -386,4 +466,116 @@ au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+
+"================================================ Gvim配置 ======================================================
+
+if has("gui_running")
+
+    set listchars=tab:▸\ ,trail:∙,eol:↵,extends:↷,precedes:↶    " 设置空白符如何显示
+    set ambiwidth=double                                        " 解决devicon只显示一半图标的问题
+    set gfn=Source\ Code\ Pro\ Black\ Italic\ 10.5              " 命令行输入 set gfn=* 打开系统字体选择面板
+    set guioptions=agitd                                        " 不显示菜单，使用gui-dark-theme
+    set guicursor=n:block,i:hor10,a:blinkon0                    " 设置光标状态
+    set cursorline                                              " 高亮显示当前行
+
+    colorscheme space-vim-dark
+    " colorscheme   ：  NeoSolarized one palenight neodark gruvbox
+    " airline_theme ：  atomic angr solarized solarized_flood cool one fruit_punch palenight base16_harmonic16 night_owl neodark behelit alduin gruvbox fairyfloss
+    " 注意，Airline的atomic主题会改变状态栏格式，不喜欢的可以把源码中的第55行开始的那段代码注释
+
+    " 切换窗口时自动关闭和打开高亮行列
+    autocmd WinLeave * set nocul
+    autocmd WinEnter * set cul
+
+    "================================
+    " => ALE配置
+    "================================
+    " 显示指定linters
+    let g:ale_linters = {
+          \   'cpp': ['clangtidy', 'cppcheck', 'gcc'],
+          \   'c': ['gcc', 'cppcheck'],
+          \   'sh': ['shell'],
+          \}
+    let g:ale_linters_explicit = 1
+    let g:ale_sign_column_always = 1
+    let g:ale_disable_lsp = 1
+    let g:ale_completion_enabled = 0
+    let g:ale_set_highlights = 1
+    let g:ale_echo_msg_format = '[%linter%] %s  [%severity%]'
+    let g:ale_lint_on_text_changed = 'never'
+    let g:ale_lint_on_insert_leave = 1
+    let g:ale_lint_on_enter = 0
+    let gLale_lint_on_save = 0
+    let g:ale_c_gcc_options = '-Wall -Wextra -O2 -std=c11'
+    let g:ale_c_cppcheck_options = '--enable=warning,style,performance,portability,information --std=c++17'
+    let g:ale_cpp_gcc_options = '-Wall -Wextra -O2 -std=c++17'
+    let g:ale_cpp_cppcheck_options = '--enable=warning,style,performance,portability,information --std=c++17'
+    let g:ale_cpp_clangtidy_options = '-extra-arg=-Weverything -extra-arg=-Wno-c++98-compat -extra-arg=-Wno-c++98-compat-pedantic -extra-arg=-Wno-pedantic -extra-arg=-Wno-missing-prototypes -extra-arg=-Wno-padded -extra-arg=-Wno-old-style-cast -extra-arg=-O2 -extra-arg=-std=c++17'
+    let g:ale_sign_error = '✗'
+    let g:ale_sign_warning = '‼'
+    let g:ale_sign_info = '⚡'
+    let g:ale_echo_msg_error_str = '✗'
+    let g:ale_echo_msg_warning_str = '‼'
+    let g:ale_echo_msg_info_str = '⚡'
+    let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
+    hi! clear SpellBad
+    hi! clear SpellCap
+    hi! clear SpellRare
+    hi! SpellBad gui=undercurl guisp=red
+    hi! SpellCap gui=undercurl guisp=yellow
+    hi! SpellRare gui=undercurl guisp=magenta
+    nnoremap <silent> gn :ALENextWrap<CR>
+    nnoremap <silent> gb :ALEPreviousWrap<CR>
+    nnoremap <silent> <space>a :ALEDetail<CR>:wincmd p<cr>
+
+    "================================
+    " => QuickRun配置
+    "================================
+    let g:QuickRunArgs=''
+    let g:QuickRunRedirect=''
+    let g:QuickRunBufnr=0
+    let g:QuickRun_PATH=''
+    command! -nargs=1 QuickrunArgs let g:QuickRunArgs = <q-args>
+    command! -nargs=1 QuickrunRedirect let g:QuickRunRedirect = <q-args>
+    function! QuickRun()
+        if !isdirectory('/tmp/QuickRun')
+            !mkdir /tmp/QuickRun
+        endif
+        if !isdirectory('/sys/fs/cgroup/memory/test')
+            !sudo mkdir /sys/fs/cgroup/memory/test
+        endif
+        if g:QuickRunBufnr != 0 && bufexists(g:QuickRunBufnr)
+            execute 'bd ' . g:QuickRunBufnr
+        endif
+        if &modified == 0 && g:QuickRun_PATH =~ expand('%:t')
+            rightbelow 15 split
+            execute 'term ++noclose ++norestore ++curwin sh -c "sudo sh -c \"echo $$ > /sys/fs/cgroup/memory/test/cgroup.procs\" && sudo sh -c \"echo 100M > /sys/fs/cgroup/memory/test/memory.memsw.limit_in_bytes\"'
+                        \ . ' && echo -e \"\\e[1;33mRerunning last compiled program!\\e[m\" && quickrun_time '
+                        \ . g:QuickRunRedirect . ' ' . g:QuickRun_PATH . ' ' . g:QuickRunArgs . '"'
+        else
+            write
+            rightbelow 15 split
+            let QuickRun_TIME = strftime('%M%H')
+            let QuickRun_FILE = expand('%:t')
+            let g:QuickRun_PATH = '/tmp/QuickRun/' . QuickRun_FILE . '.' . QuickRun_TIME
+            execute 'term ++noclose ++norestore ++curwin sh -c "sudo sh -c \"echo $$ > /sys/fs/cgroup/memory/test/cgroup.procs\" && sudo sh -c \"echo 100M > /sys/fs/cgroup/memory/test/memory.memsw.limit_in_bytes\"'
+                        \ ' && echo -e \"\\e[1;32m[Compile] ' . g:QuickRun_PATH .
+                        \ '\\e[m\" && g++ -std=c++17 -O2 -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -I. -o ' . g:QuickRun_PATH .' ' . expand('%') .
+                        \ ' && quickrun_time ' . g:QuickRunRedirect . ' ' . g:QuickRun_PATH . ' ' . g:QuickRunArgs . '"'
+        endif
+        let g:QuickRunBufnr=bufnr('%')
+        wincmd p
+    endfunction
+    nnoremap <silent> <space>lr :call QuickRun()<CR>
+    nnoremap <silent> <space>lt :execute 'bd ' g:QuickRunBufnr<cr>
+    nnoremap <silent> <space>ld :w<cr>:execute '!g++ -std=c++17 -Og -g3 -fno-inline -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
+    nnoremap <silent> <space>lc :w<cr>:execute '!clang++ -std=c++17 -O3 -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
+    nnoremap <silent> <space>li <c-w>v<c-w><right>30<c-w>\|:e /tmp/input<cr>:wincmd p<cr>
+
+    "===============================
+    " => 手动加载GVIM专用插件
+    "===============================
+    call plug#load('ale')
+
+endif
 

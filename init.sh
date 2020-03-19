@@ -2,26 +2,24 @@
 
 #配置ssh
 function ssh_cfg() {
-    sudo cp -f ssh/sshd_config /etc/ssh/sshd_config
-    cp -f ssh/ssh_config ~/.ssh/ssh_config
+    sudo cp -vf ssh/sshd_config /etc/ssh/sshd_config
+    cp -vf ssh/ssh_config ~/.ssh/ssh_config
     sudo systemctl enable --now sshd.socket
-    sudo cp ssh/motd /etc/motd
+    sudo cp -vf ssh/motd /etc/motd
     echo -e "\e[32m=====> SSH\e[m
     Now you need to push your ~/.ssh/id_ecdsa.pub to your github account."
-
 }
-
 
 #配置zsh
 function zsh_cfg() {
     #下载oh-my-zsh
-    yay -S oh-my-zsh-git
     yay -S zsh powerline-fonts zsh-syntax-highlighting zsh-autosuggestions autojump
+    yay -S oh-my-zsh-git
 
     #添加alias和man()
-    cp -f zsh/.zshrc ~/.zshrc
-    sudo cp -f zsh/.zshrc ~/.zshrc
-    sudo cp zsh/*.zsh-theme /usr/share/oh-my-zsh/themes/
+    cp -vf zsh/.zshrc ~/.zshrc
+    sudo cp -vf zsh/.zshrc ~/.zshrc
+    sudo cp -v zsh/*.zsh-theme /usr/share/oh-my-zsh/themes/
     chsh -s /bin/zsh
     sudo chsh -s /bin/zsh
 
@@ -29,7 +27,7 @@ function zsh_cfg() {
     if [ ! -e ~/.cheat ] ;then
         mkdir ~/.cheat
     fi
-    cp cheat/* ~/.cheat
+    cp -v cheat/* ~/.cheat
 }
 
 
@@ -42,7 +40,7 @@ function tmux_cfg() {
     if [ -e ~/.tmux.conf ] ;then
         mv ~/.tmux.conf{,.bak}
     fi
-    cp tmux/.tmux.conf ~/.tmux.conf
+    cp -v tmux/.tmux.conf ~/.tmux.conf
     yay -S tmux tmux-resurrect-git
 }
 
@@ -59,20 +57,14 @@ function vim_cfg() {
         mv ~/.vimrc{,.bak}
     fi
 
-    if [ -e ~/.vim/gvimrc ] ;then
-        mv ~/.vim/gvimrc{,.bak}
-    elif [ -e ~/.gvimrc ] ;then
-        mv ~/.gvimrc{,.bak}
-    fi
-
     if [ ! -e ~/.local/bin ] ;then
         mkdir ~/.local/bin
     fi
     cp  vim/vimrc ~/.vim/vimrc
-    cp  vim/gvimrc ~/.vim/gvimrc
     g++ -O3 -o ~/.local/bin vim/time.cpp
 
     yay -S gvim vim-plug cmake ctags gperf vim-instant-markdown cppcheck archlinuxcn/nerd-fonts-complete
+    yay -S vim-youcompleteme-git
 
     echo -e '\e[32m=====> VIM\e[m
     Now, launch your vim and run the command ":PlugInstall"
@@ -83,30 +75,35 @@ function vim_cfg() {
 #安装额外的CLI工具、桌面软件、GNOME扩展
 function extra_cfg() {
     #CHFS
-    curl -o ~/Downloads/chfs-linux-amd64-1.8.zip https://iscute.cn/tar/chfs/1.8/chfs-linux-amd64-1.8.zip
-    cd /opt
-    sudo unzip ~/Downloads/chfs-linux-amd64-1.8.zip
-    chmod 755 chfs-linux-amd64-1.8/chfs
-    sudo ln -s /opt/chfs-linux-amd64-1.8/chfs bin/chfs
-    cd -
-    sudo cp chfs/chfs.{service,socket} /etc/systemd/system/
-    sudo mkdir /srv/chfs
-    sudo chmod 755 /srv/chfs
-    sudo systemctl daemon-reload
-    sudo systemctl enable --now chfs.socket
+    echo -e '\e[32m=====> chfs\e[m
+    chfs is not installed. You may want to install it by yourself. Look up the init.sh source code.'
+    #curl -o ~/Downloads/chfs-linux-amd64-1.8.zip https://iscute.cn/tar/chfs/1.8/chfs-linux-amd64-1.8.zip
+    #cd /opt
+    #sudo unzip ~/Downloads/chfs-linux-amd64-1.8.zip
+    #chmod 755 chfs-linux-amd64-1.8/chfs
+    #sudo ln -s /opt/chfs-linux-amd64-1.8/chfs bin/chfs
+    #cd -
+    #sudo cp chfs/chfs.{service,socket} /etc/systemd/system/
+    #sudo mkdir /srv/chfs
+    #sudo chmod 755 /srv/chfs
+    #sudo systemctl daemon-reload
+    #sudo systemctl enable --now chfs.socket
 
     #archibold
-    sudo curl -o /opt/bin http://archibold.io/sh/archibold
-    sudo chmod 755 /opt/bin
-    echo -e "\e[32m=====> GDB
-    Now, you can change your gdm background by run 'archibold login-backgroud /path/to/your/picture'"
+    echo -e '\e[32m=====> archibold\e[m
+    archibold is not installed. You may want to install it by yourself. Look up the init.sh source code.'
+    #sudo curl -o /opt/bin http://archibold.io/sh/archibold
+    #sudo chmod 755 /opt/bin
+    #echo -e "\e[32m=====> GDB
+    #Now, you can change your gdm background by run 'archibold login-backgroud /path/to/your/picture'"
 
     #CLI工具
-    yay -S sendemail htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat ntfs-3g archlinuxcn/cppman-git clang lldb
+    yay -S sendemail htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat ntfs-3g archlinuxcn/cppman-git clang gdb
+    cp -v gdb/.gdbinit ~
 
     #百度网盘，QQ，网易云音乐，搜狗拼音，WPS
-    yay -S baidunetdisk-bin deepin.com.qq.im deepin.com.qq.office wqy-microhei netease-cloud-music vlc fcitx-sogoupinyin fcitx-im fcitx-configtool wps-office ttf-wps-fonts flameshot google-chrome
-    git clone https://github.com/haotian-wang/google-access-helper ~/Downloads/google-access-helper
+    yay -S baidunetdisk-bin deepin.com.qq.office wqy-microhei netease-cloud-music vlc fcitx-sogoupinyin fcitx-im fcitx-configtool wps-office ttf-wps-fonts flameshot google-chrome
+    git clone --depth=1 https://github.com/haotian-wang/google-access-helper ~/Downloads/google-access-helper
 
     echo -e '\e[32=====> Chrome
     Now, add google-access-helper to your google-chrome in devloper mode'
@@ -117,7 +114,7 @@ function extra_cfg() {
     #WPS配置，现在好像不需要了。。
     #sudo sed -i '1a\export XMODIFIERS="@im=fcitx"\nexport QT_IM_MODULE="fcitx"\n' /usr/bin/wps
 
-    #QQ配置
+    #QQ配置，禁用ipv6，否则不显示图片
     sudo echo "net.ipv6.conf.all.disable_ipv6 =1
     net.ipv6.conf.default.disable_ipv6 =1
     net.ipv6.conf.lo.disable_ipv6 =1" >> /etc/sysctl.conf
@@ -133,13 +130,13 @@ function extra_cfg() {
 # 系统配置
 timedatectl set-ntp 1 && timedatectl set-local-rtc 1
 sudo systemctl disable --now bluetooth.service
-sudo systemctl disable --now  org.cups.cupsd.service
-sudo systemctl disable --now  org.cups.cupsd.socket
+sudo systemctl disable --now org.cups.cupsd.service
+sudo systemctl disable --now org.cups.cupsd.socket
 sudo systemctl enable --now fstrim.timer
-sudo sed -i '/\[Journal\]/a\SystemMaxUse=50M' /etc/systemd/journald.conf
+sudo sed -i '/\[Journal\]/a\SystemMaxUse=100M' /etc/systemd/journald.conf
 sudo bash -c "mv /usr/local/* /opt && rmdir /usr/local && ln -s /opt /usr/local"
 echo -e "\e[32m=====> /etc/fstab\e[m
-Now you may need to edit your /etc/fstab to add a swap filesystem
+Now you may want to edit your /etc/fstab to add a swap filesystem
 and change both <dump> and <pass> filed to 0 for all filesystem"
 
 # pacman配置
@@ -152,7 +149,7 @@ sudo bash -c "echo '[archlinuxcn]
 SigLevel = Optional TrustAll
 Server = https://mirrors.163.com/archlinux-cn/\$arch' >> /etc/pacman.conf"
 sudo pacman -S yay
-yay -S aria2 expac pacman-contrib-git base-devel
+yay -S pacman-contrib-git aria2 expac base-devel
 sudo systemctl enable --now paccache.timer
 
 # grub配置
@@ -163,11 +160,11 @@ sudo sed -i '1,2d; 3s/.*is /GRUB_PASSWORD=/;' /boot/grub/user.cfg
 sudo sed -i '/--class os /s/--class os /--class os --unrestricted /' /etc/grub.d/{10_linux,30_os-prober}
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 echo -e "\e[32m=====> GRUB\e[m
-Now you may need to change your grub theme.Some version of Manjaro don't install grub-theme-manjaro.
+Now you may want to change your grub theme.Some version of Manjaro don't install grub-theme-manjaro.
 And you can may like to change the default .png picture. https://www.yasuotu.com/mgeshi provide online picture converter"
 
 # Nvidia配置
-yay -S bumblebee virtualgl lib32-virtualgl lib32-primus primu
+yay -S bumblebee virtualgl lib32-virtualgl lib32-primus primu linux54-bbswitch
 sudo systemctl enable --now bumblebee
 sudo gpasswd -A beardad bumblebee
 echo -e '\e[32m=====> patches
