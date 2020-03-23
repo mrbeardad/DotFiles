@@ -56,10 +56,8 @@ set undofile
 set undodir=~/.cache/vim/undo
 
 "================================
-" => Buffer、Tab、Window操作
+" => Buffer、Window、Tab 操作
 "================================
-nnoremap <silent> <leader>n :tabnext<CR>
-nnoremap <silent> <leader>b :tabprevious<CR>
 nnoremap <silent> <space>n :bn<CR>
 nnoremap <silent> <space>b :bp<CR>
 nnoremap <silent> <c-w>x :bd<CR>
@@ -75,6 +73,8 @@ nnoremap <silent> <space>4 :call Jump(4)<CR>
 nnoremap <silent> <space>5 :call Jump(5)<CR>
 nnoremap <silent> <space>6 :call Jump(6)<CR>
 nnoremap <silent> <tab> :wincmd w<CR>
+nnoremap <silent> <leader>n :tabnext<CR>
+nnoremap <silent> <leader>b :tabprevious<CR>
 
 "================================
 " => 插入模式快捷键
@@ -97,7 +97,7 @@ cnoremap <c-a> <c-b>
 "================================
 vnoremap <c-a> 0
 vnoremap <c-e> $
-vnoremap <y> "+y
+vnoremap y "+y
 
 "================================
 " => 普通模式快捷键
@@ -325,8 +325,8 @@ let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
 let g:cpp_posix_standard = 1
-" let g:cpp_experimental_simple_template_highlight = 1  " which works in most cases, but can be a little slow on large files
 let g:cpp_experimental_template_highlight = 1           " which is a faster implementation but has some corner cases where it doesn't work.
+" let g:cpp_experimental_simple_template_highlight = 1  " which works in most cases, but can be a little slow on large files
 " let g:cpp_concepts_highlight = 1
 " let g:cpp_no_function_highlight = 1
 
@@ -341,9 +341,6 @@ let g:UltiSnipsJumpForwardTrigger = '<m-m>'
 "================================
 " => Startify配置
 "================================
-function! StartifyEntryFormat()     " 开启devicons图标
-    return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
-endfunction
 let g:ascii = [
             \ '                                       ^   ',
             \ '                                _     /|   ',
@@ -368,6 +365,9 @@ let g:ascii = [
             \ ]
 let g:startify_custom_header =
           \ 'startify#pad(g:ascii + startify#fortune#boxed())'
+function! StartifyEntryFormat()     " 开启devicons图标
+    return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
+endfunction
 
 "================================
 " => 终端VIM的配置
@@ -420,7 +420,7 @@ Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }                       " �
 Plug 'octol/vim-cpp-enhanced-highlight', { 'for': 'cpp' }                   " C++语言的语法高亮增强
 Plug 'dense-analysis/ale', { 'on': [] }                                     " 动态语法检测，需要自己修改配置，本配置默认用于C/C++，cppcheck和clangtidy的bug可以用仓库中vim/{clangtidy,cppcheck}.vim替换你的ale/ale_linters/cpp/{clangtidy,cppcheck}.vim
 Plug 'SirVer/ultisnips', { 'for': ['cpp', 'c', 'markdown', 'snippets'] }    " 输入代码片段缩写后按 <C-c> 自动补全完整代码，可以按snips的语法自己添加片段
-" Plug 'https://gitee.com/mirrors/youcompleteme.git', { 'on': [] }          " 基于标签和语义的代码补全，需要自己修改配置，本配置默认用于C/C++，该插件较大且需要手动编译安装，可以安装AUR版本
+" Plug 'https://gitee.com/mirrors/youcompleteme.git'                        " 基于标签和语义的代码补全，需要自己修改配置，本配置默认用于C/C++，该插件较大且需要手动编译安装，可以安装AUR版本
 Plug 'Shougo/echodoc.vim', { 'for': ['c', 'cpp'] }                          " ycm补全函数后输入左括号则在原本命令行的位置显示函数参数提示
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh', 'on': 'Leaderf' }          " 快速搜索文件 <leader>fz，标识符 <leader>ft，代码内容 <leader>fc，函数 <leader>ff 等等
 Plug 'kana/vim-textobj-user'                                                " 此五个插件用于自定义文本对象，比如 dii 删除同缩进的代码，dif 删除函数内容，di, 删除函数参数
@@ -473,7 +473,7 @@ if has("gui_running")
 
     set listchars=tab:▸\ ,trail:∙,eol:↵,extends:↷,precedes:↶    " 设置空白符如何显示
     set ambiwidth=double                                        " 解决devicon只显示一半图标的问题
-    set gfn=Source\ Code\ Pro\ Black\ Italic\ 10.5              " 命令行输入 set gfn=* 打开系统字体选择面板
+    set gfn=Source\ Code\ Pro\ Black\ Italic\ 10                " 命令行输入 set gfn=* 打开系统字体选择面板
     set guioptions=agitd                                        " 不显示菜单，使用gui-dark-theme
     set guicursor=n:block,i:hor10,a:blinkon0                    " 设置光标状态
     set cursorline                                              " 高亮显示当前行
@@ -537,6 +537,7 @@ if has("gui_running")
     let g:QuickRun_PATH=''
     command! -nargs=1 QuickrunArgs let g:QuickRunArgs = <q-args>
     command! -nargs=1 QuickrunRedirect let g:QuickRunRedirect = <q-args>
+    command! QuickInput execute 'let g:QuickRunRedirect = "-i /tmp/' . expand('%:r') . '.input"'
     function! QuickRun()
         if !isdirectory('/tmp/QuickRun')
             !mkdir /tmp/QuickRun
@@ -547,20 +548,20 @@ if has("gui_running")
         if g:QuickRunBufnr != 0 && bufexists(g:QuickRunBufnr)
             execute 'bd ' . g:QuickRunBufnr
         endif
-        if &modified == 0 && g:QuickRun_PATH =~ expand('%:t')
+        if &modified == 0 && g:QuickRun_PATH =~ expand('%:r')
             rightbelow 15 split
-            execute 'term ++noclose ++norestore ++curwin sh -c "sudo sh -c \"echo $$ > /sys/fs/cgroup/memory/test/cgroup.procs\" && sudo sh -c \"echo 100M > /sys/fs/cgroup/memory/test/memory.memsw.limit_in_bytes\"'
-                        \ . ' && echo -e \"\\e[1;33mRerunning last compiled program!\\e[m\" && quickrun_time '
+            execute 'term ++noclose ++norestore ++curwin sh -c "sudo sh -c \"echo $$ > /sys/fs/cgroup/memory/test/cgroup.procs\" && sudo sh -c \"echo 500M | tee /sys/fs/cgroup/memory/test/memory.limit_in_bytes > /sys/fs/cgroup/memory/test/memory.memsw.limit_in_bytes\"'
+                        \ . ' && echo -e \"\\e[1;33mNote: Rerunning last compiled program!\\e[m\" && quickrun_time '
                         \ . g:QuickRunRedirect . ' ' . g:QuickRun_PATH . ' ' . g:QuickRunArgs . '"'
         else
             write
             rightbelow 15 split
             let QuickRun_TIME = strftime('%M%H')
-            let QuickRun_FILE = expand('%:t')
+            let QuickRun_FILE = expand('%:r')
             let g:QuickRun_PATH = '/tmp/QuickRun/' . QuickRun_FILE . '.' . QuickRun_TIME
-            execute 'term ++noclose ++norestore ++curwin sh -c "sudo sh -c \"echo $$ > /sys/fs/cgroup/memory/test/cgroup.procs\" && sudo sh -c \"echo 100M > /sys/fs/cgroup/memory/test/memory.memsw.limit_in_bytes\"'
+            execute 'term ++noclose ++norestore ++curwin sh -c "sudo sh -c \"echo $$ > /sys/fs/cgroup/memory/test/cgroup.procs\" && sudo sh -c \"echo 500M | tee /sys/fs/cgroup/memory/test/memory.limit_in_bytes > /sys/fs/cgroup/memory/test/memory.memsw.limit_in_bytes\"'
                         \ ' && echo -e \"\\e[1;32m[Compile] ' . g:QuickRun_PATH .
-                        \ '\\e[m\" && g++ -std=c++17 -O2 -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -I. -o ' . g:QuickRun_PATH .' ' . expand('%') .
+                        \ '\\e[m\" && g++ -std=c++17 -O2 -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -I. -o ' . g:QuickRun_PATH . ' ' . expand('%') .
                         \ ' && quickrun_time ' . g:QuickRunRedirect . ' ' . g:QuickRun_PATH . ' ' . g:QuickRunArgs . '"'
         endif
         let g:QuickRunBufnr=bufnr('%')
@@ -570,7 +571,7 @@ if has("gui_running")
     nnoremap <silent> <space>lt :execute 'bd ' g:QuickRunBufnr<cr>
     nnoremap <silent> <space>ld :w<cr>:execute '!g++ -std=c++17 -Og -g3 -fno-inline -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
     nnoremap <silent> <space>lc :w<cr>:execute '!clang++ -std=c++17 -O3 -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
-    nnoremap <silent> <space>li <c-w>v<c-w><right>30<c-w>\|:e /tmp/input<cr>:wincmd p<cr>
+    nnoremap <silent> <space>li <c-w>v<c-w><right>30<c-w>\|:execute 'e /tmp/' . expand('%:r') . '.input'<cr>:wincmd p<cr>
 
     "===============================
     " => 手动加载GVIM专用插件

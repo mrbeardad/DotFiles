@@ -166,7 +166,7 @@ CLI工具
         * gn：跳转下一个ALE语法提示
         * gb：跳转上一个ALE语法提示
     * 编译运行
-        * \<space>lr：快速编译并执行该c++程序
+        * \<space>lr：quickrun快速编译并执行该c++程序，quickrun会限制运行程序的内存使用最大为100M
         * \<space>ld：只编译用于gdb调试
         * \<space>lc：用clang优化编译
 
