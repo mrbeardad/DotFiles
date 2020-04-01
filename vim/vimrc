@@ -35,7 +35,7 @@ set tabstop=8                     " 默认的tab宽，不足则为空格
 set softtabstop=4                 " 键入的tab宽
 set shiftwidth=4                  " 缩进的tab宽
 set expandtab                     " 用空格代替tab，:retab恢复本行
-set path=/usr/include/c++/9.2.0,. " 设置PATH目录方便跳转
+set path=/usr/include/c++/9.2.1,. " 设置PATH目录方便跳转
 set list                          " 显示空白符
 set listchars=tab:▸\ ,trail:·,extends:↷,precedes:↶      " 设置空白符如何显示
 
@@ -81,10 +81,10 @@ nnoremap <silent> <leader>b :tabprevious<CR>
 "================================
 inoremap <c-a> <home><C-Right>
 inoremap <c-e> <end>
-inoremap <c-u> <c-c>d^i
-inoremap <c-k> <c-c>d$i
-inoremap <c-d> <c-c>10<c-e>i
-inoremap <c-b> <c-c>10<c-y>i
+inoremap <c-u> <c-c><right>d^i
+inoremap <c-k> <c-c><right>d$i
+inoremap <c-d> <c-c><right>10<c-e>i
+inoremap <c-b> <c-c><right>10<c-y>i
 inoremap <c-]> <c-c>%i
 
 "================================
@@ -182,7 +182,7 @@ nnoremap <silent> <leader>a :call ToggleAmbiwidth()<CR>
 "================================
 " => Airline配置
 "================================
-let g:airline_theme="alduin"                " AirlineTheme for Gvim
+let g:airline_theme="behelit"                " AirlineTheme for Gvim
 let g:airline_powerline_fonts = 1
 let g:airline_detect_spell=0
 let g:airline_extensions = ['branch', 'tabline', 'tagbar']
@@ -498,8 +498,9 @@ if has("gui_running")
     set guioptions=agitd                                        " 不显示菜单，使用gui-dark-theme
     set guicursor=n:block,i:hor10,a:blinkon0                    " 设置光标状态
     set cursorline                                              " 高亮显示当前行
+    set background=dark                                         " 设置主题被暗色
 
-    colorscheme gruvbox
+    colorscheme neodark
     " colorscheme   ：  NeoSolarized one palenight neodark gruvbox
     " airline_theme ：  atomic angr solarized solarized_flood cool one fruit_punch palenight base16_harmonic16 night_owl neodark behelit alduin gruvbox fairyfloss
     " 注意，Airline的atomic主题会改变状态栏格式，不喜欢的可以把源码中的第55行开始的那段代码注释
@@ -547,7 +548,19 @@ if has("gui_running")
     hi! SpellRare gui=undercurl guisp=magenta
     nnoremap <silent> gn :ALENextWrap<CR>
     nnoremap <silent> gb :ALEPreviousWrap<CR>
-    nnoremap <silent> <space>a :ALEToggleBuffer<cr>
+    let g:is_ALE_Running = 1
+    function! ToggleALE()
+        if g:is_ALE_Running == 1
+            let g:is_ALE_Running = 0
+            ALEToggle
+            echo "ALE Disable!"
+        else
+            let g:is_ALE_Running = 1
+            ALEToggle
+            echo "ALE Enable!"
+        endif
+    endfunction
+    nnoremap <silent> <space>a :call ToggleALE()<cr>
 
     "================================
     " => QuickRun配置

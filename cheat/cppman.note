@@ -662,7 +662,7 @@ minmax_element(b, e, op2 = lower_to)：返回第一个最小值和最后一个�
     ▪ssub_match
     ▪regex_search()
     ▪regex_match()
-    ▪regex_replace()：$& $n
+    ▪regex_replace((outputPos,)(str|b, e), regex, repl, flag)
     ▪regex_contants： 标志用于控制regex、match、replace行为
 ▪regex：(seq，regex_contants::icase)
 ▪sregex_iterator：(b，e，regex) 默认初始化为end
@@ -675,6 +675,15 @@ minmax_element(b, e, op2 = lower_to)：返回第一个最小值和最后一个�
     ▪[31m.[mformat(fmt, flag)
 ▪ssub_match： 指向表达式匹配到的子表达式
     .operator basic_string()
+▪特殊正则符号：
+    \1, \2, \3, ...
+    \b：单词边界，左右两边不全为\w的位置
+    \B：非单词边界，左右两边全为\w的位置
+▪替换语法：
+    $1, $2, $3, ...
+    $&：全部
+    $'：后缀
+    $`：前缀
 
 ○iostream：<iostream>
 ▪状态与异常： 注意，当stream会反复使用时，注意要恢复其状态

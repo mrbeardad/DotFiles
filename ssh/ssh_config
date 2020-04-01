@@ -1,6 +1,12 @@
+#Host github.com
+    #HostName ssh.cgithub.com
+    #Port 443
+    #User git
+    #IdentitiesOnly yes
+    #IdentityFile ~/.ssh/id_ecdsa
 Host github.com
-    HostName ssh.cgithub.com
-    Port 443
+    HostName github.com
+    Port 22
     User git
     IdentitiesOnly yes
     IdentityFile ~/.ssh/id_ecdsa
