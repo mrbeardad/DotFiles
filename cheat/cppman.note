@@ -683,15 +683,16 @@ minmax_element(b, e, op2 = lower_to)：返回第一个最小值和最后一个�
     ▪[31m.[mexcptions(flags)：设定触发异常的flag
     ▪[31m.[mexceptions()：返回触发异常的flag，无则返回ios::goodbit
 ▪底层I/O：
-    ▪[31m.[mget() [31m.[mget(char) [31m.[mget(char*, count, delim='\n')
-    ▪[31m.[mgetline(char*, count, delim='\n')：读取包括delim
-    ▪[31m.[mread(char*, count)：count代表指定读取的字符，而非极限
-    ▪[31m.[mreadsome(char*, count)：返回读取字符数，只从缓冲区中读取，而不陷入系统调用
-    ▪[31m.[mgcount()：返回上次读取字符数
+    ▪[31m.[mget() [31m.[mget(char)
+    ▪[31m.[mget(char*, count, delim='\n')     ：读取 count - 1 个字符，并自动添加'\0'在末尾
+    ▪[31m.[mgetline(char*, count, delim='\n') ：其他同上，但读取包括delim
+    ▪[31m.[mread(char*, count)                ：count代表指定读取的字符，而非极限
+    ▪[31m.[mreadsome(char*, count)            ：返回读取字符数，只从缓冲区中读取，而不陷入系统调用
+    ▪[31m.[mgcount()                          ：返回上次读取字符数
     ▪[31m.[mignore(count=1, delim=)
-    ▪[31m.[mpeek()：返回下个字符，但不移动iterator
-    ▪[31m.[munget()：把上次读取的字符放回（回移iterator）
-    ▪[31m.[mputback(char)：放回指定字符
+    ▪[31m.[mpeek()                            ：返回下个字符，但不移动iterator
+    ▪[31m.[munget()                           ：把上次读取的字符放回（回移iterator）
+    ▪[31m.[mputback(char)                     ：放回指定字符
     ▪[31m.[mput(char)
     ▪[31m.[mwrite(char*, count)
     ▪[31m.[mflush()
@@ -735,6 +736,7 @@ minmax_element(b, e, op2 = lower_to)：返回第一个最小值和最后一个�
     ▪oct dec hex (no)showbase
     ▪(no)showpoint
     ▪setprecision(v), [31m.[mprecision() [31m.[mprecision(v)
+    ▪fixed , scientific：使用这两个操作符后，精度的语义由“所有数字位数”变为“小数位数”
 
 ○fstream：<fstream>
 ▪构造：(filename, flag=)

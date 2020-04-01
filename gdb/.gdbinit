@@ -705,7 +705,7 @@ set print array-indexes on
 set print sevenbit-strings off
 set demangle-style gnu-v3
 set case-sensitive off
-set history save
+# set history save
 set verbose off
 set python print-stack full
 set prompt [31m>[33m>[32m>[36m>[35m> [m
