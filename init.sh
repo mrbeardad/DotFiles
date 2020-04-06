@@ -64,6 +64,7 @@ function vim_cfg() {
     g++ -O3 -o ~/.local/bin vim/time.cpp
 
     yay -S gvim vim-plug cmake ctags gperf vim-instant-markdown cppcheck archlinuxcn/nerd-fonts-complete
+    #xsel ctags gtags gloobus-preview python-pynvim the_silver_searcher
     yay -S vim-youcompleteme-git
 
     echo -e '\e[32m=====> VIM\e[m

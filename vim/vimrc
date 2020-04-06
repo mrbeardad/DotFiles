@@ -182,7 +182,7 @@ nnoremap <silent> <leader>a :call ToggleAmbiwidth()<CR>
 "================================
 " => Airline配置
 "================================
-let g:airline_theme="behelit"                " AirlineTheme for Gvim
+let g:airline_theme="cool"                " AirlineTheme for Gvim
 let g:airline_powerline_fonts = 1
 let g:airline_detect_spell=0
 let g:airline_extensions = ['branch', 'tabline', 'tagbar']
@@ -500,9 +500,9 @@ if has("gui_running")
     set cursorline                                              " 高亮显示当前行
     set background=dark                                         " 设置主题被暗色
 
-    colorscheme neodark
+    colorscheme NeoSolarized
     " colorscheme   ：  NeoSolarized one palenight neodark gruvbox
-    " airline_theme ：  atomic angr solarized solarized_flood cool one fruit_punch palenight base16_harmonic16 night_owl neodark behelit alduin gruvbox fairyfloss
+    " airline_theme ：  atomic angr solarized solarized_flood cool one fruit_punch palenight base16_harmonic16 night_owl neodark behelit alduin gruvbox fairyfloss fruit_punch
     " 注意，Airline的atomic主题会改变状态栏格式，不喜欢的可以把源码中的第55行开始的那段代码注释
 
     " 切换窗口时自动关闭和打开高亮行列
@@ -610,7 +610,15 @@ if has("gui_running")
     nnoremap <silent> <space>lt :execute 'bd ' g:QuickRunBufnr<cr>
     nnoremap <silent> <space>ld :w<cr>:execute '!g++ -std=c++17 -Og -g3 -fno-inline -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
     nnoremap <silent> <space>lc :w<cr>:execute '!clang++ -std=c++17 -O3 -I. -o ' . expand('%:r') . ' ' . expand('%')<CR>
+    autocmd BufLeave *.input :w
     nnoremap <silent> <space>li <c-w>v<c-w><right>30<c-w>\|:execute 'e /tmp/' . expand('%:r') . '.input'<cr>:wincmd p<cr>:QuickInput<cr>
+    "function! QuickrunInput()
+        "let g:QuickRunInputFile=expand('%:r')
+        "normal '<c-w><right><c-w>s'
+        "execute 'e /tmp/' . g:QuickRunInputFile . '.input'
+        "wincmd p
+        "QuickrunInput
+    "endfunction
 
     "===============================
     " => 手动加载GVIM专用插件
