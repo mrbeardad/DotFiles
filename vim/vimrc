@@ -79,7 +79,7 @@ nnoremap <silent> <leader>b :tabprevious<CR>
 "================================
 " => 插入模式快捷键
 "================================
-inoremap <c-a> <home><C-Right>
+inoremap <c-a> <c-c>^i
 inoremap <c-e> <end>
 inoremap <c-u> <c-c><right>d^i
 inoremap <c-k> <c-c><right>d$i
@@ -242,7 +242,7 @@ nmap <silent> <leader>cc <plug>NERDCommenterToggle
 nmap <silent> <leader>ca <plug>NERDCommenterAppend
 
 "================================
-" => instant-markdown配置
+" => Instant-Markdown配置
 "================================
 " 使用命令 :InstantMarkdownPreview 开启Markdown即时预览，该插件会打开你的默认浏览器
 let g:instant_markdown_autostart = 0
@@ -529,7 +529,7 @@ if has("gui_running")
     let g:ale_lint_on_enter = 0
     let g:ale_lint_on_save = 0
     let g:ale_c_gcc_options = '-Wall -Wextra -O2 -std=c11'
-    let g:ale_c_cppcheck_options = '--enable=warning,style,performance,portability,information --std=c++17'
+    let g:ale_c_cppcheck_options = '--enable=warning,style,performance,portability,information --std=c11'
     let g:ale_cpp_gcc_options = '-Wall -Wextra -O2 -std=c++17'
     let g:ale_cpp_cppcheck_options = '--enable=warning,style,performance,portability,information --std=c++17'
     let g:ale_cpp_clangtidy_options = '-extra-arg=-Weverything -extra-arg=-Wno-c++98-compat -extra-arg=-Wno-c++98-compat-pedantic -extra-arg=-Wno-pedantic -extra-arg=-Wno-missing-prototypes -extra-arg=-Wno-padded -extra-arg=-Wno-old-style-cast -extra-arg=-O2 -extra-arg=-std=c++17'
@@ -539,7 +539,6 @@ if has("gui_running")
     let g:ale_echo_msg_error_str = '✗'
     let g:ale_echo_msg_warning_str = '‼'
     let g:ale_echo_msg_info_str = '⚡'
-    let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
     hi! clear SpellBad
     hi! clear SpellCap
     hi! clear SpellRare

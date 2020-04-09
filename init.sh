@@ -2,32 +2,33 @@
 
 #配置ssh
 function ssh_cfg() {
-    sudo cp -vf ssh/sshd_config /etc/ssh/sshd_config
-    cp -vf ssh/ssh_config ~/.ssh/ssh_config
+    # 添加git push <remote>需要的ssh配置
+    cp -v ssh/ssh_config ~/.ssh/ssh_config
+    # 设置sshd用于连接到该主机
+    sudo cp -v ssh/sshd_config /etc/ssh/sshd_config
+    sudo cp -v ssh/motd /etc/motd
+
     sudo systemctl enable --now sshd.socket
-    sudo cp -vf ssh/motd /etc/motd
     echo -e "\e[32m=====> SSH\e[m
-    Now you need to push your ~/.ssh/id_ecdsa.pub to your github account."
+    Now you need to push your ~/.ssh/id_ecdsa.pub to your github and gitee account."
 }
 
 #配置zsh
 function zsh_cfg() {
-    #下载oh-my-zsh
-    yay -S zsh powerline-fonts zsh-syntax-highlighting zsh-autosuggestions autojump
-    yay -S oh-my-zsh-git
-
-    #添加alias和man()
-    cp -vf zsh/.zshrc ~/.zshrc
-    sudo cp -vf zsh/.zshrc ~/.zshrc
-    sudo cp -v zsh/*.zsh-theme /usr/share/oh-my-zsh/themes/
+    # 安装.zshrc
+    cp -v zsh/.zshrc ~/.zshrc
+    cp -v zsh/*.zsh-theme /usr/share/oh-my-zsh/themes/
     chsh -s /bin/zsh
-    sudo chsh -s /bin/zsh
 
     #添加Linux笔记，用see查询
     if [ ! -e ~/.cheat ] ;then
         mkdir ~/.cheat
     fi
     cp -v cheat/* ~/.cheat
+
+    #下载zsh相关包
+    yay -S zsh powerline-fonts zsh-syntax-highlighting zsh-autosuggestions autojump
+    yay -S oh-my-zsh-git
 }
 
 
@@ -36,48 +37,52 @@ function tmux_cfg() {
     if [ ! -e ~/.tmux ] ;then
         mkdir ~/.tmux
     fi
-
-    if [ -e ~/.tmux.conf ] ;then
-        mv ~/.tmux.conf{,.bak}
-    fi
     cp -v tmux/.tmux.conf ~/.tmux.conf
     yay -S tmux tmux-resurrect-git
 }
 
 
 #配置vim
-function vim_cfg() {
-    if [ ! -e ~/.vim ] ;then
-        mkdir ~/.vim
+# function vim_cfg() {
+#     if [ ! -e ~/.vim ] ;then
+#         mkdir ~/.vim
+#     fi
+#
+#     if [ -e ~/.vim/vimrc ] ;then
+#         mv ~/.vim/vimrc{,.bak}
+#     elif [ -e ~/.vimrc ] ;then
+#         mv ~/.vimrc{,.bak}
+#     fi
+#
+#     if [ ! -e ~/.local/bin ] ;then
+#         mkdir ~/.local/bin
+#     fi
+#     cp  vim/vimrc ~/.vim/vimrc
+#     g++ -O3 -o ~/.local/bin vim/time.cpp
+#
+#     yay -S gvim vim-plug cmake ctags gperf vim-instant-markdown cppcheck archlinuxcn/nerd-fonts-complete
+#     #xsel ctags gtags gloobus-preview python-pynvim the_silver_searcher
+#     yay -S vim-youcompleteme-git
+#
+#     echo -e '\e[32m=====> VIM\e[m
+#     Now, launch your vim and run the command ":PlugInstall"
+# }
+
+#安装定制的SpaceVim for NeoVim
+function nvim_cfg() {
+    yay -S gvim nvim xsel python-pynvim cmake ctags global cppcheck archlinuxcn/nerd-fonts-complete ripgrep
+    clone git@gitee.com:SpaceVim/SpaceVim ~/.local/SpaceVim
+    if [[ -d ~/.config/nvim ]] ;then
+        mv ~/.config/{nvim,nvim.bak}
+        ln -s ~/.local/SpaceVim ~/.config/nvim
     fi
-
-    if [ -e ~/.vim/vimrc ] ;then
-        mv ~/.vim/vimrc{,.bak}
-    elif [ -e ~/.vimrc ] ;then
-        mv ~/.vimrc{,.bak}
-    fi
-
-    if [ ! -e ~/.local/bin ] ;then
-        mkdir ~/.local/bin
-    fi
-    cp  vim/vimrc ~/.vim/vimrc
-    g++ -O3 -o ~/.local/bin vim/time.cpp
-
-    yay -S gvim vim-plug cmake ctags gperf vim-instant-markdown cppcheck archlinuxcn/nerd-fonts-complete
-    #xsel ctags gtags gloobus-preview python-pynvim the_silver_searcher
-    yay -S vim-youcompleteme-git
-
-    echo -e '\e[32m=====> VIM\e[m
-    Now, launch your vim and run the command ":PlugInstall"
-    The vim plugin "LeaderF" can work with gtags, you can download it at http://tamacom.com/global/global-6.6.4.tar.gz ,and you need to compile it on your machine.'
 }
-
 
 #安装额外的CLI工具、桌面软件、GNOME扩展
 function extra_cfg() {
     #CHFS
     echo -e '\e[32m=====> chfs\e[m
-    chfs is not installed. You may want to install it by yourself. Look up the init.sh source code.'
+    chfs is not installed by default. You may want to install it by yourself. Look up the init.sh source code.'
     #curl -o ~/Downloads/chfs-linux-amd64-1.8.zip https://iscute.cn/tar/chfs/1.8/chfs-linux-amd64-1.8.zip
     #cd /opt
     #sudo unzip ~/Downloads/chfs-linux-amd64-1.8.zip
@@ -92,25 +97,26 @@ function extra_cfg() {
 
     #archibold
     echo -e '\e[32m=====> archibold\e[m
-    archibold is not installed. You may want to install it by yourself. Look up the init.sh source code.'
+    archibold is not installed by default. You may want to install it by yourself. Look up the init.sh source code.'
     #sudo curl -o /opt/bin http://archibold.io/sh/archibold
     #sudo chmod 755 /opt/bin
     #echo -e "\e[32m=====> GDB
     #Now, you can change your gdm background by run 'archibold login-backgroud /path/to/your/picture'"
 
     #CLI工具
-    yay -S sendemail htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat ntfs-3g archlinuxcn/cppman-git clang gdb
+    yay -S htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat ntfs-3g archlinuxcn/cppman-git clang gdb
     cp -v gdb/.gdbinit ~
 
     #百度网盘，QQ，网易云音乐，搜狗拼音，WPS
-    yay -S baidunetdisk-bin deepin.com.qq.office wqy-microhei netease-cloud-music vlc fcitx-sogoupinyin fcitx-im fcitx-configtool wps-office ttf-wps-fonts flameshot google-chrome
-    git clone --depth=1 https://github.com/haotian-wang/google-access-helper ~/Downloads/google-access-helper
+    yay -S baidunetdisk-bin deepin.com.qq.office vlc netease-cloud-music fcitx-sogoupinyin fcitx-im fcitx-configtool ssf2fcitx-git pinyin-completion wps-office ttf-wps-fonts flameshot google-chrome gnome-terminal-fedaro alacritty
+    cp -v alacritty/alacritty.yml ~/.config/alacritty
+    # git clone --depth=1 https://github.com/haotian-wang/google-access-helper ~/Downloads/google-access-helper
 
     echo -e '\e[32=====> Chrome
     Now, add google-access-helper to your google-chrome in devloper mode'
 
     #搜狗拼音配置
-    echo -e 'export GTK_IM_MODULE=fcitx\nexport GTK_IM_MODULE=fcitx\nexport XMODIFIERS="@im=fcitx"' > ~/.xprofile
+    echo -e 'export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS="@im=fcitx"' > ~/.xprofile
 
     #WPS配置，现在好像不需要了。。
     #sudo sed -i '1a\export XMODIFIERS="@im=fcitx"\nexport QT_IM_MODULE="fcitx"\n' /usr/bin/wps
@@ -165,11 +171,11 @@ Now you may want to change your grub theme.Some version of Manjaro don't install
 And you can may like to change the default .png picture. https://www.yasuotu.com/mgeshi provide online picture converter"
 
 # Nvidia配置
-yay -S bumblebee virtualgl lib32-virtualgl lib32-primus primu linux54-bbswitch
-sudo systemctl enable --now bumblebee
-sudo gpasswd -A beardad bumblebee
-echo -e '\e[32m=====> patches
-Now, you may want to apply patches in patches directory'
+# yay -S bumblebee virtualgl lib32-virtualgl lib32-primus primu linux54-bbswitch
+# sudo systemctl enable --now bumblebee
+# sudo gpasswd -A beardad bumblebee
+# echo -e '\e[32m=====> patches
+# Now, you may want to apply patches in patches directory'
 
 ssh_cfg
 zsh_cfg

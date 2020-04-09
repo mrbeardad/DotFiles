@@ -279,7 +279,7 @@ gc，gc!，gca，gca!
 a代表直接W->H提交
 !代表覆盖上次提交
 
-●git tag
+●git tag [commit]
 gt
 gtl，gtv
 gsh TAG
