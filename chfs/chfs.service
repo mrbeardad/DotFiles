@@ -1,5 +1,6 @@
 [Unit]
 Description="Cut HTTP File Server"
+Conflicts=chfs.socket
 
 [Service]
 Type="simple"

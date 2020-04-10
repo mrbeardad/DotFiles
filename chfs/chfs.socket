@@ -1,5 +1,5 @@
 [Unit]
-Conflicts=chfs.service
+Description="To Start Cut HTTP File Server"
 
 [Socket]
 ListenStream=80

@@ -126,6 +126,7 @@ function extra_cfg() {
     net.ipv6.conf.default.disable_ipv6 =1
     net.ipv6.conf.lo.disable_ipv6 =1" >> /etc/sysctl.conf
     sudo sysctl -p /etc/sysctl.conf
+    # 修改/opt/deepinwine/apps/Deepin-TIM/deepin.com.qq.office.desktop 禁用ipv6并使用optirun
 
     #GNOME扩展
     yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git ttf-google-fonts-git tela-icon-theme-git gnome-shell-extension-coverflow-alt-tab gnome-shell-extension-system-monitor-git
@@ -161,9 +162,7 @@ sudo systemctl enable --now paccache.timer
 
 # grub配置
 sudo cp grub/01_users /etc/grub.d
-echo -e "Please type a password 2 times for grub...\n=> "
-sudo bash -c "grub-mkpasswd-pbkdf2 > /boot/grub/user.cfg"
-sudo sed -i '1,2d; 3s/.*is /GRUB_PASSWORD=/;' /boot/grub/user.cfg
+sudo cp grub/user.cfg /boot/grub
 sudo sed -i '/--class os /s/--class os /--class os --unrestricted /' /etc/grub.d/{10_linux,30_os-prober}
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 echo -e "\e[32m=====> GRUB\e[m
@@ -174,8 +173,8 @@ And you can may like to change the default .png picture. https://www.yasuotu.com
 # yay -S bumblebee virtualgl lib32-virtualgl lib32-primus primu linux54-bbswitch
 # sudo systemctl enable --now bumblebee
 # sudo gpasswd -A beardad bumblebee
-# echo -e '\e[32m=====> patches
-# Now, you may want to apply patches in patches directory'
+echo -e '\e[32m=====> patches
+Now, you may want to apply patches in patches directory'
 
 ssh_cfg
 zsh_cfg

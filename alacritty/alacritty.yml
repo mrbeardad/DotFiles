@@ -22,12 +22,12 @@ font:
     family: SauceCodePro Nerd Font
     style: Black Italic
   bold:
-    family: SauceCodePro Nerd Font
-    style: Bold
+    family: SpaceMono Nerd Font
+    style: Bold Italic
   italic:
-    family: SauceCodePro Nerd Font
-    style: Italic
-  size: 10.0
+    family: BlexMono Nerd Font
+    style: Bold Italic
+  size: 11.0
   offset:
     x: 0
     y: 0
