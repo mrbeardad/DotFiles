@@ -4,20 +4,19 @@
 function ssh_cfg() {
     # 添加git push <remote>需要的ssh配置
     cp -v ssh/ssh_config ~/.ssh/ssh_config
+    cp -v /mnt/AUSU/backup/id_ecdsa ~/.ssh
+
     # 设置sshd用于连接到该主机
     sudo cp -v ssh/sshd_config /etc/ssh/sshd_config
     sudo cp -v ssh/motd /etc/motd
 
     sudo systemctl enable --now sshd.socket
-    echo -e "\e[32m=====> SSH\e[m
-    Now you need to push your ~/.ssh/id_ecdsa.pub to your github and gitee account."
 }
 
 #配置zsh
 function zsh_cfg() {
     #下载zsh相关包
-    yay -S zsh powerline-fonts zsh-syntax-highlighting zsh-autosuggestions autojump
-    yay -S oh-my-zsh-git
+    yay -S zsh powerline-fonts zsh-syntax-highlighting zsh-autosuggestions autojump archlinuxcn/oh-my-zsh-git
 
     # 安装.zshrc
     cp -v zsh/.zshrc ~/.zshrc
@@ -41,67 +40,45 @@ function tmux_cfg() {
     yay -S tmux tmux-resurrect-git
 }
 
-
-#配置vim
-# function vim_cfg() {
-#     if [ ! -e ~/.vim ] ;then
-#         mkdir ~/.vim
-#     fi
-#
-#     if [ -e ~/.vim/vimrc ] ;then
-#         mv ~/.vim/vimrc{,.bak}
-#     elif [ -e ~/.vimrc ] ;then
-#         mv ~/.vimrc{,.bak}
-#     fi
-#
-#     if [ ! -e ~/.local/bin ] ;then
-#         mkdir ~/.local/bin
-#     fi
-#     cp  vim/vimrc ~/.vim/vimrc
-#     g++ -O3 -o ~/.local/bin vim/time.cpp
-#
-#     yay -S gvim vim-plug cmake ctags gperf vim-instant-markdown cppcheck archlinuxcn/nerd-fonts-complete
-#     #xsel ctags gtags gloobus-preview python-pynvim the_silver_searcher
-#     yay -S vim-youcompleteme-git
-#
-#     echo -e '\e[32m=====> VIM\e[m
-#     Now, launch your vim and run the command ":PlugInstall"
-# }
-
 #安装定制的SpaceVim for NeoVim
 function nvim_cfg() {
-    yay -S gvim nvim xsel python-pynvim cmake ctags global cppcheck archlinuxcn/nerd-fonts-complete ripgrep
+    yay -S nvim xsel python-pynvim cmake ctags global cppcheck archlinuxcn/nerd-fonts-complete ripgrep
     git clone git@gitee.com:mrbeardad/SpaceVim ~/.local/SpaceVim
     if [[ -d ~/.config/nvim ]] ;then
         mv ~/.config/{nvim,nvim.bak}
-        ln -s ~/.local/SpaceVim ~/.config/nvim
     fi
+    ln -s ~/.local/SpaceVim ~/.config/nvim
+    if [[ ! -d ~/.SpaceVim.d ]] ;then
+        mkdir ~/.SpaceVim.d
+    fi
+    if [[ -e ~/.SpaceVim.d/init.toml ]] ;then
+        mv ~/.SpaceVim.d/init.toml{,bak}
+    fi
+    cp -v ~/.local/SpaceVim/mod/init.toml ~/.SpaceVim.d
+    if [[ ! -d ~/.local/bin ]] ;then
+        mkdir ~/.local/bin
+    fi
+    cp -v bin/vim ~/.local/bin
 }
 
 #安装额外的CLI工具、桌面软件、GNOME扩展
 function extra_cfg() {
     #CHFS
-    echo -e '\e[32m=====> chfs\e[m
-    chfs is not installed by default. You may want to install it by yourself. Look up the init.sh source code.'
-    #curl -o ~/Downloads/chfs-linux-amd64-1.8.zip https://iscute.cn/tar/chfs/1.8/chfs-linux-amd64-1.8.zip
-    #cd /opt
-    #sudo unzip ~/Downloads/chfs-linux-amd64-1.8.zip
-    #chmod 755 chfs-linux-amd64-1.8/chfs
-    #sudo ln -s /opt/chfs-linux-amd64-1.8/chfs bin/chfs
-    #cd -
-    #sudo cp chfs/chfs.{service,socket} /etc/systemd/system/
-    #sudo mkdir /srv/chfs
-    #sudo chmod 755 /srv/chfs
-    #sudo systemctl daemon-reload
-    #sudo systemctl enable --now chfs.socket
+    cd /tmp
+    unzip /mnt/AUSU/packages/chfs-linux-amd64-1.8.zip
+    chmod 755 chfs-linux-amd64-1.8/chfs
+    sudo cp -v /opt/chfs-linux-amd64-1.8/chfs /opt/bin/chfs
+    cd -
+    sudo cp chfs/chfs.{service,socket} /etc/systemd/system/
+    sudo mkdir /srv/chfs
+    sudo chmod 755 /srv/chfs
+    sudo systemctl daemon-reload
+    sudo systemctl enable --now chfs.socket
 
     #archibold
-    echo -e '\e[32m=====> archibold\e[m
-    archibold is not installed by default. You may want to install it by yourself. Look up the init.sh source code.'
-    #sudo curl -o /opt/bin http://archibold.io/sh/archibold
-    #sudo chmod 755 /opt/bin
-    #echo -e "\e[32m=====> GDB
-    #Now, you can change your gdm background by run 'archibold login-backgroud /path/to/your/picture'"
+    sudo cp -v /mnt/AUSU/packages/archibold /opt
+    echo -e "\e[32m=====> GDB
+    Now, you can change your gdm background by run 'archibold login-backgroud /path/to/your/picture'"
 
     #CLI工具
     yay -S htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat ntfs-3g cppman clang gdb
@@ -129,7 +106,7 @@ function extra_cfg() {
     # 修改/opt/deepinwine/apps/Deepin-TIM/deepin.com.qq.office.desktop 禁用ipv6并使用optirun
 
     #GNOME扩展
-    yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git ttf-google-fonts-git tela-icon-theme-git gnome-shell-extension-coverflow-alt-tab gnome-shell-extension-system-monitor-git
+    yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git ttf-google-fonts-git gnome-shell-extension-coverflow-alt-tab gnome-shell-extension-system-monitor-git
 }
 
 
@@ -163,7 +140,8 @@ sudo systemctl enable --now paccache.timer
 sudo cp grub/01_users /etc/grub.d
 sudo cp grub/user.cfg /boot/grub
 sudo sed -i '/--class os/s/--class os/--class os --unrestricted /' /etc/grub.d/{10_linux,30_os-prober}
-sudo grub-mkconfig -o /boot/grub/grub.cfg
+# sudo grub-mkconfig -o /boot/grub/grub.cfg
+yay -S grub-theme-manjaro
 echo -e "\e[32m=====> GRUB\e[m
 Now you may want to change your grub theme.Some version of Manjaro don't install grub-theme-manjaro.
 And you can may like to change the default .png picture. https://www.yasuotu.com/mgeshi provide online picture converter"

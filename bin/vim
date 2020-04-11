@@ -1,0 +1,3 @@
+#!/bin/bash
+
+nvim -u ~/.config/nvim/vimrc.vim
