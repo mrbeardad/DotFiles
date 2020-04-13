@@ -1,7 +1,8 @@
 #!/bin/bash
 
-if ps -le | grep 'tmux: server' ;then
-    tmux a
+tmux list-sessions | grep Routine
+if [[ $? == 0 ]] ;then
+    tmux attach -t Routine
 else
-    tmux new -s today
+    tmux new-session -s Routine
 fi
