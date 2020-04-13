@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Terminal with Tmux
+Comment=Startup terminal with tmux
+Icon=utilities-terminal
+Terminal=true
+Exec=/opt/bin/terminal-tmux.sh
+Categories=System;TerminalEmulator;
+Keywords=Tmux;Terminal

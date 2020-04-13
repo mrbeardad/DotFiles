@@ -4,7 +4,7 @@
 function ssh_cfg() {
     # 添加git push <remote>需要的ssh配置
     cp -v ssh/ssh_config ~/.ssh/ssh_config
-    cp -v /mnt/AUSU/backup/id_ecdsa ~/.ssh
+    cp -v /mnt/ASUS/backup/id_ecdsa ~/.ssh
 
     # 设置sshd用于连接到该主机
     sudo cp -v ssh/sshd_config /etc/ssh/sshd_config
@@ -44,7 +44,8 @@ function tmux_cfg() {
 
 #安装定制的SpaceVim for NeoVim
 function nvim_cfg() {
-    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck archlinuxcn/nerd-fonts-complete ripgrep
+    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck nerd-fonts-complete ripgrep vim-instant-markdown
+    sudo sed -i '/set runtimepath/s/$/,\/usr\/share\/vim\/vimfiles\/after/' /usr/share/vim/vimfiles/after
     git clone git@gitee.com:mrbeardad/SpaceVim ~/.local/SpaceVim
     if [[ -d ~/.config/nvim ]] ;then
         mv ~/.config/{nvim,nvim.bak}
@@ -64,7 +65,7 @@ function nvim_cfg() {
 function extra_cfg() {
     #CHFS
     cd /tmp
-    unzip /mnt/AUSU/packages/chfs-linux-amd64-1.8.zip
+    unzip /mnt/ASUS/packages/chfs-linux-amd64-1.8.zip
     chmod 755 chfs
     sudo cp -v /opt/chfs /opt/bin/chfs
     cd -
@@ -74,15 +75,12 @@ function extra_cfg() {
     sudo systemctl daemon-reload
     sudo systemctl enable --now chfs.socket
 
-    #archibold
-    sudo cp -v /mnt/AUSU/packages/archibold /opt
-
     #CLI工具
-    yay -S htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat cppman clang gdb
+    yay -S htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat cppman-git clang gdb
     cp -v gdb/.gdbinit ~
 
     #百度网盘，QQ，网易云音乐，搜狗拼音，WPS
-    yay -S baidunetdisk-bin deepin.com.qq.office papper-flash vlc netease-cloud-music fcitx-sogoupinyin fcitx-im fcitx-configtool ssf2fcitx-git pinyin-completion wps-office ttf-wps-fonts flameshot google-chrome gnome-terminal-fedora alacritty
+    yay -S baidunetdisk-bin deepin.com.qq.office papper-flash vlc netease-cloud-music fcitx-sogoupinyin fcitx-im fcitx-configtool ssf2fcitx-git fcitx-skins pinyin-completion wps-office ttf-wps-fonts flameshot google-chrome gnome-terminal-fedora alacritty
     mkdir ~/.config/alacritty
     cp -v alacritty/alacritty.yml ~/.config/alacritty
     # git clone --depth=1 https://github.com/haotian-wang/google-access-helper ~/Downloads/google-access-helper
@@ -102,7 +100,7 @@ function extra_cfg() {
     # 修改/opt/deepinwine/apps/Deepin-TIM/deepin.com.qq.office.desktop 禁用ipv6并使用optirun
 
     #GNOME扩展
-    yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git ttf-google-fonts-git gnome-shell-extension-coverflow-alt-tab gnome-shell-extension-system-monitor-git
+    yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git ttf-google-fonts-git adobe-source-han-sans-cn-fonts gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git
 }
 
 
@@ -123,9 +121,9 @@ sudo cp /etc/pacman.d/mirrorlist{,.bak} # 有时候更新系统会把这个也�
 sudo sed -i "/#Color/s/#//" /etc/pacman.conf
 sudo bash -c 'echo "[archlinuxcn]
 SigLevel = Optional TrustAll
-Server = https://mirrors.163.com/archlinux-cn/\$arch" >> /etc/pacman.conf'
+Server = https://mirrors.cloud.tencent.com/archlinuxcn/\$arch" >> /etc/pacman.conf'
 sudo pacman -Syu
-pacman -S yay aria2 expac base-devel
+pacman -S yay aria2 expac base-devel archlinuxcn-keyring
 sudo systemctl enable --now paccache.timer
 
 # grub配置
@@ -135,25 +133,26 @@ sudo sed -i '/--class os/s/--class os/--class os --unrestricted /' /etc/grub.d/{
 yay -S grub-theme-manjaro
 
 # Nvidia配置
-# yay -S bumblebee virtualgl lib32-virtualgl lib32-primus primu linux54-bbswitch
-# sudo systemctl enable --now bumblebee
-# sudo gpasswd -A beardad bumblebee
+yay -S prime
 
 ssh_cfg
 zsh_cfg
-vim_cfg
+nvim_cfg
 tmux_cfg
 extra_cfg
+
+# 修改desktop文件
+sudo cp -v desktop/tmux.desktop /usr/share/applications/
+sudo sed -i '/^Name=/s/=.*$/=Neovim on Alacritty/; /TryExec=/s/^/#/; /^Exec=/s/=/=alacritty -e /; /Terminal=/s/true/false/' /usr/share/applications/nvim.desktop
+sudo sed -i '/^Exec=/s/=/=prime /' /usr/share/applications/netease-cloud-music.desktop
+sudo sed -i '/^Exec=/s/=/=prime /' /usr/share/applications/google-chrome.desktop
+sudo sed -i -e '$i sysctl -p /etc/sysctl.conf}' -e '$s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
 
 echo -e "\e[32m=====> GRUB\e[m
 Now you may want to change your grub theme.Some version of Manjaro don't install grub-theme-manjaro.
 And you can may like to change the default .png picture. https://www.yasuotu.com/mgeshi provide online picture converter"
 echo -e '\e[32m=====> Patches\e[m
 Now, you may want to apply patches in patches directory'
-echo -e '\e[32m=====>  Shortcut Wrappers\e[m
-Now you need to bind the gnome shortcut for terminal-tmux & neovim-alacritty'
-echo -e "\e[32m=====> GDM\e[m
-Now, you can change your gdm background by run 'archibold login-backgroud /path/to/your/picture'"
 echo -e '\e[32=====> Chrome\e[m
 Now, add google-access-helper to your google-chrome in devloper mode'
 echo -e '\e[32=====> Neovim\e[m

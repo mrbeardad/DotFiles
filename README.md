@@ -1,5 +1,5 @@
 # 写在前面
-整个仓库的建立都是一个我个人在学习的过程，这些也都为我自己所需所用所愿而写，故有些东西不会尽如人意
+Arch Linux早换成Manjaro了，所以没测试过前者，所以朋友自己装啦o（0.0）o
 
 [README-en.md](README-en.md)  
 [学习资源](learning-resource.md)  
@@ -8,7 +8,7 @@
 
 
 # 安装
-## Manjaro and Arch Linux
+## Manjaro
 提供了*shell*脚本用于安装配置与一些软件包  
 
 首先进入克隆的本仓库目录
@@ -24,10 +24,13 @@ $ ./init.sh
 
 ***
 
+# 详细
+
 #### pacman
 * 下载yay(AUR助手)和一些其他工具
 * 修改源为国内源，并添加archlinuxcn源
 
+Ps: Tencent mirror NB!
 ***
 
 #### zsh
@@ -40,7 +43,7 @@ $ ./init.sh
 #### tmux
 * 下载tmux，与一个小插件用于保存与回复会话
 
-* **使用：**
+* **使用简述：**
     * <kbd>Alt</kbd>+<kbd>w</kbd> 为快捷键前缀，<u>以下快捷键会省略写出前缀</u>
     * <kbd>s</kbd> 水平切分panes
     * <kbd>v</kbd> 竖直切分panes
@@ -56,7 +59,7 @@ $ ./init.sh
 #### ssh
 * 修改 */etc/sshd/sshd_conf* 更改sshd的端口号为50000，本来想设置为只允许私钥登录，
 结果手机上的JuiceSSH总是没法识别我笔记本上生成的私钥，JuiceSSH上生成的公钥在电脑上也不识别。
-要是有朋友知道提个issue嘛  
+要是有朋友知道提个issue，thanks  
 <br>脚本会自动启动*sshd.socket*
 
 * 修改 *~/.ssh/ssh_config*，这是个用于github SSH 的配置模板，这样你把仓库URL协议改为
@@ -83,7 +86,7 @@ CLI工具
 
 ***
 
-#### vim
+#### ~~vim~~ 现在已经把配置融合到SpaceVim上了，[传送门](https://github.com/mrbeardad/SpaceVim)
 * 这才是重头戏嘛，这配置搞了好久的。此配置是用来写C++的，
 其他语言的话得自己改配置了，主要就是我让一些插件 只在C++文件中工作。
 <u>插件的详情 ~~可以~~ 最好 直接打开vimrc看，我写了注释，文档就懒得更新啦</u>；

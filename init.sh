@@ -43,8 +43,9 @@ function tmux_cfg() {
 
 #安装定制的SpaceVim for NeoVim
 function nvim_cfg() {
-    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck archlinuxcn/nerd-fonts-complete ripgrep
+    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck archlinuxcn/nerd-fonts-complete ripgrep vim-instant-markdown
     # I have forked SpaceVim that do some modification. You can clone it on repo: mrbeardad/SpaceVim
+    sudo sed -i '/set runtimepath/s/$/,\/usr\/share\/vim\/vimfiles\/after/' /usr/share/vim/vimfiles/after
     git clone https://gitee.com/SpaceVim/SpaceVim ~/.local/SpaceVim
     if [[ -d ~/.config/nvim ]] ;then
         mv ~/.config/{nvim,nvim.bak}
@@ -92,7 +93,7 @@ function extra_cfg() {
     net.ipv6.conf.default.disable_ipv6 =1
     net.ipv6.conf.lo.disable_ipv6 =1" >> /etc/sysctl.conf'
     sudo sysctl -p /etc/sysctl.conf
-    # 修改/opt/deepinwine/apps/Deepin-TIM/deepin.com.qq.office.desktop 禁用ipv6并使用optirun
+    sudo sed -i '/run.sh/isysctl -p /etc/sysctl.conf' /opt/deepinwine/apps/Deepin-TIM/run.sh
 
     #GNOME扩展
     yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git ttf-google-fonts-git gnome-shell-extension-coverflow-alt-tab gnome-shell-extension-system-monitor-git
@@ -133,7 +134,7 @@ yay -S grub-theme-manjaro
 
 ssh_cfg
 zsh_cfg
-vim_cfg
+nvim_cfg
 tmux_cfg
 extra_cfg
 

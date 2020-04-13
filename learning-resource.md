@@ -53,8 +53,4 @@
 * [ArchLinux安装](notes/Arch.note)
 * [Gnome调教日记](notes/Gnome.note)
 * [Manjaro安装](notes/Manjaro.note)  
->注：Manjaro的映像文件去中科大源下载桌面完全版，
-我前几次安装就因为这问题老是挂掉，换了映像后就没事了，好像是显卡问题  
-注：Manjaro安装时选择no-free的双显卡问题其实有bug，笔记里写了解决方案，
-CSDN搜`Manjaro双显卡`，第一栏就是原处
 * [LFS中文版](https://lctt.github.io/LFS-BOOK)
