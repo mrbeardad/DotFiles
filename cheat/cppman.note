@@ -676,14 +676,25 @@ minmax_element(b, e, op2 = lower_to)：返回第一个最小值和最后一个�
 ▪ssub_match： 指向表达式匹配到的子表达式
     .operator basic_string()
 ▪特殊正则符号：
+    .   [...]   [^...]  *   +   ?   {n} {n,}    {n,m}
+    ...|...     (...)
     \1, \2, \3, ...
-    \b：单词边界，左右两边不全为\w的位置
-    \B：非单词边界，左右两边全为\w的位置
+    \n  \t  \v  \f  \r
+    \xhh   \uhhh        ：ascii与unicode
+    \b  \B              ：单词边界，非单词边界（表示一个位置，左右两边是否全为\w）
+    \d  \D              ：数字，非数字
+    \s  \S              ：空白，非空白
+    \w  \W              ：标识符，非标识符
+    \d  \D              ：数字，非数字
+    [[:alnum:]] [[:alpha:]] [[:upper:]] [[:lower:]] [[:punct:]]
+    [[:graph:]]         ：[[:alnum:][:punct:]]
+    [[:print:]]         ：[[:alnum:][:punct:] ]
 ▪替换语法：
     $1, $2, $3, ...
     $&：全部
     $'：后缀
     $`：前缀
+    $$：转义$
 
 ○iostream：<iostream>
 ▪状态与异常： 注意，当stream会反复使用时，注意要恢复其状态

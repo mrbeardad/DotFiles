@@ -44,13 +44,19 @@ function tmux_cfg() {
 #安装定制的SpaceVim for NeoVim
 function nvim_cfg() {
     yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck nerd-fonts-complete ripgrep vim-instant-markdown
-    # I have forked SpaceVim that do some modification. You can clone it on repo: mrbeardad/SpaceVim
-    sudo sed -i '/set runtimepath/s/$/,\/usr\/share\/vim\/vimfiles\/after/' /usr/share/vim/vimfiles/after
-    git clone git@gitee.com:SpaceVim/SpaceVim ~/.local/SpaceVim
+    git clone git@gitee.com:mrbeardad/SpaceVim ~/.local/SpaceVim
     if [[ -d ~/.config/nvim ]] ;then
         mv ~/.config/{nvim,nvim.bak}
     fi
     ln -s ~/.local/SpaceVim ~/.config/nvim
+    if [[ ! -d ~/.SpaceVim.d ]] ;then
+        mkdir ~/.SpaceVim.d
+    elif [[ -e ~/.SpaceVim.d/init.toml ]] ;then
+        mv ~/.SpaceVim.d/init.toml{,bak}
+    fi
+    cp -v ~/.local/SpaceVim/mod/init.toml ~/.SpaceVim.d
+    sudo cp -v bin/vim-quickrun.sh /opt/bin
+    sudo cp -v bin/alacritty-tmux.sh /opt/bin
 }
 
 #安装额外的CLI工具、桌面软件、GNOME扩展
@@ -80,10 +86,9 @@ function extra_cfg() {
 
     #百度网盘，QQ，网易云音乐，搜狗拼音，WPS
     yay -S baidunetdisk-bin deepin.com.qq.office papper-flash flashplugin vlc netease-cloud-music fcitx-sogoupinyin fcitx-im fcitx-configtool ssf2fcitx-git fcitx-skins pinyin-completion wps-office ttf-wps-fonts flameshot google-chrome gnome-terminal-fedora alacritty
+
     mkdir ~/.config/alacritty
     cp -v alacritty/alacritty.yml ~/.config/alacritty
-    # git clone --depth=1 https://github.com/haotian-wang/google-access-helper ~/Downloads/google-access-helper
-
 
     #搜狗拼音配置
     echo -e 'export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS="@im=fcitx"' > ~/.xprofile
@@ -92,8 +97,6 @@ function extra_cfg() {
     sudo bash -c 'echo "net.ipv6.conf.all.disable_ipv6 =1
     net.ipv6.conf.default.disable_ipv6 =1
     net.ipv6.conf.lo.disable_ipv6 =1" >> /etc/sysctl.conf'
-    sudo sysctl -p /etc/sysctl.conf
-    sudo sed -i '/run.sh/isysctl -p /etc/sysctl.conf' /opt/deepinwine/apps/Deepin-TIM/run.sh
 
     #GNOME扩展
     yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git ttf-google-fonts-git adobe-source-han-sans-cn-fonts gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git
@@ -117,7 +120,6 @@ sudo bash -c 'echo "Server = https://mirrors.cloud.tencent.com/manjaro/stable/$r
 sudo cp /etc/pacman.d/mirrorlist{,.bak} # 有时候更新系统会把这个也更新了，备份一下
 sudo sed -i "/#Color/s/#//" /etc/pacman.conf
 sudo bash -c 'echo "[archlinuxcn]
-SigLevel = Optional TrustAll
 Server = https://mirrors.cloud.tencent.com/archlinuxcn/\$arch" >> /etc/pacman.conf'
 sudo pacman -Sy archlinuxcn-keyring
 sudo pacman -Su
@@ -129,11 +131,6 @@ sudo cp grub/01_users /etc/grub.d
 sudo sed -i '/--class os/s/--class os/--class os --unrestricted /' /etc/grub.d/{10_linux,30_os-prober}
 yay -S grub-theme-manjaro
 
-# Nvidia配置
-# yay -S bumblebee virtualgl lib32-virtualgl lib32-primus primu linux54-bbswitch
-# sudo systemctl enable --now bumblebee
-# sudo gpasswd -A beardad bumblebee
-
 ssh_cfg
 zsh_cfg
 nvim_cfg
@@ -142,10 +139,10 @@ extra_cfg
 
 # 修改desktop文件
 sudo cp -v desktop/tmux.desktop /usr/share/applications/
-sudo sed -i '/^Name=/s/=.*$/=Neovim on Alacritty/; /TryExec=/s/^/#/; /^Exec=/s/=.*$/=prime alacritty -e alacritty-tmux.sh/; /Terminal=/s/true/false/' /usr/share/applications/nvim.desktop
-sudo sed -i '/^Exec=/s/=/=prime /' /usr/share/applications/netease-cloud-music.desktop
-sudo sed -i '/^Exec=/s/=/=prime /' /usr/share/applications/google-chrome.desktop
-sudo sed -i -e '$i sysctl -p /etc/sysctl.conf}' -e '$s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
+sudo sed -i '/^Name=/s/=.*$/=Neovim on Alacritty/; /TryExec=/s/^/#/; /^Exec=/s/=.*$/=alacritty -e alacritty-tmux.sh/; /Terminal=/s/true/false/' /usr/share/applications/nvim.desktop
+# sudo sed -i '/^Exec=/s/=/=optirun /' /usr/share/applications/netease-cloud-music.desktop
+sudo sed -i '/^Exec=/s/=/=optirun /' /usr/share/applications/google-chrome.desktop
+sudo sed -i -e '$isudo sysctl -p /etc/sysctl.conf}' -e '$s/^/optirun /' /opt/deepinwine/apps/Deepin-TIM/run.sh
 
 echo -e "\e[32m=====> GRUB\e[m
 Now you may want to change your grub theme.Some version of Manjaro don't install grub-theme-manjaro.
