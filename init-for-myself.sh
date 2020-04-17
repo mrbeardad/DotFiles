@@ -91,8 +91,8 @@ function extra_cfg() {
 
     #QQ配置，禁用ipv6，否则不显示图片
     sudo bash -c 'echo "net.ipv6.conf.all.disable_ipv6 =1
-    net.ipv6.conf.default.disable_ipv6 =1
-    net.ipv6.conf.lo.disable_ipv6 =1" >> /etc/sysctl.conf'
+net.ipv6.conf.default.disable_ipv6 =1
+net.ipv6.conf.lo.disable_ipv6 =1" >> /etc/sysctl.conf'
 
     #GNOME扩展
     yay -S gtk-theme-macos-mojave sweet-theme-git adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git ttf-google-fonts-git adobe-source-han-sans-cn-fonts gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git
@@ -136,31 +136,20 @@ extra_cfg
 
 # 修改desktop文件
 cp -v /usr/share/applications/{google-chrome,wps-office-*,nvim}.desktop ~/.local/share/applications
-echo '
-[Desktop Entry]
-Type=Application
-Name=Terminal with Tmux
-Comment=Startup terminal with tmux
-Icon=utilities-terminal
-Terminal=true
-Exec=/opt/bin/terminal-tmux.sh
-Categories=System;TerminalEmulator;
-Keywords=Tmux;Terminal' > ~/.local/share/applications/tmux.desktop
 sed -i '/^Name=/s/=.*$/=Neovim on Alacritty/; /TryExec=/s/^/#/; /^Exec=/s/=.*$/=alacritty -e alacritty-tmux.sh/; /Terminal=/s/true/false/' ~/.local/share/applications/nvim.desktop
 sed -i '/^Exec=/s/=/=optirun /' ~/.local/share/applications/wps-office-*
 sed -i '/^Exec=/s/=/=optirun /' ~/.local/share/applications/google-chrome.desktop
 sudo sed -i -e '$isudo sysctl -p /etc/sysctl.conf}' -e '$s/^/optirun /' /opt/deepinwine/apps/Deepin-TIM/run.sh
 
 echo -e "\e[32m=====> GRUB\e[m
-Now you may want to change your grub theme.Some version of Manjaro don't install grub-theme-manjaro.
-And you can may like to change the default .png picture. https://www.yasuotu.com/mgeshi provide online picture converter"
+Now, change the /usr/share/grub/themes/manjaro/background.png which is used as grub background picture."
 echo -e '\e[32m=====> Patches\e[m
-Now, you may want to apply patches in patches directory'
-echo -e '\e[32m=====>  Shortcut \e[m
-Now you need to bind the gnome shortcut for terminal-tmux & neovim-alacritty'
+Now, apply patches in patches directory to screenfetch'
 echo -e '\e[32=====> Chrome\e[m
-Now, add google-access-helper to your google-chrome in devloper mode'
+Now, add google-access-helper to my google-chrome in devloper mode'
 echo -e '\e[32=====> Neovim\e[m
-Now config your neovim by using files in DotFiles/vim'
+Now, config your neovim by using files in DotFiles/vim'
+echo -e '\e[32=====> Desktop\e[m
+Now, dconf org.gnome.desktop.wm.preferences.button-layout & terminal launch cmd & setting & tweak & extension.'
 # }
 
