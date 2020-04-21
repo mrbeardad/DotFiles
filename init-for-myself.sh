@@ -4,7 +4,7 @@
 function ssh_cfg() {
     # 添加git push <remote>需要的ssh配置
     cp -v ssh/ssh_config ~/.ssh/ssh_config
-    cp -v /mnt/ASUS/backup/id_ecdsa ~/.ssh
+    cp -v /mnt/ASUS/backup/ssh/id_ecdsa ~/.ssh
 
     # 设置sshd用于连接到该主机
     sudo cp -v ssh/sshd_config /etc/ssh/sshd_config
@@ -43,7 +43,7 @@ function tmux_cfg() {
 
 #安装定制的SpaceVim for NeoVim
 function nvim_cfg() {
-    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck nerd-fonts-complete ripgrep vim-instant-markdown
+    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck nerd-fonts-complete ripgrep #vim-instant-markdown
     git clone git@gitee.com:mrbeardad/SpaceVim ~/.local/SpaceVim
     if [[ -d ~/.config/nvim ]] ;then
         mv ~/.config/{nvim,nvim.bak}
@@ -77,7 +77,7 @@ function extra_cfg() {
     cp -v gdb/.gdbinit ~
 
     #百度网盘，QQ，网易云音乐，搜狗拼音，WPS
-    yay -S baidunetdisk-bin deepin.com.qq.office papper-flash flashplugin vlc netease-cloud-music fcitx-sogoupinyin fcitx-im fcitx-configtool ssf2fcitx-git fcitx-skins pinyin-completion wps-office ttf-wps-fonts flameshot google-chrome gnome-terminal-fedora alacritty
+    yay -S baidunetdisk-bin deepin.com.qq.office papper-flash flashplugin vlc netease-cloud-music fcitx-sogoupinyin fcitx-im fcitx-configtool fcitx-skins pinyin-completion wps-office ttf-wps-fonts flameshot google-chrome gnome-terminal-fedora alacritty
 
     mkdir ~/.config/alacritty
     cp -v alacritty/alacritty.yml ~/.config/alacritty
@@ -127,6 +127,7 @@ sudo cp grub/01_users /etc/grub.d
 sudo cp grub/user.cfg /boot/grub
 sudo sed -i '/--class os/s/--class os/--class os --unrestricted /' /etc/grub.d/{10_linux,30_os-prober}
 yay -S grub-theme-manjaro
+sudo cp /mnt/ASUS/backup/grub-background/DNA.png /usr/share/grub/themes/manjaro/background.png
 
 ssh_cfg
 zsh_cfg
@@ -137,19 +138,19 @@ extra_cfg
 # 修改desktop文件
 cp -v /usr/share/applications/{google-chrome,wps-office-*,nvim}.desktop ~/.local/share/applications
 sed -i '/^Name=/s/=.*$/=Neovim on Alacritty/; /TryExec=/s/^/#/; /^Exec=/s/=.*$/=alacritty -e alacritty-tmux.sh/; /Terminal=/s/true/false/' ~/.local/share/applications/nvim.desktop
-sed -i '/^Exec=/s/=/=optirun /' ~/.local/share/applications/wps-office-*
-sed -i '/^Exec=/s/=/=optirun /' ~/.local/share/applications/google-chrome.desktop
-sudo sed -i -e '$isudo sysctl -p /etc/sysctl.conf}' -e '$s/^/optirun /' /opt/deepinwine/apps/Deepin-TIM/run.sh
+sudo sed -i '$isudo sysctl -p /etc/sysctl.conf}' /opt/deepinwine/apps/Deepin-TIM/run.sh
+# yay -S prime
+# sudo sed -i -e '$isudo sysctl -p /etc/sysctl.conf}' -e '$s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
+# sed -i '/^Exec=/s/=/=prime /' ~/.local/share/applications/wps-office-*
+# sed -i '/^Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop
 
-echo -e "\e[32m=====> GRUB\e[m
-Now, change the /usr/share/grub/themes/manjaro/background.png which is used as grub background picture."
 echo -e '\e[32m=====> Patches\e[m
-Now, apply patches in patches directory to screenfetch'
+Now, apply patches in patches directory to screenfetch and mojave-theme'
 echo -e '\e[32=====> Chrome\e[m
 Now, add google-access-helper to my google-chrome in devloper mode'
 echo -e '\e[32=====> Neovim\e[m
-Now, config your neovim by using files in DotFiles/vim'
+Now, launch my neovim and type :SPInstall'
 echo -e '\e[32=====> Desktop\e[m
-Now, dconf org.gnome.desktop.wm.preferences.button-layout & terminal launch cmd & setting & tweak & extension.'
+Now, dconf org.gnome.desktop.wm.preferences.button-layout & terminal-launch-cmd & setting & tweak & extension.'
 # }
 
