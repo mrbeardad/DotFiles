@@ -77,7 +77,8 @@ function extra_cfg() {
     cp -v gdb/.gdbinit ~
 
     #百度网盘，QQ，网易云音乐，搜狗拼音，WPS
-    yay -S baidunetdisk-bin deepin.com.qq.office papper-flash flashplugin vlc netease-cloud-music fcitx-sogoupinyin fcitx-im fcitx-configtool fcitx-skins pinyin-completion wps-office ttf-wps-fonts flameshot google-chrome gnome-terminal-fedora alacritty
+    yay -S baidunetdisk-bin deepin.com.qq.office papper-flash flashplugin vlc netease-cloud-music wps-office ttf-wps-fonts flameshot google-chrome alacritty
+    #fcitx-sogoupinyin fcitx-im fcitx-configtool fcitx-skins pinyin-completion gnome-terminal-fedora 
 
     mkdir ~/.config/alacritty
     cp -v alacritty/alacritty.yml ~/.config/alacritty

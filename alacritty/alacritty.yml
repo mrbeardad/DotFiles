@@ -1,135 +1,140 @@
 env:
-  TERM: xterm-256color
+    TERM: xterm-256color
 
 window:
-  dimensions:
-    columns: 0
-    lines: 0
-  padding:
-    x: 2
-    y: 2
-  dynamic_padding: true
-  decorations: none
+    dimensions:
+        columns: 0
+        lines: 0
+    padding:
+        x: 2
+        y: 2
+    dynamic_padding: true
+    decorations: none
 
 scrolling:
-  history: 10000
-  multiplier: 3
-  # auto_scroll: false
+    history: 10000
+    multiplier: 3
+    # auto_scroll: false
 # tabspaces: 8
 
 font:
-  normal:
-    family: SauceCodePro Nerd Font
-    style: Black Italic
-  bold:
-    family: SpaceMono Nerd Font
-    style: Bold Italic
-  italic:
-    family: BlexMono Nerd Font
-    style: Bold Italic
-  size: 11.0
-  offset:
-    x: 0
-    y: 0
-  glyph_offset:
-    x: 0
-    y: 0
-  use_thin_strokes: true
+    normal:
+        family: SauceCodePro Nerd Font
+        style: Black Italic
+    bold:
+        family: SpaceMono Nerd Font
+        style: Bold Italic
+    italic:
+        family: BlexMono Nerd Font
+        style: Bold Italic
+    size: 11.0
+    offset:
+        x: 0
+        y: 0
+    glyph_offset:
+        x: 0
+        y: 0
+    use_thin_strokes: true
 
 draw_bold_text_with_bright_colors: true
 
 # Colors (Dracula)
 colors:
-  # Default colors
-  primary:
-    background: '0x282a36'
-    foreground: '0xf8f8f2'
+    # Default colors
+    primary:
+        background: '0x282a36'
+        foreground: '0xf8f8f2'
 
-    # Bright and dim foreground colors
+        # Bright and dim foreground colors
+        #
+        # The dimmed foreground color is calculated automatically if it is not present.
+        # If the bright foreground color is not set, or `draw_bold_text_with_bright_colors`
+        # is `false`, the normal foreground color will be used.
+        #dim_foreground: '0x9a9a9a'
+        #bright_foreground: '0xffffff'
+
+    # Cursor colors
     #
-    # The dimmed foreground color is calculated automatically if it is not present.
-    # If the bright foreground color is not set, or `draw_bold_text_with_bright_colors`
-    # is `false`, the normal foreground color will be used.
-    #dim_foreground: '0x9a9a9a'
-    #bright_foreground: '0xffffff'
+    # Colors which should be used to draw the terminal cursor. If these are unset,
+    # the cursor color will be the inverse of the cell color.
+    cursor:
+        text: '0x44475a'
+        cursor: '0xf8f8f2'
 
-  # Cursor colors
-  #
-  # Colors which should be used to draw the terminal cursor. If these are unset,
-  # the cursor color will be the inverse of the cell color.
-  cursor:
-    text: '0x44475a'
-    cursor: '0xf8f8f2'
+    # Normal colors
+    normal:
+        black:   '0x000000'
+        red:     '0xff5555'
+        green:   '0x50fa7b'
+        yellow:  '0xf1fa8c'
+        blue:    '0xbd93f9'
+        magenta: '0xff79c6'
+        cyan:    '0x8be9fd'
+        white:   '0xbfbfbf'
 
-  # Normal colors
-  normal:
-    black:   '0x000000'
-    red:     '0xff5555'
-    green:   '0x50fa7b'
-    yellow:  '0xf1fa8c'
-    blue:    '0xbd93f9'
-    magenta: '0xff79c6'
-    cyan:    '0x8be9fd'
-    white:   '0xbfbfbf'
+    # Bright colors
+    bright:
+        black:   '0x767676'
+        red:     '0xff6e67'
+        green:   '0x5af78e'
+        yellow:  '0xf4f99d'
+        blue:    '0xcaa9fa'
+        magenta: '0xff92d0'
+        cyan:    '0x9aedfe'
+        white:   '0xe6e6e6'
 
-  # Bright colors
-  bright:
-    black:   '0x4d4d4d'
-    red:     '0xff6e67'
-    green:   '0x5af78e'
-    yellow:  '0xf4f99d'
-    blue:    '0xcaa9fa'
-    magenta: '0xff92d0'
-    cyan:    '0x9aedfe'
-    white:   '0xe6e6e6'
+    # Dim colors
+    #
+    # If the dim colors are not set, they will be calculated automatically based
+    # on the `normal` colors.
+    dim:
+        black:   '0x14151b'
+        red:     '0xff2222'
+        green:   '0x1ef956'
+        yellow:  '0xebf85b'
+        blue:    '0x4d5b86'
+        magenta: '0xff46b0'
+        cyan:    '0x59dffc'
+        white:   '0xe6e6d1'
 
-  # Dim colors
-  #
-  # If the dim colors are not set, they will be calculated automatically based
-  # on the `normal` colors.
-  dim:
-    black:   '0x14151b'
-    red:     '0xff2222'
-    green:   '0x1ef956'
-    yellow:  '0xebf85b'
-    blue:    '0x4d5b86'
-    magenta: '0xff46b0'
-    cyan:    '0x59dffc'
-    white:   '0xe6e6d1'
-
-  # Indexed Colors
-  #
-  # The indexed colors include all colors from 16 to 256.
-  # When these are not set, they're filled with sensible defaults.
-  #
-  # Example:
-  #   `- { index: 16, color: '0xff00ff' }`
-  #
-  indexed_colors: []
+    # Indexed Colors
+    #
+    # The indexed colors include all colors from 16 to 256.
+    # When these are not set, they're filled with sensible defaults.
+    #
+    # Example:
+    #   `- { index: 16, color: '0xff00ff' }`
+    #
+    indexed_colors: []
 
 visual_bell:
-  animation: EaseOutExpo
-  duration: 0
-  color: "0xffffff"
-background_opacity: 1.0
+    animation: Linear
+    duration: 0
+    color: "0xffffff"
+# bell:
+#     command:
+#         program: /bin/gst-play-1.0
+#         args: ["/usr/share/sounds/freedesktop/stereo/bell.oga"]
+
+background_opacity: 0.8
 mouse_bindings:
-  - { mouse: Middle, action: PasteSelection }
+    - { mouse: Middle, action: PasteSelection }
 
 mouse:
-  double_click: { threshold: 300 }
-  triple_click: { threshold: 300 }
-  hide_when_typing: true
+    double_click: { threshold: 300 }
+    triple_click: { threshold: 300 }
+    hide_when_typing: true
 
 selection:
-  semantic_escape_chars: ',│`|:"'' ()[]{}<>'
-  save_to_clipboard: false
+    semantic_escape_chars: ',│`|:"'' ()[]{}<>'
+    save_to_clipboard: false
 
 # Allow terminal applications to change Alacritty's window title.
 # dynamic_title: true
 
 cursor:
-  style: Block
-  unfocused_hollow: true
+    style: Block
+    unfocused_hollow: true
 
 # Live config reload (changes require restart)
 # live_config_reload: true
@@ -143,7 +148,7 @@ cursor:
 #   - (Linux/macOS) /bin/bash --login
 #   - (Windows) powershell
 shell:
-  program: zsh
+    program: zsh
 #  args:
 #    - --login
 
@@ -249,77 +254,77 @@ alt_send_esc: true
 #   - ~AppKeypad
 #   - AppKeypad
 key_bindings:
-  - { key: V, mods: Command, action: Paste }
-  - { key: C, mods: Command, action: Copy }
-  - { key: Paste, action: Paste }
-  - { key: Copy, action: Copy }
-  - { key: H, mods: Command, action: Hide }
-  - { key: Q, mods: Command, action: Quit }
-  - { key: Key0, mods: Command, action: ResetFontSize }
-  - { key: Equals, mods: Alt, action: IncreaseFontSize }
-  - { key: Minus, mods: Alt, action: DecreaseFontSize }
-  - { key: Equals, mods: Command, chars: "\x13\x4c" }
-  - { key: Minus, mods: Command, chars: "\x13\x48" }
-  - { key: Minus, mods: Command|Shift, chars: "\x13\x4b" }
-  - { key: Equals, mods: Command|Shift, chars: "\x13\x4a" }
-  # - { key: K,        mods: Command, action: ClearHistory                 }
-  - { key: K, mods: Command, chars: "\x13" }
-  - { key: Back, chars: "\x7f" }
-  - { key: Back, mods: Command, chars: "\x15" }
-  - { key: NumpadEnter, chars: "\n" }
-  - { key: Grave, mods: Control, chars: "\x19p" }
-  - { key: J, mods: Command, chars: "\x13\x7a" }
-  - { key: Return, mods: Control, chars: "\x17\x0d" }
-  - { key: E, mods: Command, chars: "\x13o" }
-  - { key: D, mods: Command, chars: "\x13\x76" }
-  - { key: D, mods: Command|Shift, chars: "\x13\x6a" }
-  - { key: D, mods: Command|Shift, chars: "\x13\x6a" }
-  - { key: Backslash, mods: Command, chars: "\x67\x2f\x2f" }
-    # <c-y>_ for tab
-  - { key: Key1, mods: Command, chars: "\x13\x31" }
-  - { key: Key2, mods: Command, chars: "\x13\x32" }
-  - { key: Key3, mods: Command, chars: "\x13\x33" }
-  - { key: P, mods: Command|Shift, chars: "\x13\x53" }
-  - { key: P, mods: Command, chars: "\x1f" }
-  - { key: N, mods: Command, chars: "\x13\x43" }
-  - { key: T, mods: Command, chars: "\x13\x63" }
-    # <c-y>] for closing tab in vim
-  # - { key: W, mods: Command, chars: "\x19\x5d" }
-  - { key: W,        mods: Command, chars: "\x13\x26"                       }
-    # <c-y>? for search file in history
+    - { key: V, mods: Command, action: Paste }
+    - { key: C, mods: Command, action: Copy }
+    - { key: Paste, action: Paste }
+    - { key: Copy, action: Copy }
+    - { key: H, mods: Command, action: Hide }
+    - { key: Q, mods: Command, action: Quit }
+    - { key: Key0, mods: Command, action: ResetFontSize }
+    - { key: Equals, mods: Alt, action: IncreaseFontSize }
+    - { key: Minus, mods: Alt, action: DecreaseFontSize }
+    - { key: Equals, mods: Command, chars: "\x13\x4c" }
+    - { key: Minus, mods: Command, chars: "\x13\x48" }
+    - { key: Minus, mods: Command|Shift, chars: "\x13\x4b" }
+    - { key: Equals, mods: Command|Shift, chars: "\x13\x4a" }
+    # - { key: K,        mods: Command, action: ClearHistory                 }
+    - { key: K, mods: Command, chars: "\x13" }
+    - { key: Back, chars: "\x7f" }
+    - { key: Back, mods: Command, chars: "\x15" }
+    - { key: NumpadEnter, chars: "\n" }
+    - { key: Grave, mods: Control, chars: "\x19p" }
+    - { key: J, mods: Command, chars: "\x13\x7a" }
+    - { key: Return, mods: Control, chars: "\x17\x0d" }
+    - { key: E, mods: Command, chars: "\x13o" }
+    - { key: D, mods: Command, chars: "\x13\x76" }
+    - { key: D, mods: Command|Shift, chars: "\x13\x6a" }
+    - { key: D, mods: Command|Shift, chars: "\x13\x6a" }
+    - { key: Backslash, mods: Command, chars: "\x67\x2f\x2f" }
+        # <c-y>_ for tab
+    - { key: Key1, mods: Command, chars: "\x13\x31" }
+    - { key: Key2, mods: Command, chars: "\x13\x32" }
+    - { key: Key3, mods: Command, chars: "\x13\x33" }
+    - { key: P, mods: Command|Shift, chars: "\x13\x53" }
+    - { key: P, mods: Command, chars: "\x1f" }
+    - { key: N, mods: Command, chars: "\x13\x43" }
+    - { key: T, mods: Command, chars: "\x13\x63" }
+        # <c-y>] for closing tab in vim
+    # - { key: W, mods: Command, chars: "\x19\x5d" }
+    - { key: W,        mods: Command, chars: "\x13\x26"                       }
+        # <c-y>? for search file in history
 
-  - { key: Y, mods: Command, chars: "\x19\x5c" }
-  - { key: I, mods: Command, chars: "\x13\x6e" }
-  - { key: Tab, mods: Control, chars: "\x13\x6e" }
-  - { key: Tab, mods: Control|Shift, chars: "\x13\x70" }
-  # - { key: Tab, mods: Control, chars: "\x19\x5f" }
-  # - { key: Tab, mods: Control|Shift, chars: "\x19\x5e" }
+    - { key: Y, mods: Command, chars: "\x19\x5c" }
+    - { key: I, mods: Command, chars: "\x13\x6e" }
+    - { key: Tab, mods: Control, chars: "\x13\x6e" }
+    - { key: Tab, mods: Control|Shift, chars: "\x13\x70" }
+    # - { key: Tab, mods: Control, chars: "\x19\x5f" }
+    # - { key: Tab, mods: Control|Shift, chars: "\x19\x5e" }
 
-  - { key: Tab, mods: Shift, chars: "\x1b[Z" }
-  # - { key: LBracket,        mods: Command|Shift, chars: "\x13\x70"                       }
-  # - { key: RBracket,      mods: Command|Shift,   chars: "\x13\x6e"                      }
-  # - { key: Right,    mods: Command, chars: "\x05"                        }
-  # - { key: W,        mods: Control, chars: "\x17"                        }
-  # - { key: U,        mods: Control, chars: "\x15"                        }
-  # - { key: Right,    mods: Alt,     chars: "\x07"                        }
-  # - { key: Left,     mods: Alt,     chars: "\x02"                        }
-  - { key: Left, mods: Shift, chars: "\x1b[1;2D" }
-  - { key: Left, mods: Control, chars: "\x1b[1;5D" }
-  - { key: Left, mods: Alt, chars: "\x1b[1;3D" }
-  - { key: Left, chars: "\x1b[D", mode: ~AppCursor }
-  - { key: Left, chars: "\x1bOD", mode: AppCursor }
-  - { key: Right, mods: Shift, chars: "\x1b[1;2C" }
-  - { key: Right, mods: Control, chars: "\x1b[1;5C" }
-  - { key: Right, mods: Alt, chars: "\x1b[1;3C" }
-  - { key: Right, chars: "\x1b[C", mode: ~AppCursor }
-  - { key: Right, chars: "\x1bOC", mode: AppCursor }
-  - { key: Up, mods: Shift, chars: "\x1b[1;2A" }
-  - { key: Up, mods: Control, chars: "\x1b[1;5A" }
-  - { key: Up, mods: Alt, chars: "\x1b[1;3A" }
-  - { key: Up, chars: "\x1b[A", mode: ~AppCursor }
-  - { key: Up, chars: "\x1bOA", mode: AppCursor }
-  - { key: Down, mods: Shift, chars: "\x1b[1;2B" }
-  - { key: Down, mods: Control, chars: "\x1b[1;5B" }
-  - { key: Down, mods: Alt, chars: "\x1b[1;3B" }
-  - { key: Down, chars: "\x1b[B", mode: ~AppCursor }
-  - { key: Down, chars: "\x1bOB", mode: AppCursor }
+    - { key: Tab, mods: Shift, chars: "\x1b[Z" }
+    # - { key: LBracket,        mods: Command|Shift, chars: "\x13\x70"                       }
+    # - { key: RBracket,      mods: Command|Shift,   chars: "\x13\x6e"                      }
+    # - { key: Right,    mods: Command, chars: "\x05"                        }
+    # - { key: W,        mods: Control, chars: "\x17"                        }
+    # - { key: U,        mods: Control, chars: "\x15"                        }
+    # - { key: Right,    mods: Alt,     chars: "\x07"                        }
+    # - { key: Left,     mods: Alt,     chars: "\x02"                        }
+    - { key: Left, mods: Shift, chars: "\x1b[1;2D" }
+    - { key: Left, mods: Control, chars: "\x1b[1;5D" }
+    - { key: Left, mods: Alt, chars: "\x1b[1;3D" }
+    - { key: Left, chars: "\x1b[D", mode: ~AppCursor }
+    - { key: Left, chars: "\x1bOD", mode: AppCursor }
+    - { key: Right, mods: Shift, chars: "\x1b[1;2C" }
+    - { key: Right, mods: Control, chars: "\x1b[1;5C" }
+    - { key: Right, mods: Alt, chars: "\x1b[1;3C" }
+    - { key: Right, chars: "\x1b[C", mode: ~AppCursor }
+    - { key: Right, chars: "\x1bOC", mode: AppCursor }
+    - { key: Up, mods: Shift, chars: "\x1b[1;2A" }
+    - { key: Up, mods: Control, chars: "\x1b[1;5A" }
+    - { key: Up, mods: Alt, chars: "\x1b[1;3A" }
+    - { key: Up, chars: "\x1b[A", mode: ~AppCursor }
+    - { key: Up, chars: "\x1bOA", mode: AppCursor }
+    - { key: Down, mods: Shift, chars: "\x1b[1;2B" }
+    - { key: Down, mods: Control, chars: "\x1b[1;5B" }
+    - { key: Down, mods: Alt, chars: "\x1b[1;3B" }
+    - { key: Down, chars: "\x1b[B", mode: ~AppCursor }
+    - { key: Down, chars: "\x1bOB", mode: AppCursor }
