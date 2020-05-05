@@ -121,9 +121,11 @@ alias ip='ip -c'
 alias tmuxn='tmux new -s'
 alias tmuxa='tmux a'
 alias expactf='expac --timefmt="%Y-%m-%d %T" "%l\t%n" | sort'
+alias gdb='gdb --tui'
 # zsh中git插件的补充
 alias gmv='git mv'
 alias grst='git restore --staged'
+alias gdtre='git diff-tree'
 alias gdi='git diff-index'
 alias gdt='git difftool --tool=vimdiff'
 alias gdts='git difftool --staged --tool=vimdiff'
@@ -135,6 +137,7 @@ alias glr='git ls-remote'
 alias gpt='git push --tags'
 alias gfp='git format-patch'
 
+function egdb() { emacs --eval "(gdb \"gdb --annotate=3 -i=mi $*\")" &;}
 function see()
 {
     if [[ "$1" == "--help" ]] ;then

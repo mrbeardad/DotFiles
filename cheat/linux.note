@@ -882,8 +882,9 @@
 ▪网络协议栈
     发送	：
     ▪应用层调用socket接口函数，发送message
- ▪传输层确认socket的协议与端口号，并封装为segment▪网络层利用路由表确认参数(协议、目的IP、本地IP等)，分片并封装为packet，若目的IP为本地则直接上传
-▪链路层通过驱动程序，利用ARP表确认目的MAC地址，若不存在则发送ARP请求，最后封装成frame，然后发送到物理网卡进行信号转换并传输
+    ▪传输层确认socket的协议与端口号，并封装为segment
+    ▪网络层利用路由表确认参数(协议、目的IP、本地IP等)，分片并封装为packet，若目的IP为本地则直接上传
+    ▪链路层通过驱动程序，利用ARP表确认目的MAC地址，若不存在则发送ARP请求，最后封装成frame，然后发送到物理网卡进行信号转换并传输
     接收	：
     ▪链路层中网卡默认会将MAC地址非本机且非广播的frame丢弃，若为ARP包则本层解决
     ▪网络层确认目的IP是否为本机IP或本机网段广播，若为ICMP则本层解决
@@ -918,32 +919,32 @@
 
 ●ip --color
     ▪link/l
-    set IF up/down
-    set name NAME
-    set promisc
+        set IF up/down
+        set name NAME
+        set promisc
     ▪addr/a
-    add IP/MASK  broadcast +  dev IF
-    del IP/MASK  dev IF
+        add IP/MASK  broadcast +  dev IF
+        del IP/MASK  dev IF
     ▪route/r
-    add IP/MASK  via GWIP  dev IF  src IP  metric 600
-    add [throw|unreachable|prohibit|blackhole] IP/MA
-    del IP/MASK  via GWIP  dev IF
+        add IP/MASK  via GWIP  dev IF  src IP  metric 600
+        add [throw|unreachable|prohibit|blackhole] IP/MA
+        del IP/MASK  via GWIP  dev IF
     ▪neigh/n
-    add/del IP  lla MAC  dev IF
+        add/del IP  lla MAC  dev IF
 
     ○NetworkManager服务
 ●nmcli
     ▪radio/r
-    wifi on|off
+        wifi on|off
     ▪connection/c
-    up  CON-NAME
-    add type . ifname . ssid . con-name .
-    del SSID
-    reload
+        up  CON-NAME
+        add type . ifname . ssid . con-name .
+        del SSID
+        reload
     ▪device/d
-    wifi
-    dis IF
-    wifi c SSID  password PASSWD  (hidden yes)
+        wifi
+        dis IF
+        wifi c SSID  password PASSWD  (hidden yes)
 ●nmtui
 
 ●nmap

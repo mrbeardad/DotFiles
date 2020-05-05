@@ -2,9 +2,12 @@
 
 #配置ssh
 function ssh_cfg() {
+    if [ ! -d ~/.ssh ] ;then
+        mkdir ~/.ssh
+    fi
     # 添加git push <remote>需要的ssh配置
     cp -v ssh/ssh_config ~/.ssh/ssh_config
-    cp -v /mnt/ASUS/backup/ssh/id_ecdsa ~/.ssh
+    cp -v /mnt/ASUS/backup/ssh/id_* ~/.ssh
 
     # 设置sshd用于连接到该主机
     sudo cp -v ssh/sshd_config /etc/ssh/sshd_config
@@ -19,12 +22,12 @@ function zsh_cfg() {
     # yay -S zsh zsh-syntax-highlighting zsh-autosuggestions 
 
     # 安装.zshrc
-    cp -v zsh/.zshrc ~/.zshrc
+    cp -v zsh/zshrc ~/.zshrc
     sudo cp -v zsh/*.zsh-theme /usr/share/oh-my-zsh/themes/
     chsh -s /bin/zsh
 
     #添加Linux笔记，用see查询
-    if [ ! -e ~/.cheat ] ;then
+    if [ ! -d ~/.cheat ] ;then
         mkdir ~/.cheat
     fi
     cp -v cheat/* ~/.cheat
@@ -36,15 +39,15 @@ function tmux_cfg() {
     if [ ! -e ~/.tmux ] ;then
         mkdir ~/.tmux
     fi
-    cp -v tmux/.tmux.conf ~/.tmux.conf
+    cp -v tmux/tmux.conf ~/.tmux
     sudo cp -v bin/terminal-tumx.sh /opt/bin
     yay -S tmux tmux-resurrect-git
 }
 
 #安装定制的SpaceVim for NeoVim
 function nvim_cfg() {
-    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck nerd-fonts-complete ripgrep #vim-instant-markdown
-    git clone git@gitee.com:mrbeardad/SpaceVim ~/.local/SpaceVim
+    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck nerd-fonts-complete ripgrep #vim-instant-markdown vim-youcompleteme-git
+    git clone git@gitee.com:mrbeardad/SpaceVim ~/.SpaceVim
     if [[ -d ~/.config/nvim ]] ;then
         mv ~/.config/{nvim,nvim.bak}
     fi
@@ -54,9 +57,13 @@ function nvim_cfg() {
     elif [[ -e ~/.SpaceVim.d/init.toml ]] ;then
         mv ~/.SpaceVim.d/init.toml{,bak}
     fi
-    cp -v ~/.local/SpaceVim/mod/init.toml ~/.SpaceVim.d
+    cp -v ~/.SpaceVim/mode/init.toml ~/.SpaceVim.d
+    if [[ ! -d ~/.SpaceVim.d/UltiSnips ]] ;then
+        mkdir ~/.SpaceVim.d/UltiSnips
+    fi
+    cp -v ~/.SpaceVim/custom/cpp.snippets ~/.SpaceVim.d/UltiSnips
     sudo cp -v bin/vim-quickrun.sh /opt/bin
-    sudo cp -v bin/alacritty-tmux.sh /opt/bin
+    sudo cp -v bin/alacritty-neovim.sh /opt/bin
 }
 
 #安装额外的CLI工具、桌面软件、GNOME扩展
@@ -74,10 +81,14 @@ function extra_cfg() {
 
     #CLI工具
     yay -S htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat cppman-git clang gdb
-    cp -v gdb/.gdbinit ~
+    cp -v gdb/gdbinit ~
+    if [ ! -e ~/.cgdb ] ;then
+        mkdir ~/.cgdb
+    fi
+    cp -v gdb/cgdbrc ~/.cgdb
 
     #百度网盘，QQ，网易云音乐，搜狗拼音，WPS
-    yay -S baidunetdisk-bin deepin.com.qq.office papper-flash flashplugin vlc netease-cloud-music wps-office ttf-wps-fonts flameshot google-chrome alacritty
+    yay -S baidunetdisk-bin deepin.com.qq.office papper-flash flashplugin vlc netease-cloud-music wps-office ttf-wps-fonts flameshot google-chrome alacritty fcitx-google-pinyin fcitx-im fcitx-configtool fcitx-sinks
     #fcitx-sogoupinyin fcitx-im fcitx-configtool fcitx-skins pinyin-completion gnome-terminal-fedora 
 
     mkdir ~/.config/alacritty
@@ -137,13 +148,13 @@ tmux_cfg
 extra_cfg
 
 # 修改desktop文件
-cp -v /usr/share/applications/{google-chrome,wps-office-*,nvim}.desktop ~/.local/share/applications
-sed -i '/^Name=/s/=.*$/=Neovim on Alacritty/; /TryExec=/s/^/#/; /^Exec=/s/=.*$/=alacritty -e alacritty-tmux.sh/; /Terminal=/s/true/false/' ~/.local/share/applications/nvim.desktop
-sudo sed -i '$isudo sysctl -p /etc/sysctl.conf}' /opt/deepinwine/apps/Deepin-TIM/run.sh
-# yay -S prime
-# sudo sed -i -e '$isudo sysctl -p /etc/sysctl.conf}' -e '$s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
-# sed -i '/^Exec=/s/=/=prime /' ~/.local/share/applications/wps-office-*
-# sed -i '/^Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop
+cp -v /usr/share/applications/{google-chrome,wps-office-*,nvim,Alacritty}.desktop ~/.local/share/applications
+sed -i '/Exec=/s/=.*$/=alacritty -e terminal-tmux.sh /' ~/.local/share/applications/Alacritty
+sed -i '/Exec=/s/=.*$/=alacritty -e alacritty-neovim.sh/; /Terminal=/s/true/false/' ~/.local/share/applications/nvim.desktop
+yay -S prime
+sudo sed -i -e '$isudo sysctl -p /etc/sysctl.conf}' -e '$s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
+sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/wps-office-*
+sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop
 
 echo -e '\e[32m=====> Patches\e[m
 Now, apply patches in patches directory to screenfetch and mojave-theme'

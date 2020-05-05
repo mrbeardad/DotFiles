@@ -1,0 +1,3 @@
+set winsplit=top_big
+set ignorecase
+map a i

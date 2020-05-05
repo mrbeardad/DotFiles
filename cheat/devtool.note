@@ -11,7 +11,7 @@
 ▪指定inclide目录：-I
 ▪指定lib目录：-L -lxxx（库名省略lib、.a、.so）
 ▪GPROF剖析：-pg（最好也加下述参数）
-▪调试：-Og  -g  -fno-inline
+▪调试：-Og  -g3  -fno-inline
 ▪指定机器：-m32  -m64
 ▪指定程序规模：-mcmodel=medium/large
 代码数据段默认32位跳转
@@ -19,47 +19,53 @@
 ▪报错： -Werror  -Wall  -Wextra -Wconversion -Wfloat-equal
 
 
-●gdb  <exec-file> <core-dump> PID
+●gdb  <exec-file> <core-dump> <PID>
 ▪coredump设置
     ulimit -c unlimited
-    echo '/path/to/coredir/core.%e.%p' > /proc/sys/kernel/core_pattern
+    echo '/path/to/coredir/core.%e.%p' | sudo tee /proc/sys/kernel/core_pattern
 ▪断点：
     b/break     ：<func>，<linenum>，<if CONDITION>，*<addr>
-    w/watch     ：<value>
+    tb/tbreak   ：<func>，<linenum>
+    condition   ：<break id> <expr>
+    w/watch     ：<expr>
     catch       ：syscall|signal|exception
-    d/delete
-    disable
-    enable
+    d/delete    ：<break id>
+    ignore      ：<break id> <N>
+    disable     ：<break id>
+    enable      ：<break id>
     info b
     save b FILE
     source FILE
 ▪运行：
     set|show    ：args|path|env
-    r/run       ：<args>
+    r/run       ：<shell-like-cmd>
     c/continue
     k/kill
     q/quit
-▪调试：
+▪跟踪：
     s/step      ：<N>
     n/next      ：<N>
     u/until     ：<line-num>
-    finish
+    f/inish
     return      ：<ret-val>
     bt
-    f/frame     ：<frame-num>
-▪调试子进程：
-    set follow-fork-mode child
-▪调试多线程：
-    i thread
-    thread <thread-num>
+    frame
 ▪打印：
     i locals
     p/print     ：<val>，<expr>，"%s",addr
     whatis      ：<value>
     display     ：每次单步后打印变量
-▪界面：
+▪代码：
     la/layout   ：src，asm，reg，sp
-    l/list      ：lineno，funcname
+    l/list      ：<lineno>，<funcname>
+    update
+    search      ：{regexpr}
+    reverse-search ：{regexp}
+▪调试子进程：
+    set follow-fork-mode child
+▪调试多线程：
+    i thread
+    thread <thread-num>
 
 ●lldb <exe> [-c <core>] [-p <pid>]
 ▪断点：
@@ -126,12 +132,16 @@
 ▪快捷键：prefix设为Alt-w
     d(卸离)，D(选择卸离)，:(命令模式)，shift+鼠标(选取)
     ▪window：
-    c(创建)，&(关闭)，,(重名win)，.(重编号)
-    ▪切换windows：
-    p/n(前后)，0~9(编号)，f(搜索)，w(选择)
+        c(创建)，&(关闭)，,(重名win)，.(重编号)
+    ▪windows：
+        p/n(前后)，0~9(编号)，f(搜索)，w(选择)
     ▪pane：
-    "(sp)，%(vs)，x(关闭)，z(最大化)，
-    !(新窗口打开)，q(显示编号并切换)
+        "(sp)，%(vs)，x(关闭)，z(最大化)，
+        !(新窗口打开)，q(显示编号并切换)
+        <c-o>(交换pane)
+    ▪自定义：
+        t(切换状态栏)
+        h(htop)
 ▪插件：tmux-resurrect(备份快照)
 S：保存
 R：恢复
@@ -262,6 +272,9 @@ gmv
 
 ●git restore <path>
 grs(回溯W)，grst(撤销S)
+●git reset <commit>
+grh
+grhh 完全回溯，不保留撤销commit的改动
 
 ●git status
 gst，gss(左W右S)
