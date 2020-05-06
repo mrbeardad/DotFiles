@@ -18,8 +18,8 @@ function ssh_cfg() {
 #配置zsh
 function zsh_cfg() {
     #下载zsh相关包
-    yay -S powerline-fonts autojump oh-my-zsh-git
-    # yay -S zsh zsh-syntax-highlighting zsh-autosuggestions 
+    yay -S autojump oh-my-zsh-git
+    # yay -S zsh zsh-syntax-highlighting zsh-autosuggestions powerline-fonts 
 
     # 安装.zshrc
     cp -v zsh/zshrc ~/.zshrc
@@ -61,7 +61,6 @@ function nvim_cfg() {
     if [[ ! -d ~/.SpaceVim.d/UltiSnips ]] ;then
         mkdir ~/.SpaceVim.d/UltiSnips
     fi
-    cp -v ~/.SpaceVim/custom/cpp.snippets ~/.SpaceVim.d/UltiSnips
     sudo cp -v bin/vim-quickrun.sh /opt/bin
     sudo cp -v bin/alacritty-neovim.sh /opt/bin
 }
@@ -88,8 +87,8 @@ function extra_cfg() {
     cp -v gdb/cgdbrc ~/.cgdb
 
     #百度网盘，QQ，网易云音乐，搜狗拼音，WPS
-    yay -S baidunetdisk-bin deepin.com.qq.office papper-flash flashplugin vlc netease-cloud-music wps-office ttf-wps-fonts flameshot google-chrome alacritty fcitx-google-pinyin fcitx-im fcitx-configtool fcitx-sinks
-    #fcitx-sogoupinyin fcitx-im fcitx-configtool fcitx-skins pinyin-completion gnome-terminal-fedora 
+    yay -S baidunetdisk-bin deepin.com.qq.office papper-flash flashplugin vlc netease-cloud-music wps-office ttf-wps-fonts flameshot google-chrome alacritty fcitx-google-pinyin fcitx-im fcitx-configtool fcitx-sinks gnome-terminal-fedora 
+    #fcitx-sogoupinyin fcitx-im fcitx-configtool fcitx-skins pinyin-completion 
 
     mkdir ~/.config/alacritty
     cp -v alacritty/alacritty.yml ~/.config/alacritty

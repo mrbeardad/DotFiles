@@ -326,8 +326,9 @@ gm，gmt，gma
 grb
 grba，grbs，grbc
 ▪例：
-git rebase <主branch>：本分支变基到<branch>
+git rebase <主branch>   ：本分支变基到<branch>
 git rebase <主branch> <被branch>
+git rebase -i HEAD~n    ：压缩前n次commit
 
 ●git clone URL  <Dirname> [--depth=1]
 
@@ -361,7 +362,7 @@ git push <remote> :refs/tags/tagname
 ●git stash
 gsta，gstall(包括untraced)，gstp，gstl
 
-●git cherry-pick <commit>：复制(合并)目标commit到当前分支
+●git cherry-pick <commit>：复制(合并)目标commit相对其前一次的修改到当前分支，
 gcp，gcpa，gcpc
 
 ●git bundle create <targetfile> HEAD <branch>
