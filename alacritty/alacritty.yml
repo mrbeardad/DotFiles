@@ -74,7 +74,7 @@ colors:
 
     # Bright colors
     bright:
-        black:   '0x767676'
+        black:   '0x585858'
         red:     '0xff6e67'
         green:   '0x5af78e'
         yellow:  '0xf4f99d'
@@ -95,7 +95,7 @@ colors:
         blue:    '0x4d5b86'
         magenta: '0xff46b0'
         cyan:    '0x59dffc'
-        white:   '0xd7ffff'
+        white:   '0xf7ffff'
 
     # Indexed Colors
     #
