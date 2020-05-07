@@ -116,7 +116,7 @@ visual_bell:
 #         program: /bin/gst-play-1.0
 #         args: ["/usr/share/sounds/freedesktop/stereo/bell.oga"]
 
-background_opacity: 0.8
+background_opacity: 0.7
 mouse_bindings:
     - { mouse: Middle, action: PasteSelection }
 

@@ -8,6 +8,7 @@ function ssh_cfg() {
     # 添加git push <remote>需要的ssh配置
     cp -v ssh/ssh_config ~/.ssh/ssh_config
     cp -v /mnt/ASUS/backup/ssh/id_* ~/.ssh
+    cp -v /mnt/ASUS/backup/git/.gitconfig ~
 
     # 设置sshd用于连接到该主机
     sudo cp -v ssh/sshd_config /etc/ssh/sshd_config
@@ -40,29 +41,31 @@ function tmux_cfg() {
         mkdir ~/.tmux
     fi
     cp -v tmux/tmux.conf ~/.tmux
-    sudo cp -v bin/terminal-tumx.sh /opt/bin
+    sudo cp -v bin/terminal-tmux.sh /opt/bin
     yay -S tmux tmux-resurrect-git
 }
 
 #安装定制的SpaceVim for NeoVim
 function nvim_cfg() {
-    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck nerd-fonts-complete ripgrep #vim-instant-markdown vim-youcompleteme-git
+    #vim-instant-markdown vim-youcompleteme-git
+    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck ripgrep npm php markdown2ctags
+    yay -S nerd-fonts-complete
     git clone git@gitee.com:mrbeardad/SpaceVim ~/.SpaceVim
     if [[ -d ~/.config/nvim ]] ;then
         mv ~/.config/{nvim,nvim.bak}
     fi
-    ln -s ~/.local/SpaceVim ~/.config/nvim
+    ln -s ~/.SpaceVim ~/.config/nvim
+
     if [[ ! -d ~/.SpaceVim.d ]] ;then
         mkdir ~/.SpaceVim.d
     elif [[ -e ~/.SpaceVim.d/init.toml ]] ;then
         mv ~/.SpaceVim.d/init.toml{,bak}
     fi
     cp -v ~/.SpaceVim/mode/init.toml ~/.SpaceVim.d
-    if [[ ! -d ~/.SpaceVim.d/UltiSnips ]] ;then
-        mkdir ~/.SpaceVim.d/UltiSnips
-    fi
     sudo cp -v bin/vim-quickrun.sh /opt/bin
     sudo cp -v bin/alacritty-neovim.sh /opt/bin
+    sudo cp -v bin/nop.sh /opt/bin
+    sudo bash -c 'echo "export EDITOR=nvim" >> /etc/profile'
 }
 
 #安装额外的CLI工具、桌面软件、GNOME扩展
@@ -79,20 +82,24 @@ function extra_cfg() {
     sudo systemctl enable --now chfs.socket
 
     #CLI工具
-    yay -S htop iotop ncdu tldr cloc screenfetch ranger figlet cmatrix cheat dstat cppman-git clang gdb
-    cp -v gdb/gdbinit ~
+    # yay -S ncdu ranger
+    yay -S htop iotop tldr cloc screenfetch figlet cmatrix cheat dstat cppman-git clang gdb cgdb
+    cp -v gdb/gdbinit ~/.gdbinit
     if [ ! -e ~/.cgdb ] ;then
         mkdir ~/.cgdb
     fi
     cp -v gdb/cgdbrc ~/.cgdb
 
     #百度网盘，QQ，网易云音乐，搜狗拼音，WPS
-    yay -S baidunetdisk-bin deepin.com.qq.office papper-flash flashplugin vlc netease-cloud-music wps-office ttf-wps-fonts flameshot google-chrome alacritty fcitx-google-pinyin fcitx-im fcitx-configtool fcitx-sinks gnome-terminal-fedora 
-    #fcitx-sogoupinyin fcitx-im fcitx-configtool fcitx-skins pinyin-completion 
+    yay -S baidunetdisk-bin deepin.com.qq.office pepper-flash flashplugin vlc netease-cloud-music wps-office ttf-wps-fonts flameshot google-chrome alacritty fcitx-googlepinyin fcitx-im fcitx-configtool fcitx-skins gnome-terminal-fedora
+    # octave gimp
 
     mkdir ~/.config/alacritty
     cp -v alacritty/alacritty.yml ~/.config/alacritty
 
+    if [[ ! -d ~/.config/google-chrome ]] ;then
+        mkdir ~/.config/google-chrome
+    fi
     cd ~/.config/google-chrome/
     unzip /mnt/ASUS/packages/google-access-helper-2.3.0.zip
     cd -
@@ -106,7 +113,8 @@ net.ipv6.conf.default.disable_ipv6 =1
 net.ipv6.conf.lo.disable_ipv6 =1" >> /etc/sysctl.conf'
 
     #GNOME扩展
-    yay -S gtk-theme-macos-mojave sweet-theme-git adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git ttf-google-fonts-git adobe-source-han-sans-cn-fonts gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git
+    yay -S sweet-theme-git breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git  gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git gnome-shell-extension-dash-to-dock-git gnome-shell-extension-dash-to-panel-git gnome-shell-extension-lockkeys-git adobe-source-han-sans-cn-fonts
+    # yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin ttf-google-fonts-git 
 }
 
 
@@ -114,6 +122,7 @@ net.ipv6.conf.lo.disable_ipv6 =1" >> /etc/sysctl.conf'
 
 # 系统配置
 timedatectl set-ntp 1 && timedatectl set-local-rtc 1
+sudo hwclock -w
 sudo systemctl disable --now bluetooth.service
 sudo systemctl disable --now org.cups.cupsd.service
 sudo systemctl enable --now fstrim.timer
@@ -122,23 +131,22 @@ sudo sed -i '/^PercentageLow=/s/=.*$/=15/; /^PercentageCritical=/s/=.*$/=10/; /^
 sudo bash -c "mv /usr/local/* /opt && rmdir /usr/local && ln -s /opt /usr/local"
 
 # pacman配置
-sudo bash -c 'echo "Server = https://mirrors.cloud.tencent.com/manjaro/stable/$repo/$arch"
- > /etc/pacman.d/mirrorlist'
+sudo bash -c 'echo "Server = https://mirrors.cloud.tencent.com/manjaro/stable/\$repo/\$arch" > /etc/pacman.d/mirrorlist'
 sudo cp /etc/pacman.d/mirrorlist{,.bak} # 有时候更新系统会把这个也更新了，备份一下
 sudo sed -i "/#Color/s/#//" /etc/pacman.conf
 sudo bash -c 'echo "[archlinuxcn]
 Server = https://mirrors.cloud.tencent.com/archlinuxcn/\$arch" >> /etc/pacman.conf'
 sudo pacman -Sy archlinuxcn-keyring
 sudo pacman -Su
-pacman -S yay aria2 expac base-devel
+sudo pacman -S yay aria2 uget expac base-devel
 sudo systemctl enable --now paccache.timer
 
 # grub配置
-sudo cp grub/01_users /etc/grub.d
-sudo cp grub/user.cfg /boot/grub
+sudo cp -v grub/01_users /etc/grub.d
+sudo cp -v grub/user.cfg /boot/grub
 sudo sed -i '/--class os/s/--class os/--class os --unrestricted /' /etc/grub.d/{10_linux,30_os-prober}
 yay -S grub-theme-manjaro
-sudo cp /mnt/ASUS/backup/grub-background/DNA.png /usr/share/grub/themes/manjaro/background.png
+sudo cp -v /mnt/ASUS/backup/grub-background/DNA.png /usr/share/grub/themes/manjaro/background.png
 
 ssh_cfg
 zsh_cfg
@@ -147,11 +155,11 @@ tmux_cfg
 extra_cfg
 
 # 修改desktop文件
-cp -v /usr/share/applications/{google-chrome,wps-office-*,nvim,Alacritty}.desktop ~/.local/share/applications
-sed -i '/Exec=/s/=.*$/=alacritty -e terminal-tmux.sh /' ~/.local/share/applications/Alacritty
-sed -i '/Exec=/s/=.*$/=alacritty -e alacritty-neovim.sh/; /Terminal=/s/true/false/' ~/.local/share/applications/nvim.desktop
 yay -S prime
-sudo sed -i -e '$isudo sysctl -p /etc/sysctl.conf}' -e '$s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
+cp -v /usr/share/applications/{google-chrome,wps-office-*,nvim,Alacritty}.desktop ~/.local/share/applications
+sed -i '/^Exec=/s/=.*$/=alacritty -e terminal-tmux.sh/' ~/.local/share/applications/Alacritty.desktop
+sed -i '/^Exec=/s/=.*$/=alacritty -e alacritty-neovim.sh/; /Terminal=/s/true/false/' ~/.local/share/applications/nvim.desktop
+sudo sed -i -e '$isudo sysctl -p /etc/sysctl.conf' -e '$s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
 sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/wps-office-*
 sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop
 
