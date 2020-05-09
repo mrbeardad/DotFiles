@@ -1,46 +1,45 @@
 # 写在前面
-Arch Linux早换成Manjaro了，所以没测试过前者，所以朋友自己装啦o（0.0）o
+ArchLinux早换成Manjaro了，所以没测试过前者，所以朋友，看源码自己装啦:smile:
 
 [README-en.md](README-en.md)  
 [学习资源](learning-resource.md)  
 ***
 ![ocean misses dreams and night](ocean-3605547_1920.jpg)
 
-
 # 安装
-## Manjaro
-提供了*shell*脚本用于安装配置与一些软件包  
+> 提供了shell脚本用于安装配置
 
-首先进入克隆的本仓库目录
-```
+1. 首先进入克隆的本仓库目录
+```shell
 $ cd DotFiles
 ```
-然后执行
-```
+2. 然后执行
+```shell
 $ ./init.sh
 ```
-这只脚本会对我的Manjaro进行各种配置，包括pacman, ssh, tmux, zsh, vim等等；  
-此外，还会下载各种软件包，如TIM, WPS，和一些命令行工具等等；  当然还有各种gnome插件和主题。
-
-***
 
 # 详细
 
-#### pacman
-* 下载yay(AUR助手)和一些其他工具
+## pacman
 * 修改源为国内源，并添加archlinuxcn源
+* 下载yay(AUR助手)和一些其他工具
+* 下载基础开发包
+* 更新系统
 
-Ps: Tencent mirror NB!
-***
-
-#### zsh
+## zsh
 * 下载**oh-my-zsh**并修改其提供的默认配置
-* 下载一些很有用的zsh插件
-* 安装仓库里的zsh-theme，其中agnoster-time是由原**oh-my-zsh**主题修改而来
+### 使用方法：
+* <kbd>Esc</kbd>或<kbd>Ctrl</kbd>+<kbd>[</kbd>：进入vi-mode，可以更方便的修改命令
+* <kbd>v</kbd>：在vi-mode中，按快捷键v可打开`$EDITOR`编辑命令
+* `x`：该命令可以智能解压各种压缩包
+* `j`：该命令会根据你`cd`的频率，智能、模糊化地跳转到目标目录  
+> 例如：你去过目录`DotFiles`，你执行
+> ``````shell
+> $ j do
+> ``````
+> 就可能直接跳转到`DotFiles`目录，当然如果之前有去过其他名字含`do`的目录就会跳转到频率高的目录
 
-***
-
-#### tmux
+## tmux
 * 下载tmux，与一个小插件用于保存与回复会话
 
 * **使用简述：**

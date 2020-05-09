@@ -20,7 +20,7 @@ function ssh_cfg() {
 function zsh_cfg() {
     #下载zsh相关包
     yay -S autojump oh-my-zsh-git
-    # yay -S zsh zsh-syntax-highlighting zsh-autosuggestions powerline-fonts 
+    # yay -S zsh zsh-syntax-highlighting zsh-autosuggestions powerline-fonts
 
     # 安装.zshrc
     cp -v zsh/zshrc ~/.zshrc
@@ -47,8 +47,8 @@ function tmux_cfg() {
 
 #安装定制的SpaceVim for NeoVim
 function nvim_cfg() {
-    #vim-instant-markdown vim-youcompleteme-git
-    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck ripgrep npm php markdown2ctags
+    # yay -S vim-youcompleteme-git
+    yay -S neovim xsel python-pynvim cmake ctags global cppcheck ripgrep npm php markdown2ctags
     yay -S nerd-fonts-complete
     git clone git@gitee.com:mrbeardad/SpaceVim ~/.SpaceVim
     if [[ -d ~/.config/nvim ]] ;then
@@ -65,7 +65,6 @@ function nvim_cfg() {
     sudo cp -v bin/vim-quickrun.sh /opt/bin
     sudo cp -v bin/alacritty-neovim.sh /opt/bin
     sudo cp -v bin/nop.sh /opt/bin
-    sudo bash -c 'echo "export EDITOR=nvim" >> /etc/profile'
 }
 
 #安装额外的CLI工具、桌面软件、GNOME扩展
@@ -92,7 +91,7 @@ function extra_cfg() {
 
     #百度网盘，QQ，网易云音乐，搜狗拼音，WPS
     yay -S baidunetdisk-bin deepin.com.qq.office pepper-flash flashplugin vlc netease-cloud-music wps-office ttf-wps-fonts flameshot google-chrome alacritty fcitx-googlepinyin fcitx-im fcitx-configtool fcitx-skins gnome-terminal-fedora
-    # octave gimp
+    # yay -S octave gimp
 
     mkdir ~/.config/alacritty
     cp -v alacritty/alacritty.yml ~/.config/alacritty
@@ -104,7 +103,7 @@ function extra_cfg() {
     unzip /mnt/ASUS/packages/google-access-helper-2.3.0.zip
     cd -
 
-    #搜狗拼音配置
+    #fcitx输入法配置
     echo -e 'export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS="@im=fcitx"' > ~/.xprofile
 
     #QQ配置，禁用ipv6，否则不显示图片
@@ -114,11 +113,11 @@ net.ipv6.conf.lo.disable_ipv6 =1" >> /etc/sysctl.conf'
 
     #GNOME扩展
     yay -S sweet-theme-git breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git  gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git gnome-shell-extension-dash-to-dock-git gnome-shell-extension-dash-to-panel-git gnome-shell-extension-lockkeys-git adobe-source-han-sans-cn-fonts
-    # yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin ttf-google-fonts-git 
+    # yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin ttf-google-fonts-git
 }
 
 
-# function main() { 安装完后就改个sudo & fstab配置，其他啥也不用动
+# function main() { 安装完后就改个sudoer & fstab配置，其他啥也不用动
 
 # 系统配置
 timedatectl set-ntp 1 && timedatectl set-local-rtc 1
@@ -128,14 +127,17 @@ sudo systemctl disable --now org.cups.cupsd.service
 sudo systemctl enable --now fstrim.timer
 sudo sed -i '/\[Journal\]/a\SystemMaxUse=100M' /etc/systemd/journald.conf
 sudo sed -i '/^PercentageLow=/s/=.*$/=15/; /^PercentageCritical=/s/=.*$/=10/; /^PercentageAction=/s/=.*$/=3/' /etc/UPower/UPower.conf
-sudo bash -c "mv /usr/local/* /opt && rmdir /usr/local && ln -s /opt /usr/local"
+if [[ ! -L /usr/local ]] ;then
+    sudo bash -c "mv /usr/local/* /opt && rmdir /usr/local && ln -s /opt /usr/local"
+fi
 
 # pacman配置
 sudo bash -c 'echo "Server = https://mirrors.cloud.tencent.com/manjaro/stable/\$repo/\$arch" > /etc/pacman.d/mirrorlist'
 sudo cp /etc/pacman.d/mirrorlist{,.bak} # 有时候更新系统会把这个也更新了，备份一下
 sudo sed -i "/#Color/s/#//" /etc/pacman.conf
-sudo bash -c 'echo "[archlinuxcn]
-Server = https://mirrors.cloud.tencent.com/archlinuxcn/\$arch" >> /etc/pacman.conf'
+if grep -v archlinuxcn /etc/pacman.conf ; then
+    sudo bash -c 'echo -e "[archlinuxcn]\nServer = https://mirrors.cloud.tencent.com/archlinuxcn/\$arch" >> /etc/pacman.conf'
+fi
 sudo pacman -Sy archlinuxcn-keyring
 sudo pacman -Su
 sudo pacman -S yay aria2 uget expac base-devel
@@ -144,7 +146,9 @@ sudo systemctl enable --now paccache.timer
 # grub配置
 sudo cp -v grub/01_users /etc/grub.d
 sudo cp -v grub/user.cfg /boot/grub
-sudo sed -i '/--class os/s/--class os/--class os --unrestricted /' /etc/grub.d/{10_linux,30_os-prober}
+if grep -v '--unrestricted' /etc/grub.d/{10_linux,30_os-prober} ;then
+    sudo sed -i '/--class os/s/--class os/--class os --unrestricted /' /etc/grub.d/{10_linux,30_os-prober}
+fi
 yay -S grub-theme-manjaro
 sudo cp -v /mnt/ASUS/backup/grub-background/DNA.png /usr/share/grub/themes/manjaro/background.png
 
