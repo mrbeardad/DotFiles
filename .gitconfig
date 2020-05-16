@@ -1,0 +1,9 @@
+[user]
+	email = 960720535@qq.com
+	name = Heachen Bear
+[core]
+	editor = nvim
+[merge]
+	tool = vimdiff
+[mergetool "vimdiff"]
+	path = nvim

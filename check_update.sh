@@ -1,9 +1,18 @@
 #!/bin/bash
 
-cp -i -u ~/.cheat/* cheat
-cp -i -u ~/.zshrc zsh/zshrc
-cp -i -u ~/.tmux/tmux.conf tmux/tmux.conf
-cp -i -u ~/.config/alacritty/alacritty.yml alacritty/alacritty.yml
-cp -i -u ~/.gdbinit gdb/gdbinit
-cp -i -u ~/.cgdb/cgdbrc gdb
+if [[ "$1" == "-f" ]] ;then
+    option="-f"
+elif [[ "$1" == "-n" ]] ;then
+    option="-n"
+else
+    option="-i"
+fi
+
+cp $option -vu ~/.cheat/*.md cheat
+cp $option -vu ~/.gdbinit gdb/gdbinit
+cp $option -vu ~/.cgdb/cgdbrc gdb
+cp $option -vru ~/.local/share/fcitx5/rime/* rime-dict
+cp $option -vu ~/.tmux/tmux.conf tmux
+cp $option -vu ~/.config/xfce4/terminal/terminalrc xfce4-terminal
+cp $option -vu ~/.zshrc zsh/zshrc
 

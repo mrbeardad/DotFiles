@@ -109,8 +109,8 @@ colors:
 
 visual_bell:
     animation: EaseOut
-    duration: 300
-    color: "#005f5f"
+    duration: 100
+    color: "#585858"
 # bell:
 #     command:
 #         program: /bin/gst-play-1.0

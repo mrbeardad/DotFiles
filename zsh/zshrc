@@ -68,7 +68,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(git cp extract autojump)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git cp history extract autojump vi-mode)
+plugins=(git cp history extract autojump tmux vi-mode thefuck)
 
 
 # User configuration
@@ -105,6 +105,7 @@ fi
 
 source $ZSH/oh-my-zsh.sh
 
+# 实用的别名
 alias l='ls -lah  --time-style="+%Y %m-%d %H:%M:%S "'
 alias l.='ls -ladh  --time-style="+%Y %m-%d %H:%M:%S " .*'
 alias ll='ls -lh  --time-style="+%Y %m-%d %H:%M:%S "'
@@ -118,10 +119,10 @@ alias pstree='pstree -Uup'
 alias free='free -wh'
 alias vmstat='vmstat -w'
 alias ip='ip -c'
-alias tmuxn='tmux new -s'
-alias tmuxa='tmux a'
 alias expactf='expac --timefmt="%Y-%m-%d %T" "%l\t%n" | sort'
 alias gdb='gdb --tui'
+alias dif='diff -Naur'
+
 # zsh中git插件的补充
 alias gmv='git mv'
 alias grst='git restore --staged'
@@ -136,38 +137,11 @@ alias gct='git checkout --track'
 alias glr='git ls-remote'
 alias gpt='git push --tags'
 alias gfp='git format-patch'
+alias gmc='git merge --continue'
 
 function egdb() { emacs --eval "(gdb \"gdb --annotate=3 -i=mi $*\")" &;}
-function see()
-{
-    if [[ "$1" == "--help" ]] ;then
-        echo -e "\e[32mUsages\e[m:
-        \e[36msee -l\e[m                ：list all available entries
-        \e[36msee {entry}\e[m           ：display the specific entry
-        \e[36msee -e {entry} [file]\e[m ：display the specific exact entry in specific file in ~/.cheat"
-    elif [[ "$1" == "-l" ]] ;then
-        if [[ -n "$2" ]] ;then
-            grep -iE '●|○' ~/.cheat/$2.note
-        else
-            grep -iE '●|○' ~/.cheat/*
-        fi
-    elif [[ "$1" == "-e" ]] ;then
-        if [[ -n "$3" ]] ;then
-            sed -rn "/(●|○)($2)[\W]*$/I,/^$/p" ~/.cheat/$3.note
-        else
-            sed -rn "/(●|○)($2)[\W]*$/I,/^$/p" ~/.cheat/*
-        fi
-    else
-        if [[ -n "$2" ]] ;then
-            sed -rn "/(●|○).*($1)/I,/^$/p" ~/.cheat/$2.note
-        else
-            sed -rn "/(●|○).*($1)/I,/^$/p" ~/.cheat/*
-        fi
-    fi
-}
 
-function man()
-{
+function man() {
         LESS_TERMCAP_md=$'\e[01;34m' \
         LESS_TERMCAP_me=$'\e[0m' \
         LESS_TERMCAP_se=$'\e[0m' \
@@ -178,6 +152,22 @@ function man()
 }
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#a8a8a8"
+
 MODE_INDICATOR="%{$fg_bold[red]%}<%{$fg[yellow]%}<%{$fg[green]%}<%{$fg[cyan]%}<%{$fg[blue]%}<%{$reset_color%}"
+bindkey -M vicmd '^a' beginning-of-line
+bindkey -M vicmd '^e' end-of-line
+bindkey -M vicmd "^[[1;5C" forward-word
+bindkey -M vicmd "^[[1;5D" backward-word
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
+bindkey '^U' kill-whole-line
+bindkey '^K' kill-line
+bindkey '^Y' yank
+bindkey '^[OA' up-line-or-beginning-search
+bindkey '^[OB' down-line-or-beginning-search
+
+
+eval $(thefuck --alias)

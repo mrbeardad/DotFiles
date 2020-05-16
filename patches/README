@@ -1,5 +1,0 @@
-The AUR gtk-theme-macos-mojave will occur some error.
-The reason is that the author has some clerical errors in these two documents in /usr/share/themes/Mojave\ Light/gtk-3.0/gtk{,-dark}.css
-run in /usr/share/themes/Mojave\ Light/gtk-3.0/:
-$ patch -p6 < /path/to/gtk.css.patch
-$ patch -p6 < /path/to/gtk-dark.css.patch
