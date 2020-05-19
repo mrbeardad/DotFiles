@@ -21,8 +21,8 @@
     * `<space>cp`       ：切换该段落注释状态
     * `<space>cP`       ：注释该段落
 * 补全与结对符
-    * `<s-tab>`         ：ycm补全
-    * `<m-\>`           ：ultisnips补全
+    * `<s-tab>`         ：ycm补全，不用`<cr>`因为与auto-pair冲突，不然在c++初始化器`{}`中按`<cr>`会被auto-pair当作函数体然后换行
+    * `<m-\>`           ：ultisnips补全，`<M-M>`下一个，`<M-B>`上一个
     * `<m-e>`           ：auto-pair快速包围
     > 以下为[surround](https://github.com/tpope/vim-surround)，后接结对符，右括号不加空格
     * `cs`              ：改变surround
@@ -147,7 +147,8 @@
 * Defx
     * `<left>`          ：关闭目录
     * `<right>`         ：展开目录
-    * `p`               ：预览文件
+    * `p`               ：预览文件，利用Guake与ranger
+    * `f`               ：搜索文件，利用Leaderf搜索光标位置的目录
     * `yy`              ：复制文件路径
     * `yY`              ：复制文件内容
     * `K`               ：新建目录
@@ -181,7 +182,8 @@
     `<c-right>`
     `<c-left>`
     `<c-up>`
-    `<c-down>`      ：切换至指定方向上的窗口
+    `<c-down>`      ：切换至指定方向上的窗口  
+    `<C-L>`         ：刷新statusline
 * `标签页`：
     * 常用命令  
     :tabe，:tabn，:tabp，:tabd  

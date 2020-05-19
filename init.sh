@@ -17,7 +17,7 @@ function system_cfg() {
     sudo sed -i '/^PercentageLow=/s/=.*$/=15/; /^PercentageCritical=/s/=.*$/=10/; /^PercentageAction=/s/=.*$/=3/' /etc/UPower/UPower.conf
 
     # 将/usr/local改为/opt的软链接，强迫症福音
-    if [[ ! -L /usr/local ]] ;then
+    if [[ -d /usr/local ]] ;then
         sudo mv /usr/local/* /opt
         sudo rmdir /usr/local
         sudo ln -s /opt /usr/local
@@ -35,12 +35,12 @@ function pacman_cfg() {
 
     # 添加腾讯源的archlinuxcn源
     if ! grep -q archlinuxcn /etc/pacman.conf ; then
-        echo -e "[archlinuxcn]\nServer = https://mirrors.cloud.tencent.com/archlinuxcn/\$arch" | sudo tee -a /etc/pacman.conf
+        echo -e '[archlinuxcn]\nServer = https://mirrors.cloud.tencent.com/archlinuxcn/$arch' | sudo tee -a /etc/pacman.conf
     fi
-    sudo pacman -Sy archlinuxcn-keyring
+    sudo pacman -S archlinuxcn-keyring
 
     # 更新系统，并安装一些下载工具和开发工具
-    sudo pacman -Su
+    sudo pacman -Syyu
     sudo pacman -S yay aria2 uget expac base-devel clang gdb cgdb
 
     # 启动定时清理软件包服务
@@ -80,7 +80,7 @@ function ssh_cfg() {
 
 function zsh_cfg() {
     # 安装插件配置
-    yay -S autojump oh-my-zsh-git powerline-fonts
+    yay -S autojump oh-my-zsh-git powerline-fonts thefuck
     # yay -S zsh zsh-syntax-highlighting zsh-autosuggestions
 
     # 安装zshrc
@@ -92,7 +92,7 @@ function zsh_cfg() {
     # 安装zsh主题
     sudo cp -v zsh/*.zsh-theme /usr/share/oh-my-zsh/themes/
 
-    # 设置zsh为默认shell
+    # 设置zsh为默认shell，需要输入密码
     chsh -s /bin/zsh
 }
 
@@ -101,7 +101,7 @@ function tmux_cfg() {
     # 下载tmux和一个保存会话的插件
     yay -S tmux tmux-resurrect-git
 
-    # 安装tmux.conf
+    # 安装tmux.conf，tmux默认并只读取~/.tmux.conf，不过我在bin/terminal-tmux.sh中我设置了读取该位置
     if [[ ! -e ~/.tmux ]] ;then
         mkdir ~/.tmux
     fi
@@ -114,7 +114,7 @@ function tmux_cfg() {
 
 function nvim_cfg() {
     # 安装neovim配置需要的所有软件包
-    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck ripgrep npm php markdown2ctags
+    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck  ripgrep npm php markdown2ctags
     # yay -S vim-youcompleteme-git
 
     # 安装neovim配置
@@ -123,7 +123,9 @@ function nvim_cfg() {
     fi
     git clone https://gitee.com/mrbeardad/SpaceVim ~/.SpaceVim
 
-    if [[ -e ~/.config/nvim ]] ;then
+    if [[ ! -d ~/.config ]] ;then
+        mkdir ~/.config
+    elif [[ -e ~/.config/nvim ]] ;then
         mv ~/.config/nvim{,.bak}
     fi
     ln -s ~/.SpaceVim ~/.config/nvim
@@ -134,7 +136,10 @@ function nvim_cfg() {
         mv ~/.SpaceVim.d/init.toml{,bak}
     fi
     cp -v ~/.SpaceVim/mode/init.toml ~/.SpaceVim.d
-    sudo g++ -O3 -o /opt/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
+    if [[ ! -d ~/.local/bin ]] ;then
+        mkdir -p ~/.local/bin
+    fi
+    sudo g++ -O3 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
 }
 
 function rime_cfg() {
@@ -167,8 +172,7 @@ function extra_cfg() {
     sudo chmod 755 chfs
     cd -
     sudo cp -v chfs/chfs.{service,socket} /etc/systemd/system/
-    sudo mkdir /srv/chfs
-    sudo chmod 777 /srv/chfs
+    sudo mkdir --mode=777 /srv/chfs
     sudo systemctl daemon-reload
     sudo systemctl enable --now chfs.socket
 
@@ -193,10 +197,10 @@ function extra_cfg() {
         mkdir -p ~/.local/share/fonts/NerdCode
     fi
     cd ~/.local/share/fonts/NerdCode
-    tar -Jxf ${dotfiles_dir}/fonts/NerdCode.tar.xz
+    tar -Jxvf ${dotfiles_dir}/fonts/NerdCode.tar.xz
     mkfontdir
     mkfontscale
-    fc-cache -f
+    fc-cache -fv
     cd -
 
     # gdb与cgdb配置

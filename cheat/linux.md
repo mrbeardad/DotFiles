@@ -490,7 +490,7 @@
         * lcase      ：小写
         * ucase      ：大写
         * notrunc    ：不截断，覆盖
-* dd -if=*manjaro.iso* of=*usb-dev* bs=8M oflag=sync status=progress
+* dd if=*manjaro.iso* of=*usb-dev* bs=8M oflag=sync status=progress
 <!-- -->
 
 * losetup */dev/loop0*  *loopfile*
@@ -1175,6 +1175,7 @@
 * pacman
     * 更新数据库
         * -Sy：同步源
+            > 传入两次--refresh或-y将强制更新所有软件包列表，即使系统认为它们已经是最新。每次修改镜像之后都应该使用pacman -Syyu。
     * 查询软件包
         * -Ss：模糊搜索远程数据库
         * -Si：从远程数据库获取目的包的详细信息
@@ -1207,3 +1208,9 @@
         * pacman  -Sy
 <!-- -->
 
+* FONT
+    * mkfontdir
+    * mkfontscale
+    * fc-cache -f
+    > 以上三条命令为字体安装三部曲
+    * fc-list       ：字体缓存查看

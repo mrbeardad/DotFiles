@@ -20,7 +20,7 @@
 * * *
 
 # 笔记
-* [学习资源](learning-resource.md)
+* [学习资源](notes/learning-resource.md)
     > \[注]:该笔记很久没更新了，不过基础知识应该不会过期嘛:smile:  
     > 就怕连接过期了:joy:
 * [ANSI终端颜色](cheat/ansi.md)
@@ -37,7 +37,7 @@
     > \[注]:包括许多基础命令与概念
 * [Markdown概念](cheat/markdown.md)
 * [小鹤双拼](cheat/double_pinyin.md)
-* [Manjaro安装](manjaro.md)
+* [Manjaro安装](notes/manjaro.md)
 
 * **注：仓库中bin/{see,say}两个命令用于终端快速查阅笔记与修改笔记，`see -h ; say -h`了解详情**
     > 笔记位于`~/.cheat/*.md`，一级列表开头到`<!-- -->`结束为一条entry  
@@ -167,8 +167,8 @@ $ ./init.sh
         * <kbd>h</kbd>：打开htop
         * <kbd>r</kbd>：打开ranger
         * <kbd>n</kbd>：打开ncdu
-        > PS: 现在为更喜欢使用 <a title="下拉式终端，与gnome集成较好">Guake</a>
-        来执行这三个家伙，有时分屏也不便时也会把Guake拉下来用用  
+        > PS: 现在为更喜欢使用 <a href=## title="一个下拉式终端">Guake</a>
+        > 来执行这三个家伙，有时分屏也不便时也会把Guake拉下来用用  
         > 你可以设置gnome的快捷键命令为`guake -e htop --show CMD`来使用
 
 ## alacritty
@@ -183,7 +183,7 @@ $ ./init.sh
 现在分析一波[xfce4-terminal](https://github.com/xfce-mirror/xfce4-terminal)与[alacritty](https://github.com/alacritty/alacritty)的区别：
 * alacritty优点：
     * GPU加速是它的卖点，最快的终端模拟器，莫的之一
-    * 可以取消 <a title="就是窗口顶部有开关、放大缩小的哪个bar">顶栏</a>
+    * 可以取消 <a href=## title="就是窗口顶部有开关、放大缩小的哪个bar">顶栏</a>
     的显示，看起来更加清爽
     * 可以对**Regular** **Bold** **Italic**三种Style使用不同字体，这是非常nice的，
     特别是在vim下开gruvbox主题就会有**Bold** Style区分，两种字体看起来特别清晰
@@ -201,7 +201,7 @@ $ ./init.sh
         还有大量大量的**emoji**字体
 
 * **综上**，为了弥补alacritty的缺点，我需要找一个基于gtk的终端模拟器。同时，为了保留其优点3，
-    我需要合并字体(fonts目录下)，以让**Bold** 与**Reguler**样式使用不同字形。故我需要在一众gtkTE中选择能够取消顶拦的。
+    我需要合并字体(fonts目录下)，以让**Bold** 与**Reguler**样式使用不同字形。故我需要在一众gtkTE中选择能够取消顶栏的。
 
 **当 ！当 ！当 ！当 ！**  
 **Xfce4-terminal**满足所有需求，童叟无欺

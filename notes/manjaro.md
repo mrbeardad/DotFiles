@@ -4,9 +4,11 @@
 * **Linux**
     ```bash
     # 注：manjaro.iso为你下载的manjaro镜像，/dev/sdb为你的移动硬盘设备
-    $ dd -if=manjaro.iso of=/dev/sdb bs=8M oflag=sync status=progress
+    $ dd if=manjaro.iso of=/dev/sdb bs=8M oflag=sync status=progress
     ```
-* **Windows**
+* **Windows**  
+    [教程](https://www.cnblogs.com/coxiseed/p/9851459.html)  
+    至于怎么获取UltraISO，，下个正版然后在网上搜注册码。。。白嫖🙈️
 
 ## 启动
 > 这对新手来说时最难的步骤吧。我第一次帮我同学装的时候因为主板型号不同，**UEFI BOIS**天差地别，

@@ -68,7 +68,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(git cp extract autojump)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git cp history extract autojump tmux vi-mode thefuck)
+plugins=(git cp history extract autojump tmux vi-mode)
 
 
 # User configuration

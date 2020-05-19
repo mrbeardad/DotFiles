@@ -17,7 +17,7 @@ function system_cfg() {
     sudo sed -i '/^PercentageLow=/s/=.*$/=15/; /^PercentageCritical=/s/=.*$/=10/; /^PercentageAction=/s/=.*$/=3/' /etc/UPower/UPower.conf
 
     # 将/usr/local改为/opt的软链接，强迫症福音
-    if [[ ! -L /usr/local ]] ;then
+    if [[ -d /usr/local ]] ;then
         sudo mv /usr/local/* /opt
         sudo rmdir /usr/local
         sudo ln -s /opt /usr/local
@@ -25,22 +25,20 @@ function system_cfg() {
 }
 
 function pacman_cfg() {
-    # 改用腾讯源
-    echo "Server = https://mirrors.cloud.tencent.com/manjaro/stable/\$repo/\$arch" | sudo tee /etc/pacman.d/mirrorlist
-    # 有时候更新系统会把mirrorlist覆盖了，备份一下，当发现下载速度奇慢无比时，检查此项
-    sudo cp /etc/pacman.d/mirrorlist{,.bak}
+    # 改用腾讯源，直接改/etc/pacman.conf而非/etc/pacman.d/mirrorlist，因为有时更新系统会覆盖后者
+    sudo sed -i '/^Include = /s/^.*$/Server = https://mirrors.cloud.tencent.com/manjaro/stable/$repo/$arch/' /etc/pacman.conf
 
     # pacman彩色输出
     sudo sed -i "/^#Color/s/#//" /etc/pacman.conf
 
     # 添加腾讯源的archlinuxcn源
     if ! grep -q archlinuxcn /etc/pacman.conf ; then
-        echo -e "[archlinuxcn]\nServer = https://mirrors.cloud.tencent.com/archlinuxcn/\$arch" | sudo tee -a /etc/pacman.conf
+        echo -e '[archlinuxcn]\nServer = https://mirrors.cloud.tencent.com/archlinuxcn/$arch' | sudo tee -a /etc/pacman.conf
     fi
-    sudo pacman -Sy archlinuxcn-keyring
+    sudo pacman -S archlinuxcn-keyring
 
     # 更新系统，并安装一些下载工具和开发工具
-    sudo pacman -Su
+    sudo pacman -Syyu
     sudo pacman -S yay aria2 uget expac base-devel clang gdb cgdb
 
     # 启动定时清理软件包服务
@@ -87,7 +85,7 @@ function ssh_cfg() {
 
 function zsh_cfg() {
     # 安装插件配置
-    yay -S autojump oh-my-zsh-git powerline-fonts
+    yay -S autojump oh-my-zsh-git powerline-fonts thefuck
     # yay -S zsh zsh-syntax-highlighting zsh-autosuggestions
 
     # 安装zshrc
@@ -99,7 +97,7 @@ function zsh_cfg() {
     # 安装zsh主题
     sudo cp -v zsh/*.zsh-theme /usr/share/oh-my-zsh/themes/
 
-    # 设置zsh为默认shell
+    # 设置zsh为默认shell，需要输入密码
     chsh -s /bin/zsh
 }
 
@@ -108,7 +106,7 @@ function tmux_cfg() {
     # 下载tmux和一个保存会话的插件
     yay -S tmux tmux-resurrect-git
 
-    # 安装tmux.conf
+    # 安装tmux.conf，tmux默认并只读取~/.tmux.conf，不过我在bin/terminal-tmux.sh中我设置了读取该位置
     if [[ ! -e ~/.tmux ]] ;then
         mkdir ~/.tmux
     fi
@@ -117,16 +115,18 @@ function tmux_cfg() {
 
 function nvim_cfg() {
     # 安装neovim配置需要的所有软件包
-    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck ripgrep npm php markdown2ctags
+    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck  ripgrep npm php markdown2ctags
     # yay -S vim-youcompleteme-git
 
     # 安装neovim配置
     if [[ -d ~/.SpaceVim ]] ;then
         mv ~/.SpaceVim{,.bak}
     fi
-    git clone git@gitee.com:mrbeardad/SpaceVim ~/.SpaceVim
+    git clone https://gitee.com/mrbeardad/SpaceVim ~/.SpaceVim
 
-    if [[ -e ~/.config/nvim ]] ;then
+    if [[ ! -d ~/.config ]] ;then
+        mkdir ~/.config
+    elif [[ -e ~/.config/nvim ]] ;then
         mv ~/.config/nvim{,.bak}
     fi
     ln -s ~/.SpaceVim ~/.config/nvim
@@ -137,7 +137,10 @@ function nvim_cfg() {
         mv ~/.SpaceVim.d/init.toml{,bak}
     fi
     cp -v ~/.SpaceVim/mode/init.toml ~/.SpaceVim.d
-    sudo g++ -O3 -o /opt/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
+    if [[ ! -d ~/.local/bin ]] ;then
+        mkdir -p ~/.local/bin
+    fi
+    sudo g++ -O3 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
 }
 
 function rime_cfg() {
@@ -170,8 +173,7 @@ function extra_cfg() {
     sudo chmod 755 chfs
     cd -
     sudo cp -v chfs/chfs.{service,socket} /etc/systemd/system/
-    sudo mkdir /srv/chfs
-    sudo chmod 777 /srv/chfs
+    sudo mkdir --mode=777 /srv/chfs
     sudo systemctl daemon-reload
     sudo systemctl enable --now chfs.socket
 
@@ -181,7 +183,7 @@ function extra_cfg() {
 
     # 桌面应用
     yay -S deepin.com.qq.office pepper-flash flashplugin vlc netease-cloud-music wps-office ttf-wps-fonts \
-        flameshot google-chrome guake xfce4-terminal alacritty
+        flameshot google-chrome guake xfce4-terminal
     # yay -S octave gimp
 
     # GNOME扩展
@@ -191,15 +193,16 @@ function extra_cfg() {
     # yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin gnome-shell-extension-dash-to-dock-git
 
     # 安装字体
-    yay -S adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypexels unicode-emoji nerd-fonts-source-code-pro nerd-fonts-space-mono ttf-blex-nerd-font-git
+    yay -S adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypexels unicode-emoji
+    # yay -S nerd-fonts-compelte
     if [[ ! -d ~/.local/share/fonts/NerdCode ]] ;then
         mkdir -p ~/.local/share/fonts/NerdCode
     fi
     cd ~/.local/share/fonts/NerdCode
-    tar -Jxf ${dotfiles_dir}/fonts/NerdCode.tar.xz
+    tar -Jxvf ${dotfiles_dir}/fonts/NerdCode.tar.xz
     mkfontdir
     mkfontscale
-    fc-cache -f
+    fc-cache -fv
     cd -
 
     # gdb与cgdb配置
@@ -255,6 +258,16 @@ function bin_cfg() {
     sudo sed -i -e '$isudo sysctl -p /etc/sysctl.conf' -e '$s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
     sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/wps-office-*
     # sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop
+
+    # 安装gnome配置
+    if [[ ! -d ~/.config/dconf ]] ;then
+        mkdir -p ~/.config/dconf
+    fi
+    cp -v gnome/user ~/.config/dconf
+    if [[ ! -d ~/Pictures/Wallpapers ]] ;then
+        mkdir -p ~/Pictures/Wallpapers
+    fi
+    cp -v /mnt/ASUS/backup/Wallpapers/* ~/Pictures/Wallpapers
 }
 
 function main() {
@@ -273,7 +286,7 @@ function main() {
     echo -e '\e[32=====> Chrome\e[m
     Now, add google-access-helper to google-chrome in devloper mode'
     echo -e '\e[32=====> Neovim\e[m
-    Now, launch neovim and type :SPInstall'
+    Now, launch neovim and type :SPInstall and build YCM'
     echo -e '\e[32=====> Desktop\e[m
     Now, dconf org.gnome.desktop.wm.preferences.button-layout & setting & tweak & extension.'
 }
