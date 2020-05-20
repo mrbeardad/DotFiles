@@ -37,11 +37,10 @@ function pacman_cfg() {
     if ! grep -q archlinuxcn /etc/pacman.conf ; then
         echo -e '[archlinuxcn]\nServer = https://mirrors.cloud.tencent.com/archlinuxcn/$arch' | sudo tee -a /etc/pacman.conf
     fi
-    sudo pacman -S archlinuxcn-keyring
 
     # 更新系统，并安装一些下载工具和开发工具
     sudo pacman -Syyu
-    sudo pacman -S yay aria2 uget expac base-devel clang gdb cgdb
+    sudo pacman -S archlinuxcn-keyring yay aria2 uget expac base-devel clang gdb cgdb
 
     # 启动定时清理软件包服务
     sudo systemctl enable --now paccache.timer
@@ -144,7 +143,7 @@ function nvim_cfg() {
 
 function rime_cfg() {
     # 下载fcitx5与rime
-    yay -S fcitx5-git fcitx5-qt5-git fcitx5-qt4-git fcitx5-gtk kcm-fcitx5 fcitx5-rime rime-doublepinyin rime-emoji
+    yay -S fcitx5-git fcitx5-qt5-git fcitx5-qt4-git fcitx5-gtk kcm-fcitx5 fcitx5-rime rime-double-pinyin rime-emoji
 
     # 下载fcitx5皮肤
     if [[ ! -d ~/.local/share/fcitx5/themes ]] ;then
@@ -192,7 +191,7 @@ function extra_cfg() {
     # yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin gnome-shell-extension-dash-to-dock-git
 
     # 安装字体
-    yay -S adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypexels unicode-emoji nerd-fonts-source-code-pro nerd-fonts-space-mono ttf-blex-nerd-font-git
+    yay -S adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypixels unicode-emoji nerd-fonts-source-code-pro nerd-fonts-space-mono ttf-blex-nerd-font-git
     if [[ ! -d ~/.local/share/fonts/NerdCode ]] ;then
         mkdir -p ~/.local/share/fonts/NerdCode
     fi
@@ -256,6 +255,10 @@ function bin_cfg() {
     sudo sed -i -e '$isudo sysctl -p /etc/sysctl.conf' -e '$s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
     sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/wps-office-*
     sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop
+    if [[ ! -d ~/.cheat ]] ;then
+        mkdir ~/.cheat
+    fi
+    cp -v cheat/* ~/.cheat
 }
 
 function main() {
@@ -274,7 +277,7 @@ function main() {
     echo -e '\e[32=====> Chrome\e[m
     Now, add google-access-helper to google-chrome in devloper mode'
     echo -e '\e[32=====> Neovim\e[m
-    Now, launch neovim and type :SPInstall'
+    Now, launch neovim and type :SPInstall and build YCM'
     echo -e '\e[32=====> Desktop\e[m
     Now, dconf org.gnome.desktop.wm.preferences.button-layout & setting & tweak & extension.'
 }

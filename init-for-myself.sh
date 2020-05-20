@@ -26,7 +26,7 @@ function system_cfg() {
 
 function pacman_cfg() {
     # 改用腾讯源，直接改/etc/pacman.conf而非/etc/pacman.d/mirrorlist，因为有时更新系统会覆盖后者
-    sudo sed -i '/^Include = /s/^.*$/Server = https://mirrors.cloud.tencent.com/manjaro/stable/$repo/$arch/' /etc/pacman.conf
+    sudo sed -i '/^Include = /s/^.*$/Server = https:\/\/mirrors.cloud.tencent.com\/manjaro\/stable\/$repo\/$arch/' /etc/pacman.conf
 
     # pacman彩色输出
     sudo sed -i "/^#Color/s/#//" /etc/pacman.conf
@@ -35,11 +35,10 @@ function pacman_cfg() {
     if ! grep -q archlinuxcn /etc/pacman.conf ; then
         echo -e '[archlinuxcn]\nServer = https://mirrors.cloud.tencent.com/archlinuxcn/$arch' | sudo tee -a /etc/pacman.conf
     fi
-    sudo pacman -S archlinuxcn-keyring
 
     # 更新系统，并安装一些下载工具和开发工具
     sudo pacman -Syyu
-    sudo pacman -S yay aria2 uget expac base-devel clang gdb cgdb
+    sudo pacman -S archlinuxcn-keyring yay aria2 uget expac base-devel clang gdb cgdb
 
     # 启动定时清理软件包服务
     sudo systemctl enable --now paccache.timer
@@ -145,7 +144,7 @@ function nvim_cfg() {
 
 function rime_cfg() {
     # 下载fcitx5与rime
-    yay -S fcitx5-git fcitx5-qt5-git fcitx5-qt4-git fcitx5-gtk kcm-fcitx5 fcitx5-rime rime-doublepinyin rime-emoji
+    yay -S fcitx5-git fcitx5-qt5-git fcitx5-qt4-git fcitx5-gtk kcm-fcitx5 fcitx5-rime rime-double-pinyin rime-emoji
 
     # 下载fcitx5皮肤
     if [[ ! -d ~/.local/share/fcitx5/themes ]] ;then
@@ -178,7 +177,7 @@ function extra_cfg() {
     sudo systemctl enable --now chfs.socket
 
     # CLI工具
-    yay -S htop iotop dstat cloc screenfetch figlet cmatrix cppman-git
+    yay -S htop iotop dstat cloc screenfetch figlet cmatrix cppman
     # yay -S ncdu ranger
 
     # 桌面应用
@@ -193,7 +192,7 @@ function extra_cfg() {
     # yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin gnome-shell-extension-dash-to-dock-git
 
     # 安装字体
-    yay -S adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypexels unicode-emoji
+    yay -S adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypixels unicode-emoji
     # yay -S nerd-fonts-compelte
     if [[ ! -d ~/.local/share/fonts/NerdCode ]] ;then
         mkdir -p ~/.local/share/fonts/NerdCode
@@ -268,6 +267,10 @@ function bin_cfg() {
         mkdir -p ~/Pictures/Wallpapers
     fi
     cp -v /mnt/ASUS/backup/Wallpapers/* ~/Pictures/Wallpapers
+    if [[ ! -d ~/.cheat ]] ;then
+        mkdir ~/.cheat
+    fi
+    cp -v cheat/* ~/.cheat
 }
 
 function main() {
