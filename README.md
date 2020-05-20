@@ -167,8 +167,7 @@ $ ./init.sh
         * <kbd>r</kbd>：打开ranger
         * <kbd>n</kbd>：打开ncdu
         > PS: 现在为更喜欢使用 <a href=## title="一个下拉式终端">Guake</a>
-        > 来执行这三个家伙，有时分屏也不便时也会把Guake拉下来用用  
-        > 你可以设置gnome的快捷键命令为`guake -e htop --show CMD`来使用
+        > 来执行这三个家伙(默认已配置以 <kbd>Alt</kbd>开头的快捷键直接呼唤)，有时分屏也不便时也会把Guake拉下来用用  
 
 ## alacritty
 > 一个GPU加速的终端模拟器  

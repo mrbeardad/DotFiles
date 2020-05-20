@@ -26,7 +26,7 @@ function system_cfg() {
 
 function pacman_cfg() {
     # 改用腾讯源
-    echo "Server = https://mirrors.cloud.tencent.com/manjaro/stable/\$repo/\$arch" | sudo tee /etc/pacman.d/mirrorlist
+    echo 'Server = https://mirrors.cloud.tencent.com/manjaro/stable/$repo/$arch' | sudo tee /etc/pacman.d/mirrorlist
     # 有时候更新系统会把mirrorlist覆盖了，备份一下，当发现下载速度奇慢无比时，检查此项
     sudo cp /etc/pacman.d/mirrorlist{,.bak}
 
@@ -113,7 +113,7 @@ function tmux_cfg() {
 
 function nvim_cfg() {
     # 安装neovim配置需要的所有软件包
-    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck  ripgrep npm php markdown2ctags
+    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck silver-searcher-git ripgrep npm php markdown2ctags
     # yay -S vim-youcompleteme-git
 
     # 安装neovim配置
@@ -163,11 +163,34 @@ function rime_cfg() {
     echo -e 'export GTK_IM_MODULE=fcitx5\nexport QT_IM_MODULE=fcitx5\nexport XMODIFIERS="@im=fcitx5"\nfcitx5 > /dev/null &' > ~/.xprofile
 }
 
-#安装额外的CLI工具、桌面软件、GNOME扩展
+function bin_cfg() {
+    if [[ ! -d ~/.local/bin ]] ;then
+        mkdir -p ~/.local/bin
+    fi
+    cp -v bin/* ~/.local/bin
+
+    if [[ ! -d ~/.cheat ]] ;then
+        mkdir ~/.cheat
+    fi
+    cp -v cheat/* ~/.cheat
+
+    # 修改desktop文件
+    yay -S prime
+    if [[ ! -d ~/.local/share/applications ]] ;then
+        mkdir -p ~/.local/share/applications
+    fi
+    cp -v /usr/share/applications/{google-chrome,wps-office-*,nvim}.desktop ~/.local/share/applications
+    sed -i '/^Exec=/s/=.*$/=xfce4-terminal -e neovim.sh/; /Terminal=/s/true/false/' ~/.local/share/applications/nvim.desktop
+    sudo sed -i -e '$isudo sysctl -p /etc/sysctl.conf' -e '$s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
+    sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/wps-office-*
+    # sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop
+}
+
+# 安装额外的CLI工具、桌面软件、GNOME扩展
 function extra_cfg() {
     # CHFS
     cd /opt/bin
-    sudo unzip ${dotfiles_dir}/chfs-linux-amd64-1.8.zip
+    sudo unzip ${dotfiles_dir}/chfs/chfs-linux-amd64-1.8.zip
     sudo chmod 755 chfs
     cd -
     sudo cp -v chfs/chfs.{service,socket} /etc/systemd/system/
@@ -186,10 +209,10 @@ function extra_cfg() {
     # yay -S octave gimp
 
     # GNOME扩展
-    yay -S sweet-theme-git breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git tela-icon-theme-git \
+    yay -S sweet-theme-git adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git tela-icon-theme-git \
         gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git \
         gnome-shell-extension-dash-to-panel-git gnome-shell-extension-lockkeys-git gnome-shell-extension-topicons-plus-git
-    # yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin gnome-shell-extension-dash-to-dock-git
+    # yay -S gtk-theme-macos-mojave gnome-shell-extension-dash-to-dock-git
 
     # 安装字体
     yay -S ttf-google-fonts-git adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypixels unicode-emoji nerd-fonts-source-code-pro nerd-fonts-space-mono ttf-blex-nerd-font-git
@@ -238,28 +261,15 @@ function extra_cfg() {
     sudo bash -c 'echo "net.ipv6.conf.all.disable_ipv6 =1
 net.ipv6.conf.default.disable_ipv6 =1
 net.ipv6.conf.lo.disable_ipv6 =1" >> /etc/sysctl.conf'
-}
 
-function bin_cfg() {
-    if [[ ! -d ~/.local/bin ]] ;then
-        mkdir -p ~/.local/bin
+    # 安装gnome配置
+    if [[ ! -d ~/.config/dconf ]] ;then
+        mkdir -p ~/.config/dconf
     fi
-    cp -v bin/* ~/.local/bin
-
-    # 修改desktop文件
-    yay -S prime
-    if [[ ! -d ~/.local/share/applications ]] ;then
-        mkdir -p ~/.local/share/applications
+    cp -v gnome/user ~/.config/dconf
+    if [[ ! -d ~/Pictures/Wallpapers ]] ;then
+        mkdir -p ~/Pictures/Wallpapers
     fi
-    cp -v /usr/share/applications/{google-chrome,wps-office-*,nvim}.desktop ~/.local/share/applications
-    sed -i '/^Exec=/s/=.*$/=xfce4-terminal -e neovim.sh/; /Terminal=/s/true/false/' ~/.local/share/applications/nvim.desktop
-    sudo sed -i -e '$isudo sysctl -p /etc/sysctl.conf' -e '$s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
-    sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/wps-office-*
-    sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop
-    if [[ ! -d ~/.cheat ]] ;then
-        mkdir ~/.cheat
-    fi
-    cp -v cheat/* ~/.cheat
 }
 
 function main() {
@@ -272,15 +282,16 @@ function main() {
     tmux_cfg
     nvim_cfg
     rime_cfg
-    extra_cfg
     bin_cfg
+    extra_cfg
 
-    echo -e '\e[32=====> Chrome\e[m
+    echo -e '\e[32m=====> Chrome\e[m
     Now, add google-access-helper to google-chrome in devloper mode'
-    echo -e '\e[32=====> Neovim\e[m
+    echo -e '\e[32m=====> Neovim\e[m
     Now, launch neovim and type :SPInstall and build YCM'
-    echo -e '\e[32=====> Desktop\e[m
-    Now, dconf org.gnome.desktop.wm.preferences.button-layout & setting & tweak & extension.'
+    echo -e '\e[33m=====> Gnome dconf has been installed, logout immediately and relogin will apply it.
+Any desktop configurate may overwrite it. '
+    # Sweet-dark tela-icon:place hp-uiscan:icon
 }
 
 # 安装完镜像后后就改个sudoer & fstab配置，其他啥也不用动
