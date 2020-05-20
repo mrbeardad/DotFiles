@@ -2,14 +2,13 @@
     * 16 colors:
         * `\033[${ID}m`    (普通)
         * `\033[${ID};1m`  (加粗：由终端设置是否也高亮)
-        * `\033[${ID};2m`  (低暗：由终端设置是否也低暗)
-    * 256 color:
+        * `\033[${ID};2m`
+    * [256 color](https://jonasjacek.github.io/colors/)
         * `\033[${fg_bg};5;${ID}m`
             > ${fg_bg}：背景为`38m`，前景为`48m`  
-            > [256 color](https://jonasjacek.github.io/colors/)
     * true color:
         * `\c033[${fg_bg};2;${red};${green};${blue}m`
-            > 把你的终端的调色板打开自己看
+            > 把你的终端的调色板打开自己对照咯
 
 |  color | foreground | background |
 |:------:|:----------:|:----------:|

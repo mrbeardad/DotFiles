@@ -46,6 +46,8 @@
     * alias/unalias
     * stty size：显示终端size
     * reset：重置因读取二进制文件导致的乱码
+    * eval var1=\$$var2
+        > eval为关键字，整个表达式会替换成最终的${$val}
 <!-- -->
 
 # 特殊字符
@@ -320,9 +322,6 @@
 <!-- -->
 
 # 流处理
-* eval var1=\$$var2
-    > eval为关键字，整个表达式会替换成最终的${$val}
-<!-- -->
 
 * getopts optstring name [args]
     > 选项应该在命令参数之前：`$ cmd <options>... <parameters>...`  
