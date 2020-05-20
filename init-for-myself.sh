@@ -177,7 +177,8 @@ function extra_cfg() {
     sudo systemctl enable --now chfs.socket
 
     # CLI工具
-    yay -S htop iotop dstat cloc screenfetch figlet cmatrix cppman
+    yay -S htop iotop dstat cloc screenfetch figlet cmatrix
+    sudo pip3 install cppman
     # yay -S ncdu ranger
 
     # 桌面应用
@@ -192,7 +193,7 @@ function extra_cfg() {
     # yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin gnome-shell-extension-dash-to-dock-git
 
     # 安装字体
-    yay -S adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypixels unicode-emoji
+    yay -S ttf-google-fonts-git adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypixels unicode-emoji
     # yay -S nerd-fonts-compelte
     if [[ ! -d ~/.local/share/fonts/NerdCode ]] ;then
         mkdir -p ~/.local/share/fonts/NerdCode
@@ -286,12 +287,11 @@ function main() {
     extra_cfg
     bin_cfg
 
-    echo -e '\e[32=====> Chrome\e[m
+    echo -e '\e[32m=====> Chrome\e[m
     Now, add google-access-helper to google-chrome in devloper mode'
-    echo -e '\e[32=====> Neovim\e[m
+    echo -e '\e[32m=====> Neovim\e[m
     Now, launch neovim and type :SPInstall and build YCM'
-    echo -e '\e[32=====> Desktop\e[m
-    Now, dconf org.gnome.desktop.wm.preferences.button-layout & setting & tweak & extension.'
+    # Sweet-dark tela-icon:place hp-uiscan:icon
 }
 
 # 安装完镜像后后就改个sudoer & fstab配置，其他啥也不用动

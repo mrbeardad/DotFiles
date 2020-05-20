@@ -176,7 +176,8 @@ function extra_cfg() {
     sudo systemctl enable --now chfs.socket
 
     # CLI工具
-    yay -S htop iotop dstat cloc screenfetch figlet cmatrix cppman-git
+    yay -S htop iotop dstat cloc screenfetch figlet cmatrix
+    sudo pip3 install cppman
     # yay -S ncdu ranger
 
     # 桌面应用
@@ -191,7 +192,7 @@ function extra_cfg() {
     # yay -S gtk-theme-macos-mojave adapta-gtk-theme-bin gnome-shell-extension-dash-to-dock-git
 
     # 安装字体
-    yay -S adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypixels unicode-emoji nerd-fonts-source-code-pro nerd-fonts-space-mono ttf-blex-nerd-font-git
+    yay -S ttf-google-fonts-git adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypixels unicode-emoji nerd-fonts-source-code-pro nerd-fonts-space-mono ttf-blex-nerd-font-git
     if [[ ! -d ~/.local/share/fonts/NerdCode ]] ;then
         mkdir -p ~/.local/share/fonts/NerdCode
     fi

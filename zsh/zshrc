@@ -153,6 +153,7 @@ function man() {
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+zstyle ':bracketed-paste-magic' active-widgets '.self-*'
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#a8a8a8"
 
