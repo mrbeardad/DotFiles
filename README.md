@@ -38,6 +38,7 @@
 * [Markdown概念](cheat/markdown.md)
 * [小鹤双拼](cheat/double_pinyin.md)
 * [Manjaro安装](notes/manjaro.md)
+* [比特币与区块连](notes/bitcoin.md)
 
 * **注：仓库中bin/{see,say}两个命令用于终端快速查阅笔记与修改笔记，`see -h ; say -h`了解详情**
     > 笔记位于`~/.cheat/*.md`，一级列表开头到`<!-- -->`结束为一条entry  
@@ -47,7 +48,7 @@
 ![say](images/say.png)
 
 # 安装
-> 提供了shell脚本用于安装配置
+> 提供了shell脚本用于安装配置，**得[Manjaro20](manjaro.org)才得行哦**，不然的话照着[init.sh](init.sh)也可以非常容易的安装
 
 1. 首先进入克隆的本仓库目录
 ```shell
@@ -59,11 +60,16 @@ $ ./init.sh
 ```
 
 # 详细
-[init.sh](init.sh)脚本中已经写了非常详细的注释，可以直接打开看看修改了那些内容，不懂*bash语法*也无关系哦
+**[init.sh](init.sh)脚本中已经写了非常详细的注释，可以直接打开看看修改了那些内容，不懂*bash语法*也无关系哦**
 
 **所以接下来介绍的主要是如何使用整个开发环境：**
 * 为什么需要这个工具
 * 怎么使用这个工具
+
+## gnome dconf
+* 默认会直接把我的gnome桌面的整个环境配置装上去，执行完脚本后**logout**再**login**即可生效。  
+这样就不用每次重装都要打开**settings**和**tweaks**还有**extensions**然后点击各种按钮再配置一遍。
+> PS: 我用的背景图片你多半是没有的，所以重登的时候你的桌面背景是黢黑的 :grin:
 
 ## grub
 > 系统启动加载器，系统自带，由固件启动并加载*Linux Kernel*并为其提供参数，
@@ -215,7 +221,7 @@ $ ./init.sh
     * [更多gdb命令](https://github.com/mrbeardad/DotFiles/blob/master/cheat/devtool.md)
 
 ## chfs
-> 一个小型局域网web，方便手机与电脑传文件，当然用wine.qq也很方便，不过wine.qq没法在局域网共享资源吧
+> [一个小型局域网web](http://iscute.cn/chfs)，方便手机与电脑传文件，当然用wine.qq也很方便，不过wine.qq没法在局域网共享资源吧
 * `init.sh`默认安装并设置了开机自动启动它，使用`ip a`查看主机的ip地址，然后用浏览器访问就ok
 
 ## prime

@@ -173,17 +173,6 @@ function bin_cfg() {
         mkdir ~/.cheat
     fi
     cp -v cheat/* ~/.cheat
-
-    # 修改desktop文件
-    yay -S prime
-    if [[ ! -d ~/.local/share/applications ]] ;then
-        mkdir -p ~/.local/share/applications
-    fi
-    cp -v /usr/share/applications/{google-chrome,wps-office-*,nvim}.desktop ~/.local/share/applications
-    sed -i '/^Exec=/s/=.*$/=xfce4-terminal -e neovim.sh/; /Terminal=/s/true/false/' ~/.local/share/applications/nvim.desktop
-    sudo sed -i -e '$isudo sysctl -p /etc/sysctl.conf' -e '$s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
-    sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/wps-office-*
-    # sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop
 }
 
 # 安装额外的CLI工具、桌面软件、GNOME扩展
@@ -261,6 +250,17 @@ function extra_cfg() {
     sudo bash -c 'echo "net.ipv6.conf.all.disable_ipv6 =1
 net.ipv6.conf.default.disable_ipv6 =1
 net.ipv6.conf.lo.disable_ipv6 =1" >> /etc/sysctl.conf'
+
+    # 修改desktop文件
+    yay -S prime
+    if [[ ! -d ~/.local/share/applications ]] ;then
+        mkdir -p ~/.local/share/applications
+    fi
+    cp -v /usr/share/applications/{google-chrome,wps-office-*,nvim}.desktop ~/.local/share/applications
+    sed -i '/^Exec=/s/=.*$/=xfce4-terminal -e neovim.sh/; /Terminal=/s/true/false/' ~/.local/share/applications/nvim.desktop
+    sudo sed -i -e '$isudo sysctl -p /etc/sysctl.conf' -e '$s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
+    sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/wps-office-*
+    # sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop
 
     # 安装gnome配置
     if [[ ! -d ~/.config/dconf ]] ;then
