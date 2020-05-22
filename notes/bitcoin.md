@@ -1,5 +1,12 @@
 比特币部分参考自：[C语言中文网](http://c.biancheng.net/blockchain/)
 
+<!-- vim-markdown-toc GFM -->
+
+- [加密技术](#加密技术)
+- [基础概念](#基础概念)
+- [核心概念](#核心概念)
+
+<!-- vim-markdown-toc -->
 # 加密技术
 * 散列算法
     > 也可称作hash算法、信息摘要算法、不可逆加密技术  

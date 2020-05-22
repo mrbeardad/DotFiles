@@ -194,7 +194,7 @@ function extra_cfg() {
     # yay -S ncdu ranger
 
     # 桌面应用
-    yay -S deepin.com.qq.office pepper-flash flashplugin vlc netease-cloud-music wps-office ttf-wps-fonts \
+    yay -S deepin.com.qq.office pepper-flash flashplugin vlc baidunetdisk-bin netease-cloud-music wps-office ttf-wps-fonts \
         flameshot google-chrome guake xfce4-terminal alacritty
     # yay -S octave gimp
 

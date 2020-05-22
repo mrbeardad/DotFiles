@@ -165,9 +165,9 @@
 | ***italic&bold***              | `***italic&bold***`            |
 | ~~delete~~                     | `~~delete~~`                   |
 | <u>underline</u>               | `<u>underline</u>`             |
-| [link](https://google.com)     | `[link](https://google.com)`   |
-| `code`                         | `` `code` ``                   |
 | <kbd>Ctrl</kbd>                | `<kbd>Ctrl</kbd>`              |
+| `code`                         | `` `code` ``                   |
+| $L^{A}T_{E}X$                  | `$L^{A}T_{E}X$`                |
 <!-- -->
 
 ## 链接
