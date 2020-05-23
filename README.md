@@ -31,9 +31,6 @@
 * [Bash](cheat/bash.md)
     > \[注]:除了语法外，还有一些流处理命令，如:`awk` `sed`等
 * [Linux启动流程](cheat/boot.md)
-* [C++标准库](cheat/cppman.md)
-    > \[注]:该笔记为了终端查询可读性更好，并未遵守markdown语法，
-    > 毕竟代码里有很多`<>` `*` `_`
 * [开发工具](cheat/devtool.md)
     > \[注]:包括gcc, gdb, git等
 * [Vim](cheat/vim.md)
@@ -42,6 +39,10 @@
 * [Markdown概念](cheat/markdown.md)
 * [小鹤双拼](cheat/double_pinyin.md)
 * [Manjaro安装](notes/manjaro.md)
+* [C++标准库](cheat/cppman.md)
+    > \[注]:该笔记为了终端查询可读性更好，并未遵守markdown语法，
+    > 毕竟代码里有很多`<>` `*` `_`
+* [C++语法特性](notes/cpp.md)
 * [比特币与区块连](notes/bitcoin.md)
 * [深入了解计算机系统](notes/csapp.md)
 

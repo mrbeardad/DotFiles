@@ -143,7 +143,7 @@
     * `<space>mi`       ：为标签添加注释
     * `<space>mn`       ：跳转至下一个标签
     * `<space>mb`       ：跳转至上一个标签
-    * `<space>ma`       ：列出所有标签
+    * `<space>ml`       ：列出所有标签
 * Defx
     * `<left>`          ：关闭目录
     * `<right>`         ：展开目录
