@@ -1,5 +1,24 @@
 #!/bin/bash
 
+function backup() {
+    if [[ -z "$1" ]] ;then
+        echo -e "\033Error: backup() required one parameter\033[m"
+        exit 1
+    elif [[ -e "$1" ]] ;then
+        mv $1 $1.bak
+    fi
+}
+
+function makedir() {
+    if [[ -z "$1" ]] ;then
+        echo -e "\033Error: makedir() required one parameter\033[m"
+        exit 1
+    elif [[ ! -d "$1" ]] ;then
+        backup $1
+        mkdir -p $1
+    fi
+}
+
 function system_cfg() {
     # 开启ntp服务自动同步时间，并设置rtc让系统将主板时间当作本地时间(兼容windows)
     sudo timedatectl set-ntp 1 && timedatectl set-local-rtc 1
@@ -25,13 +44,14 @@ function system_cfg() {
 }
 
 function pacman_cfg() {
-    # 改用腾讯源，直接改/etc/pacman.conf而非/etc/pacman.d/mirrorlist，因为有时更新系统会覆盖后者
+    # 改用腾讯源
+    # 直接改/etc/pacman.conf而非/etc/pacman.d/mirrorlist，因为有时更新系统会覆盖后者
     sudo sed -i '/^Include = /s/^.*$/Server = https:\/\/mirrors.cloud.tencent.com\/manjaro\/stable\/$repo\/$arch/' /etc/pacman.conf
 
     # pacman彩色输出
     sudo sed -i "/^#Color/s/#//" /etc/pacman.conf
 
-    # 添加腾讯源的archlinuxcn源
+    # 添加腾讯云的archlinuxcn源
     if ! grep -q archlinuxcn /etc/pacman.conf ; then
         echo -e '[archlinuxcn]\nServer = https://mirrors.cloud.tencent.com/archlinuxcn/$arch' | sudo tee -a /etc/pacman.conf
     fi
@@ -61,11 +81,9 @@ function grub_cfg() {
 }
 
 function ssh_cfg() {
-    if [ ! -d ~/.ssh ] ;then
-        mkdir ~/.ssh
-    fi
+    makedir ~/.ssh
     # 添加git push <remote>需要的ssh配置，提供了对github与gitee的配置
-    # 可以将密钥改为自己喜欢的
+    # 得自己生成密钥对
     cat ssh/ssh_config >> ~/.ssh/ssh_config
 
     # 安装ssh公私钥对
@@ -88,9 +106,7 @@ function zsh_cfg() {
     # yay -S zsh zsh-syntax-highlighting zsh-autosuggestions
 
     # 安装zshrc
-    if [[ -e ~/.zshrc ]] ;then
-        mv ~/.zshrc{,.bak}
-    fi
+    backup ~/.zshrc
     cp -v zsh/zshrc ~/.zshrc
 
     # 安装zsh主题
@@ -105,11 +121,7 @@ function tmux_cfg() {
     # 下载tmux和一个保存会话的插件
     yay -S tmux tmux-resurrect-git
 
-    # 安装tmux.conf，tmux默认并只读取~/.tmux.conf，不过我在bin/terminal-tmux.sh中我设置了读取该位置
-    if [[ ! -e ~/.tmux ]] ;then
-        mkdir ~/.tmux
-    fi
-    cp -v tmux/tmux.conf ~/.tmux
+    cp -v tmux/tmux.conf ~/.tmux.conf
 }
 
 function nvim_cfg() {
@@ -118,28 +130,20 @@ function nvim_cfg() {
     # yay -S vim-youcompleteme-git
 
     # 安装neovim配置
-    if [[ -d ~/.SpaceVim ]] ;then
-        mv ~/.SpaceVim{,.bak}
-    fi
+    backup ~/.SpaceVim
     git clone https://gitee.com/mrbeardad/SpaceVim ~/.SpaceVim
 
-    if [[ ! -d ~/.config ]] ;then
-        mkdir ~/.config
-    elif [[ -e ~/.config/nvim ]] ;then
-        mv ~/.config/nvim{,.bak}
-    fi
+    makedir ~/.config
+    backup ~/.config/nvim
     ln -s ~/.SpaceVim ~/.config/nvim
 
-    if [[ ! -d ~/.SpaceVim.d ]] ;then
-        mkdir ~/.SpaceVim.d
-    elif [[ -e ~/.SpaceVim.d/init.toml ]] ;then
-        mv ~/.SpaceVim.d/init.toml{,bak}
-    fi
+    makedir ~/.SpaceVim.d
+    backup ~/.SpaceVim.d/init.toml
     cp -v ~/.SpaceVim/mode/init.toml ~/.SpaceVim.d
-    if [[ ! -d ~/.local/bin ]] ;then
-        mkdir -p ~/.local/bin
-    fi
-    sudo g++ -O3 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
+
+    makedir ~/.local/bin
+    g++ -O3 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
+    cp ~/.SpaceVim/custom/{nop.sh,vim-quickrun.sh} ~/.local/bin
 }
 
 function rime_cfg() {
@@ -147,32 +151,26 @@ function rime_cfg() {
     yay -S fcitx5-git fcitx5-qt5-git fcitx5-qt4-git fcitx5-gtk kcm-fcitx5 fcitx5-rime rime-double-pinyin rime-emoji
 
     # 下载fcitx5皮肤
-    if [[ ! -d ~/.local/share/fcitx5/themes ]] ;then
-        mkdir -p ~/.local/share/fcitx5/themes
-    fi
+    makedir ~/.local/share/fcitx5/themes
     git clone https://github.com/weearc/fcitx5-skin-simple-blue.git  ~/.local/share/fcitx5/themes/simple-blue
     git clone https://github.com/hosxy/fcitx5-dark-transparent.git ~/.local/share/fcitx5/themes/fcitx5-dark-transparent
 
     # 安装配置与词库
-    if [[ ! -d ~/.local/share/fcitx5/rime ]] ;then
-        mkdir -p ~/.local/share/fcitx5/rime
-    fi
+    makedir ~/.local/share/fcitx5/rime
     git submodule update --init
     cp -rv rime-dict/* ~/.local/share/fcitx5/rime
+
+    # 安装fcitx5配置
+    cp -rv fcitx5 ~/.config
 
     # 让桌面程序使用fcitx5输入框架
     echo -e 'export GTK_IM_MODULE=fcitx5\nexport QT_IM_MODULE=fcitx5\nexport XMODIFIERS="@im=fcitx5"\nfcitx5 > /dev/null &' > ~/.xprofile
 }
 
 function bin_cfg() {
-    if [[ ! -d ~/.local/bin ]] ;then
-        mkdir -p ~/.local/bin
-    fi
     cp -v bin/* ~/.local/bin
 
-    if [[ ! -d ~/.cheat ]] ;then
-        mkdir ~/.cheat
-    fi
+    makedir ~/.cheat
     cp -v cheat/* ~/.cheat
 }
 
@@ -206,9 +204,7 @@ function extra_cfg() {
 
     # 安装字体
     yay -S ttf-google-fonts-git adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypixels unicode-emoji nerd-fonts-source-code-pro nerd-fonts-space-mono ttf-blex-nerd-font-git
-    if [[ ! -d ~/.local/share/fonts/NerdCode ]] ;then
-        mkdir -p ~/.local/share/fonts/NerdCode
-    fi
+    makedir ~/.local/share/fonts/NerdCode
     cd ~/.local/share/fonts/NerdCode
     tar -Jxvf ${dotfiles_dir}/fonts/NerdCode.tar.xz
     mkfontdir
@@ -217,29 +213,19 @@ function extra_cfg() {
     cd -
 
     # gdb与cgdb配置
-    if [[ -e ~/.gdbinit ]] ;then
-        mv ~/.gdbinit{,.bak}
-    fi
+    backup ~/.gdbinit
     cp -v gdb/gdbinit ~/.gdbinit
-    if [[ ! -e ~/.cgdb ]] ;then
-        mkdir ~/.cgdb
-    fi
+    makedir ~/.cgdb
     cp -v gdb/cgdbrc ~/.cgdb
 
     # xfce4-terminal配置
-    if [[ ! -d ~/.config/xfce4/terminal ]] ;then
-        mkdir -p ~/.config/xfce4/terminal
-    elif [[ -e ~/.config/xfce4/terminal/terminalrc ]] ;then
-        mv ~/.config/xfce4/terminal/terminalrc{,.bak}
-    fi
+    makedir ~/.config/xfce4/terminal
+    backup ~/.config/xfce4/terminal/terminalrc
     cp -v xfce4-terminal/terminalrc ~/.config/xfce4/terminal/terminalrc
 
     # alacritty配置
-    # if [[ ! -d ~/.config/alacritty ]] ;then
-    #     mkdir ~/.config/alacritty
-    # elif [[ -e ~/.config/alacritty/alacritty.yml ]] ;then
-    #     mv ~/.config/alacritty/alacritty.yml{,.bak}
-    # fi
+    # makedir ~/.config/alacritty
+    # backup ~/.config/alacrittyalacritty.yml
     # cp -v alacritty/alacritty.yml ~/.config/alacritty
 
     # 安装google-access-helper
@@ -254,23 +240,20 @@ net.ipv6.conf.lo.disable_ipv6 =1" >> /etc/sysctl.conf'
 
     # 修改desktop文件
     yay -S prime
-    if [[ ! -d ~/.local/share/applications ]] ;then
-        mkdir -p ~/.local/share/applications
-    fi
-    cp -v /usr/share/applications/{google-chrome,wps-office-*,nvim}.desktop ~/.local/share/applications
-    sed -i '/^Exec=/s/=.*$/=xfce4-terminal -e neovim.sh/; /Terminal=/s/true/false/' ~/.local/share/applications/nvim.desktop
-    sudo sed -i -e '$isudo sysctl -p /etc/sysctl.conf' -e '$s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
+    makedir ~/.local/share/applications
+    makedir ~/.config/autostart
+    cp -v /usr/share/applications/{wps-office-*,nvim}.desktop ~/.local/share/applications
+    cp -v /usr/share/applications/guake.desktop ~/.config/autostart/guake-self.desktop
+    sed -i '/^Exec=/s/=.*$/=xfce4-terminal --maximize -x terminal-tmux.sh NeoVim/; /Terminal=/s/true/false/' ~/.local/share/applications/nvim.desktop
+    sed -i '/^Exec=/s/=.*$/=guake -e "terminal-tmux.sh Guake/"' ~/.config/autostart/guake-self.desktop
     sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/wps-office-*
-    # sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop
+    sudo sed -i -e '/wine.*run\.sh/isudo sysctl -p /etc/sysctl.conf' -e '/wine.*run\.sh/s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
+    # sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop    # 浏览器开的勤，比较耗电，需要的时候再手动开启prime吧
 
     # 安装gnome配置
-    if [[ ! -d ~/.config/dconf ]] ;then
-        mkdir -p ~/.config/dconf
-    fi
+    makedir ~/.config/dconf
     cp -v gnome/user ~/.config/dconf
-    if [[ ! -d ~/Pictures/Wallpapers ]] ;then
-        mkdir -p ~/Pictures/Wallpapers
-    fi
+    makedir ~/Pictures/Wallpapers
     cp -v /mnt/ASUS/backup/Wallpapers/* ~/Pictures/Wallpapers
 }
 
@@ -290,10 +273,8 @@ function main() {
     echo -e '\e[32m=====> Chrome\e[m
     Now, add google-access-helper to google-chrome in devloper mode'
     echo -e '\e[32m=====> Neovim\e[m
-    Now, launch neovim and type :SPInstall and build YCM'
-    echo -e '\e[33m=====> Gnome dconf has been installed, logout immediately and relogin will apply it.
-Any desktop configurate may overwrite it. '
-    # Sweet-dark tela-icon:place hp-uiscan:icon
+    Now, launch neovim and type :SPInstall, then build YCM and fix ALE'
+    # Sweet-dark tela-icon:place hp-uiscan:icon ~/Downloads/BaiduNetDisk ~/Downloads/GoogleChrome
 }
 
 # 安装完镜像后后就改个sudoer & fstab配置，其他啥也不用动

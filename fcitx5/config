@@ -1,0 +1,54 @@
+[Hotkey/TriggerKeys]
+0=Control+space
+1=Zenkaku_Hankaku
+2=Hangul
+
+[Hotkey/AltTriggerKeys]
+0=Shift_L
+
+[Hotkey/EnumerateForwardKeys]
+0=Control+Shift_R
+
+[Hotkey/EnumerateBackwardKeys]
+0=Control+Shift_L
+
+[Hotkey/EnumerateGroupForwardKeys]
+0=Super+space
+
+[Hotkey/EnumerateGroupBackwardKeys]
+0=Shift+Super+space
+
+[Hotkey/ActivateKeys]
+0=Hangul_Hanja
+
+[Hotkey/DeactivateKeys]
+0=Hangul_Romaja
+
+[Hotkey/PrevPage]
+0=Up
+
+[Hotkey/NextPage]
+0=Down
+
+[Hotkey/PrevCandidate]
+0=Shift+Tab
+
+[Hotkey/NextCandidate]
+0=Tab
+
+[Behavior]
+# Active By Default
+ActiveByDefault=False
+# Share Input State
+ShareInputState=No
+# Show Input Method Information when switch input method
+ShowInputMethodInformation=True
+# Show Input Method Information when changing focus
+showInputMethodInformationWhenFocusIn=False
+# Default page size
+DefaultPageSize=5
+# Force Enabled Addons
+EnabledAddons=
+# Force Disabled Addons
+DisabledAddons=
+

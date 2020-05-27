@@ -156,11 +156,13 @@
 * lang#c
     * `<space>lr`       ：快速运行程序
     * `<space>li`       ：快速打开输入窗口
-    * `<space>lt`       ：关闭运行程序的终端
+    * `<space>lc`       ：关闭运行程序的终端
     * `<space>ld`       ：只编译用于gdb调试
-    * `<space>lc`       ：clang优化编译
+    * `<space>lo`       ：优化编译单个TU为可执行文件
 * lang#markdown
     * `<space>lp`       ：开启markdown预览
+    * `<space>lg`       ：添加GFM目录
+    * `<space>ld`       ：删除上述添加的目录
 
 # 基础概念
 > 参考：[vim-galore-zh_cn](https://github.com/wsdjeg/vim-galore-zh_cn)  [ VIM中文文档 ](https://yianwillis.github.io/vimcdoc/doc/help.html)

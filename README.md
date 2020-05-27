@@ -43,7 +43,7 @@
     > \[注]:该笔记为了终端查询可读性更好，并未遵守markdown语法，
     > 毕竟代码里有很多`<>` `*` `_`
 * [C++语法特性](notes/cpp.md)
-* [比特币与区块连](notes/bitcoin.md)
+* [比特币与区块链](notes/bitcoin.md)
 * [深入了解计算机系统](notes/csapp.md)
 
 * **注：仓库中bin/{see,say}两个命令用于终端快速查阅笔记与修改笔记，`see -h ; say -h`了解详情**

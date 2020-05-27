@@ -1,8 +1,18 @@
 #!/bin/bash
 
-tmux list-sessions | grep Routine
-if [[ $? == 0 ]] ;then
-    tmux attach -t Routine
+if [[ -z "$1" ]] ;then
+    SessionName='Routine'
 else
-    tmux -f ~/.tmux/tmux.conf new-session -s Routine
+    SessionName="$1"
+fi
+
+tmux list-sessions | grep -q $SessionName
+if [[ $? == 0 ]] ;then
+    exec tmux attach -t $SessionName
+else
+    if [[ $SessionName == "NeoVim" ]] ;then
+        exec tmux new-session -s $SessionName "XFCE4_TERM=1 nvim"
+    else
+        exec tmux new-session -s $SessionName
+    fi
 fi

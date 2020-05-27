@@ -120,7 +120,7 @@ alias free='free -wh'
 alias vmstat='vmstat -w'
 alias ip='ip -c'
 alias expactf='expac --timefmt="%Y-%m-%d %T" "%l\t%n" | sort'
-alias gdb='gdb --tui'
+alias gdb='cgdb -- -q'
 alias dif='diff -Naur'
 
 # zsh中git插件的补充

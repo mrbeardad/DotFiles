@@ -73,6 +73,10 @@ exception <exception>`
         * (error_code, const char*)
 <!-- -->
 
+# 运算符优先级
+* 运算符优先级
+![cpp](../images/cppman.png)
+
 # C库
 * 调试：`<cassert>`
     * assert(expr)                  ：运行时断言, false则执行
@@ -538,7 +542,7 @@ exception <exception>`
 * 流缓冲区迭代器
     * 获取：类模板构造
         * istreambuf_iteratot<char>
-            * ()
+            * ()    ：默认构造为end
             * (istrm)
             * (ibuf_ptr)
         * ostreambuf_iteratot<char>
@@ -910,14 +914,16 @@ exception <exception>`
 <!-- -->
 
 * 数学库：`<cmath>`
-    * pow(double_x, double_y)   ：x**y
-    * exp(double_x)             ：e**x
-    * exp2(double_x)            ：2**x
-    * exp10(double_x)           ：10**x
+    * pow(double x, double y)   ：x**y
     * sqrt(double)
-    * log(double_N)             ：loge(N)
-    * log2(double_N)            ：log2(N)
-    * log10(double_N)           ：log10(N)
+    * exp(double x)             ：e**x
+    * expm1(double x)           ：更加精准的exp(x) - 1
+    * exp2(double x)            ：2**x
+    * exp10(double x)           ：10**x
+    * log(double N)             ：log_e(N)
+    * log1p(double N)           ：更加精准的log_e(N + 1)
+    * log2(double N)            ：log_2(N)
+    * log10(double N)           ：log_10(N)
     * cos()
     * sin()
     * tan()

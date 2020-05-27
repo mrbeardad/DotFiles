@@ -684,6 +684,16 @@ document pwstring
         #  pwstring s - Prints content, size/length, capacity and ref-count of wstring s
 end 
 
+define s
+step
+i locals
+end
+
+define n
+next
+i locals
+end
+
 define v
 i locals
 end
@@ -708,6 +718,6 @@ set case-sensitive off
 #  set history save
 #  set history filename ~/.gdb_history
 set verbose off
-set python print-stack full
+#  set python print-stack full
 set prompt [31m>[33m>[32m>[36m>[35m> [m
 
