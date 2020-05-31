@@ -177,6 +177,14 @@ guake的开机启动并自动连接tmux又依赖`init.sh`中安装的desktop文�
         > $ j do
         > ``````
         > 就可能直接跳转到`DotFiles`目录，当然如果之前有去过其他名字含`do`的目录就会跳转到频率高的目录
+    * `f`：该命令启动[fzf](https://github.com/junegunn/fzf)并用[ranger](https://github.com/ranger/ranger)打开选择的文件，  
+        若用[init.sh](init.sh)安装的话默认都会显示所有隐藏文件
+>
+踩过的坑：
+* 开启`vi-mode`会导致`history-substring-search`失效。  
+    解决办法是手动设置映射，见[zshrc](zsh/zshrc)
+* 使用`syntax-highlight`会让终端复制极其之慢，原因是该插件会对每个复制的字符进行检测。
+    需要给插件设置一下，见[zshrc](zsh/zshrc)
 
 ## tmux
 终端分屏工具和环境保护工具：
@@ -222,6 +230,12 @@ guake的开机启动并自动连接tmux又依赖`init.sh`中安装的desktop文�
         * <kbd>c</kbd>：打开cmatrix -r
         > PS: 现在为更喜欢使用 <a href=## title="一个下拉式终端">Guake</a>
         > 来执行这三个家伙([默认已配置](#gnome-dconf)以 <kbd>Alt</kbd>开头的快捷键直接呼唤)，有时分屏也不便时也会把Guake拉下来用用  
+>
+踩过的坑：
+* 按键序列被截获并更改，导致vim里面的映射失效
+* 开启终端真色
+* 开启`undercurl`并支持其特殊颜色
+
 
 ## alacritty
 一个GPU加速的终端模拟器  

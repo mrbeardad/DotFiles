@@ -209,6 +209,10 @@ function extra_cfg() {
     fc-cache -fv
     cd -
 
+    # 修改Manjaro默认的ranger配置，用于fzf与vim-defx预览文件
+    sed -i '/^set show_hidden/s/false/true/; ' ~/.config/ranger/rc.conf
+    sed -i '/highlight_format=xterm256/s/xterm256/ansi/' ~/.config/ranger/scope.sh
+
     # gdb与cgdb配置
     backup ~/.gdbinit
     cp -v gdb/gdbinit ~/.gdbinit

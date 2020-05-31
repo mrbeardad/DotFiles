@@ -122,6 +122,19 @@ alias ip='ip -c'
 alias expactf='expac --timefmt="%Y-%m-%d %T" "%l\t%n" | sort'
 alias gdb='cgdb -- -q'
 alias dif='diff -Naur'
+function f() {
+    if [[ -n "$1" ]] ;then
+        cd $1
+    fi
+    export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -l -g ""'
+    FZF_FILESS=$(fzf)
+    if [[ -n "$FZF_FILESS" ]] ;then
+        ranger --selectfile=$FZF_FILESS
+    fi
+    if [[ -n "$1" ]] ;then
+        cd -
+    fi
+}
 
 # zsh中git插件的补充
 alias gmv='git mv'
