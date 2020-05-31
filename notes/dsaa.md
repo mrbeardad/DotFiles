@@ -4,9 +4,9 @@
 ## 名字
 * 类名、静态变量&emsp;&emsp;&emsp;&emsp;&emsp;：大驼峰拼写法`ExampleName`
 * 基本类型别名、动态变量&emsp;：小驼峰拼写法`exampleName`
+* 类的数据成员&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;：小驼峰并带`_m`后缀`exampleName_m`
 * 模板参数、宏、常量&emsp;&emsp;&emsp;：全部大写和下划线间隔`EXAMPLE_NAME`
 * 命名空间、函数名称&emsp;&emsp;&emsp;：全部小写和下划线间隔`example_name`
-* 类的数据成员&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;：带`_m`后缀`example_name_m`
 >
 可用于命名标识符的一些通用前后缀：
 * 位置：`prev`，`next`，`left`，`right`，`head`，`tail`，`mid`
@@ -72,26 +72,26 @@
 * 文件末尾加一空行
 
 ## 设计经验
-* 头文件保护宏
-* 利用预处理指令做错误处理与条件编译
-* 不对外链接的符号应该都写在无名命名空间中
-* wrap函数尽可能做少的预处理，将操作封装到tool函数
+> * 头文件保护宏
+> * 利用预处理指令做错误处理与条件编译
+> * 不对外链接的符号应该都写在无名命名空间中
+> * wrap函数尽可能做少的预处理，将操作封装到tool函数
+> * 函数模板的形参，若为引用则需要decay
+> * 函数nothrow一定`noexcept`
 * 注意对函数参数与成员函数this的修饰以增强鲁棒性
 * 何时使用指针而非引用：
     * 当需要NULL语义时
     * 当需要更改它的指向时
-* 函数模板的形参，若为引用则需要decay
-* 函数nothrow一定`noexcept`
 * 类的单参构造函数若非有意，一定要explicit
 
 ## 易错点
 * 注意对I/O格式化的要求：
-    * istream会忽略前导空格
+    * istream会忽略前导空格，并注意`cin.ignore()`的使用
     * 大量的非格式化I/O应该使用流缓冲区迭代器，如`istreambuf_iterator<charT>`
-    * 注意`cin.ignore()`的使用
     * 浮点数输出：
         * fixed
         * setprecision(n)
+        * setw(n)
         * 四舍五入
         * 丢弃小数
 * 容器增删元素时，为防止一些对象失效，检查：
@@ -141,34 +141,44 @@
 
 ## 循环
 * 设计步骤：
-    > 设计多重循环时，抓住各层循环的循环变量及其先后顺序进行设计
-    1. 首先，确定**循环变量**并思考如何**迭代**变量
-    2. 其次，确定**条件检查**，可以依据相关关系；若until的条件更容易想象，则将其条件取逻辑非即可
-    3. 再者，确定**循环操作**的内容并修正**初始状态**
-    4. 然后，将最终状态的数据带入检查是否正确
-    5. **尾后处理**，例如处理剩余的元素
+    * 设计多重循环时，抓住***各层循环需要更新的循环变量***及其***先后顺序***进行设计  
+    * for循环用于***需要初始化变量***和***continue时仍需要迭代变量***的情况，其它情况用while
+    1. 首先，
+        * 确定<u>循环变量</u>
+        * 并思考如何<u>迭代</u>变量
+        * 迭代变量的<u>更新步数</u>不确定时，用if{continue;}
+    2. 其次，
+        * 确定<u>条件检查</u>
+        * 可以依据<u>相关关系</u>
+        * 注意件优先检测<u>穷尽条件</u>
+        * 若<u>until</u>的条件更容易想象，则将其条件取逻辑非即可
+    3. 再者，
+        * 标记出所有<u>需要更新的变量</u>
+        * 确定<u>循环操作</u>的内容
+        * 并修正<u>初始状态</u>
+        * 若<u>第一次循环</u>需要特殊操作，可以
+            * 利用 **once** flag
+            * 或者将第一次的循环操作直接提取出来
+    4. 然后，
+        * 将<u>最终状态的参数</u>带入检查是否正确
+    5. <u>尾后处理</u>，例如处理剩余的元素
 * 检测条件的确定：循环变量与循环操作的相关关系
     * 同步相关：检测最后操作状态
     * 异步相关**迭前操后**：检测最后操作状态
     * 异步相关**迭后操前**：检测最后操作状态+1
-* 注意：
-    * for循环用于<u>需要初始化变量</u>和<u>continue时仍需要迭代变量</u>的情况，其它情况用while
-    * 标记出所有循环迭代和循环操作**需要更新的对象**
-    * 迭代变量的更新步数不确定时，使用if-continue
-    * 內if分支中的for与外for的检测条件重合：
-        * 目的：在某条件下用另一种方式完成循环
-        * 合并：外for内嵌if-else，注意变量迭代是否有差异
-    * 内for与外if的检测条件重合：
-        * 目的：某条件下需要进行循环操作
-        * 合并：只要for，if的语义用for的初始条件替代
 
 ## 分支
-* `if-continue|break`：跳过后续公共语句
-* `if-else`：互斥条件，不应该同时发生不代表不可能，前者应该用`if-continue|break`
-* `if-if`：可能同时发生的条件
-* 无公共语句时，用`if-elseif-else`代替嵌套`if{if-else}`
-* 若某一分支的语句与另一分支重合，用嵌套`if{if-else}`代替`if-elseif-else`
-* 提取出分支中的公共语句简化代码
+首先要明确分支操作所需要的条件
+* `if-else`：不可能同时发生的条件
+* `if-if`：可能同时发生的条件，必要时可以用`break;`或`continue;`跳过公共语句
+* `if-elseif-else`：若两个分支有重合的公共语句，可以转化为`if{if-else}`
+* `for{if{break}}`：可以将if{break}的条件并入for中
+* `for{if{for}}`：外层for与内层for的检测条件重合时
+    * 目的：在某条件下用另一种方式完成循环
+    * 合并：外for内嵌if-else，注意变量迭代是否有差异
+* `if{for}`：if与for的检测条件重合时
+    * 目的：某条件下需要进行循环操作
+    * 合并：只要for，if的语义用for的初始条件替代
 
 ## 递归
 * 设计步骤：
@@ -177,6 +187,7 @@
     * 一般进展：一次递归只做部分，其余部分调用递归函数做，结合后返回时对调用者也符合函数功能
 * 注意：
     * 尾递归尽量地转换成循环语句
+    * 递归的结束尽量用**基准情况**来控制，并且尽早的检查结束条件
     * 可以用Stack来存储递归途径
 
 ## 步数
@@ -185,24 +196,111 @@
 * 向量 +/- 数量 = 下/上一组同位置
 * 向量 +/- 距离 = 等距离向量
 <br>
-<br>
+</br>
 
 # 数据结构
 
 ## 栈
 * LIFO表：后进先出
-* [单调栈](https://github.com/mrbeardad/Practices/blob/master/ACM/BOOK/data_structs/monotonic_stack.cpp)：
+* 单调栈
     压入元素为弹出的元素后续的第一个大/小值
+<details>
+    <summary><b>humdrum_queue Code...</b></summary>
+
+```cpp
+#include <c++/9.3.0/x86_64-pc-linux-gnu/bits/c++config.h>
+#include <cstddef>
+#include <deque>
+#include <functional>
+#include <iostream>
+#include <utility>
+#include <vector>
+
+using namespace std;
+
+template <typename T, typename CMP = less<T> >
+struct HumdQue
+{
+    deque<T> que_m;
+    CMP cmp_m;
+
+    void push(const T& val)
+    {
+        while ( !que_m.empty() && cmp_m(val, que_m.back()) ) {
+            que_m.pop_back();
+        }
+        que_m.push_back(val);
+    }
+
+    void pop()
+    {
+        que_m.pop_front();
+    }
+};
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    /*
+     * 滑动窗口
+     */
+    constexpr int WIN_SIZE{3};
+    HumdQue<pair<int, int> > humdQueue;
+    for ( int nr{}, tmp4que{}; cin >> tmp4que; ++nr ) {
+        humdQueue.push({tmp4que, nr});
+        constexpr int WIN_SIZE_1{WIN_SIZE - 1};
+        if ( nr >= WIN_SIZE_1 ) {
+            if ( nr - humdQueue.que_m.front().second + 1 > WIN_SIZE ) {
+                humdQueue.pop();
+            }
+            cout << "min(" << nr - WIN_SIZE + 1 << ", " << nr << ") = " << humdQueue.que_m.front().first << endl;
+            }
+        }
+
+    return 0;
+}
+```
+</details>
 
 ## 队列
 * FIFO表：先进先出
-* [单调队列](https://github.com/mrbeardad/Practices/blob/master/ACM/BOOK/data_structs/humdrum_queue.cpp)：
+* 单调队列：
     * 从队尾弹出破坏单调性的元素(类似单调栈)
     * 滑动窗体时判断队首的元素是否为窗体内的元素，否则出队
     * 队首的元素即所求窗口内最值
-* 多级反馈队列：优先级高的任务未完成则放入下级队列尾部
+<details>
+    <summary><b>monotonic_stack Code...</b></summary>
 
-## [树状数组](https://github.com/mrbeardad/Practices/blob/master/ACM/BOOK/data_structs/binary_index_tree.cpp)
+```cpp
+template <typename T, typename CMP = less<T> >
+struct MonoStack
+{
+    deque<T> stk_m;
+    CMP cmp_m;
+
+    void push(const T& val)
+    {
+        while ( !stk_m.empty() && cmp_m(val, stk_m.back()) ) {
+            cout << stk_m.back() << ": " << val << endl;
+            stk_m.pop_back();
+        }
+        stk_m.push_back(val);
+    }
+
+    void pop()
+    {
+        stk_m.pop_back();
+    }
+};
+
+```
+</details>
+
+* 多级反馈队列：优先级高的任务未完成则放入下级队列尾部，操作系统的调度算法
+
+## 树状数组
 * 特点：快速进行任意范围的区间操作
 * 细节：
     * 父节点管理前面`lowbit(x & -x)`个元素
@@ -224,8 +322,86 @@
         diff数组`point_add(left, (left - 1) * val); point_add(right + 1, (right - 1) * -val)`
     * `range_query(left, right, diff)`：`_sum_tool(right, diff) - _sum_tool(left - 1, diff)`，
         其中`_sum_tool(originIdx, val)`利用`sum = originIdx * BITree[idx] - diff[idx]`求和
+<details>
+    <summary><b>Code...</b></summary>
 
-## [ST表](https://github.com/mrbeardad/Practices/blob/master/ACM/BOOK/data_structs/sparse_table.cpp)
+```cpp
+template <typename T>
+struct BITree
+{
+    vector<T> tree_m;
+
+    explicit BITree(size_t size): tree_m(size + 1) {}
+
+    T sum_tool(size_t idx)
+    {
+        T sum{};
+        for ( int curIdx = idx; curIdx > 0; curIdx -= curIdx & -curIdx ) {
+            sum += tree_m[curIdx];
+        }
+        return sum;
+    }
+
+    void point_add(size_t idx, const T& val) // point_change&range_query
+    {
+        int size = tree_m.size();
+        for ( int curIdx = idx; curIdx < size; curIdx += curIdx & -curIdx ) {
+            tree_m[curIdx] += val;
+        }
+    }
+
+    T range_query(size_t left, size_t right) // point_change&range_query
+    {
+        return sum_tool(right) - sum_tool(left - 1);
+    }
+
+    void range_add(size_t left, size_t right, T val) // range_change&point_query
+    {
+        point_add(left, val);
+        point_add(right + 1, -val);
+    }
+
+    T point_query(size_t idx) // range_change&point_query
+    {
+        return sum_tool(idx);
+    }
+
+    void range_add(size_t left, size_t right, T val, vector<T>& diff) // range_change&range_query
+    {
+        range_add(left, right, val);
+
+        int size = tree_m.size();
+        auto pointAdd = [&] (int idx, T val) {
+            while ( idx < size ) {
+                diff[idx] += val;
+                idx += idx & -idx;
+            }
+        };
+
+        pointAdd(left, val * (left - 1));
+        pointAdd(right + 1, val * -(right - 1));
+    }
+
+    T range_query(size_t left, size_t right, vector<T>& diff) // range_change&range_query
+    {
+        auto pointQuery = [&] (int idx) {
+            T sum{};
+            int orgIdx{idx};
+            while ( idx > 0 ) {
+                sum += orgIdx * this->tree_m[idx] - diff[idx];
+                idx -= idx & -idx;
+            }
+            return sum;
+        };
+
+        return pointQuery(right) - pointQuery(left - 1);
+    }
+};
+
+```
+</details>
+
+## ST表
 * 特点：对于重叠OP无影响的结果进行快速地任意区间查寻
 * 细节：
     * `dp[i][j]`代表区间$[i, i^j-1]$的OP结果
@@ -236,6 +412,40 @@
 * query()：
     * `k = log(n)/log(2)`，n表示数量
     * $OP(dp[i][k]，dp[j-2^k][k])$
+<details>
+    <summary><b>Code...</b></summary>
+
+```cpp
+template <typename T>
+struct STable
+{
+    vector<vector<T> > table_m;
+
+    template <typename ITER>
+    void build(ITER begin, ITER end)
+    {
+        while ( begin != end ) {
+            table_m.push_back({});
+            table_m.back().push_back(*begin++);
+        }
+
+        int tableSize = table_m.size();
+        for ( int maxPow = log(tableSize) / log(2), curPow{1}; curPow <= maxPow; ++curPow ) {
+            for ( int idx{}; idx + (1 << curPow) <= tableSize; ++idx ) {
+                table_m[idx].push_back(max(table_m[idx][curPow - 1], table_m[idx + (1 << (curPow - 1))][curPow - 1]));
+            }
+        }
+    }
+
+    T query(size_t left, size_t right)
+    {
+        int maxPow = log1p(right - left) / log(2);
+        return max(table_m[left][maxPow], table_m[right - (1 << maxPow) + 1][maxPow]);
+    }
+};
+
+```
+</details>
 
 ## 并查集
 * 特点：快速查询与合并类型集合
@@ -243,129 +453,252 @@
     * 数组索引作为元素标识，存储内容为上级元素的索引，根的存储内容为负且其绝对值代表高度
 * root()：查找目标所在集合的根，并进行路径压缩
 * merge()：合并两集合的根，并更新高度
+<details>
+    <summary><b>Code...</b></summary>
+
+```cpp
+struct DisSet
+{
+    vector<int> vec_m;
+
+    explicit DisSet(size_t size): vec_m(size, -1) {}
+
+    size_t root(size_t idx)
+    {
+        if ( vec_m[idx] < 0 ) {
+            return idx;
+        }
+
+        size_t itsRoot{root(vec_m[idx])};
+        return vec_m[idx] = itsRoot;
+    }
+
+    void merge(size_t root1, size_t root2)
+    {
+        int& dep1{vec_m[root1]};
+        int& dep2{vec_m[root2]};
+        if ( dep1 < dep2 ) {
+            dep2 = root1;
+        } else {
+            if ( dep1 == dep2 ) {
+                --dep2;
+            }
+            dep1 = root2;
+        }
+    }
+};
+
+```
+</details>
 
 ## Trie树
-    * 特点：快速匹配字符串前缀
-    * 细节：
+* 特点：快速匹配字符串前缀
+* 细节：
 可以使用数组实现
-每个节点存储flag以判定此节点是否为单词尾部
-每个节点存储Umap或vector以判断后续节点是否存在
-    * 插入：
-按前缀一路查询，无匹配则添加节点，尾部节点flag置1
-    * 删除：
-从尾部开始，若无后续字符串清除Umap中的ptr，并销毁节点
-    * 查询：
-按前缀查询完后，flag为true则匹配
+    * 每个节点存储flag以判定此节点是否为单词尾部
+    * 每个节点存储Umap或vector以判断后续节点是否存在
+* 插入：
+    * 按前缀一路查询，无匹配则添加节点，尾部节点flag置1
+* 删除：
+    * 从尾部开始，若无后续字符串清除Umap中的ptr，并销毁节点
+* 查询：
+    * 按前缀查询完后，flag为true则匹配
+<details>
+    <summary><b>Code...</b></summary>
+
+```cpp
+struct Vertex
+{
+    array<size_t, 26> next_m;
+    bool isEnd_m;
+};
+
+struct Trie
+{
+    vector<Vertex> tree_m;
+
+    explicit Trie(): tree_m{Vertex{}} {}
+
+    void insert(const string& insetStr)
+    {
+        int trieIdx{};
+        for ( char thisChar : insetStr ) {
+            size_t& nextIdx{tree_m[trieIdx].next_m[thisChar - 'a']};
+            if ( nextIdx == 0 ) {
+                trieIdx = nextIdx = tree_m.size();
+                tree_m.push_back({});
+            } else {
+                trieIdx = nextIdx;
+            }
+        }
+        tree_m[trieIdx].isEnd_m = true;
+    }
+
+    bool match(const string& matchStr)
+    {
+        int strIdx{}, strEnd = matchStr.size(), trieIdx{};
+        int nextIdx{};
+        while ( strIdx < strEnd && (nextIdx = tree_m[trieIdx].next_m[matchStr[strIdx] - 'a']) != 0 ) {
+            ++strIdx; 
+            trieIdx = nextIdx;
+        }
+        return strIdx == nextIdx && tree_m[trieIdx].isEnd_m;
+    }
+};
+
+```
+</details>
 
 ## 跳跃表
-    * 特点：快速搜索元素并自动排序
-    * 细节：
-每个元素包含一个多级索引表，其为N级的概率为1/2ⁿ，第N级索引指向后面第2ⁿ个元素
-    * 搜索：
-从每个节点的最高级索引开始搜索
-    * 插入与删除：
-利用0-1分布，决定索引表是否提升
-保留每级索引最近的节点并更新
+* 特点：快速搜索元素并自动排序
+* 细节：
+    * 每个元素包含一个多级索引表，其为N级的概率为1/2ⁿ，第N级索引指向后面第2ⁿ个元素
+* 搜索：
+    * 从每个节点的最高级索引开始搜索
+* 插入与删除：
+    * 利用0-1分布，决定索引表是否提升
+    * 保留每级索引最近的节点并更新
+<details>
+    <summary><b>noCode...</b></summary>
+
+```cpp
+//真的没有
+```
+</details>
 
 # 哲学思想
+***接下来会含有$L^AT_EX$公式，记得安插件哦，看***[这里](https://github.com/mrbeardad/DotFiles/blob/master/notes/csapp.md)
 
-## 自顶向下
-需要什么，设计什么；怎么使用，怎么设计
-## 由宏及微
+<br></br>
+
+* **由宏及微**  
 先确定大目标，再确定小目标，按顺序步骤设计
-## 面向对象
+* **自顶向下**  
+需要什么，设计什么；怎么使用，怎么设计
+* **面向对象**  
 数据抽象，派生继承，动态绑定
 
 ## 算法优化
-    * 找出重复的计算
-    * 减少多余的拷贝
-    * 避免重复的访存
-注：读取某个内存引用，若在作用域内不可能被某些操作写入，则可以被编译器优化
-妨碍优化：
-函数参数：写入同样是函数参数的另一引用
-类成员：调用同一个类对象的方法
-全局变量：不调用任何函数
+* 找出重复的计算
+* 减少多余的拷贝
+* 避免重复的访存
+>
+
+读取某个内存引用，若在作用域内不可能被某些操作写入，重复引用时可以被编译器优化，
+而避免手动将其载入寄存器的麻烦，以下操作便会妨碍优化：
+* 传引用参数：函数有多个传引用形参，试图读取其中一个实参，又要写入另一个参数
+    > 因为传入的多个引用可能指向同一个对象
+* 类成员：试图读取一个类的数据成员，但又要调用同一个类对象的方法
+    > 调用的方法(成员函数)可能修改你试图写入的成员
+* 全局变量：试图读取全局对象，但又要调用任何函数
+    > 任何函数都可能修改全局变量
 
 ## 算法设计
 * 贪婪：
-证明局部最优解即全局最优解
+    * 需要证明局部最优解即全局最优解
+
 * 回溯
-    * 若此时有多个选择可能得到解，则dfs选择，若选择错误或无选择则函数返回(回溯)重新选择
+    * 利用***DFS***进行多路分叉选择，若选择错误或无选择则函数返回(撤销)重新选择
+
     * 注意是否可以裁剪掉一些情况
+
 * 分治：
     * 将大问题分解为各类型子问题，各部分递归求解
+
     * 子问题的解可以用来裁剪掉一些情况
+
 * DP：
     * 问题分解：分治策略拆分出子问题
-相邻依赖，状态决策
+        > 相邻依赖，状态决策
+
     * 状态定义：确定记忆表的维度和记录值的语义
-前者即影响状态的变量，后者即解决之前状态的解
+        > 前者即影响状态的变量，后者即解决之前状态的解
+
     * 递推方程：当前解如何依赖之前表中的解推出
-    * 初始状态：由最初始解即边界条件决定是否逆推
+
+    * 初始状态：由最初始解即边界条件决定是否改为循环逆推
 
 # 时空复杂度
 
 ## 复杂度标记
-    * T ≤ O
-    * T ≥ Ω
-    * T = Θ
-    * T < o
-## 复杂度公式
-    * T1 + T2 = max(O1, O2)
-    * T1 * T2 = O1 * O2
+* T ≤ O
+* T ≥ Ω 
+* T = Θ 
+* T < o
+
+## 复杂度计算
+复杂度合并：
+* $T_1 + T_2 = \max(O_1, O_2)$
+
+* $T_1 \times T_2 = O_1 \times O_2$
+
+级数公式：
+* $\sum_{i=0}^{N}A^i=\frac{A^{N+1}-1}{A-1}$
+
+* $\sum_{i=0}^{N}A^i\le\frac{1}{1-A}\qquad(0\lt A\lt 1)$
+
+* $\sum_{i=1}^{N}i^k\approx \frac{N^{k+1}}{|k+1|}\qquad(k \ne -1)$
+
+* $\sum_{i=1}^N\frac{1}{i}\approx \ln{N}$
+
+* $F_{k+1}=F_k+F_{k-1}\qquad，则F_{k+1}\lt(5/3)^{k+1}$
+
 ## 经典复杂度
-
-
-
-
-
-
-
-
-
-
-
+![fzd](../images/fzd1.jpg)
+![fzd2](../images/fzd2.png)
+![fzd3](../images/fzd3.png)
 
 # 数论
 
 ## 同余与模算术
-* 同余方程：
-若(a-b)%N==0，则a≡b(mod N)
+* 同余方程： 若$(a-b)\%N=0$，则$a\equiv b\mod N$
+
+* 逆元：$b\times b^{ -1 } \equiv 1 \mod N$
+    所有$x=b^{-1}+k\times N(k\in Z)$ 都是 $b$ 在模$N$意义下的逆元  
+    整数 $b$ 存在逆元的充要条件是 $b$ 与 $N$ 互素
+
 * 取余方程：
-    * (a+b)%n = (a%n + b%n)%n
-    * (a-b)%n = (a%n - b%n + n)%n
-    * (a*b)%n = (a%n * b%n)%n
-    * (a/b)%n = (b*b`¹)%n
-    * a%b = a - a/b*b
-* 逆元：
-b*b^(-1) ≡ 1 (mod c)
-* 费马小定理：
-若b为整数，m为素数，
-则b^{m-1} ≡ 1 (mod m)，
-即b*b^{m-2} ≡ 1 (mod m)
+    * 计算机运算：整数运算丢弃小数部分`a % b == a - (a / b) * b`
+
+    * $(a+b)\%N = (a\%N + b\%N)\%N$
+
+    * $(a-b)\%N = (a\%N - b\%N + N)\%N$
+
+    * $(a\times b)\%N = (a\%N \times b\%N)\%N$
+
+    * $(a\div b)\%N = (a\times b^{-1})\%N$，$b^{-1}$是$b$ 的逆元
+> 推导：
+> $$
+> (a\div b)\mod N \Rightarrow (a\div b)\times 1\mod N\Rightarrow(a\div b)\times(b\times b^{-1})\mod N
+> \Rightarrow(a\times b^{-1})\mod N
+> $$
+> 故需要 $a$ 可以被 $b$ 整除，因为计算机整数运算中`a/b`会丢弃小数，违反来上述证明必要的数学运算逻辑
+
+如何求逆元：
+* 费马小定理：  
+    若$b$为整数，$N$为素数，  
+    则$b^{N-1} \equiv 1 \mod N$，  
+    即$b\times b^{N-2} \equiv 1 \mod N$，$b^{m-2}$就是$b$在模$m$意义下的逆元
+
+* [扩展欧几里得算法](#ny)
 
 ## gcd与lcm
+* 描述：最大公因数(gcd)与最小公倍数(lcm)
 * gcd性质
-    * gcd(a, b) = gcd(b, a)
-    * gcd(a, b) = gcd(a-b, b) (a ≥ b)：辗转相减法
-    * gcd(a, b) = gcd(a%b, b)
-    * gcd(a, b, c) = gcd(gcd(a, b), c)
+    * $\gcd(a, b) = \gcd(b, a)$
+    * $\gcd(a, b) = \gcd(a-b, b) (a ≥ b)：辗转相减法$
+    * $\gcd(a, b) = \gcd(a\%b, b)$
+    * $\gcd(a, b, c) = \gcd(gcd(a, b), c)$
 * lcm性质
-lcm(a, b) = a*b / gcd(a, b)
+    * $lcm(a, b) = a\times b \div gcd(a, b)$
+<details>
+    <summary><b>Code...</b></summary>
 
-## 排列组合
-    * 加法原理：同类相加
-    * 乘法原理：前后顺序
-    * 容斥原理：加法重叠
-    * 多重集的排列数：
-
-    * 多重集的组合数：
-
-
-## 欧几里得算法
-int gcd(int m, int n)
+```cpp
+inline int
+gcd(int m, int n)
 {
-    while ( n != 0 ) { // 直到n == 0结束，gcd为m
+    while ( n != 0 ) {
         int tmp{m % n};
         m = n;
         n = tmp;
@@ -373,42 +706,95 @@ int gcd(int m, int n)
     return m;
 }
 
+inline int
+lcm(int m, int n)
+{
+    return m * n / gcd(m, n);
+}
+```
+</details>
 
 ## 扩展欧几里得算法
+* 描述：求 $x$ 与 $y$ 使得$a\times x+b\times y=\gcd(a, b)$
 * 应用：
-    * ax + by = c的整数解
-x = c/g * x0 + b/g * t
-y = c/g * y0 - a/g * t
-    * 逆元：
-bx + my = 1解得x即逆元，若gcd非1则无解
+    * $ax + by = c$的整数解
+        * $x = \frac{c}{g} \times x_0 + \frac{b}{g} \times t$
+        * $y = \frac{c}{g} \times y_0 - \frac{a}{g} \times t$
+    * 逆元： <span id="ny"></span>
+        * $b\times x+N\times y = 1 =\gcd()$
+<details>
+    <summary><b>Code...</b></summary>
+
+```cpp
 int ext_gcd(int a, int b, int& x, int& y)
 {
-    if ( b == 0 ) { // 递归基准
+    if ( b == 0 ) {
         x = 1;
         y = 0;
-        return a; // 返回gcd
-    } else {
-        int ret = exp_gcd(b, a%b, y, x); // (a % b) * x + b * y == ret == x_0 * b + y_0 * b
-        y -= (a / b) * x; // a % b == a - a / b * b 代入上式
-       return ret;
-   }
-}
+        return a;
+    }
 
+    int ans{ext_gcd(b, a % b, y, x)};
+    /*
+     * 因 ans == b * y + (a % b) * x
+     * 又 a % b == a - (a / b) * b
+     * 故 ans == b * y + (a - (a / b) * b) * x == x * a + (y - (a / b) * x) * b
+     */
+    y -= a / b * x;
+    return ans;
+}
+```
+</details>
+
+## 排列组合
+* 加法原理：同类相加
+
+* 乘法原理：前后顺序
+
+* 容斥原理：加法重叠
+
+* 多重集的排列数：
+$$
+\binom{n}{n_1,n_2,\cdots,n_k}=\frac{n!}{\prod_{i=1}^kn_i!}
+$$
+$$
+\binom{n}{m}等价于\binom{n}{m,n-m}
+$$
+* 多重集的组合数：
+$$
+即求x_1+x_2+\cdots+x_k=r，利用插板法(x_1+1)+(x_2+1)+\cdots+(x_k+1)=r+k
+$$
+$$
+得\binom{r+k-1}{k-1}
+$$
 
 ## 快速幂运算
-int quick_pow(int x, int n) { // 利用指数的二进制分解与指数加法，简化幂运算
+* 描述：$a^{23}=a^{0x17}=a^{0b00010111}=a^{0x10}\times a^{0x4}\times a^{0x2}\times a^{0x1}$
+<details>
+    <summary><b>Code...</b></summary>
+
+```cpp
+int quick_pow(int num, int pow) { // 利用指数的二进制分解与指数加法，简化整数的幂运算
     int ret{1};
-    while ( n != 0 ) {
-        if ( n & 0x1 ) { // 如果thisBit为1，则乘以x(现在的x表示当前的指数的x的幂)
-            ret *= x;
+    while ( pow != 0 ) {
+        if ( pow & 0x1 ) { // 如果thisBit为1，则乘以x(现在的x表示当前的指数的x的幂)
+            ret *= num;
         }
-        x *= x; // 每次循环都更新x，需要时才乘入ret
-        n >>= 1;
+        num *= num; // 每次循环都更新x，需要时才乘入ret
+        pow >>= 1;
     }
+    return ret;
 }
+```
+</details>
 
 
 ## 厄拉多塞筛
+* 描述：素数的倍数均为非素数，筛掉这些倍数
+<details>
+    <summary><b>Code...</b></summary>
+
+```cpp
 vector<int> prime_sieve(int maxNum) // 筛掉初始值的所有倍数
 {
     const int SQRT_N = sqrt(maxNum);
@@ -418,8 +804,8 @@ vector<int> prime_sieve(int maxNum) // 筛掉初始值的所有倍数
             ret.push_back(num); // 半online算法
             for ( size_t needErase{num + num}; needErase <= maxNum; needErase += num ) {
                 prime[needErase] = false; // MEM_OPT
-           }
-       }
+            }
+        }
     }
     for ( size_t idx{SQRT_N + 1}; idx <= maxNum; ++idx ) {
         if ( prime[idx] ) {
@@ -428,78 +814,106 @@ vector<int> prime_sieve(int maxNum) // 筛掉初始值的所有倍数
     }
     return ret;
 }
+```
+</details>
 
 
 ## 唯一分解定理
-* 拓展：
-从多个数的质数分解式中，选取每个质数的指数的最小值则得到gcd的质数分解式，选取最大值则得到lcm的质数分解式
+* 描述：每个整数可以被分解为质数的幂的乘积，如$20=2^2\times 3^0\times 5^1$
+* 拓展： 从多个数的质数分解式中，选取每个质数的指数的最小值则得到gcd的质数分解式，
+    选取最大值则得到lcm的质数分解式
+<details>
+    <summary><b>Code...</b></summary>
+
+```cpp
 vector<int> udt(int num) // 每个正整数都可以分解为唯一的素数的幂的积
 {
-     vector<int> ret(Primes.size()); // Primes为素数表
-     for ( size_t idx{}; num > 0; ++idx ) {
-         int thisPrime{Primes[idx]}, pows{};
-         auto divd{div(num, thisPrime)};
-         while ( divd.rem == 0 ) { // 如果当前的素数为因子，则计算其最大的指数
-             ++pows;
-             num = divd.quot;
+    vector<int> ret(Primes.size()); // Primes为素数表
+    for ( size_t idx{}; num > 0; ++idx ) {
+        int thisPrime{Primes[idx]}, pows{};
+        auto divd{div(num, thisPrime)};
+        while ( divd.rem == 0 ) { // 如果当前的素数为因子，则计算其最大的指数
+            ++pows;
+            num = divd.quot;
             divd = div(num, thisPrime);
         }
         ret[idx] = pows;
     }
     return ret;
 }
+```
+</details>
 
 
-# 字符串与排序
+# 匹配与排序
 
 ## KMP
 * 特点：快速匹配模式子串
 * 细节：
-失配指针next：指向该位置所代表的字符串的一个前缀的后一个位置，该前缀与字符串后缀相等且是所有可能中最长的
-计算next：依赖前一个位置的next值，注意前缀的前缀等于后缀的后缀
-模式匹配：某个位置匹配失败，则直接将模式串前缀右移到next记录的后缀的位置上
-* init_next()：
-vector<int> init_next(const string& str)
-{
-    int len = str.size();
-    vector<int> next(len);
-    for ( int idx{1}; idx < len; ++idx ) { // 计算每个位置的next值
-        int pubLen{next[idx - 1]}; // 初始状态为前一个位置的next值，若该位置匹配则直接+1,否则迭代判断前缀的前缀
-        while ( pubLen != 0 && str[pubLen] != str[idx] ) { // 直到pubLen == 0或者该位置相等，前者防止next[pubLen - 1]越界
-            pubLen = next[pubLen - 1]; // 核心：前缀str.substr(0, pubLen-1)与后缀str.substr(len-pubLen+1)相同，故前缀的前缀等于后缀的后缀
-        }
-       if ( str[pubLen] == str[idx] ) { // 如果该位置匹配，则next[i]直接为next[i-1]
-           ++pubLen;
-       }
-       next[idx] = pubLen;
-    }
-    return next;
-}
+    * 失配指针next：指向该位置所代表的字符串的一个前缀的后一个位置，该前缀与字符串后缀相等且是所有可能中最长的
+    * 计算next：依赖前一个位置的next值，注意前缀的前缀等于后缀的后缀
+    * 模式匹配：某个位置匹配失败，则直接将模式串前缀右移到next记录的后缀的位置上
+<details>
+    <summary><b>Code...</b></summary>
 
-* kmp_comp()：
-bool kmp_comp(const string& needComp, const string& pattern, vector<int>& nextKMP)
+```cpp
+struct KMP
 {
-    size_t compIdx{}, patIdx{}, compLen{needComp.size()}, patLen{pattern.size()};
-    while ( compIdx < patLen && latterIdx < latterLen ) { // 循环直到匹配串或模式串结束
-        if ( needComp[compIdx] == pattern[patIdx] ) { // 该位置匹配成功则比较下一个位置
-            ++formerIdx;
-            ++latterIdx;
-        } else if ( patIdx != 0 ) { // 若不成立且模式串索引不为0，右移模式串，将其“前缀”移到“后缀”位置上再比较
-                patIdx = nextKMP[patIdx - 1];
-       } else { // 模式串索引为0，表示无最长公共前后缀，从下个位置重新匹配模式串
-              ++compIdx;
-       }
+    vector<int> next_m;
+    string pat_m;
+
+    explicit KMP(const string& patStr): pat_m{patStr}
+    {
+        int lenth = patStr.length();
+        next_m.resize(lenth);
+        for ( int idx{1}; idx < lenth; ++idx ) {
+            int pubLen{next_m[idx - 1]};
+            while ( pubLen >= 1 && patStr[pubLen] != patStr[idx] ) {
+                pubLen = next_m[pubLen - 1];
+            }
+            if ( patStr[pubLen] == patStr[idx] ) {
+                next_m[idx] = pubLen + 1;
+            } else {
+                next_m[idx] = 0;
+            }
+        }
     }
-    return patIdx == patLen; // 如果模式串结束匹配，则代表匹配成功
-}
+
+    size_t operator()(const string& cmpStr, size_t begin = 0)
+    {
+        int cmpIdx{}, cmpEnd = cmpStr.size(), patIdx{}, patEnd = next_m.size();
+        while ( cmpIdx != cmpEnd && patIdx != patEnd ) {
+            if ( cmpStr[cmpIdx] == pat_m[patIdx] ) {
+                ++cmpIdx;
+                ++patIdx;
+            } else if ( patIdx != 0 ) {
+                patIdx = next_m[patIdx - 1];
+            } else {
+                ++cmpIdx;
+            }
+        }
+
+        if ( patIdx == patEnd ) {
+            return cmpIdx - patEnd;
+        } else {
+            return UINT64_MAX;
+        }
+    }
+};
+```
+</details>
 
 
 ## AC自动机
 * 特点：快速进行一对多模式匹配
 * 细节：
-失配指针：指向这样一个节点，它代表的字符串是当前已匹配的字符串的后缀，且是所有可能中最长的
-计算fail：依赖父节点的fail，注意将不存在的子节点赋值为其fail的同一子节点的值
-模式匹配：失配时跳转到fail指向的节点
+    * 失配指针：指向这样一个节点，它代表的字符串是当前已匹配的字符串的后缀，且是所有可能中最长的
+    * 计算fail：依赖父节点的fail，注意将不存在的子节点赋值为其fail的同一子节点的值
+    * 模式匹配：失配时跳转到fail指向的节点
+<details>
+    <summary><b>Code...</b></summary>
+
+```cpp
 struct Vertex
 {
     array<size_t, 26> children_m;
@@ -579,25 +993,33 @@ struct Trie
         return matchCnt;
     }
 };
+```
+</details>
 
 
 ## 计数排序
 * 特点：时间效率高，空间效率低
 * 细节：
-使用线性数组索引标记元素，cnt[]数组的索引表示原数组值，存储的值表示该桶中元素的序号，最后遍历原数组，找到cnt中对应的元素的值即为序号，输出并-1
+    * 使用线性数组索引标记元素，cnt[]数组的索引表示原数组值，存储的值表示该桶中元素的序号，最后遍历原数组，找到cnt中对应的元素的值即为序号，输出并-1
+<details>
+    <summary><b>Code...</b></summary>
+
+```cpp
 vector<int> cnt_sort(iter begin, iter end, int max, int min)
 {
     vector<int> cnt(max - min + 1), retSort(end - begin + 1);
-    for_each(begin, end, [](int i){++cnt[i]  - mini];});
+    for_each(begin, end, [&](int i){++cnt[i]  - mini];});
     for ( size_t idx{1}, len{cnt.size()}; idx < len; ++idx ) {
         cnt[]idx] += cn[][]tidx - 1];
     }
     for_each(begin, end, ](int i){retSortcnti]] = i;}
 }
+```
+</details>
 
 
 # 图论
-
+[Code...](https://github.com/mrbeardad/Practices/tree/master/ACM/BOOK/dsaa:c%2B%2B)
 ## 拓扑排序有向无圈图
 * 数据结构：
 Vertex{numr; adj;}
@@ -694,7 +1116,7 @@ vector<vector<idx>> branch
     * 多次dfs，添加branch，从map删除该节点，每次dfs从numr最大者开始
     * 每个branch为强分支
     * 注：第二种dfs需提前为branch提供空位
-# 算法
+# 其它算法
 
 ## 哈夫曼编码贪婪
 * 数据结构：

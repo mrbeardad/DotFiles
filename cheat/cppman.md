@@ -833,7 +833,9 @@ exception <exception>`
     * (no)uppercase
     * oct dec hex (no)showbase
     * (no)showpoint
-    * setprecision(v), .precision() .precision(v)
+    * setprecision(v),
+    * .precision()
+    * .precision(v)
     * fixed , scientific：使用这两个操作符后, 精度的语义由“所有数字位数”变为“小数位数”
 <!-- -->
 
@@ -886,7 +888,7 @@ exception <exception>`
     * std::ios(定义了一些标志位)
 <!-- -->
 
-* 字符处理：
+* 字符转换与处理：
     * `<cctype>`    ：字符分类
     * `<codecvt>`   ：字符编码转换器
     * `<locale>`    ：转换宽字符需要此头文件

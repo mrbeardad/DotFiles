@@ -196,7 +196,11 @@
 * GitHub
     @username  
     @commit-hash  
-#issue  
+    {user}/{repo}#issue  
     :emoji:
+    ```diff
+    + 新增
+    - 删除
+    ```
 <!-- -->
 

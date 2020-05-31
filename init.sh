@@ -190,7 +190,7 @@ function extra_cfg() {
 
     # 桌面应用
     yay -S deepin.com.qq.office pepper-flash flashplugin vlc baidunetdisk-bin netease-cloud-music wps-office ttf-wps-fonts \
-        flameshot google-chrome guake xfce4-terminal alacritty
+        flameshot google-chrome guake xfce4-terminal peek alacritty
     # yay -S octave gimp
 
     # GNOME扩展

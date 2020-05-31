@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 while getopts ":whpf:" opt ;do
     case $opt in
@@ -66,3 +66,5 @@ if [[ $(echo $line | wc -w) -gt 1 ]] ;then
 fi
 
 $EDITOR +$line $file
+
+# vim: filetype=sh
