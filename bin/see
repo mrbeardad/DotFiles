@@ -33,10 +33,10 @@ if [[ $help_flag == 1 || -z "$entry" && -z "$list_flag" ]] ;then
     \r\e[32mUsages\e[m:
     \e[33m$\e[m \e[32msee\e[m \e[36m<options>.. <entry>\e[m
 
-    -h      : list this help_flag menu
-    -l      : list names of all available entries
-    -w      : Point out that the entry you give is a complete word, not a part of a word
-    -f      : specify a file in ~/.cheat/ to search, suffix '.md' is unnecessary\n"
+    -h              : list this help_flag menu
+    -l [<entry>]    : list names of all available entries
+    -w <entry>      : Point out that the entry you give is a complete word, not a part of a word
+    -f <file>       : specify a file in ~/.cheat/ to search, suffix '.md' is unnecessary\n"
     exit 0
 fi
 
@@ -46,7 +46,7 @@ if [[ -n "$specific_file" ]] ;then
 fi
 
 if [[ $list_flag == 1 ]] ;then
-    sed -n '/^\* /p' $cheat_files | grep --color \*
+    sed -rn "/^\* $entry/{s/\* (.*)/[31;1m*[m \1/;p}" $cheat_files
     exit 0
 fi
 

@@ -162,8 +162,11 @@
             * `Ctrl`+`R`：从磁盘文件恢复会话
         * 其他操作：
             * `h`：打开htop
+            * `i`：打开iotop
             * `r`：打开ranger
             * `n`：打开ncdu
+            * `m`：打开cmatrix
+            * `m`：打开cmatrix -r
 <!-- -->
 
 * SSH
@@ -468,8 +471,12 @@ gra -> gcb|gct -> gf|gl -> gco -> gc -> gm|grb -> gp
     * gcpc
 <!-- -->
 
+* git archive [--format] --output FILE BRANCH
+    > 不同于bundle，该操作打包不带有`.git`目录
+<!-- -->
+
 * git bundle create TargetFile HEAD Branch
-    > 打包  
+    > 打包本应该用push操作的数据  
     > 注： 最好带上HEAD自动checkout  
     > 可用`git clone <file> [<dirname>]`重建目录
 <!-- -->

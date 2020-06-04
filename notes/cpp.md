@@ -24,6 +24,7 @@
 - [面向对象](#面向对象)
 - [泛型编程](#泛型编程)
   - [编译器类型推断](#编译器类型推断)
+  - [元编程](#元编程)
 - [预处理](#预处理)
 - [其他特性](#其他特性)
 
@@ -116,7 +117,7 @@
     * 返回类型推断：
         * auto
         * deltype(auto)
-        > 注：递归调用之前必须有return以确定返回类型
+        > 注：所有返回类型均要相同，且递归调用之前必须有return以确定返回类型
 >
 
 ## 其它特性
@@ -405,7 +406,7 @@
 * 类型别名：
     > `using newtype = oldtype`  
     * 针对类与类型
-* 模板别名：
+* 模板类型别名：
     > `template<typename T> using newtype = typename oldtype<T>::Type`
     * 使用方法类似[模板特例化](#mbtlh)
     * 目标为模板类或模板类的类型成员(可能需要[typename](#typename))
@@ -413,7 +414,7 @@
 * <span id="using声明">using声明</span> ：
     > `using std::member1, std::member2;`
     * 将命名空间或类中的成员引入当前作用域
-    * 引入函数时不需要完整函数签名，故可引入完整的重载函数集
+    * 引入函数时不需要函数签名，故可引入完整的重载函数集
 * using指示
     > `using namespace std`
     * 将命名空间所有成员引入当前的全局作用域，若发生名字冲突可以再使用::运算符解决(using声明不行)
@@ -632,14 +633,14 @@
 >
 
 * OOP与Template之间“多态”的区别
-    * OOP通过继承体系的运行时转换(真多态)
+    * OOP通过继承体系的运行时转换(动态多态)
         * 通过不同的派生类的指针或引用做参数进行调用
         * 需要设计virtual函数并override
         * 可以调用已编译好的库
-    * Template通过泛型的编译时实例化(伪多态)
+    * Template通过泛型的编译时实例化(静态多态)
         * 通过类的成员函数的形式调用
         * 需要设计符合接口规范的成员供Template调用
-        * 需要重新编译源文件(因为template时根据已有的调用实例由编译器自动生成的，而在之前是没有这个实例的)
+        * 需要重新编译源文件(因为template时根据已有的调用实例由编译器自动生成的，而在设计它之前是没有这个实例的)
 >
 
 * 利用OOP与Template设计框架
@@ -652,24 +653,29 @@
 # 泛型编程
 * 模板参数
     * 模板参数作用域中，不能重用模板参数名
-    * 用typename指出目标模板的成员为类型 <span id="typename"></span>
+    * 用typename指出目标模板的成员为类型，避免与静态数据成员相混淆 <span id="typename"></span>
     * 类型参数：
         * 普通类型
             > `template <typename T>`
         * 模板类型
-            > `template <template<typename> typename T>`
+            > `template <template<typename, typename> class T>`  
+            > `template <template<typename...> class T>`  
+            > `template <template<auto...> class T>`
     * 非类型参数：必须常量表达式
         * 显示指定
             > `template<int INT>`
         * auto推断
             > `template<auto INT>`
+* 默认模板参数
+    * 类型与非类型都可以有默认模板参数
+    * 自动实施于偏特化版本
 >
 
 * 函数模板
     > `template <typename T> int test(Test<T> t);`
     * 根据限定修饰后的形参再由实参推断出模板参数([类型抵消](#lxdx))
         * 限定符：const
-        * 修饰符：`*`、`[]`、`()`、`<T>`
+        * 修饰符：`::`、`[]`、`()`、`<T>`、`*`
             > `&`不会被类型抵消，而是遵守[引用折叠](#yyvd)的规则
     * 显式指定模板参数
         > `test<int>(Test<int>{})`
@@ -677,6 +683,25 @@
         * 用于声明[模板友元](#mbyy)是指定其某一实例为友元
         * 此机制可用于递归指定次数
     * 将函数模板转换为函数指针时，会根据指针推断模板参数
+    * 函数模板的偏序：用于判断重载的模板函数中哪个更特例化
+        ```cpp
+        template<typename T>
+        partial_order_func(T t); // #1
+
+        template<typename T>
+        partial_order_func(T* t); // #2
+
+        template<typename T>
+        partial_order_func(const T* t); // #3
+        ```
+        规则就是：将模板参数`T`设为类型`X`，则`#1`就是`X`，`#2`是`X*`，`#3`是`const X*`。
+        针对`#1`与`#2`，将后者的类型`X*`带入前者的模板，可以成功推断(忽略类型转换)出`T`为`X*`；
+        而反过来将`X`带入`#2`的模板，无法成功推断，因为`T*`要求传入的实参必须为指针；
+        如此单方面的推断，则表明`#1`的模板参数比`#2`更加泛型，即`#2`比`#1`更加特例化  
+        常见的有：
+        * `T*`比`T`更特例化
+        * `const T*`比`T*`更特例化
+        * `(T1 t1, T1 t2)`比`(T1 t1, T2 t2)`更特例化
 >
 
 * 类模板
@@ -690,7 +715,8 @@
 
 * 变量模板
     > `template <typename T> obj = get_val<T>()`
-    * 根据模板参数(类型或非类型)来方便地生成变量
+    * 根据模板参数(类型或非类型)来方便地生成变量，甚至利用元编程技术来编译器获取值
+    * 不能作为模板模板参数(一种非类型参数)
 >
 
 * 变参
@@ -760,6 +786,31 @@
     * 保留原始类型
     * 左值为引用：双层括号显式指定引用
 >
+## 元编程
+
+元编程：在编译期，利用 **类型推导**与 **类型匹配** 以在编译期对类型进行限定、计算、选择
+> 数值的编译期计算倒是其次
+
+元函数的调用形式：
+```cpp
+// 获取类型
+MetaFunc<T, N>::type    // 利用using类型别名和using模板类型别名
+MetaFunc_t<T, N>        // 利用`using模板类型别名`包装`::type`
+
+// 获取值
+MetaFunc<T, N>::value   // 利用static const数据成员
+MetaFunc<T, N>          // 直接利用`变量模板`取代`::value`，但无法利用static_assert进行编译期判断
+MetaFunc(CONSTEXPR_INT) // constexpr函数，需要传入constexpr对象并将返回值赋值给constexpr对象
+```
+* 循环：
+    * 变参递归，设计参数个数固定的特化模板结束递归
+    * 非变参递归，设计最终结束状态的特化模板结束递归
+* 分支：
+    * 利用特例化的偏序规则进行分支选择
+    * 利用`if constexpr (CONSTEXPR_INT)`来实现编译期分支，作用可看作预处理指令`#if CONDITION`，
+        只不过前者如果出现在模板之外，仍然会对被丢弃的语句进行语法检测
+* 顺序：
+    * using的顺序需要保证
 
 # 预处理
 * 宏

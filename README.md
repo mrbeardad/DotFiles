@@ -150,6 +150,8 @@ guake的开机启动并自动连接tmux又依赖`init.sh`中安装的desktop文�
     > 本来想设置只允许密钥链接的，结果我手机上用的**JuiceSSH**，它生成的公钥电脑上无法识别，
     > 电脑上生成的私钥它又无法识别。要是有万能的网友朋友知道，提个issue呀:smile:
 
+> 现在会安装`/etc/hosts`文件，手动解析github的域名，访问更快速
+
 ## zsh
 代替**bash**，强有力的生产工具，当然写脚本还是得用bash  
 相较与bash，zsh主要的有点是**好看**与**好用**
@@ -317,6 +319,11 @@ alacritty是用rust写的，没用qt也没用gtk，
 
 
 ## neovim
-一个终端文本编辑器，超顶的
-* 这个配置单独一个仓库，[传送门](https://github.com/mrbeardad/SpaceVim)
-> vim目录下的配置是以前用vim是自己搭的，现在转neovim了，并把配置都转移到了spacevim里
+一个终端文本编辑器，超顶的  
+这个配置单独一个仓库，[传送门](https://github.com/mrbeardad/SpaceVim)  
+vim目录下的配置是以前用vim是自己搭的，现在转neovim了，并把配置都转移到了spacevim里  
+踩过的坑：
+* 如果你的neovim剪切板使用的是`xsel`，有时重启X是会导致其失效，因为`$DISPLAY`环境变量在重启X时已经更改了，
+而neovim不知道，当你在tmux运行neovim的时候就会出现这bug，因为tmux也不知道`$DISPLAY`变了，而neovim以致被它接管着，
+所以解决办法就是重启tmux，`tmux kill-server`把tmux服务杀了在重启
+

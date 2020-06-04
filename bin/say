@@ -21,7 +21,7 @@ eval entry=\$$OPTIND
 ((++OPTIND))
 eval entry_numr=\$$OPTIND
 # -h选项，选项出错，-f无参数，entry为空
-if [[ $help_flag == 1 || -z "$entry" ]] ;then
+if [[ $help_flag == 1 || -z "$entry" && -z "$specific_file" ]] ;then
     if [[ -z "$entry" && $help_flag != 1 ]] ;then
         echo -e "$0: \e[31mRequired <entry>\e[m"
     fi
@@ -30,6 +30,7 @@ if [[ $help_flag == 1 || -z "$entry" ]] ;then
     If there are more than 1 entry have found, type a num to choose one, or give the num in parameter after <entry>
     \r\e[32mUsages\e[m:
     \e[33m$\e[m \e[32msay\e[m \e[36m<options>.. <entry> [<num>]\e[m
+    \e[33m$\e[m \e[32msay\e[m \e[36m-f <file>\e[m
 
     -h      : list this help_flag menu
     -p      : the <entry> must be a prefix of entry name
@@ -40,6 +41,10 @@ fi
 cheat_files=~/.cheat/*.md
 if [[ -n "$specific_file" ]] ;then
     cheat_files=~/.cheat/$specific_file*.md
+    if [[ -z "$entry" ]] ;then
+        $EDITOR $cheat_files
+        exit 0
+    fi
 fi
 if [[ $word_flag == 1 ]] ;then
     word_pattern='\b'
@@ -66,5 +71,3 @@ if [[ $(echo $line | wc -w) -gt 1 ]] ;then
 fi
 
 $EDITOR +$line $file
-
-# vim: filetype=sh

@@ -2,20 +2,22 @@
 
 function backup() {
     if [[ -z "$1" ]] ;then
-        echo -e "\033Error: backup() required one parameter\033[m"
+        echo -e "\033[31mError: backup() required one parameter\033[m"
         exit 1
     elif [[ -e "$1" ]] ;then
-        mv $1 $1.bak
+        mv "$1" "$1".bak
     fi
 }
 
 function makedir() {
     if [[ -z "$1" ]] ;then
-        echo -e "\033Error: makedir() required one parameter\033[m"
+        echo -e "\033[31mError: makedir() required one parameter\033[m"
         exit 1
     elif [[ ! -d "$1" ]] ;then
-        backup $1
-        mkdir -p $1
+        if [[ -e "$1" ]] ;then
+            mv "$1" "$1".bak
+        fi
+        mkdir -p "$1"
     fi
 }
 
@@ -44,9 +46,10 @@ function system_cfg() {
 }
 
 function pacman_cfg() {
-    # 改用腾讯源
+    # 修改pacman源为腾讯源
     echo 'Server = https://mirrors.cloud.tencent.com/manjaro/stable/$repo/$arch' | sudo tee /etc/pacman.d/mirrorlist
-    # 有时候更新系统会把mirrorlist覆盖了，备份一下，当发现下载速度奇慢无比时，检查此项
+    # 有时候更新系统会把mirrorlist覆盖了，备份一下，当发现下载速度奇慢无比时检查此项
+    # 直接在/etc/pacman.conf修改可以解决此问题，就像init-for-myself.sh一样
     sudo cp /etc/pacman.d/mirrorlist{,.bak}
 
     # pacman彩色输出
@@ -59,7 +62,7 @@ function pacman_cfg() {
 
     # 更新系统，并安装一些下载工具和开发工具
     sudo pacman -Syyu
-    sudo pacman -S archlinuxcn-keyring yay aria2 uget expac base-devel clang gdb cgdb
+    sudo pacman -S archlinuxcn-keyring yay aria2 uget expac base-devel clang gdb cgdb boost
 
     # 启动定时清理软件包服务
     sudo systemctl enable --now paccache.timer
@@ -68,10 +71,9 @@ function pacman_cfg() {
 function grub_cfg() {
     # 来自fedora的grub配置：
     # 使用`grub-mkpasswd-pbkdf2`命令获取加密密码，
-    # 并在/boot/grub/user.cfg中定义GRUB_PASSWORD变量为该密码(可仿照仓库中的文件grub/user.cfg进行设置)，
+    # 并在/boot/grub/user.cfg中定义`GRUB_PASSWORD`变量为该密码(可仿照仓库中的文件grub/user.cfg进行设置)，
     # 即可设置grub超级用户：超级用户名为`root`
     sudo cp -v grub/01_users /etc/grub.d
-    # sudo cp -v grub/user.cfg /boot/grub
     if ! grep -q '--unrestricted' /etc/grub.d/{10_linux,30_os-prober} ;then
         sudo sed -i '/--class os/s/--class os/--class os --unrestricted /' /etc/grub.d/{10_linux,30_os-prober}
     fi
@@ -81,25 +83,23 @@ function grub_cfg() {
 }
 
 function ssh_cfg() {
-    makedir ~/.ssh
     # 添加git push <remote>需要的ssh配置，提供了对github与gitee的配置
     # 得自己生成密钥对
+    makedir ~/.ssh
     # cat ssh/ssh_config >> ~/.ssh/ssh_config
 
     # 仓库中的.gitconfig提供了将`git difftool`中vimdiff链接到nvim的配置
     # 需要的话，修改后拷贝到家目录下
     # cp .gitconfig ~
 
-    # 设置sshd用于连接到该主机
+    # 配置sshd用于连接到该主机并启动sshd服务
     sudo cp -v ssh/sshd_config /etc/ssh/sshd_config
-
-    # 启动ssh服务
     sudo systemctl enable --now sshd.service
 }
 
 function zsh_cfg() {
     # 安装插件配置
-    yay -S autojump oh-my-zsh-git powerline-fonts thefuck
+    yay -S oh-my-zsh-git powerline-fonts thefuck autojump
     # yay -S zsh zsh-syntax-highlighting zsh-autosuggestions
 
     # 安装zshrc
@@ -122,8 +122,8 @@ function tmux_cfg() {
 }
 
 function nvim_cfg() {
-    # 安装neovim配置需要的所有软件包
-    yay -S gvim neovim xsel python-pynvim cmake ctags global cppcheck silver-searcher-git ripgrep npm php markdown2ctags
+    # 围绕NeoVim搭建IDE
+    yay -S neovim gvim xsel python-pynvim cmake ctags global silver-searcher-git ripgrep npm php markdown2ctags shellcheck cppcheck clang gdb cgdb boost
     # yay -S vim-youcompleteme-git
 
     # 安装neovim配置
@@ -139,13 +139,13 @@ function nvim_cfg() {
     cp -v ~/.SpaceVim/mode/init.toml ~/.SpaceVim.d
 
     makedir ~/.local/bin
-    g++ -O3 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
+    g++ -O3 -std=c++17 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
     cp ~/.SpaceVim/custom/{nop.sh,vim-quickrun.sh} ~/.local/bin
 }
 
 function rime_cfg() {
     # 下载fcitx5与rime
-    yay -S fcitx5-git fcitx5-qt5-git fcitx5-qt4-git fcitx5-gtk kcm-fcitx5 fcitx5-rime rime-double-pinyin rime-emoji
+    yay -S fcitx5-git fcitx5-qt5-git fcitx5-qt4-git fcitx5-gtk fcitx5-config-qt-git fcitx5-rime rime-double-pinyin rime-emoji
 
     # 下载fcitx5皮肤
     makedir ~/.local/share/fcitx5/themes
@@ -164,50 +164,29 @@ function rime_cfg() {
     echo -e 'export GTK_IM_MODULE=fcitx5\nexport QT_IM_MODULE=fcitx5\nexport XMODIFIERS="@im=fcitx5"\nfcitx5 > /dev/null &' > ~/.xprofile
 }
 
-function bin_cfg() {
-    cp -v bin/* ~/.local/bin
-
-    makedir ~/.cheat
-    cp -v cheat/* ~/.cheat
-}
-
-# 安装额外的CLI工具、桌面软件、GNOME扩展
-function extra_cfg() {
+function chfs_cfg() {
     # CHFS
-    cd /opt/bin
-    sudo unzip ${dotfiles_dir}/chfs/chfs-linux-amd64-1.8.zip
-    sudo chmod 755 chfs
-    cd -
+    (
+        cd /opt/bin || exit 1
+        sudo unzip "$dotfiles_dir"/chfs/chfs-linux-amd64-1.8.zip
+        sudo chmod 755 chfs
+    )
     sudo cp -v chfs/chfs.{service,socket} /etc/systemd/system/
     sudo mkdir --mode=777 /srv/chfs
     sudo systemctl daemon-reload
     sudo systemctl enable --now chfs.socket
+}
+
+function cli_cfg() {
+    # 安装say, see, terminal-tmux.sh，以及用于say, see修改和查看的cheat-sheets
+    cp -v bin/* ~/.local/bin
+    makedir ~/.cheat
+    cp -v cheat/* ~/.cheat
 
     # CLI工具
     yay -S htop iotop dstat cloc screenfetch figlet cmatrix
     sudo pip3 install cppman
     # yay -S ncdu ranger
-
-    # 桌面应用
-    yay -S deepin.com.qq.office pepper-flash flashplugin vlc baidunetdisk-bin netease-cloud-music wps-office ttf-wps-fonts \
-        flameshot google-chrome guake xfce4-terminal peek alacritty
-    # yay -S octave gimp
-
-    # GNOME扩展
-    yay -S sweet-theme-git adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git tela-icon-theme-git \
-        gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git \
-        gnome-shell-extension-dash-to-panel-git gnome-shell-extension-lockkeys-git gnome-shell-extension-topicons-plus-git
-    # yay -S gtk-theme-macos-mojave gnome-shell-extension-dash-to-dock-git
-
-    # 安装字体
-    yay -S ttf-google-fonts-git adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypixels unicode-emoji nerd-fonts-source-code-pro nerd-fonts-space-mono ttf-blex-nerd-font-git
-    makedir ~/.local/share/fonts/NerdCode
-    cd ~/.local/share/fonts/NerdCode
-    tar -Jxvf ${dotfiles_dir}/fonts/NerdCode.tar.xz
-    mkfontdir
-    mkfontscale
-    fc-cache -fv
-    cd -
 
     # 修改Manjaro默认的ranger配置，用于fzf与vim-defx预览文件
     sed -i '/^set show_hidden/s/false/true/; ' ~/.config/ranger/rc.conf
@@ -217,7 +196,39 @@ function extra_cfg() {
     backup ~/.gdbinit
     cp -v gdb/gdbinit ~/.gdbinit
     makedir ~/.cgdb
+    backup ~/.cgdb/cgdbrc
     cp -v gdb/cgdbrc ~/.cgdb
+}
+
+function desktop_cfg() {
+    # 桌面应用
+    yay -S deepin.com.qq.office baidunetdisk-bin netease-cloud-music wps-office ttf-wps-fonts \
+        flameshot google-chrome guake xfce4-terminal
+    # yay -S octave gimp
+
+    # 其它工具：视频、字体
+    yay -S vlc peek ffmpeg pepper-flash flashplugin fontforge
+
+    # GNOME扩展
+    yay -S sweet-theme-git adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git tela-icon-theme-git \
+        gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git \
+        gnome-shell-extension-lockkeys-git gnome-shell-extension-topicons-plus-git
+    # yay -S  gnome-shell-extension-dash-to-dock-git gnome-shell-extension-dash-to-panel-git
+    git clone --depth=1 https://github.com/mrbeardad/gtk-theme-macos-mojave ~/Downloads/gtk-theme-macos-mojave
+    makedir ~/.local/share/themes
+    cp -rv ~/Downloads/gtk-theme-macos-mojave/McOS-MJV-3.30 ~/.local/share/themes/McOS-MJV-Light
+    cp -rv ~/Downloads/gtk-theme-macos-mojave/McOS-MJV-Dark-mode-Gnome-3.30 ~/.local/share/themes/McOS-MJV-Dark
+
+    # 安装字体
+    yay -S ttf-google-fonts-git adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypixels unicode-emoji
+    makedir ~/.local/share/fonts/NerdCode
+    (
+        cd ~/.local/share/fonts/NerdCode || exit 1
+        tar -Jxvf "$dotfiles_dir"/fonts/NerdCode.tar.xz
+        mkfontdir
+        mkfontscale
+        fc-cache -fv
+    )
 
     # xfce4-terminal配置
     makedir ~/.config/xfce4/terminal
@@ -229,27 +240,35 @@ function extra_cfg() {
     # backup ~/.config/alacrittyalacritty.yml
     # cp -v alacritty/alacritty.yml ~/.config/alacritty
 
-    # 安装google-access-helper
-    cd ~/.config/
-    unzip $dotfiles_dir/chrome/google-access-helper-2.3.0.zip
-    cd -
+    # 安装google-chrome插件
+    (
+        cd ~/.config/ || exit 1
+        unzip "$dotfiles_dir"/chrome/google-access-helper-2.3.0.zip
+        git clone --depth=1 https://github.com/orsharir/github-mathjax.git
+    )
+
+    # github 手动解析域名
+    if [[ -e /etc/hosts ]] ;then
+        sudo mv /etc/hosts{,.bak}
+    fi
+    sudo cp -v hosts /etc/hosts
 
     # TIM配置，启动TIM时禁用ipv6，否则不显示图片
-    sudo bash -c 'echo "net.ipv6.conf.all.disable_ipv6 =1
+    echo "net.ipv6.conf.all.disable_ipv6 =1
 net.ipv6.conf.default.disable_ipv6 =1
-net.ipv6.conf.lo.disable_ipv6 =1" >> /etc/sysctl.conf'
+net.ipv6.conf.lo.disable_ipv6 =1" | sudo tee -a /etc/sysctl.conf
 
     # 修改desktop文件
     yay -S prime
     makedir ~/.local/share/applications
     makedir ~/.config/autostart
-    cp -v /usr/share/applications/{wps-office-*,nvim}.desktop ~/.local/share/applications
+    cp -v /usr/share/applications/{wps-office-*,google-chrome,nvim}.desktop ~/.local/share/applications
     cp -v /usr/share/applications/guake.desktop ~/.config/autostart/guake-self.desktop
     sed -i '/^Exec=/s/=.*$/=xfce4-terminal --maximize -x terminal-tmux.sh NeoVim/; /Terminal=/s/true/false/' ~/.local/share/applications/nvim.desktop
     sed -i '/^Exec=/s/=.*$/=guake -e "terminal-tmux.sh Guake/"' ~/.config/autostart/guake-self.desktop
     sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/wps-office-*
     sudo sed -i -e '/wine.*run\.sh/isudo sysctl -p /etc/sysctl.conf' -e '/wine.*run\.sh/s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
-    # sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop    # 浏览器开的勤，比较耗电，需要的时候再手动开启prime吧
+    sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop    # 浏览器开的勤，比较耗电，需要的时候再手动开启prime吧
 
     # 安装gnome配置
     makedir ~/.config/dconf
@@ -257,7 +276,8 @@ net.ipv6.conf.lo.disable_ipv6 =1" >> /etc/sysctl.conf'
 }
 
 function main() {
-    export dotfiles_dir=$(pwd)
+    dotfiles_dir=$(pwd)
+    export dotfiles_dir
     system_cfg
     pacman_cfg
     grub_cfg
@@ -266,14 +286,15 @@ function main() {
     tmux_cfg
     nvim_cfg
     rime_cfg
-    bin_cfg
-    extra_cfg
+    chfs_cfg
+    cli_cfg
+    desktop_cfg
 
     echo -e '\e[32m=====> Chrome\e[m
-    Now, add google-access-helper to google-chrome in devloper mode'
+    Now, add google-access-helper and github-mathjax to google-chrome in devloper mode'
     echo -e '\e[32m=====> Neovim\e[m
-    Now, launch neovim and type :SPInstall, then build YCM and fix ALE'
-    echo -e '\e[33m=====> Gnome dconf has been installed, logout immediately and relogin will apply it.
+    Now, launch nvim and type :SPInstall. Build YCM and fix ALE after all plugins are installed '
+    echo -e '\e[33m=====> Gnome dconf has been installed, logout immediately and back-in will apply it.
 Any desktop configurate may overwrite it. '
     # Sweet-dark tela-icon:place hp-uiscan:icon ~/Downloads/BaiduNetDisk ~/Downloads/GoogleChrome
 }

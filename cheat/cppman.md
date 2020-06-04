@@ -154,6 +154,26 @@ exception <exception>`
         _mm256_store_epi256( int* , __m256i )
         ```
 <!-- -->
+* 字面值：
+    > 定义于：`inline namespace std::literals`
+    * chrono::duration：
+        * 后缀：h，min，s，ms，us，ns
+    * 数字：
+        * 前缀：二(0b/0B)、八(0)、十、十六(0x/0X)
+        * 后缀：u，l，ul，ll，ull，f
+        * 无后缀的整数字面值，其类型为：
+            * 若为十进制，为`int` `long` `long long`中的最小者
+            * 若不为十进制，为`int` `unsigned int` `long` `unsigned long` `long long` `unsigned long long`
+               中的最小者
+        * 无后缀的浮点数字面值，其类型为double
+    * 字符：
+        > 默认的C-Style字符串类型为`const char*`，标准提供了一个特殊转换：可以将C-Style-String赋值给`char*`
+        * `R"del(string)del"`
+        * 前缀：`u8`UTF-8，`u`UTF-16，`U`UTF-32，`L`宽字符
+        * 后缀(仅限于C-string)：s，sv
+    * 自定义
+        * `ret operator""cus(ar)`
+<!-- -->
 
 # 通用工具
 * pair：`<utility>`
@@ -893,10 +913,29 @@ exception <exception>`
     * `<codecvt>`   ：字符编码转换器
     * `<locale>`    ：转换宽字符需要此头文件
     例：
-    * wbuffer_convert<codecvt_utf8<wchar_t>> wbuf_utf8(stream.rdbuf())
-    * wistream utf8(&wbuf_utf8)
-    * wstring_convert`<codecvt_utf8<wchar_t>>` convertor
-    * .to_bytes() .from_bytes() 参数：(char) (char*) (string) (beg, end)
+    * 转换stream_buffer
+    ```cpp
+    wbuffer_convert<codecvt_utf8<wchar_t> > utf8_to_wchar_t(cin.rdbuf())
+    wistream get_wstring_from_multibytes_stream(&utf8_to_wchar_t)
+    get_wstring_from_multibytes_stream >> wstring;
+    wbuffer_convert<codecvt_utf8<wchar_t> > wchar_t_to_utf8(cout.rdbuf())
+    wistream put_wstring_to_multibytes_stream(&wchar_t_to_utf8)
+    put_wstring_to_multibytes_stream << wstring; // 注意结束时必须冲刷该缓冲区，不然会有字符留在里面未输出
+    // 注意cout与put_wstring_to_multibytes_stream的缓冲区并不一样，
+    ```
+    * 转换string
+    ```cpp
+    wstring_convert<codecvt_utf8<wchar_t>> convertor
+    convertor.to_bytes(wstring&)
+    convertor.from_bytes(string)
+    /* 参数：
+     * (char byte);
+     * (const char* ptr);
+     * (const byte_string& str);
+     * (const char* first, const char* last);
+     */
+
+    ```
 <!-- -->
 
 * 随机数生成器：`<random>`

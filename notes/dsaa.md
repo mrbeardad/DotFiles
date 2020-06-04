@@ -10,8 +10,8 @@
 >
 可用于命名标识符的一些通用前后缀：
 * 位置：`prev`，`next`，`left`，`right`，`head`，`tail`，`mid`
-* 循环：`pos`，`idx`，`this`，`now`，`cur`，`beg`，`end`
-* 时间：`new`，`old`，`early`，`late`，`last`
+* 循环：`pos`，`idx`，`this`，`cur`，`beg`，`end`
+* 时间：`new`，`old`，`early`，`late`，`last`，`now`
 * 计数：`size`，`len`，`num`，`cnt`，`nr`，`dep`，`wid`，`hei`
 * 序数：`fst`，`snd`，`last`
 * bool：`is`，`not`，`and`，`or`，`any`，`all`，`none`
@@ -53,7 +53,7 @@
     int operator ""_s(unsigned long long i);
 ```
 * 用4个`<space>`代替`<tab>`
-* 指针与引用声明中，`*`与`&`应该与类型放在一起，故引用和指针应该单独一行声明，如`int& r; double* p;`
+* 指针与引用声明中，`*`与`&`应该与类型放在一起，故引用和指针应该单独声明，如`int& r; double* p;`
 * 控制流语句的括号需内部空格，控制流语句关键字与括号隔空格，如`if ( get_bool() )`
 * else(catch)跟在if(try)语句块末端花括号后面
 ```cpp
@@ -127,8 +127,7 @@
     * 快速搜索且需要自动排序
     * 注：以下情况考虑用线性数组
         * 元素的比较为整数的比较，且该整数的值域可接受作为下标索引
-        * 且元素总量固定，可使用`std::sort()`排序
-        * 且允许off-line算法
+        * 且元素总量固定，且允许off-line算法，可使用`std::sort()`排序
 * Unordered
     * 快速搜索且无需排序
     * 注：以下情况考虑用线性数组
@@ -971,7 +970,7 @@ struct Trie
         }
     }
 
-    int find(const string& str)
+    int operator()(const string& str)
     {
         size_t matchCnt{};
         vector<bool> isOnce(trie_m.size(), true); // 记录一个子串是否已被匹配过了
