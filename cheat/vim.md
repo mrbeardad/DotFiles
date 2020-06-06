@@ -46,7 +46,7 @@
 
 <!-- vim-markdown-toc -->
 
-# [SpaceVim定制版](https://mrbeardad/SpaceVim)
+# [SpaceVim定制版](https://github.com/mrbeardad/SpaceVim)
 ## 插入模式
 * 插入模式
 > 进入插入模式：`i` `a` `I` `A` `o` `O`
@@ -284,18 +284,18 @@
 ## Toggle命令
 * Toggle命令
 
-| 按键        | 作用                         |
-|-------------|------------------------------|
-| `<space>tl` | 切换linebreak                |
-| `<space>tw` | 切换wrap                     |
-| `<space>tv` | 切换virtualedit              |
-| `<space>te` | 切换expandtab                |
-| `<space>ts` | 切换spell                    |
-| `<space>tf` | 切换foldmethod               |
-| `<space>t8` | 切换列数提醒                 |
-| `<space>tb` | 切换背景颜色                 |
-| `<space>tc` | 切换隐藏符号，如`\n` `\t` 等 |
-| `<space>tn` | 切换行号显示                 |
+| 按键        | 作用                             |
+|-------------|----------------------------------|
+| `<space>tl` | 切换linebreak                    |
+| `<space>tw` | 切换wrap                         |
+| `<space>tv` | 切换virtualedit                  |
+| `<space>te` | 切换expandtab                    |
+| `<space>ts` | 切换spell                        |
+| `<space>tf` | 切换foldmethod                   |
+| `<space>t8` | 切换列数提醒                     |
+| `<space>tb` | 切换背景颜色                     |
+| `<space>tc` | 切换隐藏符号显示，如`\n` `\t` 等 |
+| `<space>tn` | 切换行号显示                     |
 <!-- -->
 ## Git
 * Git
@@ -309,6 +309,7 @@
 <!-- -->
 ## 快速移动光标
 * 快速移动光标
+
 | 按键               | 作用                       |
 |--------------------|----------------------------|
 | `<space>jw`        | 跳转至某单词               |
@@ -378,7 +379,7 @@
 | `go` | 跳转定义或声明      |
 | `gr` | 跳转引用            |
 | `gt` | 获取对象类型        |
-| `gc` | 重构对象            |
+| `gc` | 更名对象            |
 <!-- -->
 ## 语法错误检测
 * 语法错误检测
@@ -439,6 +440,7 @@
 
 ## 杂项
 * 杂项
+> Last but not least
 
 | 按键        | 作用                 |
 |-------------|----------------------|

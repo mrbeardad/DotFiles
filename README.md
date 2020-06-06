@@ -41,6 +41,7 @@
 * [开发工具](cheat/devtool.md)
     > \[注]:包括gcc, gdb, git等
 * [Vim](cheat/vim.md)
+    > 非常完整的使用文档，只需要你记快捷键就行
 * [Markdown概念](cheat/markdown.md)
 * [小鹤双拼](cheat/double_pinyin.md)
 * [Manjaro安装](notes/manjaro.md)
