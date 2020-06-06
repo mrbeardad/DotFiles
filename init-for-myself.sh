@@ -57,12 +57,41 @@ function pacman_cfg() {
         echo -e '[archlinuxcn]\nServer = https://mirrors.cloud.tencent.com/archlinuxcn/$arch' | sudo tee -a /etc/pacman.conf
     fi
 
-    # 更新系统，并安装一些下载工具和基础开发工具
+    # 更新系统，并安装一些下载工具
     sudo pacman -Syyu
-    sudo pacman -S archlinuxcn-keyring yay aria2 uget expac base-devel
+    sudo pacman -S archlinuxcn-keyring yay aria2 uget expac
 
     # 启动定时清理软件包服务
     sudo systemctl enable --now paccache.timer
+}
+
+function nvim_cfg() {
+    # 围绕NeoVim搭建IDE
+    yay -S base-devel neovim gvim xsel python-pynvim cmake ctags global silver-searcher-git ripgrep npm php markdown2ctags shellcheck cppcheck clang gdb cgdb boost
+    # yay -S vim-youcompleteme-git
+
+    # 安装neovim配置
+    backup ~/.SpaceVim
+    git clone https://gitee.com/mrbeardad/SpaceVim ~/.SpaceVim
+
+    makedir ~/.config
+    backup ~/.config/nvim
+    ln -s ~/.SpaceVim ~/.config/nvim
+
+    makedir ~/.SpaceVim.d
+    backup ~/.SpaceVim.d/init.toml
+    cp -v ~/.SpaceVim/mode/init.toml ~/.SpaceVim.d
+
+    makedir ~/.local/bin
+    g++ -O3 -std=c++17 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
+    cp ~/.SpaceVim/custom/{nop.sh,vim-quickrun.sh} ~/.local/bin
+
+    makedir ~/.cache/cppman/cplusplus.com
+    (
+        cd /tmp || exit 1
+        tar -zxf "$dotfiles_dir"/cppman/cppman_db.tar.gz
+        cp -vn cppplusplus.com/* ~/.cache/cppman/cplusplus.com
+    )
 }
 
 function grub_cfg() {
@@ -78,12 +107,11 @@ function grub_cfg() {
 
     # 安装grub主题，自选png图片替代/usr/share/grub/themes/manjaro/background.png即可替换背景图片
     yay -S grub-theme-manjaro
-    sudo cp -v /mnt/ASUS/backup/grub-background/DNA.png /usr/share/grub/themes/manjaro/background.png
+    sudo cp -v grub/DNA.png /usr/share/grub/themes/manjaro/background.png
 }
 
 function ssh_cfg() {
     # 添加git push <remote>需要的ssh配置，提供了对github与gitee的配置
-    # 得自己生成密钥对
     makedir ~/.ssh
     cat ssh/ssh_config >> ~/.ssh/ssh_config
 
@@ -121,28 +149,6 @@ function tmux_cfg() {
     yay -S tmux tmux-resurrect-git
 
     cp -v tmux/tmux.conf ~/.tmux.conf
-}
-
-function nvim_cfg() {
-    # 围绕NeoVim搭建IDE
-    yay -S neovim gvim xsel python-pynvim cmake ctags global silver-searcher-git ripgrep npm php markdown2ctags shellcheck cppcheck clang gdb cgdb boost
-    # yay -S vim-youcompleteme-git
-
-    # 安装neovim配置
-    backup ~/.SpaceVim
-    git clone https://gitee.com/mrbeardad/SpaceVim ~/.SpaceVim
-
-    makedir ~/.config
-    backup ~/.config/nvim
-    ln -s ~/.SpaceVim ~/.config/nvim
-
-    makedir ~/.SpaceVim.d
-    backup ~/.SpaceVim.d/init.toml
-    cp -v ~/.SpaceVim/mode/init.toml ~/.SpaceVim.d
-
-    makedir ~/.local/bin
-    g++ -O3 -std=c++17 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
-    cp ~/.SpaceVim/custom/{nop.sh,vim-quickrun.sh} ~/.local/bin
 }
 
 function rime_cfg() {
@@ -208,18 +214,14 @@ function desktop_cfg() {
         flameshot google-chrome guake xfce4-terminal
     # yay -S octave gimp
 
-    # 其它工具：视频、字体
-    yay -S vlc peek ffmpeg pepper-flash flashplugin fontforge
+    # 其它工具：视频、字体、渗透、抓包
+    yay -S vlc peek ffmpeg pepper-flash flashplugin fontforge nmap tcpdump wireshark-qt
 
     # GNOME扩展
-    yay -S sweet-theme-git adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git tela-icon-theme-git \
+    yay -S mojave-gtk-theme-git sweet-theme-git adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git tela-icon-theme-git \
         gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git \
         gnome-shell-extension-lockkeys-git gnome-shell-extension-topicons-plus-git
     # yay -S  gnome-shell-extension-dash-to-dock-git gnome-shell-extension-dash-to-panel-git
-    git clone --depth=1 https://github.com/mrbeardad/gtk-theme-macos-mojave ~/Downloads/gtk-theme-macos-mojave
-    makedir ~/.local/share/themes
-    cp -rv ~/Downloads/gtk-theme-macos-mojave/McOS-MJV-3.30 ~/.local/share/themes/McOS-MJV-Light
-    cp -rv ~/Downloads/gtk-theme-macos-mojave/McOS-MJV-Dark-mode-Gnome-3.30 ~/.local/share/themes/McOS-MJV-Dark
 
     # 安装字体
     yay -S ttf-google-fonts-git adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypixels unicode-emoji
@@ -249,7 +251,7 @@ function desktop_cfg() {
         git clone --depth=1 https://github.com/orsharir/github-mathjax.git
     )
 
-    # github 手动解析域名
+    # 手动解析github域名
     if [[ -e /etc/hosts ]] ;then
         sudo mv /etc/hosts{,.bak}
     fi
@@ -284,11 +286,11 @@ function main() {
     export dotfiles_dir
     system_cfg
     pacman_cfg
+    nvim_cfg
     grub_cfg
     ssh_cfg
     zsh_cfg
     tmux_cfg
-    nvim_cfg
     rime_cfg
     chfs_cfg
     cli_cfg

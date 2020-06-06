@@ -1,147 +1,9 @@
-# C++ Style
-部分风格参考自[HosseinYousefi/CompetitiveCPPManifesto](https://github.com/HosseinYousefi/CompetitiveCPPManifesto)
-
-## 名字
-* 类名、静态变量&emsp;&emsp;&emsp;&emsp;&emsp;：大驼峰拼写法`ExampleName`
-* 基本类型别名、动态变量&emsp;：小驼峰拼写法`exampleName`
-* 类的数据成员&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;：小驼峰并带`_m`后缀`exampleName_m`
-* 模板参数、宏、常量&emsp;&emsp;&emsp;：全部大写和下划线间隔`EXAMPLE_NAME`
-* 命名空间、函数名称&emsp;&emsp;&emsp;：全部小写和下划线间隔`example_name`
->
-可用于命名标识符的一些通用前后缀：
-* 位置：`prev`，`next`，`left`，`right`，`head`，`tail`，`mid`
-* 循环：`pos`，`idx`，`this`，`cur`，`beg`，`end`
-* 时间：`new`，`old`，`early`，`late`，`last`，`now`
-* 计数：`size`，`len`，`num`，`cnt`，`nr`，`dep`，`wid`，`hei`
-* 序数：`fst`，`snd`，`last`
-* bool：`is`，`not`，`and`，`or`，`any`，`all`，`none`
-* 介词：`in`，`on`，`at`，`of`，`2`，`4`
-* 类型：`int`，`char`，`str`，`strm`，`ptr`
-* 用途：`ret`，`ans`，`val`，`need`，`tmp`，`deal`，`have`
-
-## 注释
-* 块注释`/* comment */`：
-    * 注释大片代码
-    * 源文件标题
-* 单行注释`// comment ` ：代码步骤解释
-    * 尾后注释：解释<u>*该行*</u>或<u>*该语句块*</u>或<u>*该作用域*</u>的功能
-    * 行前注释：解释接下来一段的代码的功能
->
-一般使用单行注释，这样可以用块注释来注释大片代码，因为`/* */`内是可以嵌套`//`的，
-但是不能嵌套`/* */`
-
-## 括号
-* 命名空间、类、函数的花括号下一行开端
-* 控制流语句块、多行lambda的花括号同一行开端
-* 所有控制流语句都应该用花括号，即使现在只有一行
-* 复合表达式中，注意括号的使用以突出显示优先级
-
-## 空格
-* template与<>间隔空格，如`template <typename T>`
-* 嵌套模板参数的右括号`>`间隔空格，如`vector<vector<int> >`
-* 模板参数包`...`与左边隔空格，如`<typename ...T>`；解包与右边隔空格，如`(T&&... args)`
-* 函数有关键字inline、constexpr、template、static应该分行写
-```cpp
-    template <typename T>
-    inline int
-    test_func(T& t);
-```
-* 函数名与参数列表不间隔空格
-* operator与重载符号结合一般当做函数名，同上
-```cpp
-    int operator()(int i);
-    int operator ""_s(unsigned long long i);
-```
-* 用4个`<space>`代替`<tab>`
-* 指针与引用声明中，`*`与`&`应该与类型放在一起，故引用和指针应该单独声明，如`int& r; double* p;`
-* 控制流语句的括号需内部空格，控制流语句关键字与括号隔空格，如`if ( get_bool() )`
-* else(catch)跟在if(try)语句块末端花括号后面
-```cpp
-    if ( get_bool() ) {
-        //statement
-    } else {
-        //statement
-    }
-```
-* 二元运算符两边空格，一元只隔一边，三元全隔
-* 逗号与分号只与右边隔空格
-* 访问控制、case标签、构造函数的冒号只右边隔空格
-* lambda函数体超过2行时应该分行
-* 函数体、类作用域、命名空间的头尾不留空行
-* 各作用域和功能模块之间一般需要隔空行
-* 文件末尾加一空行
-
-## 设计经验
-> * 头文件保护宏
-> * 利用预处理指令做错误处理与条件编译
-> * 不对外链接的符号应该都写在无名命名空间中
-> * wrap函数尽可能做少的预处理，将操作封装到tool函数
-> * 函数模板的形参，若为引用则需要decay
-> * 函数nothrow一定`noexcept`
-* 注意对函数参数与成员函数this的修饰以增强鲁棒性
-* 何时使用指针而非引用：
-    * 当需要NULL语义时
-    * 当需要更改它的指向时
-* 类的单参构造函数若非有意，一定要explicit
-
-## 易错点
-* 注意对I/O格式化的要求：
-    * istream会忽略前导空格，并注意`cin.ignore()`的使用
-    * 大量的非格式化I/O应该使用流缓冲区迭代器，如`istreambuf_iterator<charT>`
-    * 浮点数输出：
-        * fixed
-        * setprecision(n)
-        * setw(n)
-        * 四舍五入
-        * 丢弃小数
-* 容器增删元素时，为防止一些对象失效，检查：
-    * 是否在**range-based-for**中
-    * 是否之前获取了与改容器相关的**迭代器**、**指针**、**引用**
-* 循环中，注意stream是否失效
-* 使用节点式容器时删除元素前别忘记后移迭代器
-
-## 解题经验
-* online，offline：边输入边处理，输入完全后处理
-* 抓住题干：
-    * 无需保存所有数据，只存储题目需要的
-    * 转换题意并找出核心计算问题
-    * 逆向思维，由起点到终点，变为求终点的起点
-
-## 选择标准库容器
-* vector
-    * 无其他需求一般选择vector
-* array
-    * 固定大小
-    * 容量需求大且时间效率优于空间效率
-* 内置数组
-    * 相对array需要多维线性数组
-* deque
-    * 需要头部增删元素
-    * 容量需求大且空间效率优于时间效率
-    * 容量需求过大
-* list
-    * 需要大量地随处插删
-* Pqueue
-    * 只需快速找出最值而无需完全排序
-* Associated
-    * 快速搜索且需要自动排序
-    * 注：以下情况考虑用线性数组
-        * 元素的比较为整数的比较，且该整数的值域可接受作为下标索引
-        * 且元素总量固定，且允许off-line算法，可使用`std::sort()`排序
-* Unordered
-    * 快速搜索且无需排序
-    * 注：以下情况考虑用线性数组
-        * 元素的比较为整数的比较，若该整数的值域可接受作为下标索引
-* Map
-    * 在set的基础上提供更方便的下标操作
-    * 只比较key而进行映射集合的分类
-
 # 奇技淫巧
 
 ## 循环
 * 设计步骤：
-    * 设计多重循环时，抓住***各层循环需要更新的循环变量***及其***先后顺序***进行设计  
-    * for循环用于***需要初始化变量***和***continue时仍需要迭代变量***的情况，其它情况用while
+    * *设计多重循环时，抓住**各层循环需要更新的循环变量**及其**先后顺序**进行设计*  
+    * *for循环用于**需要初始化头部**和**continue时仍需要迭代变量**的情况，其它情况用while*
     1. 首先，
         * 确定<u>循环变量</u>
         * 并思考如何<u>迭代</u>变量
@@ -152,15 +14,16 @@
         * 注意件优先检测<u>穷尽条件</u>
         * 若<u>until</u>的条件更容易想象，则将其条件取逻辑非即可
     3. 再者，
-        * 标记出所有<u>需要更新的变量</u>
         * 确定<u>循环操作</u>的内容
         * 并修正<u>初始状态</u>
+        * 标记出所有<u>需要更新的变量</u>
         * 若<u>第一次循环</u>需要特殊操作，可以
             * 利用 **once** flag
-            * 或者将第一次的循环操作直接提取出来
+            * 或者将第一次的循环操作直接**提取**出来
     4. 然后，
         * 将<u>最终状态的参数</u>带入检查是否正确
-    5. <u>尾后处理</u>，例如处理剩余的元素
+    5. 最后，
+        * <u>尾后处理</u>，例如处理剩余的元素
 * 检测条件的确定：循环变量与循环操作的相关关系
     * 同步相关：检测最后操作状态
     * 异步相关**迭前操后**：检测最后操作状态
@@ -171,13 +34,14 @@
 * `if-else`：不可能同时发生的条件
 * `if-if`：可能同时发生的条件，必要时可以用`break;`或`continue;`跳过公共语句
 * `if-elseif-else`：若两个分支有重合的公共语句，可以转化为`if{if-else}`
+* `if-else{if-else}`：若内部分支无重合的公共语句，可以转化为`if-elseif-else`
 * `for{if{break}}`：可以将if{break}的条件并入for中
-* `for{if{for}}`：外层for与内层for的检测条件重合时
-    * 目的：在某条件下用另一种方式完成循环
-    * 合并：外for内嵌if-else，注意变量迭代是否有差异
 * `if{for}`：if与for的检测条件重合时
     * 目的：某条件下需要进行循环操作
     * 合并：只要for，if的语义用for的初始条件替代
+* `for{if{for}}`：外层for与内层for的检测条件重合时
+    * 目的：在某条件下用另一种方式完成循环
+    * 合并：外for内嵌if-else，注意变量迭代是否有差异
 
 ## 递归
 * 设计步骤：
@@ -185,8 +49,8 @@
     * 基准情况：结束递归并保证函数功能符合
     * 一般进展：一次递归只做部分，其余部分调用递归函数做，结合后返回时对调用者也符合函数功能
 * 注意：
-    * 尾递归尽量地转换成循环语句
     * 递归的结束尽量用**基准情况**来控制，并且尽早的检查结束条件
+    * 尾递归尽量地转换成循环语句
     * 可以用Stack来存储递归途径
 
 ## 步数
@@ -199,6 +63,7 @@
 
 # 数据结构
 
+***接下来会含有$L^AT_EX$公式，记得安插件哦，看***[这里](https://github.com/mrbeardad/DotFiles/blob/master/notes/csapp.md)
 ## 栈
 * LIFO表：后进先出
 * 单调栈
@@ -207,7 +72,6 @@
     <summary><b>humdrum_queue Code...</b></summary>
 
 ```cpp
-#include <c++/9.3.0/x86_64-pc-linux-gnu/bits/c++config.h>
 #include <cstddef>
 #include <deque>
 #include <functional>
@@ -300,7 +164,7 @@ struct MonoStack
 * 多级反馈队列：优先级高的任务未完成则放入下级队列尾部，操作系统的调度算法
 
 ## 树状数组
-* 特点：快速进行任意范围的区间操作
+* 特点：快速进行任意范围区间的可加性操作与查询
 * 细节：
     * 父节点管理前面`lowbit(x & -x)`个元素
     * 0索引空缺(0管理0个节点)，数组多开一格
@@ -407,10 +271,10 @@ struct BITree
 * build()：
     * 初始状态：`dp[i][0]`=`a[i]`
     * 递推方程：`dp[i][j]`=$OP(dp[i][j-1], dp[i+2^{j-1}][j-1]$)
-    * 外迭代$j$直到$k$，内迭代$i$直到$i+2^k\gt n$
+    * 外迭代$j$直到最后状态为$k$，内迭代$i$直到$i+2^j\le n$
 * query()：
-    * `k = log(n)/log(2)`，n表示数量
-    * $OP(dp[i][k]，dp[j-2^k][k])$
+    * $k = \log(n)/\log(2)$，$n$表示数量
+    * $OP(dp[i][k]，dp[j-2^k+1][k])$
 <details>
     <summary><b>Code...</b></summary>
 
@@ -561,15 +425,11 @@ struct Trie
     <summary><b>noCode...</b></summary>
 
 ```cpp
-//真的没有
+//真的没有o(=·ェ·=)m
 ```
 </details>
 
 # 哲学思想
-***接下来会含有$L^AT_EX$公式，记得安插件哦，看***[这里](https://github.com/mrbeardad/DotFiles/blob/master/notes/csapp.md)
-
-<br></br>
-
 * **由宏及微**  
 先确定大目标，再确定小目标，按顺序步骤设计
 * **自顶向下**  
@@ -585,7 +445,7 @@ struct Trie
 
 读取某个内存引用，若在作用域内不可能被某些操作写入，重复引用时可以被编译器优化，
 而避免手动将其载入寄存器的麻烦，以下操作便会妨碍优化：
-* 传引用参数：函数有多个传引用形参，试图读取其中一个实参，又要写入另一个参数
+* 传引用参数：函数有多个传引用形参，试图读取其中一个实参，又要写入另一个参数(调用任何有非底层const传引用参数的函数都视为写入)
     > 因为传入的多个引用可能指向同一个对象
 * 类成员：试图读取一个类的数据成员，但又要调用同一个类对象的方法
     > 调用的方法(成员函数)可能修改你试图写入的成员
@@ -652,7 +512,7 @@ struct Trie
 ## 同余与模算术
 * 同余方程： 若$(a-b)\%N=0$，则$a\equiv b\mod N$
 
-* 逆元：$b\times b^{ -1 } \equiv 1 \mod N$
+* 逆元：$b\times b^{ -1 } \equiv 1 \mod N$  
     所有$x=b^{-1}+k\times N(k\in Z)$ 都是 $b$ 在模$N$意义下的逆元  
     整数 $b$ 存在逆元的充要条件是 $b$ 与 $N$ 互素
 
@@ -671,15 +531,15 @@ struct Trie
 > (a\div b)\mod N \Rightarrow (a\div b)\times 1\mod N\Rightarrow(a\div b)\times(b\times b^{-1})\mod N
 > \Rightarrow(a\times b^{-1})\mod N
 > $$
-> 故需要 $a$ 可以被 $b$ 整除，因为计算机整数运算中`a/b`会丢弃小数，违反来上述证明必要的数学运算逻辑
+> 故需要 $a$ 可以被 $b$ 整除，因为计算机整数运算中`a/b`会丢弃小数，违反了上述证明必要的数学运算逻辑
 
 如何求逆元：
 * 费马小定理：  
     若$b$为整数，$N$为素数，  
     则$b^{N-1} \equiv 1 \mod N$，  
-    即$b\times b^{N-2} \equiv 1 \mod N$，$b^{m-2}$就是$b$在模$m$意义下的逆元
+    即$b\times b^{N-2} \equiv 1 \mod N$，$b^{m-2}$就是$b$在模$N$意义下的逆元
 
-* [扩展欧几里得算法](#ny)
+* [扩展欧几里得算法](#扩展欧几里得算法)
 
 ## gcd与lcm
 * 描述：最大公因数(gcd)与最小公倍数(lcm)
@@ -716,11 +576,11 @@ lcm(int m, int n)
 ## 扩展欧几里得算法
 * 描述：求 $x$ 与 $y$ 使得$a\times x+b\times y=\gcd(a, b)$
 * 应用：
-    * $ax + by = c$的整数解
+    * $ax + by = c$的解
         * $x = \frac{c}{g} \times x_0 + \frac{b}{g} \times t$
         * $y = \frac{c}{g} \times y_0 - \frac{a}{g} \times t$
-    * 逆元： <span id="ny"></span>
-        * $b\times x+N\times y = 1 =\gcd()$
+    * 逆元：
+        * $b\times x+N\times y = 1 =\gcd(b, N)$ ，则$x$即$b$的逆元
 <details>
     <summary><b>Code...</b></summary>
 
@@ -748,7 +608,7 @@ int ext_gcd(int a, int b, int& x, int& y)
 ## 排列组合
 * 加法原理：同类相加
 
-* 乘法原理：前后顺序
+* 乘法原理：异类相乘
 
 * 容斥原理：加法重叠
 
@@ -998,21 +858,28 @@ struct Trie
 
 ## 计数排序
 * 特点：时间效率高，空间效率低
-* 细节：
-    * 使用线性数组索引标记元素，cnt[]数组的索引表示原数组值，存储的值表示该桶中元素的序号，最后遍历原数组，找到cnt中对应的元素的值即为序号，输出并-1
 <details>
     <summary><b>Code...</b></summary>
 
 ```cpp
-vector<int> cnt_sort(iter begin, iter end, int max, int min)
+template <typename ITER>
+vector<int> cnt_sort(ITER begin, ITER end, int minNum, int maxNum)
 {
-    vector<int> cnt(max - min + 1), retSort(end - begin + 1);
-    for_each(begin, end, [&](int i){++cnt[i]  - mini];});
-    for ( size_t idx{1}, len{cnt.size()}; idx < len; ++idx ) {
-        cnt[]idx] += cn[][]tidx - 1];
+    vector<int> cnt(maxNum - minNum + 1);
+    for ( auto pos{begin}; pos != end; ++pos ) {    // 每个元素先记录该桶中的元素个数
+        ++cnt[*pos - minNum];
     }
-    for_each(begin, end, ](int i){retSortcnti]] = i;}
+    for ( int idx{1}, end = cnt.size(); idx < end; ++idx ) {    // 记录该通最后一个元素的序数，1开始
+        cnt[idx] += cnt[idx - 1];
+    }
+    vector<int> ret(cnt.back());
+    for ( auto pos{--end}; pos != begin; ++pos ) {    // 遍历原数组 
+        ret[--cnt[*pos - minNum]] = *pos;
+    }
+    ret[--cnt[*begin - minNum]] = *begin;
+    return ret;
 }
+
 ```
 </details>
 

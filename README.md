@@ -48,6 +48,7 @@
     > \[注]:该笔记为了终端查询可读性更好，并未遵守markdown语法，
     > 毕竟代码里有很多`<>` `*` `_`
 * [C++语法特性](notes/cpp.md)
+* [C++风格](notes/cppstyle.md)
 * [比特币与区块链](notes/bitcoin.md)
 * [深入了解计算机系统](notes/csapp.md)
 * [编程技巧&数据结构与算法](notes/dsaa.md)
@@ -84,12 +85,13 @@ $ ./init.sh
 > Ps: 我用的背景图片你多半是没有的，所以重登的时候你的桌面背景是黢黑的 :grin:
 * [这次提交](https://github.com/mrbeardad/DotFiles/commit/0a7d0e035b1ac9bde23024eeafe6503d5d9ab527)之后
     ，整个桌面环境就很舒服了
-    * <kbd>Alt</kbd>+ <kbd>R</kbd>用guake执行`ranger`
-    * <kbd>Alt</kbd>+ <kbd>H</kbd>用guake执行`htop`
-    * <kbd>Alt</kbd>+ <kbd>N</kbd>用guake执行`ncdu`
-    * <kbd>Alt</kbd>+ <kbd>F</kbd>用guake执行`fzf`
-    * <kbd>Alt</kbd>+ <kbd>M</kbd>用guake全屏执行`cmatrix`
-    * <kbd>Alt</kbd>+ <kbd>C</kbd>用guake全屏执行`cmatrix -r`
+    * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>R</kbd>用guake执行`ranger`
+    * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>H</kbd>用guake执行`htop`
+    * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>I</kbd>用guake执行`iotop`
+    * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>N</kbd>用guake执行`ncdu`
+    * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>F</kbd>用guake执行`fzf`
+    * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>M</kbd>用guake全屏执行`cmatrix`
+    * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>C</kbd>用guake全屏执行`cmatrix -r`
     * <kbd>Alt</kbd>+ <kbd>T</kbd>切换guake全屏状态
     * <kbd>Ctrl</kbd>+ <kbd>T</kbd>下拉或者关掉guake
     * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>A</kbd> FlameShot截图
