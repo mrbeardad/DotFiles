@@ -11,7 +11,7 @@ if [[ $? == 0 ]] ;then
     exec tmux attach -t $SessionName
 else
     if [[ $SessionName == "NeoVim" ]] ;then
-        exec tmux new-session -s $SessionName "XFCE4_TERM=1 nvim"
+        exec tmux new-session -s $SessionName "COLORBG=1 nvim"
     else
         exec tmux new-session -s $SessionName
     fi

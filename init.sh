@@ -50,6 +50,7 @@ function pacman_cfg() {
     echo 'Server = https://mirrors.cloud.tencent.com/manjaro/stable/$repo/$arch' | sudo tee /etc/pacman.d/mirrorlist
     # 有时候更新系统会把mirrorlist覆盖了，备份一下，当发现下载速度奇慢无比时检查此项
     # 直接在/etc/pacman.conf修改可以解决此问题，就像init-for-myself.sh一样
+    # sudo sed -i '/^Include = /s/^.*$/Server = https:\/\/mirrors.cloud.tencent.com\/manjaro\/stable\/$repo\/$arch/' /etc/pacman.conf
     sudo cp /etc/pacman.d/mirrorlist{,.bak}
 
     # pacman彩色输出
@@ -207,7 +208,6 @@ function desktop_cfg() {
     # 桌面应用
     yay -S deepin.com.qq.office baidunetdisk-bin netease-cloud-music wps-office ttf-wps-fonts \
         flameshot google-chrome guake xfce4-terminal
-    # yay -S octave gimp
 
     # 其它工具：视频、字体、渗透、抓包
     # yay -S vlc peek ffmpeg pepper-flash flashplugin fontforge nmap tcpdump wireshark-qt
@@ -247,10 +247,7 @@ function desktop_cfg() {
     )
 
     # 手动解析github域名
-    if [[ -e /etc/hosts ]] ;then
-        sudo mv /etc/hosts{,.bak}
-    fi
-    sudo cp -v hosts /etc/hosts
+    cat hosts | sudo tee -a /etc/hosts
 
     # TIM配置，启动TIM时禁用ipv6，否则不显示图片
     echo "net.ipv6.conf.all.disable_ipv6 =1
@@ -267,7 +264,7 @@ net.ipv6.conf.lo.disable_ipv6 =1" | sudo tee -a /etc/sysctl.conf
     sed -i '/^Exec=/s/=.*$/=guake -e "terminal-tmux.sh Guake/"' ~/.config/autostart/guake-self.desktop
     sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/wps-office-*
     sudo sed -i -e '/wine.*run\.sh/isudo sysctl -p /etc/sysctl.conf' -e '/wine.*run\.sh/s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
-    sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop    # 浏览器开的勤，比较耗电，需要的时候再手动开启prime吧
+    sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop
 
     # 安装gnome配置
     makedir ~/.config/dconf

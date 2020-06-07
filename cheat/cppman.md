@@ -7,7 +7,7 @@
 # 标准库异常
 * 异常体系结构
 ```
-exception <exception>`  
+exception                 `<exception>`  
 ├─── bad_cast             `<typeinfo>`      ：多态引用的转换失败  
 ├─── bad_typeid           `<typeinfo>`      ：目标为含有虚函数的类型的空指针  
 ├─── bad_weak_ptr         `<memory>`        ：构造weak_ptr失败  
@@ -176,6 +176,18 @@ exception <exception>`
 <!-- -->
 
 # 通用工具
+* integer_sequence：`<utility>`
+    * 定义
+        * integer_sequence<typename T, T... INTS>
+        * index_sequence<T... SIZETS>
+    * 构造
+        * make_integer_sequence<typename T, T N>
+            > 构造1 ~ N-1的T类型的证书序列
+        * make_index_sequence<size_t N>
+    * 读取
+        * ::size()      ：获取整数个数
+        * `(integer_sequence<T, INTS...)`并用折叠表达式处理INTS
+
 * pair：`<utility>`
     * 构造
         * 类聚合式构造      ：支持移动语义
@@ -240,7 +252,6 @@ exception <exception>`
         > 注：get_if<>错误匹配类型返回空指针
     * 修改：
         * .operator=()
-            > 注意：若类型不匹配则会抛出异常
         * .emplace<T>()
         * .emplace<N>()
     * 访问：
@@ -343,7 +354,7 @@ exception <exception>`
         * .get()    ：返回目标引用才能调用成员函数
 <!-- -->
 
-* function：`<functional>`
+* function：`<functional>` C++17弃用
     * 运行时能够统一可调用类型的三种形式
         * 函数指针
         * 成员函数指针
@@ -582,12 +593,14 @@ exception <exception>`
 >     * 谓词指向外部状态
 >     * 显式指定模板实参为reference
 >     * 利用for_each()算法的返回值
-> * 并行算法：第一参数为std::execution::par
+> * 并行算法：第一参数为std::par
+<!--  -->
 
 * 其它算法
     * for_each(b, e, op1)                 ：返回op(以改动过的)拷贝
     * count(b, e, v)
     * count_if(b, e, op1)
+    * clamp(x, min, max)                  ：返回三者中的第二大者
     * min_element(b, e, op2 = lower_to)   ：返回第一个最小值
     * max_element(b, e, op2 = lower_to)   ：返回第一个最大值
     * minmax_element(b, e, op2 = lower_to)：返回第一个最小值和最后一个最大值
@@ -859,6 +872,20 @@ exception <exception>`
     * fixed , scientific：使用这两个操作符后, 精度的语义由“所有数字位数”变为“小数位数”
 <!-- -->
 
+* quoted：`<iomanip>`
+    > 将字符串引用转义  
+    > 输出(`<<`)时quoted()的参数作为引用转义的输入对象  
+    > 输入(`>>`)时quoted()的参数作为引用转义的输出对象
+    * 签名：
+        `quoted(char* s, delim='"', escape='\\')`  
+        `quoted(string& s, delim='"', escape='\\')`  
+```cpp
+string in{"hello \"world\""}, out;
+stringstream ss;
+ss << quoted(in);   // ss.str() == "\"hello \\\"world\\\""，即输出"hello \"world\""
+ss >> quoted(out);  // 将ss中被引用包围后的字符还原，即out输出为hello "world"
+```
+
 * fstream：`<fstream>`
     * 构造：(filename, flag=)
     * 成员：.open(filename, flag=) .close() .is_open()
@@ -977,7 +1004,9 @@ exception <exception>`
     * modf(x, *iptr)            ：将x分解为整数与小数部分, 整数存于*iptr, 返回小数
     * abs(x)                    ：x的绝对值, 重载了整形和浮点型
     * div(x, y)                 ：x除以y的商(div_t.quot)和余数(div_t.rem)
-    * gcd(m, n)                 ：欧几里得算法求最大公因数`<numeric>`
+    * hypot(x, y, z=0)          ：sqrt(pow(x, 2), pow(y, 2), pow(z, 2))
+    * gcd(m, n)                 ：最大公因数`<numeric>`
+    * lcm(m, n)                 ：最小公倍数`<numeric>`
 <!-- -->
 
 * `<cstdlib>`
