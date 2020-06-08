@@ -194,9 +194,9 @@
         * 数字：\d、\D、[[:digit:]]、[[:xdigit:]]
         * 字母：[[alpha]]、[[upper]]、[[lower]]
         * 空白：\s、\S、[[:space:]]
-        * 标签：\w、\W
-        * 可视：[[:graph:]]，等同[[:alnum:][:punct:]]
-        * 打印：[[:print:]]，等同[[:alnum:][:punct:] ]
+        * 单词：\w、\W ，前者等同`[[:alnum:]_]`
+        * 可视：[[:graph:]]，等同`[[:alnum:][:punct:]]`
+        * 打印：[[:print:]]，等同`[[:alnum:][:punct:] ]`
         * 所有：[[:alnum:]]、[[:punct:]]、[[:space:]]
     * 转义字符：
         * `\n`  `\r`  `\t`  `\v`  `\f`
