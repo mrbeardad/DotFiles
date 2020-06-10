@@ -1,3 +1,22 @@
+# 目录
+<!-- vim-markdown-toc GFM -->
+
+- [C++ Style](#c-style)
+  - [名字](#名字)
+  - [注释](#注释)
+  - [括号](#括号)
+  - [空格](#空格)
+- [设计经验](#设计经验)
+  - [一般性设计准则](#一般性设计准则)
+  - [面向对象](#面向对象)
+  - [异常安全](#异常安全)
+  - [函数参数](#函数参数)
+  - [初始化](#初始化)
+  - [内存引用](#内存引用)
+  - [易错点](#易错点)
+  - [解题经验](#解题经验)
+
+<!-- vim-markdown-toc -->
 # C++ Style
 部分风格参考自[HosseinYousefi/CompetitiveCPPManifesto](https://github.com/HosseinYousefi/CompetitiveCPPManifesto)
 
@@ -9,11 +28,11 @@
 * 命名空间、函数名称&emsp;&emsp;&emsp;：全部小写和下划线间隔`example_name`
 >
 可用于命名标识符的一些通用前后缀：
-* 位置：`prev`，`next`，`left`，`right`，`head`，`tail`，`mid`
+* 位置：`prev`，`next`，`lhs`，`rhs`，`head`，`tail`，`mid`
 * 循环：`pos`，`idx`，`this`，`cur`，`beg`，`end`
-* 时间：`new`，`old`，`early`，`late`，`last`，`now`
+* 时间：`new`，`old`，`early`，`late`，`last`，`now`，`orig`
 * 计数：`size`，`len`，`num`，`cnt`，`nr`，`dep`，`wid`，`hei`
-* 序数：`fst`，`snd`，`lhs`，`rhs`，`last`
+* 序数：`fst`，`snd`，`last`
 * bool：`is`，`not`，`and`，`or`，`any`，`all`，`none`
 * 介词：`in`，`on`，`at`，`of`，`2`，`4`
 * 类型：`int`，`char`，`str`，`strm`，`ptr`
@@ -74,9 +93,183 @@
 # 设计经验
 ## 一般性设计准则
 * 头文件保护宏
+
 * 利用预处理指令做错误处理与条件编译
 * 不对外链接的符号应该都写在无名命名空间中
 * 函数不抛出异常则一定限定为`noexcept`
+* 类中无virtual函数，应该声明为`final`
+
+## 面向对象
+* 将多态基类的析构函数声明为virtual，当然也不要声明为纯虚函数，转而用`=default`体代替`=0`
+    <a href=## title="因为即使基类的析构函数是纯虚函数，派生类的默认析构函数也需要调用其基类的析构函数，但是基类的析构函数未定义从而导致链接错误，倒不如提供一个默认定义">[注]</a>；
+    若不是多态基类则不要声明任何虚函数而引入虚指针与虚表
+
+* 不要在构造函数与析构函数中调用虚函数
+* 不要让异常逃离析构函数，并提供一个接口函数执行析构任务以让用户有处理的机会
+    > 当异常发生时会析构当前作用域的对象，若析构这些对象又发生了异常，会导致直接终止程序
+* 数据成员封装为private
+* non-member non-friend函数比member函数封装性更好，
+    并尽量使用public成员函数作底层接口供non-member封装函数调用以取消后者的friend属性
+* 注意返回的private句柄(handle)应该const，以维护封装性，当然最好避免返回handle
+    > private句柄包括封装好的private的函数、指针、引用
+* 降低编译依赖
+    > 主要是重构数据成员时，所有调用该类的文件都要重新编译，因为数据成员包含在类的定义中被一起放在类头文件，
+    > 用以编译器判断类对象所需栈内存大小。解决办法：
+    * Handle类：Handle类作为**接口类**给用户使用，其内存储指针指向**实现类**（其中包含数据成员），如此一来实现类便只需声明式，
+        再将**实现类的定义**与**接口类的接口函数的定义**放在*实现源文件*中，如此实现分离而降低编译依赖
+        <details>
+            <summary><b>例子</b></summary>
+        
+        ```cpp
+        // 接口头文件
+        #include <string>
+
+        class Person
+        {
+        public:
+            Person(const std::string& name, size_t id);
+            ~Person();
+            const std::string& name() const;
+            size_t id() const;
+        private:
+            struct PersonImpl;
+            PersonImpl* ptr2ps_m;
+        };
+        
+        // 实现源文件
+        #include "person.hpp"
+        #include <string>
+
+        struct Person::PersonImpl
+        {
+            std::string name_m;
+            size_t id_m;
+        };
+
+        Person::Person(const std::string& name, size_t id):
+            ptr2ps_m{new Person::PersonImpl{name, id}} {  }
+
+        Person::~Person()
+        {
+            delete ptr2ps_m;
+        }
+
+        const std::string& Person::name() const
+        {
+            return ptr2ps_m->name_m;
+        }
+
+        size_t Person::id() const
+        {
+            return ptr2ps_m->id_m;
+        }
+        ```
+        </details>
+
+    * Interface类：Interface类作为**接口**给用户使用，其本质是一个**抽象基类**，其中定义了用户接口（没有数据成员），
+        并提供static成员函数来构造**实现类**（即派生类）并获取其指针或引用（具体来说是unique_ptr）。最后将该**static函数**与**实现类**（派生类）
+        定义在*实现源文件*中
+        > 使用`unique_ptr`的目的是防止static函数返回的**指针**忘记被delete，而抽象基类是无法定义具体对象的，
+        > 包括其**引用**
+        <details>
+            <summary><b>例子</b></summary>
+        
+        ```cpp
+        // 接口头文件
+        #include <string>
+        #include <memory>
+
+        struct Human
+        {
+            virtual ~Human() {  };
+            virtual const std::string& name() const =0;
+            virtual std::size_t id() const =0;
+            static std::unique_ptr<Human> make(const std::string& name = "", std::size_t id = 0);
+        };
+
+        // 实现源文件
+        #include "human.hpp"
+        #include <memory>
+        #include <string>
+
+        class HumanInte : public Human
+        {
+        public:
+            HumanInte(const std::string& name, std::size_t id):
+                name_m{name}, id_m{id} {  }
+
+            const std::string& name() const override
+            {
+                return name_m;
+            }
+
+            std::size_t id() const override
+            {
+                return id_m;
+            }
+
+        private:
+            std::string name_m;
+            std::size_t id_m;
+        };
+
+        std::unique_ptr<Human> Human::make(const std::string& name, std::size_t id)
+        {
+            return std::make_unique<HumanInte>(name, id);
+        }
+                        ```
+        </details>
+
+## 异常安全
+* 异常安全性
+    * 不泄漏任何资源
+    * 不允许数据败坏
+* 异常安全等级
+    > 由等级最低者决定
+    * 基本承诺  ：若异常发生，保证资源不泄漏，保证数据有效
+    * 强烈保证  ：若异常发生，保证返回状态与调用前状态相同
+    * 不抛出异常：顾名思义，但若还是抛出异常则终止程序
+* 技巧：
+    * 留心可能发生异常的代码，在它后面干正事儿，即需要它成功后才进入正题
+        > 大部分标准库异常见[这儿](https://github.com/mrbeardad/DotFiles/blob/master/cheat/cppman.md#%E6%A0%87%E5%87%86%E5%BA%93%E5%BC%82%E5%B8%B8)
+    * 留心流的失效且对其中数据的读取对程序其它部分可见，从而只能保证基本承诺
+    * 使用unique_ptr管理资源
+    * 使用copy-and-sawp技巧
+
+## 函数参数
+主要是注意对函数传引用参数的const修饰，还有不要忘了对成员函数this的const修饰与引用限定  
+原因有两点：
+* 利用const可以让编译期帮助我们查找违反本意（即修改了不该修改的数据）的代码
+* <b>const T&</b>相比<b>T&</b>，前者可以接收更多类型，见下表
+
+| 类型          | 特性                                 |
+|---------------|--------------------------------------|
+| T             | 拷贝                                 |
+| T&            | 引用、左值(非常量)                   |
+| T&&           | 引用、右值                           |
+| const T&      | 引用、左值、右值、隐式类型转换、只读 |
+| temp T&       | 引用、左值、泛型                     |
+| temp const T& | 引用、左值、右值、泛型、只读         |
+| temp T&&      | 引用、左值、右值、泛型、转发         |
+
+<img align="center" height=600 src="../images/cpp_args.png"></img>
+
+注意：
+* 何时使用传引用参数
+    * 需要修改实参对象
+    * 实参对象为类而非基础类型（避免拷贝构造）
+    * 需要动态绑定，避免切割
+* <b>重载T&</b>时，应该利用non-const版本调用const版本以避免代码重复，  
+不应该反过来让const调用non-const，因为non-const版本并未保证const语义
+> 参考自**C++ Primer**与**Effective C++**
+```cpp
+const T& func(const T& t);
+
+T& func(T& t)
+{
+    return const_cast<T&>(func(static_cast<const T&>(t)));
+}
+```
 
 ## 初始化
 * 一般使用列表初始化`int i{1}`，  
@@ -86,17 +279,29 @@
         比如`vector v{4, 0}`会构造一个2元素的`vector<int>`{4, 0}，而非构造一个4元素的{0, 0, 0, 0}。
         此时就应该用圆括号初始化`vector v(4, 0)`
 
-* 注意使用的对象是否需要初始化并已初始化
+* 注意使用对象时是否需要初始化并已初始化
     > 一般来说，除了该声明的对象马上用于存放从stream中的数据，**其它情况均需初始化**
     * 内置类型与聚合类的默认构造是未定义的，即`int i;`语句后对象`i`的值是未定义的
 
-    * 对于上述两种类型，`int a[5];`叫默认初始化，`int a[5]{}`叫值初始化，后者将初始化对象为全零(0)
+    * 对于上述两种类型，`int a[5];`叫默认初始化，`int a[5]{}`叫值初始化，
+        前者初始化静态变量为全零，初始化动态变量为未定义；后者将初始化对象为全零(0)
+        > 在全局作用域中，默认初始化又会升级为值初始化
     * 对于其它类型（类），`string s;`与`string s{};`都叫默认初始化，行为都一样，即调用其默认构造函数
+
+* 尽可能延后对象的初始化，直到使用的前一刻
+    > 注意若初始化与使用之间可能抛出异常，则异常发生时会导致多余的构造与析构操作
+
+* 循环中使用的对象，一般在循环体中定义而非在循环外
+    * 优点：
+        * **效率一般更好**。前者执行1次构造+1次析构+n次赋值，后者执行n次构造+n次赋值，
+            除非1次赋值比1次构造+1次析构更高效。
+            > 一般来讲，长string、容器与流都是后者，即应该定义在循环外
+        * 减小其作用域范围，防止名称污染
 
 * 构造函数的初始化列表
     * 在进入函数体前会初始化所有non-static数据成员，若无初始化列表则进行默认初始化（见上）
 
-    * 注意成员的构造顺序与声明顺序一致
+    * 注意成员的构造顺序与声明顺序一致，对于基类，则是从左到右、从上到下 <a href=## title="从左到右即是在派生说明中的顺序，从上到下即是从更深的基类到派生类">[注]</a>
 
 * 注意多个翻译单元(TU)中，non-local static对象的初始化顺序是未定义的。  
     &emsp;当在`A`文件中定义`a`，在`B`文件中定义`b`，`b`依赖于`a`，
@@ -123,40 +328,6 @@
     * 解决多TU中static对象的初始化顺序问题
     * 在调用`get_a()`之前，不会有构造`a`的开销
 
-## 函数参数
-主要是注意对函数传引用参数的const修饰，还有不要忘了对成员函数this的const修饰与引用限定  
-原因有两点：
-* 利用const可以让编译期帮助我们查找违反本意（即修改了不该修改的数据）的代码
-* <b>const T&</b>相比<b>T&</b>，前者可以接收更多类型，见下表
-
-| 类型          | 特性                                 |
-|---------------|--------------------------------------|
-| T             | 拷贝                                 |
-| T&            | 引用、左值(非常量)                   |
-| T&&           | 引用、右值                           |
-| const T&      | 引用、左值、右值、隐式类型转换、只读 |
-| temp T&       | 引用、左值、泛型                     |
-| temp const T& | 引用、左值、右值、泛型、只读         |
-| temp T&&      | 引用、左值、右值、泛型、转发         |
-
-<img align="center" height=600 src="../images/cpp_args.png"></img>
-
-注意：
-* 何时使用传引用参数
-    * 需要修改实参对象
-    * 实参对象为类而非基础类型（避免拷贝构造）
-* <b>重载T&</b>时，应该利用non-const版本调用const版本以避免代码重复，  
-不应该反过来让const调用non-const，因为non-const版本并未保证const语义
-> 参考自**C++ Primer**与**Effective C++**
-```cpp
-const T& func(const T& t);
-
-T& func(T& t)
-{
-    return const_cast<T&>(func(static_cast<const T&>(t)));
-}
-```
-
 ## 内存引用
 * 何时使用指针而非引用：
     * 当需要NULL语义时
@@ -165,11 +336,11 @@ T& func(T& t)
 读取某个内存引用，若在作用域内不可能被某些操作写入，重复引用时可以被编译器优化，
 而避免手动将其载入寄存器的麻烦，以下操作便会妨碍优化：
 * 传引用参数：函数有多个传引用形参，试图读取其中一个实参，又要写入另一个参数(调用任何有非底层const传引用参数的函数都视为写入)
-    > 因为传入的多个引用可能指向同一个对象
+    > 因为传入的多个引用可能指向同一个对象，所以对于所有处理多引用的函数应该进行“证同测试”
 * 类成员：试图读取一个类的数据成员，但又要调用同一个类对象的non-const成员函数
     > 调用的方法(成员函数)可能修改你试图写入的成员
 * 全局变量：试图读取全局对象，但又要调用任何函数
-    > 任何函数都可能修改全局变量
+    > 任何函数都可能修改全局变量，包括lambda
 
 ## 易错点
 * 注意对I/O格式化的要求：
@@ -194,34 +365,4 @@ T& func(T& t)
     * 无需保存所有数据，只存储题目需要的
     * 转换题意并找出核心计算问题
     * 逆向思维，由起点到终点，变为求终点的起点
-
-## 选择标准库容器
-* vector
-    * 无其他需求一般选择vector
-* array
-    * 固定大小
-    * 容量需求大且时间效率优于空间效率
-* 内置数组
-    * 相对array需要多维线性数组
-* deque
-    * 需要头部增删元素
-    * 容量需求大且空间效率优于时间效率
-    * 容量需求过大
-* list
-    * 需要大量地随处插删
-* Pqueue
-    * 只需快速找出最值而无需完全排序
-* Associated
-    * 快速搜索且需要自动排序
-    * 注：以下以下两点则考虑用线性数组(快速搜索且需要排序)
-        > 使用线性数组 + 排序算法
-        * 元素的比较为整数的比较，且该整数的值域可接受作为下标索引
-        * 且元素总量固定，且允许off-line算法
-* Unordered
-    * 快速搜索且无需排序
-    * 注：以下情况考虑用线性数组
-        * 元素的比较为整数的比较，若该整数的值域可接受作为下标索引
-* Map
-    * 在set的基础上提供更方便的下标操作
-    * 只比较key而进行映射集合的分类
 

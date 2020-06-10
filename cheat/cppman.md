@@ -278,10 +278,12 @@ exception                 `<exception>`
         * 拷贝/移动构造         ：更新引用计数
         * shared_ptr<T>(new_ptr, deleter)
         * make_shared<T>()
-            > 对象内存与引用计数器一次分配
+            > 对象内存与引用计数器一次分配  
+            > 同时避免new表达式与用shared_ptr管理new获取的指针这两部之间发生异常，而导致内存泄漏（make_unique同）
     * 读取：
-        * operator*()
-        * operator->()
+        * .operator*()
+        * .operator->()
+        * .get()
         * .use_count()
     * 修改：
         * .reset()
@@ -313,9 +315,11 @@ exception                 `<exception>`
     * 构造：
         * unique_ptr<T, Del>(ptr, del)
             > del默认为delete表达式
+        * make_unique<>()
         * 支持移动构造, 拒绝拷贝构造
     * 读取：
         * .get()
+        * .operator=()
     * 修改：
         * .reset()
         * .reset(ptr)

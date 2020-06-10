@@ -117,11 +117,11 @@ guake的开机启动并自动连接tmux又依赖`init.sh`中安装的desktop文�
     * <kbd>Alt</kbd>+ <kbd>tab</kbd> 切换窗口
     * <kbd>Alt</kbd>+ <kbd>F2</kbd> 执行命令，`r`可重启X
 
-> <kbd>Alt</kbd>+ <kbd>M</kbd>开启矩阵革命 :smirk:
+> <kbd>Ctrl</kbd><kbd>Alt</kbd>+ <kbd>M</kbd>开启矩阵革命 :smirk:
 
 ![cmatrix](images/matrix.gif)
 
-> <kbd>Alt</kbd>+ <kbd>C</kbd>就是🌈️雨的屏保啦
+> <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>C</kbd>就是🌈️雨的屏保啦
 
 ## grub
 系统启动加载器，系统自带，由固件启动并加载*Linux Kernel*并为其提供参数，
