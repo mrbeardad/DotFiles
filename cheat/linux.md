@@ -1009,19 +1009,19 @@
     * insmod/rmmod       ：加载/卸载模块
     * loopback dev isofile：建立loop设备，-d删除
     * halt/reboot        ：关机/重启
-    ○GRUB安全
-* 设置超级用户
-    set superusers="root"
-    * 注 ：设置后只有超级用户才能修改选单
-* 设置加密密码
-    password_pbkdf2 root grub.pbkdf2.sha512...
-    * 注 ：使用grub-mkpasswd-pbkdf2命令产生密码
-* 设置明文密码
-    password user ...
-* menuentry选项
-    * --unrestricted    ：所有人可执行
-    * --users ""        ：仅超级用户
-    * --users "user"    ：仅user与超级用户
+* GRUB安全
+    * 设置超级用户
+        set superusers="root"
+        * 注 ：设置后只有超级用户才能修改选单
+    * 设置加密密码
+        password_pbkdf2 root grub.pbkdf2.sha512...
+        * 注 ：使用grub-mkpasswd-pbkdf2命令产生密码
+    * 设置明文密码
+        password user ...
+    * menuentry选项
+        * --unrestricted    ：所有人可执行
+        * --users ""        ：仅超级用户
+        * --users "user"    ：仅user与超级用户
 <!-- -->
 
 ## GRUB选单

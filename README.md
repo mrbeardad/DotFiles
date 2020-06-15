@@ -62,6 +62,8 @@
 笔记位于`~/.cheat/*.md`，一级列表开头到`<!-- -->`结束为一条entry  
 欢迎大家一起贡献一波cheat-sheet呀:smile:
 
+现在`see`命令可以简单的在终端显示一些markdown标签和元素
+
 ![see](images/see.png)
 ![say](images/say.png)
 
@@ -88,18 +90,16 @@ $ ./init.sh
 默认会直接把我的gnome桌面的整个环境配置装上去，执行完脚本后**logout**再**login**即可生效。  
 这样就不用每次重装都要打开**settings**和**tweaks**还有**extensions**然后点击各种按钮再配置一遍。
 > Ps: 我用的背景图片你多半是没有的，所以重登的时候你的桌面背景是黢黑的 :grin:
-* [这次提交](https://github.com/mrbeardad/DotFiles/commit/0a7d0e035b1ac9bde23024eeafe6503d5d9ab527)之后
-    ，整个桌面环境就很舒服了
-    * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>R</kbd>用guake执行`ranger`
-    * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>H</kbd>用guake执行`htop`
-    * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>I</kbd>用guake执行`iotop`
-    * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>N</kbd>用guake执行`ncdu`
-    * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>F</kbd>用guake执行`fzf`
-    * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>M</kbd>用guake全屏执行`cmatrix`
-    * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>C</kbd>用guake全屏执行`cmatrix -r`
-    * <kbd>Alt</kbd>+ <kbd>T</kbd>切换guake全屏状态
-    * <kbd>Ctrl</kbd>+ <kbd>T</kbd>下拉或者关掉guake
-    * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>A</kbd> FlameShot截图
+* <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>R</kbd>用guake执行`ranger`
+* <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>H</kbd>用guake执行`htop`
+* <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>I</kbd>用guake执行`iotop`
+* <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>N</kbd>用guake执行`ncdu`
+* <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>F</kbd>用guake执行`fzf`
+* <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>M</kbd>用guake全屏执行`cmatrix`
+* <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>C</kbd>用guake全屏执行`cmatrix -r`
+* <kbd>Alt</kbd>+ <kbd>T</kbd>切换guake全屏状态
+* <kbd>Ctrl</kbd>+ <kbd>T</kbd>下拉或者关掉guake
+* <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>A</kbd> FlameShot截图
 >
 
 guake是一个下拉式终端，可以集成在gnome中  

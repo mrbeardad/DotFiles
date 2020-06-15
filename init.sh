@@ -220,12 +220,20 @@ function desktop_cfg() {
 
     # 安装字体
     yay -S ttf-google-fonts-git adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypixels unicode-emoji
-    makedir ~/.local/share/fonts/NerdCode
     (
+        makedir ~/.local/share/fonts/NerdCode
         cd ~/.local/share/fonts/NerdCode || exit 1
         tar -Jxvf "$dotfiles_dir"/fonts/NerdCode.tar.xz
         mkfontdir
         mkfontscale
+
+        makedir ~/.local/share/fonts/HandWrite
+        cd ~/.local/share/fonts/HandWrite || exit 1
+        git clone --depth=1 https://github.com/zjsxwc/handwrite-text ~/Downloads/handwrite-text
+        cp ~/Downloads/handwrite-text/font/* .
+        mkfontdir
+        mkfontscale
+
         fc-cache -fv
     )
 
@@ -272,7 +280,7 @@ net.ipv6.conf.lo.disable_ipv6 =1" | sudo tee -a /etc/sysctl.conf
 }
 
 function main() {
-    dotfiles_dir=$(pwd)
+    dotfiles_dir=$PWD
     export dotfiles_dir
     system_cfg
     pacman_cfg
@@ -287,7 +295,7 @@ function main() {
     desktop_cfg
 
     echo -e '\e[32m=====> Chrome\e[m
-    Now, add google-access-helper and github-mathjax to google-chrome in devloper mode'
+    Now, add google-access-helper and github-mathjax in directory ~/.config to google-chrome in devloper mode'
     echo -e '\e[32m=====> Neovim\e[m
     Now, launch nvim and type :SPInstall. Build YCM and fix ALE after all plugins are installed '
     echo -e '\e[33m=====> Gnome dconf has been installed, logout immediately and back-in will apply it.

@@ -4,7 +4,7 @@ Conflicts=chfs.socket
 
 [Service]
 Type="simple"
-ExecStart=/usr/local/bin/chfs --path=/srv/chfs
+ExecStart=/opt/bin/chfs --path=/srv/chfs
 
 [Install]
 WantedBy="multi-user.target"
