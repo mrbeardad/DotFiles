@@ -36,22 +36,15 @@ function system_cfg() {
 
     # 笔记本电源，15%提醒电量过低，10%提醒即将耗尽电源，3%强制休眠(根据系统差异，也可能会关机)
     sudo sed -i '/^PercentageLow=/s/=.*$/=15/; /^PercentageCritical=/s/=.*$/=10/; /^PercentageAction=/s/=.*$/=3/' /etc/UPower/UPower.conf
-
-    # 将/usr/local改为/opt的软链接，强迫症福音
-    if [[ -d /usr/local ]] ;then
-        sudo mv /usr/local/* /opt
-        sudo rmdir /usr/local
-        sudo ln -s /opt /usr/local
-    fi
 }
 
 function pacman_cfg() {
-    # 修改pacman源为腾讯源
+    # 修改pacman源为腾讯源，有时候更新系统会把mirrorlist覆盖了，备份一下，当发现下载速度奇慢无比时检查此项
     echo 'Server = https://mirrors.cloud.tencent.com/manjaro/stable/$repo/$arch' | sudo tee /etc/pacman.d/mirrorlist
-    # 有时候更新系统会把mirrorlist覆盖了，备份一下，当发现下载速度奇慢无比时检查此项
-    # 直接在/etc/pacman.conf修改可以解决此问题，就像init-for-myself.sh一样
-    # sudo sed -i '/^Include = /s/^.*$/Server = https:\/\/mirrors.cloud.tencent.com\/manjaro\/stable\/$repo\/$arch/' /etc/pacman.conf
     sudo cp /etc/pacman.d/mirrorlist{,.bak}
+
+    # 或者直接修改/etc/pacman.conf可以解决此问题，就像init-for-myself.sh一样
+    # sudo sed -i '/^Include = /s/^.*$/Server = https:\/\/mirrors.cloud.tencent.com\/manjaro\/stable\/$repo\/$arch/' /etc/pacman.conf
 
     # pacman彩色输出
     sudo sed -i "/^#Color/s/#//" /etc/pacman.conf
@@ -171,6 +164,7 @@ function rime_cfg() {
 function chfs_cfg() {
     # CHFS
     (
+        sudo mkdir -p /opt/bin
         cd /opt/bin || exit 1
         sudo unzip "$dotfiles_dir"/chfs/chfs-linux-amd64-1.8.zip
         sudo chmod 755 chfs
@@ -209,8 +203,9 @@ function desktop_cfg() {
     yay -S deepin.com.qq.office baidunetdisk-bin netease-cloud-music wps-office ttf-wps-fonts \
         flameshot google-chrome guake xfce4-terminal
 
-    # 其它工具：视频、字体、渗透、抓包
-    # yay -S vlc peek ffmpeg pepper-flash flashplugin fontforge nmap tcpdump wireshark-qt
+    # 其它工具：多媒体播放、多媒体处理、多媒体录制、gif录制、字体修改、渗透、抓包
+    yay -S vlc ffmpeg obs-studio peek fontforge nmap tcpdump wireshark-qt
+    # yay -S pepper-flash flashplugin 
 
     # GNOME扩展
     yay -S mojave-gtk-theme-git sweet-theme-git adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git tela-icon-theme-git \
@@ -227,12 +222,12 @@ function desktop_cfg() {
         mkfontdir
         mkfontscale
 
-        makedir ~/.local/share/fonts/HandWrite
-        cd ~/.local/share/fonts/HandWrite || exit 1
-        git clone --depth=1 https://github.com/zjsxwc/handwrite-text ~/Downloads/handwrite-text
-        cp ~/Downloads/handwrite-text/font/* .
-        mkfontdir
-        mkfontscale
+        # makedir ~/.local/share/fonts/HandWrite
+        # cd ~/.local/share/fonts/HandWrite || exit 1
+        # git clone --depth=1 https://github.com/zjsxwc/handwrite-text ~/Downloads/handwrite-text
+        # cp ~/Downloads/handwrite-text/font/* .
+        # mkfontdir
+        # mkfontscale
 
         fc-cache -fv
     )

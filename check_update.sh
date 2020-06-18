@@ -8,7 +8,7 @@ else
     option="-i"
 fi
 
-cp $option -vu ~/.cheat/*.md cheat
+# cp $option -vu ~/.cheat/*.md cheat
 cp $option -vu ~/.gdbinit gdb/gdbinit
 cp $option -vu ~/.cgdb/cgdbrc gdb
 cp -vru ~/.local/share/fcitx5/rime/* rime-dict
