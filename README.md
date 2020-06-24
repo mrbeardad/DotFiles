@@ -68,7 +68,7 @@
 ![say](images/say.png)
 
 # 安装
-> 提供了shell脚本用于安装配置，**得[Manjaro20](manjaro.org)才得行哦**，不然的话照着[init.sh](init.sh)也可以非常容易的安装
+> 提供了shell脚本用于安装配置，**得[Manjaro20](https://manjaro.org)才得行哦**，不然的话照着[init.sh](init.sh)也可以非常容易的安装
 
 1. 首先进入克隆的本仓库目录
 ```shell

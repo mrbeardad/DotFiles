@@ -1,37 +1,57 @@
 * gcc
-    * 优化级别          ：-O1  -O2  -O3
-    * 编译程度          ：-E(.i)  -S(.s)  -c(.o)  -o
-    * 指定标准          ：-std=c11
-    * 使用AVX指令       ：-mavx2
-    * 并发库            ：-lpthread
-    * 制作动态库        ：-shared  -fpic
-    * 调用链接器        ：-rdynamic  -ldl
-    * 链接库打桩        ：-Wl,--wrap,func
-    * 定义宏            ：-Dmacros_define
-    * 指定inclide目录   ：-I
-    * 指定lib目录       ：-L -lxxx（库名省略lib、.a、.so）
-    * GPROF剖析         ：-pg（最好也加下述参数）
-    * 调试              ：-Og  -g3  -fno-inline
-    * 指定机器          ：-m32  -m64
-    * 指定程序规模      ：-mcmodel= medium | large
+    * 优化级别              ：-O1  -O2  -O3
+    * 编译程度              ：-E(.i)  -S(.s)  -c(.o)  -o
+    * 指定标准              ：-std=c11
+    * 使用AVX指令           ：-mavx2
+    * 并发库                ：-lpthread
+    * 制作动态库            ：-shared  -fpic
+    * 调用链接器            ：-rdynamic  -ldl
+    * 链接库打桩            ：-Wl,--wrap,func
+    * 定义宏                ：-Dmacros_define
+    * 指定inclide目录       ：-I
+    * 指定lib目录           ：-L -lxxx（库名libxxx.a、libxxx.so）
+    * GPROF剖析             ：-pg（最好也加下述参数）
+    * 调试                  ：-Og  -g3  -fno-inline
+    * 指定机器              ：-m32  -m64
+    * 指定程序规模          ：-mcmodel= medium|large
         > 代码数据段默认32位跳转
-    * 开启标准库debug模式：-D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC
-    * 报错： -Werror  -Wall  -Wextra -Wconversion -Wfloat-equal
+    * 开启标准库debug模式   ：-D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC
+    * 报错                  ：-Werror  -Wall  -Wextra -Wconversion -Wfloat-equal
+<!-- -->
+
+* ar：
+    * r：替换，d：删除，t：显示
+    * c：创建，s：符号，u：更新，v：详述
+    * 创建：rscv
+    * 显示：tv
+    * 追加：rsv
+    * 更新：rsuv
+    * 删除：dsv
+    * 提取：xv
+    > 注：BSD风格：`cmd  opts  lib.a  a.o`
+<!-- -->
+
+* objdump -dx
+* readelf
+* ldd -V
+* strace
+* pmap
+* gprof
 <!-- -->
 
 * gdb  *exec-file* *core-dump* *PID*
     * coredump设置
         ```bash
         $ ulimit -c unlimited
-        $ echo '/path/to/coredir/core.%e.%p' | sudo tee /proc/sys/kernel/core_pattern
+        $ echo "$HOME/.coredump/core.%e.%p" | sudo tee /proc/sys/kernel/core_pattern
         ```
     * 断点：
-        * b/break     ：`func`，`linenum`，`if CONDITION`
-        * tb/tbreak   ：`func`，`linenum`
+        * b|break     ：`func`，`linenum`，`if CONDITION`
+        * tb|tbreak   ：`func`，`linenum`
         * condition   ：`break-id expr`
-        * w/watch     ：`expr`
+        * w|watch     ：`expr`
         * catch       ：`syscall|signal|exception`
-        * d/delete    ：`break-id`
+        * d|delete    ：`break-id`
         * ignore      ：`break-id N`
         * disable     ：`break-id`
         * enable      ：`break-id`
@@ -39,11 +59,11 @@
         * save b FILE
         * source FILE
     * 运行：
-        * set|show    ：`args|path|env`
-        * r/run       ：`shell-like-cmd`
-        * c/continue
-        * k/kill
-        * q/quit
+        * set/show    ：`args|path|env`
+        * r|run       ：`shell-like-cmd`
+        * c|continue
+        * k|kill
+        * q|quit
     * 跟踪：
         * s/step      ：`N`
         * n/next      ：`N`
@@ -54,12 +74,12 @@
         * frame
     * 打印：
         * i locals
-        * p/print     ：`val`，`expr`，`"%s",addr`
+        * p|print     ：`val`，`expr`，`"%s",addr`
         * whatis      ：`value`
         * display     ：每次单步后打印变量
     * 代码：
-        * la/layout   ：src|asm|reg|sp
-        * l/list      ：`lineno`，`funcname`
+        * la|layout   ：src|asm|reg|sp
+        * l|list      ：`lineno`，`funcname`
         * update
         * search      ：{regexpr}
         * reverse-search ：{regexp}
@@ -77,7 +97,8 @@
     * `<space>`：切换设置断点
     * `o`：打开文件
 <!--  -->
-```bash
+
+```
 * lldb <exe> [-c <core>] [-p <pid>]
     > lldb现在确实没有gdb好用
     * 断点：
@@ -108,26 +129,6 @@
         dis：反汇编
         reg：寄存器
 ```
-<!-- -->
-
-* ar：
-    * r：替换，d：删除，t：显示
-    * c：创建，s：符号，u：更新，v：详述
-    * 创建：rscv
-    * 显示：tv
-    * 追加：rsv
-    * 更新：rsuv
-    * 删除：dsv
-    * 提取：xv
-    > 注：BSD风格：`cmd  opts  lib.a  a.o`
-<!-- -->
-
-* objdump -dx
-* readelf
-* gprof
-* ldd -V
-* strace
-* pmap
 <!-- -->
 
 * tmux
@@ -166,7 +167,7 @@
             * `r`：打开ranger
             * `n`：打开ncdu
             * `m`：打开cmatrix
-            * `m`：打开cmatrix -r
+            * `c`：打开cmatrix -r
 <!-- -->
 
 * SSH
@@ -308,6 +309,18 @@
 * git restore *Path*
     * grs   ：撤销W
     * grst  ：撤销S
+<!-- -->
+
+* git commit
+    * gc
+    * gc!
+    * gca
+    * gca!
+    > 注：  
+    > `a`代表直接W->H提交  
+    > `!`代表覆盖上次提交
+<!-- -->
+
 * git reset *Commit*
     * grh   ：撤销commit历史
     * grhh  ：完全撤销，不保留撤销commit的改动
@@ -331,16 +344,6 @@
     <commit> [<path>]           ：比较W-C或S-C
     <commit> <commit> [<path>]  ：比较C-C
     ```
-<!-- -->
-
-* git commit
-    * gc
-    * gc!
-    * gca
-    * gca!
-    > 注：  
-    > `a`代表直接W->H提交  
-    > `!`代表覆盖上次提交
 <!-- -->
 
 * git tag
@@ -414,8 +417,8 @@
 
 * git submodule
     * git submodule add `URL` [Dir] ：添加子模块信息
-    * `gsi`：git submodule init                 ：根据本地记载的子模块信息，初始化子模块
-    * `gsu`：git submodule update               ：上次提交时记录的子模块的“快照”可能并不是最新的，需要更新
+    * gsi：git submodule init                   ：根据本地记载的子模块信息，初始化子模块
+    * gsu：git submodule update                 ：上次提交时记录的子模块的“快照”可能并不是最新的，需要更新
     > git submodule update --init               ：相当于上两步一起  
     > git submodule update --init --recursive   ：递归
 <!-- -->
@@ -506,24 +509,25 @@ $ git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch pat
 ```
 <!-- -->
 
+# 构建系统
 * Makefile
     * 规则：
         * 格式：
         ```makefile
-        <target>：<prerequisites>
+        <target>: <prerequisites>
         <tab> <command>
         ```
         * 前置条件与命令至少要有一个存在
     * 目标：默认执行第一个目标
-        * 文件(默认)：
-    依赖前置条件(也是一系列目标)生成目标文件
-        * 伪目标(用`.PHONY:<target>`指定)：
-    用于表示该目标不是文件，无条件执行
+        * 文件(默认)：  
+            依赖前置条件(也是一系列目标)生成目标文件
+        * 伪目标(用`.PHONY:<target>`指定)：  
+            用于表示该目标不是文件，无条件执行
     * 前置条件：用空格分隔
-        * 依赖文件：
-    若依赖文件存在且时间戳晚于目标文件，则不生成目标文件
-        * 依赖伪目标：
-    直接执行伪目标
+        * 依赖文件：  
+            若依赖文件存在且时间戳旧于目标文件，则不生成目标文件
+        * 依赖伪目标：  
+            直接执行伪目标
     * 命令：
         * 前导符用`.RECIPEPREFIX = {char}`指定，默认<tab>
         * 每行命令在单独shell中，用`.ONESHELL:`则在同一个shell中

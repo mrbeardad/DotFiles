@@ -1,313 +1,65 @@
-> - [基础命令](#基础命令)
-> - [文件权限](#文件权限)
-> - [文件系统](#文件系统)
-> - [用户与登录](#用户与登录)
-> - [系统资源](#系统资源)
-> - [systemd](#systemd)
->   * [units配置](#units配置)
->     + [[Unit]](#[unit])
->     + [[Install]](#[install])
->     + [[Service]](#[service])
->     + [[timer]](#[timer])
->     + [[Socket]](#[socket])
-> - [GRUB](#grub)
->   * [GRUB配置](#GRUB配置)
->   * [GRUB Shell](#GRUB-Shell)
->   * [GRUB选单](#GRUB选单)
->   * [系统救援](#系统救援)
-> - [主机配置](#主机配置)
-> - [网络基础概念](#网络基础概念)
->   * [网络配置](#网络配置)
->     + [NetworkManager服务](#NetworkManager服务)
+# 目录
+<!-- vim-markdown-toc GFM -->
 
-# 基础命令
-* echo
-    * -n        ：不自动加入换行符(zsh会将无换行结尾的输出的尾部标记%)
-    * -e        ：启用转义语义(zsh自动开启，包括赋值环境变量时)
-<!-- -->
+- [硬盘与文件系统](#硬盘与文件系统)
+  - [分区工具](#分区工具)
+  - [LVM](#lvm)
+  - [XFS](#xfs)
+  - [挂载](#挂载)
+  - [归档包](#归档包)
+  - [文件权限](#文件权限)
+- [用户与登录](#用户与登录)
+- [系统资源](#系统资源)
+- [日志](#日志)
+- [systemd](#systemd)
+  - [units配置](#units配置)
+    - [[Unit]](#unit)
+    - [[Install]](#install)
+    - [[Service]](#service)
+    - [[Timer]](#timer)
+    - [[Socket]](#socket)
+  - [命令](#命令)
+- [GRUB](#grub)
+  - [GRUB配置](#grub配置)
+  - [GRUB Shell](#grub-shell)
+  - [GRUB选单](#grub选单)
+  - [系统救援](#系统救援)
+- [主机配置](#主机配置)
+- [计算机网络](#计算机网络)
+  - [网络配置](#网络配置)
+  - [NetworkManager服务](#networkmanager服务)
+  - [其它网络命令](#其它网络命令)
+- [基础命令](#基础命令)
+  - [读取文件信息](#读取文件信息)
+  - [文件的修改、创建与删除](#文件的修改创建与删除)
+  - [文件的搜索](#文件的搜索)
+  - [其它](#其它)
 
-* ls
-    * -d        ：显示目录本身
-    * -i        ：显示inode
-    * -L        ：显示符号链接的目标
-    * -n        ：显示uid与gid
-    * -R        ：目录递归显示
-    * -s        ：显示文件block大小
-    * -S        ：按大小排序(降序)
-    * -t        ：按modify时间排序(降序)
-    * -Z        ：安全上下文
-<!-- -->
-
-* stat
-    * `默认`    ：显示文件详细信息
-    * -f        ：显示文件所处文件系统信息
-<!-- -->
-
-* touch
-    * `默认`    ：修改a/m/ctime
-    * -a        ：只改atime
-    * -m        ：只改mtime
-    * -d        ：指定touch的时间，date模式
-<!-- -->
-
-* file
-    * -i        ：详述
-<!-- -->
-
-* pwd
-    * -P        ：显示真实路径而非软连接
-<!-- -->
-
-* ln  *SRC*  *TAG*
-    * `默认`：硬连接
-    * -s        ：软连接
-    * -f        ：强制覆盖
-<!-- -->
-
-* cp  *SRC*  *TAG*
-    * -a        ：尽可能复制所有信息
-    * -r        ：目录递归
-    * -v        ：详述
-    * -i        ：询问是否覆盖
-    * -u        ：只更新
-    * -f        ：强制覆盖
-    * -n        ：直接不覆盖
-<!-- -->
-
-* mv *SRC*  *TAG*
-    * -u        ：只更新
-    * -v        ：详述
-    * -i        ：询问是否覆盖
-    * -f        ：强制覆盖
-    * -n        ：直接不覆盖
-<!-- -->
-
-* rm
-    * -r        ：目录递归
-    * -v        ：详述
-    * -f        ：强制覆盖
-<!-- -->
-
-* cat
-    * -A        ：打印空白符
-    * -n        ：显示行号
-    * -b        ：显示行号但空行不算行号
-* tac：翻转首尾
-* rev：每行翻转
-<!-- -->
-
-* tail
-    * -v        ：显示文件名
-    * -n        ：指定显示多少行
-    * -f        ：监听
-<!-- -->
-
-* head
-    * -v        ：显示文件名
-    * -n        ：指定显示多少行
-<!-- -->
-
-* mkdir
-    * -p        ：递归
-    * -m        ：设置权限
-<!-- -->
-
-* whereis       ：搜索可执行，头文件和帮助信息的位置，使用系统内建数据库
-<!-- -->
-
-* locate  *PATTERN*
-    * -i        ：忽略大小写
-    * -r        ：正则表达式(默认通配符)
-    * -c        ：显示匹配的文件数量
-    * -S        ：显示数据库信息
-* updatedb
-    > 配置  ：/etc/updatedb.conf  
-    > 数据库：/var/lib/mlocate/mlocate.db  
-    > 由updatedb.service更新
-<!-- -->
-
-* find  *DIR* *options...*
-    * 打印：
-        * -print
-    * 正则名字：
-        * -regex
-        * -iregex
-    * 通配符名字：
-        * -name
-        * -iname
-    * 用户：
-        * -uid
-        * -gid
-        * -user
-        * -group
-        * -nouser
-    * 权限：
-        * -writable
-        * -readable
-        * -executable
-        * -perm
-        > `-`表示非空子集  
-        > `/`表示非空交集  
-        > `无前缀`表示精准权限
-    * 大小：
-        * -size
-        > `+`表示大于  
-        > `-`表示小于  
-        > 单位用c/k/M/G
-    * 时间：
-        * -[a|m|c]time *n* ：指定`n*24 h`之前的文件，`+/-`表示更早/更晚
-        * -[a|m|c]min  *n* ：指定`n min`之前的文件
-        * -[a|m|c]newer *file*
-    * 文件类型：
-        * -type ：f/d/l/b/c/p/s
-    * 其他信息：
-        * -links        ：硬连接数
-        * -inum     ：inode号
-    * 复合逻辑关系：-a、-o、-not
-    * 对搜索到的文件执行CMD：-exec  *CMD*  {} \;
-<!-- -->
-
-* date
-    * -d *time* ：将参数转换为时间
-    * -d @`N`   ：epoch之后N秒
-    * -d '19700101  Ndays'：epoch之后N天
-    * 指定格式  ：+"%[Yy]-%[mbB]-%[dj]  %H:%M:%[Ss]  %[aA]"
-<!-- -->
-
-* cal  *MONTH*  *YEAR*
-<!-- -->
-
-* bc
-    * -l        ：可以使用数学库函数 s(sin x)，c(cos x)，a(arctan x)，l(ln x)，e(e^x)
-    * 特殊变量  ：scale，last，ibase，obase，支持^运算符求幂
-<!-- -->
-
-* split  *FILE*  *Preffix*
-    * -b        ：按大小分割
-    * -l        ：按行数分割
-    * 注：preffix最后最好加dot，大小单位可指定，默认byte
-<!-- -->
-
-* locale [-a]
-    > /etc/locale.conf
-<!-- -->
-
-* ulimit  -a -HS
-    > /etc/security/ulimits.d/
-<!-- -->
-
-* iconv  FILE
-    * -f        ：原字符集
-    * -t        ：目标字符集
-    * -o        ：输出文件
-    * --list    ：列出可选字符集
-<!-- -->
-
-* diff -Naur *OLD* *NEW* > *.patch
-* patch -p`n`  < *.patch
-    > * new和old不要在同一目录下  
-    > * n为去掉的/个数
-<!-- -->
-
-* curl -o *File* *URL*
-* curl -fsSL *URL* | bash
-* curl -fsSL *URL* | bash -s -- {-opt}
-* curl cheat.sh/`CMD`
-* curl cheat.sh/`LANG`/`SPECIFIC`
-    > [cheat.sh](https://github.com/chubin/cheat.sh)是github上一个nice的项目  
-    * 空白用`+`代替
-    * `curl cheat.sh/~keyword`
-    * `curl cheat.sh/python/:list` 列出可选项
-<!-- -->
-
-* col -x ：将tab替换为等宽space，该命令只从stdin读取
-<!-- -->
-
-* sendEmail
-    * -s        ：SMTP服务器
-    * -f        ：发送者的邮箱
-    * -t        ：接收者的邮箱
-    * -cc       ：表示抄送发给谁
-    * -bcc      ：表示暗抄送给谁
-    * -xu       ：SMTP验证的用户名
-    * -xp       ：SMTP验证的密码
-    * -u        ：标题
-    * -m        ：内容
-    * -a        ：附件
-    * -o message-content-type=*html*/*text* ：邮件的格式
-    * -o message-charset=utf8               ：邮件的编码
-<!-- -->
-
-# 文件权限
-* 权限信息
-    > 只有owner与root能修改
-    * uid与gid    ：指明owner与group
-    * rwx         ：对应owner/group/others权限，读/写/执
-    * sStT        ：特殊权限，小写代表同时存在x权限
-    * umask       ：默认权限掩码，设置后会掩盖默认权限，目录默认755，文件默认644
-* 普通文件
-    * r/w表示可读/写其对应block
-    * x表示可以加载执行此文件
-    * SUID表示执行时环境变量EUID改为owner
-    * SGID表示执行时环境变量EGID改为group
-* 目录
-    * r/w表示可读/写其对应block的entry，注意r无法读取inode
-    * x表示能否对目录下文件进行访问，即使没有rw也可以“摸黑”访问
-    * SGID表示所有创建在此目录的普通文件的gid默认为目录的gid
-    * SBIT表示该目录下的普通文件只有其owner与目录owner能删除
-* ACL权限
-    * 优先级在owner和group之后
-    * `setfacl`与`getfacl`命令
-<!-- -->
-
-* chattr
-    * -R：    递归目录
-    * 以下选项的前缀，-设置，+取消
-        * a   ：    只能追加
-        * i   ：    无法变更
-        * A   ：    不更新atime
-        * S   ：    同步存储文件
-        * d   ：    不被xfsdump
-* lsattr
-<!-- -->
-
-* su
-    * `-`         ：转为root
-    * `- user`    ：转为user
-    * `-c`        ：用对应目标用户执行一条命令
-<!-- -->
-
-* sudo *CMD*
-    * -u        ：使用目标用户权限(仅root可用)
-    * -l        ：列出本用户sudo信息
-    * -b        ：后台执行
-* visudo
-    > /etc/sudoers  
-    > user  host=(root) cmd，!cmd  
-    > %grp host=(%root) NOPASSWD:ALL
-<!-- -->
-
-# 文件系统
-* GPT分区表：
+<!-- vim-markdown-toc -->
+# 硬盘与文件系统
+* GPT分区表组成：
     * MBR保护
+        > 防止不识别GPT的程序误读
     * GPT头  
-    磁盘GUID、GPT版本、校验、分区项信息等
+        > 磁盘GUID、GPT版本、校验、分区项信息等
     * 分区项  
-    分区GUID、类型、属性、标签、分区位置
+        > 分区GUID、类型、属性、标签、分区位置
     * 分区
+        > 存储文件系统数据的硬盘区块
     * 备份区  
-    GPT头与分区项的备份
+        > GPT头与分区项的备份
 <!-- -->
 
 * XFS文件系统：
-    * 分配组
-        * 超级块(只在第一个分配组)
-        * 空闲空间索引(B+tree)
-        * Inode索引(B+tree)
-    * Inodes
-    * Blocks
-    * log
-    * realtime
+    * 结构：
+        * 分配组
+            * 超级块(只在第一个分配组)
+            * 空闲空间索引(B+tree)
+            * Inode索引(B+tree)
+        * Inodes
+        * Blocks
+        * Log
+        * Realtime
     * XFS特性
         * 分配组的并行性
         * 日志与恢复
@@ -315,58 +67,141 @@
         * 扩展属性
 <!-- -->
 
-* df  *MP*
-    * -T        ：显示文件系统类型
-    * -h        ：人性化size
-    * -i        ：显示inode使用情况
-<!-- -->
-
-* du
-    * -sh       ：显示目标占用block大小
-<!-- -->
-
-* lsblk
-    * -f        ：显示文件系统类型
-    * -m        ：权限及所有者
-* blkid  [*DEV*]
-    * 文件系统标签与类型
-    * 文件系统UUID(fstab所用)
-    * 分区标签
-    * 分区UUID
-<!-- -->
-
+## 分区工具
 * gdisk  *DEV* [-l]
     * m ：普通模式
     * x ：专家模式
     * r ：恢复模式
-* partprobe     ：让内核重载gdisk的修改
+    * ? ：帮助
+* partprobe：让内核重载硬盘信息
 <!-- -->
 
 * parted  *DEV*
     * p
     * mktable
-    * mkpart  *LABLE*  *START*  *END*
-    * resizepart   *NUM*  *END*
-    * rm   *NUM*
-    * name  *NUM*  *NAME*
-    * set  *NUM*  *FLAG*  on/off
+    * mkpart *LABLE* *START* *END*
+    * resizepart *NUM* *END*
+
+    * rm *NUM*
+    * name *NUM* *NAME*
+    * set *NUM* *FLAG* on/off
         * FLAG       ：raid  lvm  boot  hidden  diag
-* partprobe     ：让内核重载gdisk的修改
+* partprobe：让内核重载硬盘信息
 <!-- -->
 
 * 分区标签
-``````
-    parted Flag      Type                     Attr
-        hidden                                  0
-        boot        EFI System
-        diag        Windows RE
-        msftres     Micorsoft reserved
-``````
+```
+    parted-Flag      Type                     Attr
+        hidden         -                        0
+        boot        EFI System                  -
+        diag        Windows RE                  -
+        msftres     Micorsoft reserved          -
+```
 <!-- -->
 
-* mount  *DEV*  *MP*
+## LVM
+* LVM-PV阶段
+    * pvs
+    * pvdisplay  *PV*
+    * pvcreate  *DEV*
+    * pvremove  *DEV*
+<!--  -->
+
+* LVM-VG阶段
+    * vgs
+    * vgdisplay  *VG*
+    * vgcreate *VG*  *PV*
+        * -s ：指定PE大小
+    * vgextend *VG*  *PV*
+    * vgreduce *VG*  *PV*
+    * vgchange  -a `y/n`
+    * vgremove  *VG*
+<!--  -->
+
+* LVM-LV阶段
+    * lvs
+    * lvdisplay  *LV*
+    * lvcreate
+        * -L *SIZE* -n *LV*                 ：普通LV
+        * -L *SIZE* -T *VG/LVpool*          ：建立LVpool
+        * -V *SIZE* -T *VG/LVpool* -n *LV*  ：在指定LVpool中建立LV
+        * -s -L *SIZE* -n *LVS* *VG/LV*     ：建立快照
+    * lvresize
+        * -L +|-*SIZE*
+    * lvchange  -a y|n
+    * lvremove  *LV*
+<!-- -->
+
+## XFS
+* mkfs.xfs  *DEV*
+    * -f        ：强制
+    * -L        ：设置文件系统标签
+    * -b size=
+    * -i  size=
+    * -d agcount=
+    * -d file
+    * -l  external,logdev=  ,size=
+<!-- -->
+
+* xfs_admin
+    * -l        ：查看文件系统标签
+    * -L        ：修改标签
+    * -u        ：查看文件系统uuid
+    * -U        ：修改uuid
+<!-- -->
+
+* xfsdump *MP*
+    > 注 ：挂载点*MP*末不能带/号
+    * -l        ：备份级别0为全量，其他在前一级基础上增量
+    * -L        ：备份文件标签
+    * -M        ：备份设备标签
+    * -f        ：指定备份文件
+    * -e        ：排除属性含d的文件
+    * -s        ：指定目录（无增量备份）
+* xfsrestore *MP*
+    * -f        ：指定使用的备份文件
+    * -s        ：只还原指定的文件或目录
+    * -I        ：查询基础数据库/var/lib/xfsdump/inventory/
+<!-- -->
+
+* xfs_repair
+    * -f        ：对image-file修复
+    * -n        ：只检测
+    * -l        ：指定logdev
+    * -d        ：用于单用户模式强制恢复以ro挂载的/
+<!-- -->
+
+* xfs_info
+* xfs_growfs
+<!-- -->
+
+## 挂载
+> 文件系统抽象由内核的VFS模块提供，Unix一切皆文件。  
+> 其中包括：  
+> 硬盘文件系统（文件系统驱动）  
+> 内存文件系统（内核接口）  
+> 硬件设备（udev映射）
+
+* lsblk
+    * -f        ：显示文件系统类型
+    * -m        ：权限及所有者
+<!--  -->
+
+* blkid [*DEV*]
+    * 文件系统标签与类型
+    * 文件系统UUID（fstab所用）
+    * 分区标签
+    * 分区UUID
+<!-- -->
+
+* df
+    * -T        ：显示文件系统类型
+    * -h        ：人性化size
+    * -i        ：显示inode使用情况
+<!-- -->
+
+* mount *DEV* *MP*
     * -a        ：忽略其他参数，按/etc/fstab挂载
-    * -n        ：不修改/etc/mtab
     * --bind    ：转移挂载点
     * --rbind   ：递归转移挂载点
     * -t        ：指定文件系统类型(sysfs,proc,devtmpfs,tmpfs)
@@ -386,76 +221,8 @@
 * umount
 <!-- -->
 
-* mkfs.xfs  *DEV*
-    * -f        ：强制
-    * -L        ：设置文件系统标签
-    * -b size=
-    * -i  size=
-    * -d agcount=
-    * -d file
-    * -l  external,logdev=  ,size=
-<!-- -->
-
-* xfs_admin
-    * -l        ：查看文件系统标签
-    * -L        ：修改标签
-    * -u        ：查看文件系统uuid
-    * -U        ：修改uuid
-<!-- -->
-
-* xfs_repair
-    * -f        ：对image file修复
-    * -n        ：只检测
-    * -l        ：指定logdev
-    * -d        ：用于单用户模式强制恢复以ro挂载的/
-<!-- -->
-
-* xfs_info
-* xfs_growfs
-* xfs_fsr
-<!-- -->
-
-* xfsdump  *MP*
-    * -l        ：备份级别0为全量，其他在前一级基础上增量
-    * -L        ：备份文件标签
-    * -M        ：备份设备标签
-    * -f        ：指定备份文件
-    * -e        ：排除属性含d的文件
-    * -s        ：指定目录(无增量备份)
-    > 注 ：挂载点末不能带/号
-* xfsrestore  *MP*
-    * -f        ：指定使用的备份文件
-    * -s        ：只还原指定的文件或目录
-    * -I        ：查询基础数据库/var/lib/xfsdump/inventory/
-<!-- -->
-
-* LVM-PV阶段
-    * pvs
-    * pvdisplay  *PV*
-    * pvcreate  *DEV*
-    * pvremove  *DEV*
-* LVM-VG阶段
-    * vgs
-    * vgdisplay  *VG*
-    * vgcreate *VG*  *PV*
-        * -s ：指定PE大小
-    * vgextend *VG*  *PV*
-    * vgreduce *VG*  *PV*
-    * vgchange  -a `y/n`
-    * vgremove  *VG*
-* LVM-LV阶段
-    * lvs
-    * lvdisplay  *LV*
-    * lvcreate
-        * -L *SIZE*  -n *LV*                ：普通LV
-        * -L *SIZE*  -T *VG/LVpool*         ：建立LVpool
-        * -V *SIZE*  -T *VG/LVpool* -n *LV* ：在指定LVpool中建立LV
-        * -s  -L *SIZE*  -n *LVS*   *VG/LV* ：建立快照
-    * lvresize
-        * -L +|-*SIZE*
-    * lvchange  -a y|n
-    * lvremove  *LV*
-<!-- -->
+## 归档包
+制作归档包时，应该让解包出来的文件都在一个目录中，故一般在要打包的目录的父目录进行操作从而将整个目录打包
 
 * zip  *ZIPFILE*  *FILES*
     * -[1-9]    ：压缩等级，越大压缩比越高
@@ -476,8 +243,6 @@
     * -p          ：保留权限等信息
     * --exlcude   ：排除，pattern
     * -C          ：解包时指定路径
-    > `-f`后接的路径名也会保留，除了根目录  
-    > 如果用.做目录，则解压后目录内文件仍会分散
 <!-- -->
 
 * dd
@@ -491,39 +256,101 @@
         * lcase      ：小写
         * ucase      ：大写
         * notrunc    ：不截断，覆盖
-* dd if=*manjaro.iso* of=*usb-dev* bs=8M oflag=sync status=progress
+> 例：dd if=*manjaro.iso* of=*usb-dev* bs=8M oflag=sync status=progress
 <!-- -->
 
 * losetup */dev/loop0*  *loopfile*
+    > 制作loop设备
 * losetup -d */dev/loop0*
+    > 解除loop设备
+<!-- -->
+
+## 文件权限
+* 权限信息
+    > 只有owner与root能修改，使用stat命令可以查看详细信息  
+    > `umask`即默认权限掩码，设置后会掩盖默认权限，默认为022，从而目录默认权限为755，文件默认644
+    * Uid与Gid      ：指明文件所属的owner与group
+    * `r w x`       ：**读/写/执**权限，以八进制数字表示时从高位到低位依次代表是否具有**读/写/执**权限
+    * `s S t T`     ：**SUID/SGID/SBIT**特殊权限，以八进制表示时从高位到低位依次表示是否具有**SUID/SGID/SBIT**权限
+    * OOOO          ：4位八进制数，第一个表示特殊权限，后三个分别表示owner/group/other的读/写/执权限
+* 对普通文件
+    * r/w表示可读/写其对应block
+    * x表示可以执行该文件形成进程
+    * SUID表示执行时环境变量EUID改为owner
+    * SGID表示执行时环境变量EGID改为group
+* 对目录
+    * r/w表示可读/写其对应block内存储的entry
+    * x表示能否对目录下文件进行访问，即使没有rw也可以“摸黑访问”
+    * SGID表示所有创建在此目录的普通文件的gid默认为目录的gid
+    * SBIT表示该目录下的普通文件只有其owner与目录owner能删除
+<!-- -->
+
+* setfacl
+    > 设置ACL权限，优先级在owner和group之后
+* getfacl
+<!--  -->
+
+* chattr
+    > 设置文件额外属性
+    * -R：    递归目录
+    * 以下选项的前缀，-设置，+取消
+        * a   ：    只能追加
+        * i   ：    无法变更
+        * A   ：    不更新atime
+        * S   ：    同步存储文件
+        * d   ：    不被dump
+* lsattr
+<!-- -->
+
+* su
+    * `-`         ：转为root
+    * `- user`    ：转为user
+    * `-c`        ：用对应目标用户执行一条命令
+<!-- -->
+
+* sudo *CMD*
+    * -u        ：使用目标用户权限(仅root可用)
+    * -l        ：列出本用户sudo信息
+    * -b        ：后台执行
+<!--  -->
+
+* visudo
+    > /etc/sudoers与/etc/sudoers.d  
+    > user host=(root) cmd，!cmd  
+    > %grp host=(%root) NOPASSWD:ALL
 <!-- -->
 
 # 用户与登录
 * 登录文件
+    > 由PAM模块控制登录验证
     * /etc/nologin   ：若存在则只允许root登陆
+
     * /etc/issue     ：本地控制台登陆提示
     * /etc/motd      ：远程登录提示
     * /etc/login.defs：用户登陆设置
+<!--  -->
+
 * 用户文件
     * /etc/passwd
-        * `用户名：密码：UID：GID：描述信息：主目录：默认Shell`
+        * `用户名:密码:UID:GID:描述信息:主目录:默认Shell`
+
     * /etc/shadow
-        * `用户名：加密密码：最后一次修改时间：最小修改时间间隔：密码有效期：密码需要变更前的警告天数：密码过期后的宽限时间：账号失效时间：保留`
+        * `用户名:加密密码:最后一次修改时间:最小修改时间间隔:密码有效期:密码需要变更前的警告天数:密码过期后的宽限时间:账号失效时间:保留`
         > 在密码前加上 "!"、"*" 或 "x" 使密码暂时失效
     * /etc/group
-        * 组名        ：密码：GID：组附加用户列表
+        * `组名:密码:GID:组附加用户列表`
     * /etc/gshadow
-        * 组名        ：加密密码：组管理员：组附加用户列表
-    * /etc/skel/`.*`   ：建立用户主目录时拷贝次目录
+        * `组名:加密密码:组管理员:组附加用户列表`
+    * /etc/skel/：建立用户主目录时拷贝此目录
 <!-- -->
 
-* last  ：系统的启动与用户登陆日志
+* last      ：系统的启动与用户登陆日志
     > /var/log/wtmp
-* lastlog       ：每个用户最后一次登陆时间
+* lastlog   ：每个用户最后一次登陆时间
     > /var/log/lastlog
-* lastb ：上次错误登录记录
-    > /variety/log/btmp
-* w     ：系统现在的登录情况
+* lastb     ：上次错误登录记录
+    > /var/log/btmp
+* w         ：系统现在的登录情况
     > /var/run/ulmp
 <!-- -->
 
@@ -607,7 +434,7 @@
     * TTY
     * UID、EUID、GID、EGID
     * PID、PPID、PGID、SID、TPGID
-    * SELinux context
+    * SELinux-Context
 <!-- -->
 
 * CPU使用时间
@@ -670,6 +497,7 @@
 | 31       | SIGSYS            | 错误的系统调用       |                                            | 终止、core dump        | 159       |
 | 34~64    | SIGRTMIN~SIGRTMAX | 实时信号             |                                            | 终止                   | 34~64     |
 > 参考至[linux信号表](https://blog.csdn.net/xuyaqun/article/details/5338563)
+
 * jobs
     * -l        ：显示PID
     * -r        ：显示running jobs
@@ -677,22 +505,6 @@
 <!-- -->
 
 * fg/bg  *%JID*
-<!-- -->
-
-* top
-    * -bn       ：指定刷新次数并手动重定向到文件
-    * -d        ：指定刷新周期
-    * -u        ：指定监视用户
-    * -p        ：指定监视PID
-    * 交互命令
-        * P/M/T/N     ：按cpu/mem/time/pid排序
-        * c   ：显示完整命令
-        * e   ：切换内存单位
-        * 1   ：显示多核
-        * z   ：切换颜色
-        * f   ：选择域的显示/排序
-        * t/m ：切换cpu/mem显示模式
-        * k/r ：kill/renice
 <!-- -->
 
 * ps
@@ -719,7 +531,44 @@
 * renice -n PID
 <!-- -->
 
-* nohup CMD (&)
+* top
+    * -bn       ：指定刷新次数并手动重定向到文件
+    * -d        ：指定刷新周期
+    * -u        ：指定监视用户
+    * -p        ：指定监视PID
+    * 交互命令
+        * P/M/T/N     ：按cpu/mem/time/pid排序
+        * c   ：显示完整命令
+        * e   ：切换内存单位
+        * 1   ：显示多核
+        * z   ：切换颜色
+        * f   ：选择域的显示/排序
+        * t/m ：切换cpu/mem显示模式
+        * k/r ：kill/renice
+* htop：top的替代品
+<!-- -->
+
+* free
+    * -wh       ：人性化输出
+    * -s        ：刷新周期
+    * -c        ：刷新次数
+<!-- -->
+
+* vmstat -w  [周期]  [次数]
+<!-- -->
+
+* iostat -h
+* iotop
+<!-- -->
+
+* lspci
+    * -s        ：显示指定设备
+    * -vv       ：显示详情
+* lsusb -t
+* lscpu
+<!-- -->
+
+* nohup CMD [&]
 <!-- -->
 
 * lsof
@@ -735,25 +584,12 @@
     > 列出打开目标文件的进程
 <!-- -->
 
-* free
-    * -wh       ：人性化输出
-    * -s        ：刷新周期
-    * -c        ：刷新次数
+* ulimit  -a -HS
+    > /etc/security/ulimits.d/
 <!-- -->
 
-* vmstat -w  [周期]  [次数]
-<!-- -->
 
-* iostat -h
-<!-- -->
-
-* lspci
-    * -s        ：显示指定设备
-    * -vv       ：显示详情
-* lsusb -t
-* lscpu
-<!-- -->
-
+# 日志
 * syslog.h规范类型
     * 0      ：kern(kernel)：内核日志，大都为硬件检测与内核功能加载
     * 1      ：user：用户层信息(如logger)
@@ -818,48 +654,6 @@
         > * 只有在配置目录的unit才在systemd视线里  
         > * 是否开机启动取决于满足上述的unit是否在default.target的依赖链中
 <!-- -->
-
-* systemctl
-    * 信息查看
-        * status
-        * show
-        * cat
-        * edit
-    * unit查看
-        * --state=
-        * list-units  ：已加载的
-        * -t          ：指定unit类型
-        * -a          ：所有
-        * list-unit-files    ：所有
-        * list-dependencies [--reverse]
-    * 手动控制
-        * start
-        * stop
-        * restart
-        * reload
-    * 开机管理
-        * enable|disable      ：可使用--now同时执行start/stop
-        * static      ：只能作为依赖被启动
-        * mask        ：禁止启动，unmask解禁
-    * 主机状态
-        * suspend
-        * hibernate
-        * rescue
-        * emergency
-    * 主机target
-        * get-default
-        * set-default
-        * isolate
-    * systemd重新读取unit
-        * daemon-reload
-<!-- -->
-
-* systemd-analyze
-    * systemd-analyze blame
-    * systemd-analyze plot > plot.svg
-* systemd-escape --path ：路径转义
-<!-- -->
-
 ## units配置
 * unit配置
     * 选项可重复设置，后面覆盖前面
@@ -964,25 +758,66 @@
     * 注：可能希望在foo.service中[Unit]设置Conflicts=foo.socket
 <!-- -->
 
-# GRUB
+## 命令
+* systemctl
+    * 信息查看
+        * status
+        * show
+        * cat
+        * edit
+    * unit查看
+        * --state=
+        * list-units  ：已加载的
+        * -t          ：指定unit类型
+        * -a          ：所有
+        * list-unit-files    ：所有
+        * list-dependencies [--reverse]
+    * 手动控制
+        * start
+        * stop
+        * restart
+        * reload
+    * 开机管理
+        * enable|disable      ：可使用--now同时执行start/stop
+        * static      ：只能作为依赖被启动
+        * mask        ：禁止启动，unmask解禁
+    * 主机状态
+        * suspend
+        * hibernate
+        * rescue
+        * emergency
+    * 主机target
+        * get-default
+        * set-default
+        * isolate
+    * systemd重新读取unit
+        * daemon-reload
+<!-- -->
 
+* systemd-analyze
+    * systemd-analyze blame
+    * systemd-analyze plot > plot.svg
+* systemd-escape --path ：路径转义
+<!-- -->
+
+# GRUB
 ## GRUB配置
 * /etc/default/grub
-``````
+```
     GRUB_DEFAULT=0
     GRUB_TIMEOUT=5
     GRUB_GFXMODE=auto
     GRUB_GFXPAYLOAD_LINUX=keep
     GRUB_CMDLINE_LINUX-DEFAULT=
-``````
+```
 * /etc/grub.d/
-``````
+```
     * 00_header
     * 01_user     ：自定义环境
     * 10_linux    ：确定linux选单
     * 20_os-prober：确定其他OS选单
     * 40_custom   ：自定义选单
-``````
+```
 <!-- -->
 
 ## GRUB Shell
@@ -1064,9 +899,18 @@
     * /etc/adjtime          ：系统时间校准类型
 <!-- -->
 
+* FONT
+    * mkfontdir
+    * mkfontscale
+    * fc-cache -f
+    > 以上三条命令为字体安装三部曲
+    * fc-list       ：字体缓存查看
+
 * hostnamectl
     * set-hostname
-* locale
+<!--  -->
+
+* locale [-a]
 * localectl
 <!-- -->
 
@@ -1076,7 +920,22 @@
     * set-ntp     ：chronyd服务
 <!-- -->
 
-# 网络基础概念
+* date
+    * +*timeformat*
+        > * `%Y %y`         ：年份、年份后两位
+        > * `%m %b %B`      ：月份、月份单词缩写、月份单词
+        > * `%d %j %s`      ：一月中第几天、一年中第几天、从epoch开始的秒数
+        > * `%H %M %S`      ：时（24小时值）、分、秒
+        > * `%a %A`         ：礼拜单词缩写、礼拜单词
+    * -d *timeformat*       ：将参数转换为时间
+    * -d @`N`               ：epoch之后N秒
+    * -d '19700101  Ndays'  ：epoch之后N天
+<!-- -->
+
+* cal *[MONTH YEAR]*
+<!-- -->
+
+# 计算机网络
 * OSI七层模型与TCP/IP四层模型
 
 | TCP/IP | OSI                    |
@@ -1146,7 +1005,7 @@
         * add/del IP  lla MAC  dev IF
 <!-- -->
 
-### NetworkManager服务
+## NetworkManager服务
 * nmcli
     * radio/r
         * wifi on|off
@@ -1162,6 +1021,7 @@
 * nmtui
 <!-- -->
 
+## 其它网络命令
 * nmap
 ![图片来自网络](../images/nmap.png)
 <!-- -->
@@ -1210,9 +1070,218 @@
         * pacman  -Sy
 <!-- -->
 
-* FONT
-    * mkfontdir
-    * mkfontscale
-    * fc-cache -f
-    > 以上三条命令为字体安装三部曲
-    * fc-list       ：字体缓存查看
+* curl -o *File* *URL*
+* curl -fsSL *URL* | bash
+* curl -fsSL *URL* | bash -s -- {-opt}
+* curl cheat.sh/`CMD`
+* curl cheat.sh/`LANG`/`SPECIFIC`
+    > [cheat.sh](https://github.com/chubin/cheat.sh)是github上一个nice的项目  
+    * 空白用`+`代替
+    * `curl cheat.sh/~keyword`
+    * `curl cheat.sh/python/:list` 列出可选项
+<!-- -->
+
+* sendEmail
+    * -s        ：SMTP服务器
+    * -f        ：发送者的邮箱
+    * -t        ：接收者的邮箱
+    * -cc       ：表示抄送发给谁
+    * -bcc      ：表示暗抄送给谁
+    * -xu       ：SMTP验证的用户名
+    * -xp       ：SMTP验证的密码
+    * -u        ：标题
+    * -m        ：内容
+    * -a        ：附件
+    * -o message-content-type=*html*/*text* ：邮件的格式
+    * -o message-charset=utf8               ：邮件的编码
+<!-- -->
+
+# 基础命令
+## 读取文件信息
+* stat
+    * `默认`    ：显示文件详细信息
+    * -f        ：显示文件所处文件系统信息
+<!-- -->
+
+* ls
+    * -d        ：显示目录本身
+    * -i        ：显示inode
+    * -L        ：显示符号链接的目标
+    * -n        ：显示uid与gid
+    * -R        ：目录递归显示
+    * -s        ：显示文件占用block大小
+    * -S        ：按大小排序（降序）
+    * -t        ：按modify时间排序（降序）
+    * -Z        ：安全上下文
+<!-- -->
+
+* du
+    * -sh       ：显示目标占用block大小
+<!-- -->
+
+* file
+    * -i        ：文件的格式信息
+<!-- -->
+
+* cat
+    * -A        ：打印特殊空白符
+    * -n        ：显示行号
+    * -b        ：显示行号但空行不算行号
+* tac：翻转首尾
+* rev：每行翻转
+<!-- -->
+
+* head
+    * -v        ：显示文件名
+    * -n        ：指定显示多少行
+<!-- -->
+
+* tail
+    * -v        ：显示文件名
+    * -n        ：指定显示多少行
+    * -f        ：监听
+<!-- -->
+
+* xxd
+    > 以十六进制读取文件数据
+
+## 文件的修改、创建与删除
+* touch
+    * `默认`    ：修改a/m/ctime
+    * -a        ：只改atime
+    * -m        ：只改mtime
+    * -d        ：指定touch的时间，date模式
+<!-- -->
+
+* ln *SRC* *TAG*
+    * `默认`    ：硬连接
+    * -s        ：软连接
+    * -f        ：强制覆盖
+<!-- -->
+
+* cp  *SRC*  *TAG*
+    * -a        ：尽可能复制所有信息
+    * -r        ：目录递归
+    * -v        ：详述
+    * -i        ：询问是否覆盖
+    * -u        ：只更新
+    * -f        ：强制覆盖
+    * -n        ：直接不覆盖
+<!-- -->
+
+* mv *SRC*  *TAG*
+    * -v        ：详述
+    * -i        ：询问是否覆盖
+    * -u        ：只更新
+    * -f        ：强制覆盖
+    * -n        ：直接不覆盖
+<!-- -->
+
+* rm
+    * -r        ：目录递归
+    * -v        ：详述
+    * -f        ：强制覆盖
+<!-- -->
+
+* mkdir
+    * -p        ：递归
+    * -m        ：设置权限
+<!-- -->
+
+## 文件的搜索
+* whereis       ：搜索可执行，头文件和帮助信息的位置，使用系统内建数据库
+<!-- -->
+
+* locate
+    * -i        ：忽略大小写
+    * -r        ：正则表达式（默认通配符）
+    * -c        ：显示匹配的文件数量
+    * -S        ：显示数据库信息
+* updatedb
+    > 更新locate命令需要的数据库  
+    > 配置  ：/etc/updatedb.conf  
+    > 数据库：/var/lib/mlocate/mlocate.db  
+<!-- -->
+
+* find *DIR* *OPTS...*
+    * 打印：
+        * -print
+    * 正则名字：
+        * -regex
+        * -iregex
+    * 通配符名字：
+        * -name
+        * -iname
+    * 用户：
+        * -uid
+        * -gid
+        * -user
+        * -group
+        * -nouser
+    * 权限：
+        * -writable
+        * -readable
+        * -executable
+        * -perm
+            > `-`表示权限为指定范围的非空子集  
+            > `/`表示权限为指定范围的非空交集  
+            > `无前缀`表示精准权限
+    * 大小：
+        * -size
+            > `+`表示大于  
+            > `-`表示小于  
+            > 单位用c/k/M/G
+    * 时间：
+        * -[a|m|c]time *n*  ：指定`n*24 h`之前的文件，`+/-`表示更早/更晚
+        * -[a|m|c]min  *n*  ：指定`n min`之前的文件
+        * -[a|m|c]newer *file*
+    * 文件类型：
+        * -type [f|d|l|b|c|p|s]
+    * 其他信息：
+        * -links            ：硬连接数
+        * -inum             ：inode号
+    * 复合逻辑关系          ：-a、-o、-not
+    * 对搜索到的文件执行CMD ：-exec  *CMD*  {} \;
+<!--  -->
+
+* fzf   ：交互式模糊搜索
+<!-- -->
+
+## 其它
+* echo
+    * -n        ：不自动加入换行符（zsh会将无换行结尾的输出的尾部标记`反显的%`）
+    * -e        ：启用转义语义（zsh自动开启）
+<!-- -->
+
+
+* pwd
+    * -P        ：显示真实路径而非软连接
+<!-- -->
+
+* bc
+    * -l        ：可以使用数学库函数 s(sin x)，c(cos x)，a(arctan x)，l(ln x)，e(e^x)
+    * 特殊变量  ：scale，last，ibase，obase，支持^运算符求幂
+<!-- -->
+
+* split *FILE* *Preffix*
+    > 注：preffix最后最好加dot，大小单位可指定，默认byte
+    * -b        ：按大小分割
+    * -l        ：按行数分割
+<!-- -->
+
+* iconv  FILE
+    * -f        ：原字符集
+    * -t        ：目标字符集
+    * -o        ：输出文件
+    * --list    ：列出可选字符集
+<!-- -->
+
+* col -x ：将tab替换为等宽space，该命令只从stdin读取
+<!-- -->
+
+* diff -Naur *OLD* *NEW* > *.patch
+* patch -p`n`  < *.patch
+    > * new和old不要在同一目录下  
+    > * n为去掉的/个数
+<!-- -->
+
