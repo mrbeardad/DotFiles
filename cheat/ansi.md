@@ -1,32 +1,33 @@
-* color_ansi
+* ansi_color
     * 16 colors:
-        * `\033[${ID}m`    (普通)
-        * `\033[${ID};1m`  (加粗：由终端设置是否也高亮)
-        * `\033[${ID};2m`
+        * `\033[${ID}m`     (普通)
+        * `\033[${ID};1m`   (加粗：由终端设置是否也高亮)
+        * `\033[${ID};2m`   (低暗：终端不一定支持)
+
+    |  color | foreground | background |
+    |:------:|:----------:|:----------:|
+    |  black |     30     |     40     |
+    |   red  |     31     |     41     |
+    |  green |     32     |     32     |
+    | yellow |     33     |     33     |
+    |  blue  |     34     |     34     |
+    | purple |     35     |     35     |
+    |  cyan  |     36     |     36     |
+    |  white |     37     |     37     |
+
     * [256 color](https://jonasjacek.github.io/colors/)
-        * `\033[${fg_bg};5;${ID}m`
-            > ${fg_bg}：背景为`48m`，前景为`38m`  
+        * `\033[${fg_bg};5;${id}m`
+            > ${fg_bg}：前景为`38m`，背景为`48m`  
     * true color:
         * `\c033[${fg_bg};2;${red};${green};${blue}m`
             > 把你的终端的调色板打开自己对照咯
-
-|  color | foreground | background |
-|:------:|:----------:|:----------:|
-|  black |     30     |     40     |
-|   red  |     31     |     41     |
-|  green |     32     |     32     |
-| yellow |     33     |     33     |
-|  blue  |     34     |     34     |
-| purple |     35     |     35     |
-|  cyan  |     36     |     36     |
-|  white |     37     |     37     |
 <!-- -->
 
-* escape_ansi
+* ansi_escape
 
 |        escape       |    meaning   |
 |:-------------------:|:------------:|
-|       `\e[0m`       |     恢复     |
+|       `\e[0m`       |     复原     |
 |       `\e[1m`       |     加粗     |
 |       `\e[2m`       |     低暗     |
 |       `\e[3m`       |     斜体     |

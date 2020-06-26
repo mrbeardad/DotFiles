@@ -832,18 +832,18 @@
     * cmdpath    ：core.image所在目录
     * superusers ：超级用户，逗号分隔
 * grub命令
-    * ls ：列出已知设备/设备中的文件/目录的内容
-    * cat        ：显示文件内容，--dos选项处理换行符
-    * echo       ：与bash用法一样
-    * normal     ：执行命令脚本
-    * source     ：将文件内容插入当前位置
-    * configfile ：将文件做配置加载，不会保留其设置的环境变量
-    * set var=val：设置变量
-    * export var ：导出至环境变量，使其对configfile命令载入的配置文件可见
-    * lsmod      ：列表已加载模块
-    * insmod/rmmod       ：加载/卸载模块
-    * loopback dev isofile：建立loop设备，-d删除
-    * halt/reboot        ：关机/重启
+    * ls                    ：列出已知设备/设备中的文件/目录的内容
+    * cat                   ：显示文件内容，--dos选项处理换行符
+    * echo                  ：与bash用法一样
+    * normal                ：执行命令脚本
+    * source                ：将文件内容插入当前位置
+    * configfile            ：将文件做配置加载，不会保留其设置的环境变量
+    * set var=val           ：设置变量
+    * export var            ：导出至环境变量，使其对configfile命令载入的配置文件可见
+    * lsmod                 ：列表已加载模块
+    * insmod/rmmod          ：加载/卸载模块
+    * loopback dev isofile  ：建立loop设备，-d删除
+    * halt/reboot           ：关机/重启
 * GRUB安全
     * 设置超级用户
         set superusers="root"

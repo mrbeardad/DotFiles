@@ -22,7 +22,7 @@ function makedir() {
 }
 
 function system_cfg() {
-    # 开启ntp服务自动同步时间，并设置rtc让系统将主板时间当作本地时间(兼容windows)
+    # 开启ntp服务自动同步时间，并设置rtc让系统将主板时间当作本地时间（兼容windows）
     sudo timedatectl set-ntp 1 && timedatectl set-local-rtc 1
     sudo hwclock -w
 
@@ -42,7 +42,6 @@ function pacman_cfg() {
     # 修改pacman源为腾讯源，有时候更新系统会把mirrorlist覆盖了，备份一下，当发现下载速度奇慢无比时检查此项
     echo 'Server = https://mirrors.cloud.tencent.com/manjaro/stable/$repo/$arch' | sudo tee /etc/pacman.d/mirrorlist
     sudo cp /etc/pacman.d/mirrorlist{,.bak}
-
     # 或者直接修改/etc/pacman.conf可以解决此问题，就像init-for-myself.sh一样
     # sudo sed -i '/^Include = /s/^.*$/Server = https:\/\/mirrors.cloud.tencent.com\/manjaro\/stable\/$repo\/$arch/' /etc/pacman.conf
 
@@ -187,7 +186,9 @@ function cli_cfg() {
     # yay -S ncdu ranger
 
     # 修改Manjaro默认的ranger配置，用于fzf与vim-defx预览文件
-    sed -i '/^set show_hidden/s/false/true/; ' ~/.config/ranger/rc.conf
+    sed -i '/^set show_hidden/s/false/true/;
+    /^#map cw console rename%space/s/^.*$/map rn console rename%space/;
+    /^map dD console delete$/s/dD/rm/' ~/.config/ranger/rc.conf
     sed -i '/highlight_format=xterm256/s/xterm256/ansi/' ~/.config/ranger/scope.sh
 
     # gdb与cgdb配置

@@ -130,7 +130,7 @@
     ```
     - [ ] task1 incomplete item with `space`
     - [x] task2 complete item with `x`
-    ``````
+    ```
     - [ ] task1 incomplete item with `space`
     - [x] task2 complete item with `x`
 
@@ -161,8 +161,9 @@
 ## 强调
 * 强调
 
-| *italic*                       | `*italic*`                     |
+| 渲染                           | 源码                           |
 | :----------------------------: | :----------------------------: |
+| *italic*                       | `*italic*`                     |
 | **bold**                       | `**bold**`                     |
 | ***italic&bold***              | `***italic&bold***`            |
 | ~~delete~~                     | `~~delete~~`                   |

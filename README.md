@@ -35,7 +35,7 @@
     > 就怕连接过期了:joy:
 * [linux基础](cheat/linux.md)
     > \[注]:包括许多基础命令与概念
-* [Linux启动流程](cheat/boot.md)
+* [Linux系统总结](note/boot.md)
 * [Bash](cheat/bash.md)
     > \[注]:除了语法外，还有一些流处理命令，如:`awk` `sed`等
 * [ANSI终端颜色](cheat/ansi.md)
@@ -44,7 +44,7 @@
 * [Vim](cheat/vim.md)
     > 非常完整的使用文档，只需要你记快捷键就行
 * [Markdown概念](cheat/markdown.md)
-* [小鹤双拼](cheat/double_pinyin.md)
+* [RIME小鹤双拼](cheat/double_pinyin.md)
 * [Manjaro安装](notes/manjaro.md)
 * [C++标准库](cheat/cppman.md)
     > \[注]:该笔记为了终端查询可读性更好，并未遵守markdown语法，

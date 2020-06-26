@@ -1,7 +1,17 @@
+# Host addresses
+127.0.0.1  localhost
+127.0.1.1  ASUS-Manjaro
+::1        localhost ip6-localhost ip6-loopback
+ff02::1    ip6-allnodes
+ff02::2    ip6-allrouters
 
 # GitHub Fastly Access
-13.250.177.223      www.github.com
-13.250.177.223      github.com
+
+# XinJin
+# 13.250.177.223      www.github.com
+# 13.250.177.223      github.com
+52.74.223.119       www.github.com
+52.74.223.119       github.com
 88.191.249.182      github.global.ssl.fastly.net
 185.199.109.153     assets-cdn.github.com
 13.250.177.223      gist.github.com
