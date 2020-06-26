@@ -34,7 +34,7 @@ function system_cfg() {
     # 限制系统日志大小为100M
     sudo sed -i '/\[Journal\]/a\SystemMaxUse=100M' /etc/systemd/journald.conf
 
-    # 笔记本电源，15%提醒电量过低，10%提醒即将耗尽电源，3%强制休眠(根据系统差异，也可能会关机)
+    # 笔记本电源，15%提醒电量过低，10%提醒即将耗尽电源，4%强制休眠(根据系统差异，也可能会关机)
     sudo sed -i '/^PercentageLow=/s/=.*$/=15/; /^PercentageCritical=/s/=.*$/=10/; /^PercentageAction=/s/=.*$/=3/' /etc/UPower/UPower.conf
 }
 
@@ -209,7 +209,7 @@ function desktop_cfg() {
     # yay -S pepper-flash flashplugin 
 
     # GNOME扩展
-    yay -S mojave-gtk-theme-git sweet-theme-git adapta-gtk-theme-bin breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git tela-icon-theme-git \
+    yay -S mojave-gtk-theme-git sweet-theme-git adapta-gtk-theme breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git tela-icon-theme-git \
         gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git \
         gnome-shell-extension-lockkeys-git gnome-shell-extension-topicons-plus-git
     # yay -S  gnome-shell-extension-dash-to-dock-git gnome-shell-extension-dash-to-panel-git
@@ -265,7 +265,7 @@ net.ipv6.conf.lo.disable_ipv6 =1" | sudo tee -a /etc/sysctl.conf
     cp -v /usr/share/applications/{wps-office-*,google-chrome,nvim}.desktop ~/.local/share/applications
     cp -v /usr/share/applications/guake.desktop ~/.config/autostart/guake-self.desktop
     sed -i '/^Exec=/s/=.*$/=xfce4-terminal --maximize -x terminal-tmux.sh NeoVim/; /Terminal=/s/true/false/' ~/.local/share/applications/nvim.desktop
-    sed -i '/^Exec=/s/=.*$/=guake -e "terminal-tmux.sh Guake/"' ~/.config/autostart/guake-self.desktop
+    sed -i '/^Exec=/s/=.*$/=guake -e "terminal-tmux.sh Guake"/' ~/.config/autostart/guake-self.desktop
     sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/wps-office-*
     sudo sed -i -e '/wine.*run\.sh/isudo sysctl -p /etc/sysctl.conf' -e '/wine.*run\.sh/s/^/prime /' /opt/deepinwine/apps/Deepin-TIM/run.sh
     sed -i '/Exec=/s/=/=prime /' ~/.local/share/applications/google-chrome.desktop
@@ -295,7 +295,7 @@ function main() {
     echo -e '\e[32m=====> Neovim\e[m
     Now, launch nvim and type :SPInstall. Build YCM and fix ALE after all plugins are installed '
     echo -e '\e[33m=====> Gnome dconf has been installed, logout immediately and back-in will apply it.
-Any desktop configurate may overwrite it. '
+If it does not wrok, copy gnome/user to ~/.config/dconf/user manually, and then logout immediately and back-in will work.'
     # Sweet-dark tela-icon:place hp-uiscan:icon ~/Downloads/BaiduNetDisk ~/Downloads/GoogleChrome
 }
 
