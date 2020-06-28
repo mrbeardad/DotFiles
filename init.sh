@@ -81,13 +81,6 @@ function nvim_cfg() {
     makedir ~/.local/bin
     g++ -O3 -std=c++17 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
     cp ~/.SpaceVim/custom/{nop.sh,vim-quickrun.sh} ~/.local/bin
-
-    makedir ~/.cache/cppman/cplusplus.com
-    (
-        cd /tmp || exit 1
-        tar -zxf "$dotfiles_dir"/cppman/cppman_db.tar.gz
-        cp -vn cppplusplus.com/* ~/.cache/cppman/cplusplus.com
-    )
 }
 
 function grub_cfg() {
@@ -185,6 +178,13 @@ function cli_cfg() {
     sudo pip3 install cppman
     # yay -S ncdu ranger
 
+    makedir ~/.cache/cppman/cplusplus.com
+    (
+        cd /tmp || exit 1
+        tar -zxf "$dotfiles_dir"/cppman/cppman_db.tar.gz
+        cp -vn cplusplus.com/* ~/.cache/cppman/cplusplus.com
+    )
+
     # 修改Manjaro默认的ranger配置，用于fzf与vim-defx预览文件
     sed -i '/^set show_hidden/s/false/true/;
     /^#map cw console rename%space/s/^.*$/map rn console rename%space/;
@@ -210,7 +210,7 @@ function desktop_cfg() {
 
     # GNOME扩展
     yay -S mojave-gtk-theme-git sweet-theme-git adapta-gtk-theme breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git tela-icon-theme-git \
-        gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git \
+        gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git gnome-shell-extension-openweather \
         gnome-shell-extension-lockkeys-git gnome-shell-extension-topicons-plus-git
     # yay -S  gnome-shell-extension-dash-to-dock-git gnome-shell-extension-dash-to-panel-git
 
@@ -296,7 +296,9 @@ function main() {
     Now, launch nvim and type :SPInstall. Build YCM and fix ALE after all plugins are installed '
     echo -e '\e[33m=====> Gnome dconf has been installed, logout immediately and back-in will apply it.
 If it does not wrok, copy gnome/user to ~/.config/dconf/user manually, and then logout immediately and back-in will work.'
-    # Sweet-dark tela-icon:place hp-uiscan:icon ~/Downloads/BaiduNetDisk ~/Downloads/GoogleChrome
+    # sweet-theme:dark, tela-icon:place, hp-uiscan:icon,
+    # ~/Downloads/Baidu_NetDisk_Downloads/ ~/Downloads/Google_Chrome_Downloads/ 
+    # automaically-login, user-profile-photo
 }
 
 # 安装完镜像后后就改个sudoer & fstab配置，其他啥也不用动

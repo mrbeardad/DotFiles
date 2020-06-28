@@ -4,32 +4,32 @@ Language=en
 Label=apl
 
 [keyboard-apl-dyalog]
-Description="Keyboard - APL - Dyalog APL complete"
+Description="Keyboard - APL - APL symbols (Dyalog APL)"
 Language=en
 Label=apl
 
 [keyboard-apl-sax]
-Description="Keyboard - APL - APL Keyboard Symbols: sax"
+Description="Keyboard - APL - APL symbols (SAX, Sharp APL for Unix)"
 Language=en
 Label=apl
 
 [keyboard-apl-unified]
-Description="Keyboard - APL - APL Keyboard Symbols: Unified Layout"
+Description="Keyboard - APL - APL symbols (unified)"
 Language=en
 Label=apl
 
 [keyboard-apl-apl2]
-Description="Keyboard - APL - APL Keyboard Symbols: IBM APL2"
+Description="Keyboard - APL - APL symbols (IBM APL2)"
 Language=en
 Label=apl
 
 [keyboard-apl-aplplusII]
-Description="Keyboard - APL - APL Keyboard Symbols: Manugistics APL*PLUS II"
+Description="Keyboard - APL - APL symbols (Manugistics APL*PLUS II)"
 Language=en
 Label=apl
 
 [keyboard-apl-aplx]
-Description="Keyboard - APL - APL Keyboard Symbols: APLX Unified APL Layout"
+Description="Keyboard - APL - APL symbols (APLX unified)"
 Language=en
 Label=apl
 
@@ -59,7 +59,7 @@ Language=
 Label=brai
 
 [keyboard-brai-right_hand]
-Description="Keyboard - Braille - t-handed)"
+Description="Keyboard - Braille - Braille (right-handed)"
 Language=
 Label=brai
 
@@ -94,12 +94,12 @@ Language=eo
 Label=epo
 
 [keyboard-epo-legacy]
-Description="Keyboard - Esperanto - Esperanto (displaced semicolon and quote, obsolete)"
+Description="Keyboard - Esperanto - Esperanto (legacy)"
 Language=eo
 Label=epo
 
 [keyboard-eu]
-Description="Keyboard - EurKEY (US based layout with European letters)"
+Description="Keyboard - EurKEY (US)"
 Language=ca
 Label=eu
 
@@ -119,7 +119,7 @@ Language=ko
 Label=kr
 
 [keyboard-kr-kr104]
-Description="Keyboard - Korean - Korean (101/104 key compatible)"
+Description="Keyboard - Korean - Korean (101/104-key compatible)"
 Language=ko
 Label=kr
 
@@ -134,7 +134,7 @@ Language=en
 Label=gb
 
 [keyboard-gb-extd]
-Description="Keyboard - English (UK) - English (UK, extended, with Win keys)"
+Description="Keyboard - English (UK) - English (UK, extended, Windows)"
 Language=en
 Label=gb
 
@@ -159,7 +159,7 @@ Language=en
 Label=gb
 
 [keyboard-gb-mac_intl]
-Description="Keyboard - English (UK) - English (UK, intl., Macintosh)"
+Description="Keyboard - English (UK) - English (UK, Macintosh, intl.)"
 Language=en
 Label=gb
 
@@ -194,7 +194,7 @@ Language=uk
 Label=ua
 
 [keyboard-ua-winkeys]
-Description="Keyboard - Ukrainian - Ukrainian (Win keys)"
+Description="Keyboard - Ukrainian - Ukrainian (Windows)"
 Language=uk
 Label=ua
 
@@ -299,12 +299,12 @@ Language=ru
 Label=ru
 
 [keyboard-ru-phonetic_winkeys]
-Description="Keyboard - Russian - Russian (phonetic, with Win keys)"
+Description="Keyboard - Russian - Russian (phonetic, Windows)"
 Language=ru
 Label=ru
 
-[keyboard-ru-phonetic_yazherty]
-Description="Keyboard - Russian - Russian (phonetic yazherty)"
+[keyboard-ru-phonetic_YAZHERTY]
+Description="Keyboard - Russian - Russian (phonetic, YAZHERTY)"
 Language=ru
 Label=ru
 
@@ -334,7 +334,7 @@ Language=os
 Label=ru
 
 [keyboard-ru-os_winkeys]
-Description="Keyboard - Russian - Ossetian (Win keys)"
+Description="Keyboard - Russian - Ossetian (Windows)"
 Language=os
 Label=ru
 
@@ -509,7 +509,7 @@ Language=is
 Label=is
 
 [keyboard-is-Sundeadkeys]
-Description="Keyboard - Icelandic - Icelandic (with Sun dead keys)"
+Description="Keyboard - Icelandic - Icelandic (Sun dead keys)"
 Language=is
 Label=is
 
@@ -544,7 +544,7 @@ Language=es
 Label=es
 
 [keyboard-es-winkeys]
-Description="Keyboard - Spanish - Spanish (Win keys)"
+Description="Keyboard - Spanish - Spanish (Windows)"
 Language=es
 Label=es
 
@@ -554,7 +554,7 @@ Language=es
 Label=es
 
 [keyboard-es-sundeadkeys]
-Description="Keyboard - Spanish - Spanish (with Sun dead keys)"
+Description="Keyboard - Spanish - Spanish (Sun dead keys)"
 Language=es
 Label=es
 
@@ -564,7 +564,7 @@ Language=es
 Label=es
 
 [keyboard-es-ast]
-Description="Keyboard - Spanish - Asturian (Spain, with bottom-dot H and bottom-dot L)"
+Description="Keyboard - Spanish - Asturian (Spain, with bottom-dot H and L)"
 Language=ast
 Label=es
 
@@ -599,7 +599,7 @@ Language=et
 Label=ee
 
 [keyboard-ee-us]
-Description="Keyboard - Estonian - Estonian (US, with Estonian letters)"
+Description="Keyboard - Estonian - Estonian (US)"
 Language=et
 Label=ee
 
@@ -614,7 +614,7 @@ Language=nl
 Label=nl
 
 [keyboard-nl-sundeadkeys]
-Description="Keyboard - Dutch - Dutch (with Sun dead keys)"
+Description="Keyboard - Dutch - Dutch (Sun dead keys)"
 Language=nl
 Label=nl
 
@@ -724,7 +724,7 @@ Language=ru
 Label=se
 
 [keyboard-se-smi]
-Description="Keyboard - Swedish - Northern Saami (Sweden)"
+Description="Keyboard - Swedish - orthern Saami (Sweden)"
 Language=se
 Label=se
 
@@ -739,12 +739,12 @@ Language=sv
 Label=se
 
 [keyboard-se-us_dvorak]
-Description="Keyboard - Swedish - Swedish (based on US Intl. Dvorak)"
+Description="Keyboard - Swedish - Swedish (Dvorak, intl.)"
 Language=sv
 Label=se
 
 [keyboard-se-us]
-Description="Keyboard - Swedish - Swedish (US, with Swedish letters)"
+Description="Keyboard - Swedish - Swedish (US)"
 Language=sv
 Label=se
 
@@ -811,6 +811,11 @@ Label=us
 [keyboard-us-chr]
 Description="Keyboard - English (US) - Cherokee"
 Language=chr
+Label=us
+
+[keyboard-us-haw]
+Description="Keyboard - English (US) - Hawaiian"
+Language=haw
 Label=us
 
 [keyboard-us-euro]
@@ -884,7 +889,7 @@ Language=en
 Label=us
 
 [keyboard-us-olpc2]
-Description="Keyboard - English (US) - English (the divide/multiply keys toggle the layout)"
+Description="Keyboard - English (US) - English (the divide/multiply toggle the layout)"
 Language=en
 Label=us
 
@@ -909,12 +914,12 @@ Language=en
 Label=us
 
 [keyboard-us-intl-unicode]
-Description="Keyboard - English (US) - English (US, international AltGr Unicode combining)"
+Description="Keyboard - English (US) - English (US, intl., AltGr Unicode combining)"
 Language=en
 Label=us
 
 [keyboard-us-alt-intl-unicode]
-Description="Keyboard - English (US) - English (US, international AltGr Unicode combining, alternative)"
+Description="Keyboard - English (US) - English (US, intl., AltGr Unicode combining, alt.)"
 Language=en
 Label=us
 
@@ -989,7 +994,12 @@ Language=en
 Label=us
 
 [keyboard-us-3l-cros]
-Description="Keyboard - English (US) - English (3l, chromebook)"
+Description="Keyboard - English (US) - English (3l, Chromebook)"
+Language=en
+Label=us
+
+[keyboard-us-3l-emacs]
+Description="Keyboard - English (US) - English (3l, emacs)"
 Language=en
 Label=us
 
@@ -1044,7 +1054,7 @@ Language=hr
 Label=hr
 
 [keyboard-hr-us]
-Description="Keyboard - Croatian - Croatian (US, with Croatian letters)"
+Description="Keyboard - Croatian - Croatian (US)"
 Language=hr
 Label=hr
 
@@ -1099,7 +1109,7 @@ Language=
 Label=ma
 
 [keyboard-ma-tifinagh-alt-phonetic]
-Description="Keyboard - Arabic (Morocco) - Berber (Morocco, Tifinagh alt. phonetic)"
+Description="Keyboard - Arabic (Morocco) - Berber (Morocco, Tifinagh phonetic, alt.)"
 Language=
 Label=ma
 
@@ -1149,17 +1159,32 @@ Language=uz
 Label=af
 
 [keyboard-dz]
-Description="Keyboard - Berber (Algeria, Latin)"
+Description="Keyboard - Kabylian (azerty layout, no dead keys)"
 Language=
+Label=dz
+
+[keyboard-dz-azerty-deadkeys]
+Description="Keyboard - Kabylian (azerty layout, no dead keys) - Kabylian (azerty layout, with dead keys)"
+Language=kab
+Label=dz
+
+[keyboard-dz-qwerty-gb-deadkeys]
+Description="Keyboard - Kabylian (azerty layout, no dead keys) - Kabylian (qwerty-gb layout, with dead keys)"
+Language=kab
+Label=dz
+
+[keyboard-dz-qwerty-us-deadkeys]
+Description="Keyboard - Kabylian (azerty layout, no dead keys) - Kabylian (qwerty-us layout, with dead keys)"
+Language=kab
 Label=dz
 
 [keyboard-dz-ber]
-Description="Keyboard - Berber (Algeria, Latin) - Berber (Algeria, Tifinagh)"
-Language=
+Description="Keyboard - Kabylian (azerty layout, no dead keys) - Kabylian (Algeria, Tifinagh)"
+Language=kab
 Label=dz
 
 [keyboard-dz-ar]
-Description="Keyboard - Berber (Algeria, Latin) - Arabic (Algeria)"
+Description="Keyboard - Kabylian (azerty layout, no dead keys) - Arabic (Algeria)"
 Language=ar
 Label=dz
 
@@ -1224,12 +1249,12 @@ Language=vi
 Label=vn
 
 [keyboard-vn-us]
-Description="Keyboard - Vietnamese - Vietnamese (US, with Vietnamese letters)"
+Description="Keyboard - Vietnamese - Vietnamese (US)"
 Language=vi
 Label=vn
 
 [keyboard-vn-fr]
-Description="Keyboard - Vietnamese - Vietnamese (French, with Vietnamese letters)"
+Description="Keyboard - Vietnamese - Vietnamese (French)"
 Language=vi
 Label=vn
 
@@ -1254,12 +1279,12 @@ Language=ar
 Label=ara
 
 [keyboard-ara-azerty_digits]
-Description="Keyboard - Arabic - Arabic (AZERTY/digits)"
+Description="Keyboard - Arabic - Arabic (AZERTY, Eastern Arabic numerals)"
 Language=ar
 Label=ara
 
 [keyboard-ara-digits]
-Description="Keyboard - Arabic - Arabic (digits)"
+Description="Keyboard - Arabic - Arabic (Eastern Arabic numerals)"
 Language=ar
 Label=ara
 
@@ -1269,7 +1294,7 @@ Language=ar
 Label=ara
 
 [keyboard-ara-qwerty_digits]
-Description="Keyboard - Arabic - Arabic (qwerty/digits)"
+Description="Keyboard - Arabic - Arabic (QWERTY, Eastern Arabic numerals)"
 Language=ar
 Label=ara
 
@@ -1294,12 +1319,12 @@ Language=ar
 Label=ara
 
 [keyboard-ara-basic_ext]
-Description="Keyboard - Arabic - Arabic (with extensions for Arabic-written other languages and European digits preferred)"
+Description="Keyboard - Arabic - Arabic (Arabic numerals, extensions in the 4th level)"
 Language=ar
 Label=ara
 
 [keyboard-ara-basic_ext_digits]
-Description="Keyboard - Arabic - Arabic (with extensions for Arabic-written other languages and Arabic digits preferred)"
+Description="Keyboard - Arabic - Arabic (Eastern Arabic numerals, extensions in the 4th level)"
 Language=ar
 Label=ara
 
@@ -1344,17 +1369,17 @@ Language=fr
 Label=cm
 
 [keyboard-cm-qwerty]
-Description="Keyboard - English (Cameroon) - Cameroon Multilingual (QWERTY)"
+Description="Keyboard - English (Cameroon) - Cameroon Multilingual (QWERTY, intl.)"
 Language=en
 Label=cm
 
 [keyboard-cm-azerty]
-Description="Keyboard - English (Cameroon) - Cameroon Multilingual (AZERTY)"
+Description="Keyboard - English (Cameroon) - Cameroon (AZERTY, intl.)"
 Language=fr
 Label=cm
 
 [keyboard-cm-dvorak]
-Description="Keyboard - English (Cameroon) - Cameroon Multilingual (Dvorak)"
+Description="Keyboard - English (Cameroon) - Cameroon (Dvorak, intl.)"
 Language=en
 Label=cm
 
@@ -1449,7 +1474,7 @@ Language=ta
 Label=lk
 
 [keyboard-lk-us]
-Description="Keyboard - Sinhala (phonetic) - Sinhala (US, with Sinhala letters)"
+Description="Keyboard - Sinhala (phonetic) - Sinhala (US)"
 Language=si
 Label=lk
 
@@ -1514,12 +1539,12 @@ Language=sr
 Label=rs
 
 [keyboard-rs-alternatequotes]
-Description="Keyboard - Serbian - Serbian (Cyrillic with guillemets)"
+Description="Keyboard - Serbian - Serbian (Cyrillic, with guillemets)"
 Language=sr
 Label=rs
 
 [keyboard-rs-latinalternatequotes]
-Description="Keyboard - Serbian - Serbian (Latin with guillemets)"
+Description="Keyboard - Serbian - Serbian (Latin, with guillemets)"
 Language=sr
 Label=rs
 
@@ -1544,7 +1569,7 @@ Language=da
 Label=dk
 
 [keyboard-dk-winkeys]
-Description="Keyboard - Danish - Danish (Win keys)"
+Description="Keyboard - Danish - Danish (Windows)"
 Language=da
 Label=dk
 
@@ -1579,7 +1604,7 @@ Language=lo
 Label=la
 
 [keyboard-la-stea]
-Description="Keyboard - Lao - Lao (STEA proposed standard layout)"
+Description="Keyboard - Lao - Lao (STEA)"
 Language=lo
 Label=la
 
@@ -1604,7 +1629,7 @@ Language=sl
 Label=si
 
 [keyboard-si-us]
-Description="Keyboard - Slovenian - Slovenian (US, with Slovenian letters)"
+Description="Keyboard - Slovenian - Slovenian (US)"
 Language=sl
 Label=si
 
@@ -1639,7 +1664,7 @@ Language=hy
 Label=am
 
 [keyboard-am-olpc-phonetic]
-Description="Keyboard - Armenian - Armenian (OLPC phonetic)"
+Description="Keyboard - Armenian - Armenian (OLPC, phonetic)"
 Language=hy
 Label=am
 
@@ -1655,6 +1680,16 @@ Label=by
 
 [keyboard-by-latin]
 Description="Keyboard - Belarusian - Belarusian (Latin)"
+Language=be
+Label=by
+
+[keyboard-by-ru]
+Description="Keyboard - Belarusian - Russian (Belarus)"
+Language=be
+Label=by
+
+[keyboard-by-intl]
+Description="Keyboard - Belarusian - Belarusian (intl.)"
 Language=be
 Label=by
 
@@ -1693,7 +1728,7 @@ Description="Keyboard - Portuguese (Brazil) - Portuguese (Brazil, IBM/Lenovo Thi
 Language=pt
 Label=br
 
-[keyboard-br-pe6]
+[keyboard-br-sun_type6]
 Description="Keyboard - Portuguese (Brazil) - Portuguese (Brazil, Sun Type 6/7)"
 Language=pt
 Label=br
@@ -1724,7 +1759,7 @@ Language=bn
 Label=in
 
 [keyboard-in-ben_gitanjali]
-Description="Keyboard - Indian - Bangla (India, Uni Gitanjali)"
+Description="Keyboard - Indian - Bangla (India, Gitanjali)"
 Language=bn
 Label=in
 
@@ -1759,7 +1794,7 @@ Language=kn
 Label=in
 
 [keyboard-in-kan-kagapa]
-Description="Keyboard - Indian - Kannada (KaGaPa phonetic)"
+Description="Keyboard - Indian - Kannada (KaGaPa, phonetic)"
 Language=kn
 Label=in
 
@@ -1819,7 +1854,7 @@ Language=te
 Label=in
 
 [keyboard-in-tel-kagapa]
-Description="Keyboard - Indian - Telugu (KaGaPa phonetic)"
+Description="Keyboard - Indian - Telugu (KaGaPa, phonetic)"
 Language=te
 Label=in
 
@@ -1839,7 +1874,7 @@ Language=ur
 Label=in
 
 [keyboard-in-urd-winkeys]
-Description="Keyboard - Indian - Urdu (Win keys)"
+Description="Keyboard - Indian - Urdu (Windows)"
 Language=ur
 Label=in
 
@@ -1854,23 +1889,38 @@ Language=hi
 Label=in
 
 [keyboard-in-hin-kagapa]
-Description="Keyboard - Indian - Hindi (KaGaPa phonetic)"
+Description="Keyboard - Indian - Hindi (KaGaPa, phonetic)"
 Language=hi
 Label=in
 
 [keyboard-in-san-kagapa]
-Description="Keyboard - Indian - Sanskrit (KaGaPa phonetic)"
+Description="Keyboard - Indian - Sanskrit (KaGaPa, phonetic)"
 Language=sa
 Label=in
 
 [keyboard-in-mar-kagapa]
-Description="Keyboard - Indian - Marathi (KaGaPa phonetic)"
+Description="Keyboard - Indian - Marathi (KaGaPa, phonetic)"
 Language=mr
 Label=in
 
 [keyboard-in-eng]
 Description="Keyboard - Indian - English (India, with rupee)"
 Language=en
+Label=in
+
+[keyboard-in-iipa]
+Description="Keyboard - Indian - Indic IPA (IIPA)"
+Language=en
+Label=in
+
+[keyboard-in-marathi]
+Description="Keyboard - Indian - मराठी इन्स्क्रिप्ट"
+Language=en
+Label=in
+
+[keyboard-in-modi-kagapa]
+Description="Keyboard - Indian - Modi (KaGaPa phonetic)"
+Language=mr
 Label=in
 
 [keyboard-be]
@@ -1884,17 +1934,17 @@ Language=de
 Label=be
 
 [keyboard-be-oss_latin9]
-Description="Keyboard - Belgian - Belgian (alt., Latin-9 only)"
+Description="Keyboard - Belgian - Belgian (Latin-9 only, alt.)"
 Language=de
 Label=be
 
 [keyboard-be-oss_sundeadkeys]
-Description="Keyboard - Belgian - Belgian (alt., with Sun dead keys)"
+Description="Keyboard - Belgian - Belgian (Sun dead keys, alt.)"
 Language=de
 Label=be
 
 [keyboard-be-iso-alternate]
-Description="Keyboard - Belgian - Belgian (alt. ISO)"
+Description="Keyboard - Belgian - Belgian (ISO, alt.)"
 Language=de
 Label=be
 
@@ -1904,7 +1954,7 @@ Language=de
 Label=be
 
 [keyboard-be-sundeadkeys]
-Description="Keyboard - Belgian - Belgian (with Sun dead keys)"
+Description="Keyboard - Belgian - Belgian (Sun dead keys)"
 Language=de
 Label=be
 
@@ -1917,6 +1967,11 @@ Label=be
 Description="Keyboard - Belgian - Belgian (Sun Type 6/7)"
 Language=de
 Label=be
+
+[keyboard-eg]
+Description="Keyboard - Coptic"
+Language=cop
+Label=eg
 
 [keyboard-cd]
 Description="Keyboard - French (Democratic Republic of the Congo)"
@@ -1944,7 +1999,7 @@ Language=bs
 Label=ba
 
 [keyboard-ba-us]
-Description="Keyboard - Bosnian - Bosnian (US, with Bosnian letters)"
+Description="Keyboard - Bosnian - Bosnian (US)"
 Language=bs
 Label=ba
 
@@ -1984,42 +2039,42 @@ Language=lv
 Label=lv
 
 [keyboard-lv-dvorak]
-Description="Keyboard - Latvian - Latvian (US Dvorak)"
+Description="Keyboard - Latvian - Latvian (Dvorak)"
 Language=lv
 Label=lv
 
 [keyboard-lv-ykeydvorak]
-Description="Keyboard - Latvian - Latvian (US Dvorak, Y variant)"
+Description="Keyboard - Latvian - Latvian (Dvorak, with Y)"
 Language=lv
 Label=lv
 
 [keyboard-lv-minuskeydvorak]
-Description="Keyboard - Latvian - Latvian (US Dvorak, minus variant)"
+Description="Keyboard - Latvian - Latvian (Dvorak, with minus)"
 Language=lv
 Label=lv
 
 [keyboard-lv-dvorakprogr]
-Description="Keyboard - Latvian - Latvian (programmer US Dvorak)"
+Description="Keyboard - Latvian - Latvian (programmer Dvorak)"
 Language=lv
 Label=lv
 
 [keyboard-lv-ykeydvorakprogr]
-Description="Keyboard - Latvian - Latvian (programmer US Dvorak, Y variant)"
+Description="Keyboard - Latvian - Latvian (programmer Dvorak, with Y)"
 Language=lv
 Label=lv
 
 [keyboard-lv-minuskeydvorakprogr]
-Description="Keyboard - Latvian - Latvian (programmer US Dvorak, minus variant)"
+Description="Keyboard - Latvian - Latvian (programmer Dvorak, with minus)"
 Language=lv
 Label=lv
 
 [keyboard-lv-colemak]
-Description="Keyboard - Latvian - Latvian (US Colemak)"
+Description="Keyboard - Latvian - Latvian (Colemak)"
 Language=lv
 Label=lv
 
 [keyboard-lv-apostrophecolemak]
-Description="Keyboard - Latvian - Latvian (US Colemak, apostrophe variant)"
+Description="Keyboard - Latvian - Latvian (Colemak, with apostrophe)"
 Language=lv
 Label=lv
 
@@ -2059,12 +2114,12 @@ Language=sr
 Label=me
 
 [keyboard-me-cyrillicalternatequotes]
-Description="Keyboard - Montenegrin - Montenegrin (Cyrillic with guillemets)"
+Description="Keyboard - Montenegrin - Montenegrin (Cyrillic, with guillemets)"
 Language=sr
 Label=me
 
 [keyboard-me-latinalternatequotes]
-Description="Keyboard - Montenegrin - Montenegrin (Latin with guillemets)"
+Description="Keyboard - Montenegrin - Montenegrin (Latin, with guillemets)"
 Language=sr
 Label=me
 
@@ -2079,7 +2134,7 @@ Language=de
 Label=at
 
 [keyboard-at-sundeadkeys]
-Description="Keyboard - German (Austria) - German (Austria, with Sun dead keys)"
+Description="Keyboard - German (Austria) - German (Austria, Sun dead keys)"
 Language=de
 Label=at
 
@@ -2104,7 +2159,7 @@ Language=de
 Label=ch
 
 [keyboard-ch-de_sundeadkeys]
-Description="Keyboard - German (Switzerland) - German (Switzerland, with Sun dead keys)"
+Description="Keyboard - German (Switzerland) - German (Switzerland, Sun dead keys)"
 Language=de
 Label=ch
 
@@ -2119,7 +2174,7 @@ Language=fr
 Label=ch
 
 [keyboard-ch-fr_sundeadkeys]
-Description="Keyboard - German (Switzerland) - French (Switzerland, with Sun dead keys)"
+Description="Keyboard - German (Switzerland) - French (Switzerland, Sun dead keys)"
 Language=fr
 Label=ch
 
@@ -2224,32 +2279,32 @@ Language=mvf
 Label=cn
 
 [keyboard-cn-mon_trad_todo]
-Description="Keyboard - Chinese - Mongolian Todo"
+Description="Keyboard - Chinese - Mongolian (Todo)"
 Language=mvf
 Label=cn
 
 [keyboard-cn-mon_trad_xibe]
-Description="Keyboard - Chinese - Mongolian Xibe"
+Description="Keyboard - Chinese - Mongolian (Xibe)"
 Language=sjo
 Label=cn
 
 [keyboard-cn-mon_trad_manchu]
-Description="Keyboard - Chinese - Mongolian Manchu"
+Description="Keyboard - Chinese - Mongolian (Manchu)"
 Language=mnc
 Label=cn
 
 [keyboard-cn-mon_trad_galik]
-Description="Keyboard - Chinese - Mongolian Galik"
+Description="Keyboard - Chinese - Mongolian (Galik)"
 Language=mvf
 Label=cn
 
 [keyboard-cn-mon_todo_galik]
-Description="Keyboard - Chinese - Mongolian Todo Galik"
+Description="Keyboard - Chinese - Mongolian (Todo Galik)"
 Language=mvf
 Label=cn
 
 [keyboard-cn-mon_manchu_galik]
-Description="Keyboard - Chinese - Mongolian Manchu Galik"
+Description="Keyboard - Chinese - Mongolian (Manchu Galik)"
 Language=mnc
 Label=cn
 
@@ -2269,7 +2324,7 @@ Language=ug
 Label=cn
 
 [keyboard-cn-altgr-pinyin]
-Description="Keyboard - Chinese - Hanyu Pinyin (altgr)"
+Description="Keyboard - Chinese - Hanyu Pinyin (with AltGr dead keys)"
 Language=zh
 Label=cn
 
@@ -2289,17 +2344,17 @@ Language=fr
 Label=ca
 
 [keyboard-ca-multix]
-Description="Keyboard - French (Canada) - Canadian Multilingual"
+Description="Keyboard - French (Canada) - Canadian (intl.)"
 Language=fr
 Label=ca
 
 [keyboard-ca-multi]
-Description="Keyboard - French (Canada) - Canadian Multilingual (1st part)"
+Description="Keyboard - French (Canada) - Canadian (intl., 1st part)"
 Language=fr
 Label=ca
 
 [keyboard-ca-multi-2gr]
-Description="Keyboard - French (Canada) - Canadian Multilingual (2nd part)"
+Description="Keyboard - French (Canada) - Canadian (intl., 2nd part)"
 Language=fr
 Label=ca
 
@@ -2384,7 +2439,7 @@ Language=fr
 Label=fr
 
 [keyboard-fr-sundeadkeys]
-Description="Keyboard - French - French (with Sun dead keys)"
+Description="Keyboard - French - French (Sun dead keys)"
 Language=fr
 Label=fr
 
@@ -2404,7 +2459,7 @@ Language=fr
 Label=fr
 
 [keyboard-fr-oss_sundeadkeys]
-Description="Keyboard - French - French (alt., with Sun dead keys)"
+Description="Keyboard - French - French (alt., Sun dead keys)"
 Language=fr
 Label=fr
 
@@ -2419,22 +2474,22 @@ Language=fr
 Label=fr
 
 [keyboard-fr-latin9_sundeadkeys]
-Description="Keyboard - French - French (legacy, alt., with Sun dead keys)"
+Description="Keyboard - French - French (legacy, alt., Sun dead keys)"
 Language=fr
 Label=fr
 
 [keyboard-fr-bepo]
-Description="Keyboard - French - French (Bepo, ergonomic, Dvorak way)"
+Description="Keyboard - French - French (BEPO)"
 Language=fr
 Label=fr
 
 [keyboard-fr-bepo_latin9]
-Description="Keyboard - French - French (Bepo, ergonomic, Dvorak way, Latin-9 only)"
+Description="Keyboard - French - French (BEPO, Latin-9 only)"
 Language=fr
 Label=fr
 
 [keyboard-fr-bepo_afnor]
-Description="Keyboard - French - French (Bepo, ergonomic, Dvorak way, AFNOR)"
+Description="Keyboard - French - French (BEPO, AFNOR)"
 Language=fr
 Label=fr
 
@@ -2454,7 +2509,7 @@ Language=fr
 Label=fr
 
 [keyboard-fr-afnor]
-Description="Keyboard - French - French (AFNOR standardized AZERTY)"
+Description="Keyboard - French - French (AZERTY, AFNOR)"
 Language=fr
 Label=fr
 
@@ -2474,7 +2529,7 @@ Language=ka
 Label=fr
 
 [keyboard-fr-us]
-Description="Keyboard - French - French (US, with French letters)"
+Description="Keyboard - French - French (US)"
 Language=fr
 Label=fr
 
@@ -2484,7 +2539,7 @@ Language=fr
 Label=fr
 
 [keyboard-fr-us-alt]
-Description="Keyboard - French - French (US, with French letters, with dead keys, alternative)"
+Description="Keyboard - French - French (US with dead keys, alt.)"
 Language=fr
 Label=fr
 
@@ -2514,7 +2569,7 @@ Language=fi
 Label=fi
 
 [keyboard-fi-winkeys]
-Description="Keyboard - Finnish - Finnish (Winkeys)"
+Description="Keyboard - Finnish - Finnish (Windows)"
 Language=fi
 Label=fi
 
@@ -2564,7 +2619,7 @@ Language=lt
 Label=lt
 
 [keyboard-lt-us]
-Description="Keyboard - Lithuanian - Lithuanian (US, with Lithuanian letters)"
+Description="Keyboard - Lithuanian - Lithuanian (US)"
 Language=lt
 Label=lt
 
@@ -2589,7 +2644,7 @@ Language=sgs
 Label=lt
 
 [keyboard-lt-us_dvorak]
-Description="Keyboard - Lithuanian - Lithuanian (US Dvorak with Lithuanian letters)"
+Description="Keyboard - Lithuanian - Lithuanian (Dvorak)"
 Language=lt
 Label=lt
 
@@ -2619,7 +2674,7 @@ Language=pt
 Label=pt
 
 [keyboard-pt-sundeadkeys]
-Description="Keyboard - Portuguese - Portuguese (with Sun dead keys)"
+Description="Keyboard - Portuguese - Portuguese (Sun dead keys)"
 Language=pt
 Label=pt
 
@@ -2634,7 +2689,7 @@ Language=pt
 Label=pt
 
 [keyboard-pt-mac_sundeadkeys]
-Description="Keyboard - Portuguese - Portuguese (Macintosh, with Sun dead keys)"
+Description="Keyboard - Portuguese - Portuguese (Macintosh, Sun dead keys)"
 Language=pt
 Label=pt
 
@@ -2669,7 +2724,7 @@ Language=id
 Label=id
 
 [keyboard-id-phoneticx]
-Description="Keyboard - Indonesian (Arab Melayu, phonetic) - Indonesian (Arab Melayu, ext. phonetic)"
+Description="Keyboard - Indonesian (Arab Melayu, phonetic) - Indonesian (Arab Melayu, extended phonetic)"
 Language=id
 Label=id
 
@@ -2704,7 +2759,7 @@ Language=ro
 Label=de
 
 [keyboard-de-ro_nodeadkeys]
-Description="Keyboard - German - )"
+Description="Keyboard - German - Romanian (Germany, no dead keys)"
 Language=ro
 Label=de
 
@@ -2714,7 +2769,7 @@ Language=de
 Label=de
 
 [keyboard-de-sundeadkeys]
-Description="Keyboard - German - German (with Sun dead keys)"
+Description="Keyboard - German - German (Sun dead keys)"
 Language=de
 Label=de
 
@@ -2764,12 +2819,12 @@ Language=de
 Label=de
 
 [keyboard-de-us]
-Description="Keyboard - German - German (US, with German letters)"
+Description="Keyboard - German - German (US)"
 Language=en
 Label=de
 
 [keyboard-de-hu]
-Description="Keyboard - German - German (with Hungarian letters and no dead keys)"
+Description="Keyboard - German - German (with Hungarian letters, no dead keys)"
 Language=de
 Label=de
 
@@ -2799,17 +2854,17 @@ Language=de
 Label=de
 
 [keyboard-de-bone_eszett_home]
-Description="Keyboard - German - German (Bone, eszett home row)"
+Description="Keyboard - German - German (Bone, eszett in the home row)"
 Language=de
 Label=de
 
 [keyboard-de-neo_qwertz]
-Description="Keyboard - German - German (Neo qwertz)"
+Description="Keyboard - German - German (Neo, QWERTZ)"
 Language=de
 Label=de
 
 [keyboard-de-neo_qwerty]
-Description="Keyboard - German - German (Neo qwerty)"
+Description="Keyboard - German - German (Neo, QWERTY)"
 Language=de
 Label=de
 
@@ -2824,7 +2879,7 @@ Language=ru
 Label=de
 
 [keyboard-de-lld]
-Description="Keyboard - German - German Ladin"
+Description="Keyboard - German - German (Ladin)"
 Language=de
 Label=de
 
@@ -2914,87 +2969,92 @@ Language=hu
 Label=hu
 
 [keyboard-hu-101_qwertz_comma_dead]
-Description="Keyboard - Hungarian - Hungarian (101/QWERTZ/comma/dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTZ, 101-key, comma, dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-101_qwertz_comma_nodead]
-Description="Keyboard - Hungarian - Hungarian (101/QWERTZ/comma/no dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTZ, 101-key, comma, no dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-101_qwertz_dot_dead]
-Description="Keyboard - Hungarian - Hungarian (101/QWERTZ/dot/dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTZ, 101-key, dot, dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-101_qwertz_dot_nodead]
-Description="Keyboard - Hungarian - Hungarian (101/QWERTZ/dot/no dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTZ, 101-key, dot, no dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-101_qwerty_comma_dead]
-Description="Keyboard - Hungarian - Hungarian (101/QWERTY/comma/dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTY, 101-key, comma, dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-101_qwerty_comma_nodead]
-Description="Keyboard - Hungarian - Hungarian (101/QWERTY/comma/no dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTY, 101-key, comma, no dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-101_qwerty_dot_dead]
-Description="Keyboard - Hungarian - Hungarian (101/QWERTY/dot/dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTY, 101-key, dot, dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-101_qwerty_dot_nodead]
-Description="Keyboard - Hungarian - Hungarian (101/QWERTY/dot/no dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTY, 101-key, dot, no dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-102_qwertz_comma_dead]
-Description="Keyboard - Hungarian - Hungarian (102/QWERTZ/comma/dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTZ, 102-key, comma, dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-102_qwertz_comma_nodead]
-Description="Keyboard - Hungarian - Hungarian (102/QWERTZ/comma/no dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTZ, 102-key, comma, no dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-102_qwertz_dot_dead]
-Description="Keyboard - Hungarian - Hungarian (102/QWERTZ/dot/dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTZ, 102-key, dot, dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-102_qwertz_dot_nodead]
-Description="Keyboard - Hungarian - Hungarian (102/QWERTZ/dot/no dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTZ, 102-key, dot, no dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-102_qwerty_comma_dead]
-Description="Keyboard - Hungarian - Hungarian (102/QWERTY/comma/dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTY, 102-key, comma, dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-102_qwerty_comma_nodead]
-Description="Keyboard - Hungarian - Hungarian (102/QWERTY/comma/no dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTY, 102-key, comma, no dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-102_qwerty_dot_dead]
-Description="Keyboard - Hungarian - Hungarian (102/QWERTY/dot/dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTY, 102-key, dot, dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-102_qwerty_dot_nodead]
-Description="Keyboard - Hungarian - Hungarian (102/QWERTY/dot/no dead keys)"
+Description="Keyboard - Hungarian - Hungarian (QWERTY, 102-key, dot, no dead keys)"
 Language=hu
 Label=hu
 
 [keyboard-hu-oldhun]
 Description="Keyboard - Hungarian - Old Hungarian"
+Language=hu
+Label=hu
+
+[keyboard-hu-ohu_lig]
+Description="Keyboard - Hungarian - Old Hungarian (for ligatures)"
 Language=hu
 Label=hu
 
@@ -3014,7 +3074,7 @@ Language=tr
 Label=tr
 
 [keyboard-tr-sundeadkeys]
-Description="Keyboard - Turkish - Turkish (with Sun dead keys)"
+Description="Keyboard - Turkish - Turkish (Sun dead keys)"
 Language=tr
 Label=tr
 
@@ -3029,7 +3089,7 @@ Language=ku
 Label=tr
 
 [keyboard-tr-ku_alt]
-Description="Keyboard - Turkish - Turkey, Latin Alt-Q)"
+Description="Keyboard - Turkish - Kurdish (Turkey, Latin Alt-Q)"
 Language=ku
 Label=tr
 
@@ -3094,7 +3154,7 @@ Language=it
 Label=it
 
 [keyboard-it-winkeys]
-Description="Keyboard - Italian - Italian (Winkeys)"
+Description="Keyboard - Italian - Italian (Windows)"
 Language=it
 Label=it
 
@@ -3104,7 +3164,7 @@ Language=it
 Label=it
 
 [keyboard-it-us]
-Description="Keyboard - Italian - Italian (US, with Italian letters)"
+Description="Keyboard - Italian - Italian (US)"
 Language=it
 Label=it
 
@@ -3139,7 +3199,7 @@ Language=it
 Label=it
 
 [keyboard-it-lld]
-Description="Keyboard - Italian - Italian Ladin"
+Description="Keyboard - Italian - Italian (Ladin)"
 Language=lld
 Label=it
 
@@ -3179,12 +3239,12 @@ Language=ja
 Label=jp
 
 [keyboard-jp-sun_type7]
-Description="Keyboard - Japanese - Japanese (Sun Type 7 - pc compatible)"
+Description="Keyboard - Japanese - Japanese (Sun Type 7, PC-compatible)"
 Language=ja
 Label=jp
 
 [keyboard-jp-sun_type7_suncompat]
-Description="Keyboard - Japanese - Japanese (Sun Type 7 - sun compatible)"
+Description="Keyboard - Japanese - Japanese (Sun Type 7, Sun-compatible)"
 Language=ja
 Label=jp
 
@@ -3204,7 +3264,7 @@ Language=es
 Label=latam
 
 [keyboard-latam-sundeadkeys]
-Description="Keyboard - Spanish (Latin American) - Spanish (Latin American, with Sun dead keys)"
+Description="Keyboard - Spanish (Latin American) - Spanish (Latin American, Sun dead keys)"
 Language=es
 Label=latam
 
@@ -3229,7 +3289,7 @@ Language=mt
 Label=mt
 
 [keyboard-mt-us]
-Description="Keyboard - Maltese - Maltese (with US layout)"
+Description="Keyboard - Maltese - Maltese (US)"
 Language=mt
 Label=mt
 
@@ -3239,7 +3299,7 @@ Language=mt
 Label=mt
 
 [keyboard-mt-alt-gb]
-Description="Keyboard - Maltese - Maltese (UK layout with AltGr overrides)"
+Description="Keyboard - Maltese - Maltese (UK, with AltGr overrides)"
 Language=mt
 Label=mt
 
@@ -3254,7 +3314,7 @@ Language=no
 Label=no
 
 [keyboard-no-winkeys]
-Description="Keyboard - Norwegian - Norwegian (Win keys)"
+Description="Keyboard - Norwegian - Norwegian (Windows)"
 Language=no
 Label=no
 
@@ -3384,7 +3444,7 @@ Language=ro
 Label=ro
 
 [keyboard-ro-winkeys]
-Description="Keyboard - Romanian - Romanian (Win keys)"
+Description="Keyboard - Romanian - Romanian (Windows)"
 Language=ro
 Label=ro
 

@@ -20,7 +20,7 @@ exception                 `<exception>`
 │   ├─── domain_error                       ：数学库, 传入值域错误  
 │   ├─── invalid_argument                   ：bitset构造参数无效  
 │   ├─── length_error                       ：容器size超出限制  
-│   ├─── out_of_range                       ：数组类型的无效索引  
+│   ├─── out_of_range                       ：容器的无效索引  
 │   └─── future_error     `<future>`        ：异步系统调用  
 │  
 └─── runtime_error        `<stdexcept>`  
@@ -42,12 +42,12 @@ exception                 `<exception>`
         > error_code 与 error_condition 区别：可移植性  
         > 前者由编译器定义(OS相关), 后者为默认标准
         * error_code成员：
-            * .value()
             * .message()
+            * .value()
             * .category().name()
             * .default_error_condition()
-            * .default_error_condition().value()
             * .default_error_condition().message()
+            * .default_error_condition().value()
             * .default_error_condition().category().name()
         * 比较：
             > 重载了与**领域枚举值**的比较运算符
@@ -80,11 +80,11 @@ exception                 `<exception>`
         > 可以取消宏函数assert()
     * static_assert(expr, message)  ：编译期断言, 可以自定义打印消息
         > #define NDEBUG  
-        > 并不会取消关键字static_assert()
+        > 并不会取消**关键字static_assert()**
     * 编译器预处理宏：
         * `__func__`
-        * `__FILE__`
         * `__LINE__`
+        * `__FILE__`
         * `__TIME__`
         * `__DATE__`
 <!-- -->
@@ -99,82 +99,86 @@ exception                 `<exception>`
 <!-- -->
 
 * `<cctype>`
-    * isalnum()     ：字母+数字
-    * isalpha()     ：字母
-    * islower()     ：小写字母
-    * isupper()     ：大写字母
-    * isdigit()     ：数字
-    * isxdigit()    ：数字+`xabcdefXABCDEF`
-    * ispunct()     ：符号
-    * isblank()     ：` `+`\t`
-    * isspace()     ：` `+`\t`+`\n`+`\r`+`\v`+`\f`
-    * iscntrl()     ：0x00-0x1F + 0x7F
-    * isgraph()     ：字母+数字
-    * isprint()     ：字母+数字+空格
-    * toupper()
-    * tolower()
+    * isalnum(c)     ：字母+数字
+    * isalpha(c)     ：字母
+    * islower(c)     ：小写字母
+    * isupper(c)     ：大写字母
+    * isdigit(c)     ：数字
+    * isxdigit(c)    ：数字+`xabcdefXABCDEF`
+    * ispunct(c)     ：符号
+    * isblank(c)     ：` `+`\t`
+    * isspace(c)     ：` `+`\t`+`\n`+`\r`+`\v`+`\f`
+    * iscntrl(c)     ：0x00-0x1F + 0x7F
+    * isgraph(c)     ：字母+数字+符号
+    * isprint(c)     ：字母+数字+符号+空格
+    * toupper(c)
+    * tolower(c)
 <!--  -->
+
 * 数学库：`<cmath>`
-    > 所有函数的参数都对`float` `double` `long double` 整数 有重载，故一般省略形参类型  
-    > `x ^ y`代表`pow(x, y)`
-    * cos(T)
-    * sin(T)
-    * tan(T)
-    * acos(T)
-    * asin(T)
-    * atan(T)
+    > 几乎所有函数的参数都对`float` `double` `long double` 和整数 有重载，故一般省略形参类型  
+    > 若只能为浮点数会指明`double`
+    * 三角函数
+        * cos(T)
+        * sin(T)
+        * tan(T)
+        * acos(T)
+        * asin(T)
+        * atan(T)
 
-    * exp(x)                    ：e ^ x
-    * expm1(x)                  ：exp(x) - 1（计算更精准）
-    * exp2(x)                   ：2 ^ x
-    * exp10(x)                  ：10 ^ x
+    * 对数与幂
+        * log(N)                    ：log_e(N)
+        * log1p(N)                  ：更加精准的log_e(N + 1)
+        * log2(N)                   ：log_2(N)
+        * log10(N)                  ：log_10(N)
 
-    * log(N)                    ：log_e(N)
-    * log1p(N)                  ：更加精准的log_e(N + 1)
-    * log2(N)                   ：log_2(N)
-    * log10(N)                  ：log_10(N)
+        * exp(x)                    ：e ^ x
+        * expm1(x)                  ：exp(x) - 1（计算更精准）
+        * exp2(x)                   ：2 ^ x
+        * exp10(x)                  ：10 ^ x
 
-    > 以下两函数，n为返回值，等号右边的n与x范围是[0.5, 1.0)
-    * frexp(x, int* exp)        ：x = n * (2 ^ exp)
-    * ldexp(x, int exp)         ：n = x * (2 ^ exp)
+        * pow(x, y)                 ：x ^ y
+        * sqrt(double x)            ：x的平方根
+        * cbrt(double x)            ：x的立方根
+        * hypot(x, y, z=0)          ：sqrt(pow(x, 2), pow(y, 2), pow(z, 2))
 
-    * pow(x, y)                 ：x ^ y
-    * sqrt(double x)            ：x的平方根
-    * cbrt(double x)            ：x的立方根
-    * hypot(x, y, z=0)          ：sqrt(pow(x, 2), pow(y, 2), pow(z, 2))
+    * 浮点数取整
+        * ceil(double x)            ：向上取整
+        * floor(double d)           ：向下取整
+        * trunc(double x)           ：丢弃小数
+        * round(double x)           ：四舍五入
 
-    * ceil(double x)            ：向上取整
-    * floor(double d)           ：向下取整
-    * trunc(x)                  ：丢弃小数
-    * round(x)                  ：四舍五入
+    * 其它
+        * frexp(double x, int* exp) ：x = n * (2 ^ exp)，返回n值域为[0.5, 1.0)，并返回exp到指针所指的int
+        * ldexp(double x, int exp)  ：n = x * (2 ^ exp)，返回n，x的值域为[0.5, 1.0)
+        * fmod(double x, double y)  ：浮点数的x % y
+        * modf(double x, int* n)    ：将x分解为整数与小数部分，整数存于n，返回小数
 
-    * fmod(x, y)                ：浮点数的x % y
-    * modf(x, int* n)           ：将x分解为整数与小数部分，整数存于n，返回小数
-    * abs(x)                    ：x的绝对值
-    * fdim(x, y)                ：如果x > y则返回x - y，否则返回0
-    * fma(x, y, z)              ：返回x * y + z
-    * div(x, y)                 ：x除以y的商(div_t.quot)和余数(div_t.rem)   `<cstdlib>`
-    * gcd(x, y)                 ：`<numeric>`
-    * lcm(x, y)                 ：`<numeric>`
+        * abs(x)                    ：x的绝对值
+        * fdim(x, y)                ：如果x > y则返回x - y，否则返回0
+        * fma(x, y, z)              ：返回x * y + z
+        * div(x, y)                 ：x除以y的商(div_t.quot)和余数(div_t.rem)   `<cstdlib>`
+
+        * gcd(x, y)                 ：`<numeric>`
+        * lcm(x, y)                 ：`<numeric>`
 <!-- -->
 
-* `int getopt(int argc, char* const argv[], const char* optstring)`
-> `<unistd.h>`
+* `int getopt(int argc, char* const argv[], const char* optstring)`  `<unistd.h>`
     * 参数argc与argv：
         * 来自`int main(int argc, char* argv[])`
     * 参数optstring：
-        * `:`       ：第一个字符为`:`表示开启silent模式，此模式下不自动打印错误消息
+        * `:`       ：第一个字符若为`:`表示开启silent模式，此模式下不自动打印错误消息
         * `o`       ：代表选项`o`没有参数  
-        * `o:`      ：代表选项`o`必有参数, 紧跟`-oarg`或间隔`-o arg`都被视为参数  
-        * `o::`     ：代表选项`o`可选参数, 只识别紧跟`-oarg`为参数
+        * `o:`      ：代表选项`o`必有参数, 紧跟`-oarg`或间隔`-o arg`中的`arg`都被视为`-o`的参数  
+        * `o::`     ：代表选项`o`可选参数, 只识别紧跟`-oarg`
     * 返回int：
         > 表示当前选项字符
-        * `?`       ：默认模式表示无效选项，silent模式表示**不存在此选项**
-        * `:`       ：silent模式表示该**必有参数**的选项无参数
+        * `?`       ：默认模式表示无效选项，即**不存在此选型**或**该选项必有参数却未提供**，silent模式下只表示前者
+        * `:`       ：silent模式表示上述无效选项的后者，通过`argv[optind - 1]`可获取该选项字母
         * `-1`      ：表示结束，剩余的都是non-option-element
     * 全局变量：
-        * optarg    ：指向当前选项的参数，无则为NULL
-        * optind    ：调用getopt()后，作为下个要处理的argv数组中元素的索引
+        * optarg    ：类型为`char*`，指向当前选项的参数，无则为NULL
+        * optind    ：类型为`size_t`，作为下次调用getopt()将要处理的argv数组中元素的索引
 
 > 命令行单个参数中可能有以下几种情况：
 > * `-o`单个选项`o`
@@ -184,27 +188,27 @@ exception                 `<exception>`
 
 > 非预期的情况有：
 > * **必有参数**的选项作为命令行最后一个参数，即它没有参数
-> * 以`-`开头的*命令行参数*若不被识别为选项参数，则被视作选项，若`optstring`中不存在则算错误
-> * non-option-element，即不被识别为选项，有不作为选项参数的*命令行参数*，它应该作为该命令的参数
-
+> * `optstring`中不存在当前选项
+> * 以`-`开头的**命令行参数**若不被识别为选项参数，则会被视作选项
+> * non-option-element，即不被识别为选项，又不作为选项参数的*命令行参数*，它应该作为该命令的参数，
+>       这类参数会被getopt()转移到argv数组的最后，即当getopt()返回-1时，此时的optind即指向这类参数中第一个（如果有的话）
 <!--  -->
 
-* `int getopt_long(argc, argv, optstring, const struct option* longopts, int* longindex)`
-> `<getopt.h>`
+* `int getopt_long(argc, argv, optstring, const struct option longopts[], int* longindex)`   `<getopt.h>`
     > 基本规则同`getopt()`，增加了对长选项的解析  
-    > “长选项的紧跟”为`--option=arg`, 而且长选项可不用完整输入
+    > “长选项的紧跟”为`--option=arg`, 而且长选项若无歧义可不用完整输入
     * 参数longopts：
         > struct option的数组, 最后一个option必须全0以作为数组结束标志
         ```c
         struct option {
-            const char* name;    // 参数名称
+            const char* name;    // 选项名称
             int has_arg;         // no|required|optional_argrument
-            int* flag;           // 不为NULL则匹配时*flag=val且函数返回0，否则函数返回val
+            int* flag;           // 等于NULL则函数返回val，否则匹配时*flag=val且函数返回0
             int val;             // 指定匹配到该选项时返回的int值
         };
         ```
     * 参数longindex：
-        > 若不为NULL，存储当前处理的长选项在`longopts`中的索引
+        > 若不等于NULL，存储当前处理的长选项在`longopts`中的索引
 * `getopt_long_only(argc, argv, optstring, option*, int*)`
     > 注：规则同上, 但是`-opt`会优先解析为长选项, 不符合再为短
 <!-- -->
@@ -235,48 +239,32 @@ exception                 `<exception>`
         _mm256_store_epi256( int* , __m256i )
         ```
 <!-- -->
-* 字面值：
-    > 定义于：`namespace std::literals`
-    * chrono::duration：
-        * 后缀：h，min，s，ms，us，ns
-    * 数字：
-        * 前缀：二(0b/0B)、八(0)、十、十六(0x/0X)
-        * 后缀：u，l，ul，ll，ull，f
-        * 无后缀的整数字面值，其类型为：
-            * 若为十进制，为`int` `long` `long long`中的最小者
-            * 若不为十进制，为`int` `unsigned int` `long` `unsigned long` `long long` `unsigned long long`
-               中的最小者
-        * 无后缀的浮点数字面值，其类型为double
-    * 字符：
-        > 默认的C-Style字符串类型为`const char*`，标准提供了一个特殊转换：可以将C-Style-String赋值给`char*`
-        * `R"del(string)del"`
-        * 前缀：`u8`UTF-8，`u`UTF-16，`U`UTF-32，`L`宽字符
-        * 后缀(仅限于C-string)：s，sv
-<!-- -->
 
 # 解释规范
-> * 类聚合构造  ：即是对每个数据成员进行copy/move构造
-> * 逐块式构造  ：利用tuple传递每个数据成员的构造函数的实参
-> * 成员模板构造：比如pair<int, char*>可以赋值给pair<int, string>，尽管类型不一样，
+> * 类聚合式构造    ：即是对每个数据成员进行copy/move构造
+> * 逐块式构造      ：利用tuple传递每个数据成员的构造函数的实参
+> * 成员模板构造    ：比如pair<int, char*>可以赋值给pair<int, string>，尽管类型不一样，
 >   但提供了模板构造函数用于接收不同实例。
-> * 所有需要使用`balabala<T>::type`与`balabala<T>::value`
->   都提供了模板类型别名`balabala_t<T>`与变量模板`balabala_v<T>`代替
-> * 访问表示可以读取也可以写入
+> * 所有需要使用`foo<T>::type`与`bar<T>::value`，都提供了模板类型别名`foo_t<T>`与变量模板`bar_v<T>`代替
+> * **访问**表示可以读取也可以写入
+> * .operator=()与.emplace()省略参数
 
 # 通用工具
 * initializer_list：`<initializer_list>`
-    > 语言支持库，用`{1, 2, 3}`直接构造
+    > 语言支持库，支持聚合初始化
+    > * 使用列表初始化时，会优先调用参数为initializer_list的构造函数
+    > * 在range-based-for中，可以直接在冒号右边用列表初始化构造initializer_list作为容器
 
 * integer_sequence：`<utility>`
     * 构造
         * integer_sequence<typename T, T... INTS>
-        * index_sequence<T... SIZETS>
+        * index_sequence<size_t... SIZETS>
         > 以下构造1 ~ N-1的T类型的证书序列
         * make_integer_sequence<typename T, T N>
         * make_index_sequence<size_t N>
     * 读取
         * ::size()                          ：获取整数个数
-        * (integer_sequece<T, INTN...> t)   ：利用模板参数解包与折叠表达式处理INTS
+        * (integer_sequece<T, INTS...> t)   ：利用模板参数解包与折叠表达式处理INTS
 <!--  -->
 
 * pair：`<utility>`
@@ -312,6 +300,8 @@ exception                 `<exception>`
         * 默认构造      ：构造为nullptr
         * 类聚合式构造  ：支持移动语义
         * 就地构造      ：(std::in_place_type<Type>, args...)
+    * 访问
+        * any_cast<T&>(any)
     * 读取：
         * .has_value()
         * .type().name()
@@ -320,13 +310,11 @@ exception                 `<exception>`
         * .operator=()
         * .emplace<T>()
         * .reset()
-    * 访问
-        * any_cast<T&>(any)
 <!-- -->
 
 * variant：`<variant>`
     * 构造：
-        * 默认构造      ：构造第一个类型
+        * 默认构造      ：默认构造第一个类型
             > std::monostate类作占位符避免无默认构造函数
         * 类聚合式构造  ：支持移动语义
             > 匹配最佳的类型，但注意char*匹配数值类型比匹配string更佳
@@ -340,9 +328,11 @@ exception                 `<exception>`
         * .emplace<T>()
         * .emplace<N>()
     * 访问：
-        * get<T>(vrt)         与 get<N>(vrt)
-        * get_if<T>(&variant) 与 get_if<N>(&variant)
-            > get<>错误匹配类型会抛出异常，get_if<>错误匹配类型返回空指针
+        * get<T>(vrt)
+        * get<N>(vrt)
+        * get_if<T>(vrt*)
+        * get_if<N>(vrt*)
+        > get<>错误匹配类型会抛出异常，get_if<>错误匹配类型返回空指针
         * visit(func, vrt)
             > func为能接受所有vrt模板参数类型的重载可调用类型
     * 比较：
@@ -381,9 +371,9 @@ exception                 `<exception>`
         * .reset(ptr)
         * .reset(ptr, del)
     * 类型转换：
-        * static_pointer_cast<>()
-        * dynamic_pointer_cast<>()
-        * const_pointer_cast<>()
+        * static_pointer_cast<>(sp)
+        * dynamic_pointer_cast<>(sp)
+        * const_pointer_cast<>(sp)
         * .operator bool()
     * 比较：
         > 比较存储的指针
@@ -431,47 +421,48 @@ exception                 `<exception>`
     * ::quiet_NaN()     ：NAN
 <!-- -->
 
-* TypeTrait：`<type_traits>`
+* `<type_traits>`
     * 类型判断式
-    * 类型关系检验
     * 类型修饰符
+    * 类型关系检验
+    * 类型计算
     * 常用：`decay<T>::type`
     * 使用：
         * ::value   ：返回std::true_type或std::false_type
         * ::type    ：返回修饰后的类型
-        * 通过包装函数处理/过滤类型后调用工具函数
-            * 利用::value调用重载工具
-            * 利用::type转换类型传递给模板或修改参数类型
+        * wrapper函数利用上述两者封装调用重载的too函数
 <!-- -->
 
 * reference_wrapper：`<functional>`
     * 构造：
-        * ref()
-        * cref()
-    * 转换：提供到目标引用的转换from&to
+        * ref(obj)
+        * cref(obj)
+    * 转换：提供到目标引用的转换`from & to`
     * 访问
-        * .get()    ：返回目标引用才能调用成员函数
+        * .get()    ：返回目标引用，如此才能调用其成员函数
 <!--  -->
 
 * hash：`<functional>`
-    * 预定义：整型、浮点型、指针、智能指针、string、bitset<>、vector<bool>
+    > 预定义：整型、浮点型、指针、智能指针、string、bitset<>、vector<bool>
 <!-- -->
 
 * ratio：`<ratio>`
     * 构造：预定义ratio类型
-    * 读取：模板非类型参数作分子与分母
+    * 读取：
+        > 模板非类型参数作分子与分母
         * ::num    ：分子
         * ::den    ：分母
-    * 运算：编译期运算、比较、化简、报错
-        * ratio_OP<ratio1, ratio2>::type
-        * ratio_OP<ratio1, ratio2>::value
+    * 运算：
+        > 编译期运算、比较、化简、报错
+        * 算术运算：ratio_OP<ratio1, ratio2>::type
+        * 关系运算：ratio_OP<ratio1, ratio2>::value
 <!-- -->
 
 * 时间库：`<chrono>`
     * duration
         * 构造：
             * time_point相减
-            * 预定义字面值
+            * 字面值构造
         * 读取：
             * .count()
             * ::rep
@@ -498,9 +489,10 @@ exception                 `<exception>`
             * time_point与duration运算
         * 算术运算、关系运算、类型转换
 * `<ctime>`：
-    * time(time_t*)                         ：获取当前时间
-    * localtime(time_t*); gmtime(time_t*)   ：返回`tm*`
+    * time(time_t*)                         ：获取当前时间并存储到time_t*指向的位置
+    * localtime(time_t*); gmtime(time_t*)   ：传入上述的time_t*，返回`tm*`
 * `<iomanip>`：
+    > `fmt`格式见linux中date命令的格式
     * get_time(tm*, fmt)
     * put_time(tm*, fmt)
 <!-- -->
@@ -508,8 +500,8 @@ exception                 `<exception>`
 # STL
 > * STL组件
 >     * 容器：序列、关联、无序
->         * 异常发生：容器reallocate, 元素的copy与move
->         * 异常处理：容器保证reallocate异常安全；对于元素产生的异常, 随机访问容器无法恢复, 节点式容器保证安全
+>         * 异常发生：容器reallocate, 元素的copy与move等
+>         * 异常处理：容器保证reallocate异常安全；对于元素增删时产生的异常, 随机访问容器无法恢复, 节点式容器保证安全
 >     * 迭代器：输出、输入、单向、双向、随机
 >     * 泛型算法：搜索比较、更替复制、涂写删除
 > * 解释：
@@ -522,17 +514,24 @@ exception                 `<exception>`
 >     * A : Assoicated
 >     * U : Unordered
 >     * M : all-kinds-of-Map
+> * STL算法
+>     * 为了简化，将重载函数的形参当作同一函数的默认实参来处理
+>     * op1表示接收一个实参的操作数，op2接收两个
+>     * b表示begin，e表示end
+>     * partB表示是和b是同一个容器的且非end的迭代器
+>     * destB表示是作为算法的输出区间
 <!-- -->
 
 * 容器构造：
     * 默认               ：all-a
     * (initializer-list) ：all-a
     * (beg, end)         ：all-a
+    * 聚合初始化         ：a
     * 拷贝               ：all
     * 移动               ：all
     * (num)              ：v, d, l, fl
     * (num, value)       ：s, v, d, l, fl
-    > array只有拷贝构造、移动构造与聚合初始化  
+    > array为聚合类  
     > 前三条对于A与U都可加额外参数(..., cmpPred)与(..., bnum, hasher, eqPred)
 <!-- -->
 
@@ -556,16 +555,16 @@ exception                 `<exception>`
     * .rbegin(), .crbegin(), .rend(), crend() ：all-U-fl
 <!-- -->
 
-* 容器插入：
+* 元素插入：
     * .insert(pos, value)            ：all
     * .insert(pos, num, val)         ：s, v, d, l
     * .insert(pos, initializer-list) ：s, v, d, l
     * .insert(pos, beg, end)         ：s, v, d, l
-    * .insert(value)                 ：A, U(非multi返回`pair<iter, bool>`)
+    * .insert(value)                 ：A, U(非multi返回pair<iter, bool>)
     * .insert(initializer-list)      ：A, U
     * .insert(beg, end)              ：A, U
-    * .emplace(args...)              ：A, U(非multi返回`pair<iter, bool>`)
     * .emplace(pos, args...)         ：v, d, l
+    * .emplace(args...)              ：A, U(非multi返回pair<iter, bool>)
     * .emplace_hint(pos, args...)    ：A, U
     * .emplace_back(v)               ：v, d, l
     * .emplace_front(v)              ：d, l, fl
@@ -573,7 +572,7 @@ exception                 `<exception>`
     * .push_front(v)                 ：d, l, fl
 <!-- -->
 
-* 容器删除：
+* 元素删除：
     * .erase(v)          ：A, U(返回删除个数)
     * .erase(pos)        ：all-fl
     * .erase(beg, end)   ：all-fl
@@ -594,7 +593,7 @@ exception                 `<exception>`
 <!-- -->
 
 * 容器比较：
-    * 相等比较：all
+    * 相等比较：U
     * 非相等比较：all-U
 <!-- -->
 
@@ -604,9 +603,10 @@ exception                 `<exception>`
     * .lower_bound(v)   ：A
     * .upper_bound(v)   ：A
     * .equal_range(v)   ：A
-    * .merge(A)         ：A, U
+    * .merge(C )        ：A, U
     * .extract(iter)    ：A, U
     * .extract(key)     ：A, U
+        > .extract()的作用是利用move语义获取元素handle
 <!-- -->
 
 * U特有：bucket接口
@@ -631,14 +631,14 @@ exception                 `<exception>`
     * .sort(op)
     * .unique()
     * .unique(op)
-    * .splice(pos, source, sourcePos)
-    * .splice(pos, source, sourceBeg, sourceEnd)
+    * .splice(pos, sourceList, sourcePos)
+    * .splice(pos, sourceList, sourceBeg, sourceEnd)
     * .merge(source)
     * .merge(source, cmpPred)
     * .reverse()
 <!-- -->
 
-* 迭代器辅助函数：`<iterator>`
+* 迭代器辅助函数： `<iterator>`
     * next(iter, n=1)
     * prev(iter, n=1)
     * distance(iter1, iter2)
@@ -652,13 +652,6 @@ exception                 `<exception>`
         * .crbegin()
         * .crend()
     * .base()：反向迭代器的成员，转换为正常迭代器(+1)
-<!-- -->
-
-* 插入迭代器
-    * 获取：通过泛型函数
-        * back_inserter(cont)
-        * front_inserter(cont)
-        * inserter(cont, pos)
 <!-- -->
 
 * 流迭代器
@@ -685,8 +678,15 @@ exception                 `<exception>`
     * 作算法源区间, 需要保证元素只能处理一次
 <!-- -->
 
+* 插入迭代器
+    * 获取：通过泛型函数
+        * back_inserter(cont)
+        * front_inserter(cont)
+        * inserter(cont, pos)
+<!-- -->
+
 > * 泛型算法：`<algorithm>, <numeric>, <execution>`
-> * 默认by value传递谓词, 算法并不保证在类内保存状态的谓词能正确运作(拷贝谓词导致重置状态)
+> * 默认by value传递pred, 算法并不保证在类内保存状态的pred能正确运作(重新构造pred可能导致重置状态)
 > * 获取谓词状态：
 >     * 谓词指向外部状态
 >     * 显式指定模板实参为reference
@@ -730,11 +730,13 @@ exception                 `<exception>`
     * lower_bound(b, e, v, op2=lower_to)
     * upper_bound(b, e, v, op2=lower_to)
     * equal_range(b, e, v, op2=lower_to)
+
     > 搜索子区间
-    * search(b, e, searchB, searchE, op2=equal_to)
+    * search(b, e, searchB, searchE, op2=equal_to)          ：op2(elem, v)
     * search_n(b, e, n, v, op2=equal_to)                    ：op2(elem, v)
     * find_end(b, e, searchB, searchE, op2=equal_to)
     * adjacent_find(b, e, op2=equal_to)                     ：搜索一对连续相等的元素, 返回第一个位置
+
     > 搜索目标范围中的元素
     * find_first_of(b, e, searchB, searchE, op2=equal_to)   ：搜索
 <!-- -->
@@ -761,8 +763,8 @@ exception                 `<exception>`
     * replace_if(b, e, op1, newV)               ：返回void
     * replace_copy(b, e, destB, oldV, newV)
     * replace_copy_if(b, e, destB, op1, newV)
-    * transform(b, e, destB, op1)               ：用[b, e)区间的元素调用op1()，并将返回结果写入destB
-    * transform(b1, e1, b2, destB, op2)         ：用[b1, e1)与[b2, e2)的元素调用将op2()，并将返回结果写入destB
+    * transform(b, e, destB, op1)               ：用`[b, e)`区间的元素调用op1()，并将返回结果写入destB
+    * transform(b1, e1, b2, destB, op2)         ：用`[b1, e1)`与`[b2, e2)`的元素调用将op2()，并将返回结果写入destB
     * fill(b, e, v)                             ：返回void
     * fill_n(b, n, v)                           ：返回void
     * generate(b, e, op0)                       ：返回void
@@ -801,21 +803,22 @@ exception                 `<exception>`
 * 区间检验与比较：一般返回boolean
     * equal(b, e, cmpB, op2 = equal_to)
     * mismatch(b, e, cmpB, op2 = equal_to)                  ：查找第一个不相同的元素, 返回pair存储两个区间的不同点的迭代器
-    * lexicographical_compare(b1, e1, b2, e2, op = equal_to)：比较两区间字典序
-    * is_sorted(b, e, op2=lower_to)
-    * is_sorted_until(b, e, op2=lower_to)                   ：返回已排序区间的尾后迭代器
-    * is_heap(b, e, op2=lower_to)
-    * is_heap_until(b, e, op2=lower_to)                     ：返回已堆排序区间的尾后迭代器
+    * lexicographical_compare(b1, e1, b2, e2, op = lower_to)：比较两区间字典序
+    * is_sorted(b, e, op2 = lower_to)
+    * is_sorted_until(b, e, op2 = lower_to)                 ：返回已排序区间的尾后迭代器
+    * is_heap(b, e, op2 = lower_to)
+    * is_heap_until(b, e, op2 = lower_to)                   ：返回已堆排序区间的尾后迭代器
     * is_partitioned(b, e, op1)
     * partition_point(b, e, op1)                            ：返回满足op1()为true的区间的尾后迭代器
-    * includes(b1, e1, b2, e2, op2=equal_to)                ：区间[b2, e2)是否为区间[b1, e1)的**子序列**
-    * is_permutation(b1, e1, b2, op2=equal_to)              ：检测两个区间的所有元素是否为同一个集合，即不考虑顺序
+    * includes(b1, e1, b2, e2, op2 = equal_to)              ：区间`[b2, e2)`是否为区间`[b1, e1)`的**子序列**
+    * is_permutation(b1, e1, b2, op2 = equal_to)            ：检测两个区间的所有元素是否为同一个集合，即不考虑顺序
     * all_of(b, e, op1)
     * any_of(b, e, op1)
     * none_of(b, e, op1)
 <!-- -->
 
 * 集合算法
+    > 需要先排序
     * merge(b1, e1, b2, e2, destB, op2=lower_to)
     * inplace_merge(b1, partB, e2 ,op=lower_to)                         ：将同一个集合中的两部分合并, 两部分都有序
     * set_union(b1, e1, b2, e2, destB, op2=lower_to)                    ：并集
@@ -850,7 +853,7 @@ exception                 `<exception>`
         * .reset(pos)
         * .flip()
         * .flip(pos)
-        * b[pos].flip()
+        * .operator[](idx).flip()
     * 转换：
         * .to_ulong()
         * .to_ullong()
@@ -861,9 +864,9 @@ exception                 `<exception>`
     > 范围：(i, l)、(b, e)  
     > 目标：(s)、(s, i)、(s, i, l)、(c)、(c, l)、(char)、(n, char)
     * 修改
-        * string() .assign() .append()      ：(s)、(s, i)、(s, i, l)、(c)、(c, l)、(char)、(n, char)
+        * string() .assign() .append()      ：目标
         * operator= operator+ operator+=    ：(s)、(c)、(char)
-        * .insert()                         ：pos + 目标（除了single char）
+        * .insert()                         ：pos + 目标（除了(char)）
         * .replace()                        ：范围+ 目标
     * 搜索
         > 参数：(s) (s,i) (c) (c,i) (c,i,l) (char) (char,i)
@@ -923,7 +926,7 @@ exception                 `<exception>`
         * .begin() .cbegin() .end() .cend()
         * .size()
         * .empty()
-        * .operator[]()
+        * .operator[](idx)
         * .prefix()
         * .suffix()
         * .length(n)
@@ -979,11 +982,11 @@ exception                 `<exception>`
     * 预定义I/O运算符：
     ```
         * 整型：  
-            [0-9]*, [0-8]*,  
-            ((0(x|X))|[0-9a-fA-F])[0-9a-fA-F]*
+            [0-7]*  
+            [0-9]*
+            (0x|0X)?[0-9a-fA-F]*
         * 浮点型：  
-            [0-9]+\.?[0-9]*(e[+-]?[0-9]+)?  
-            \.[0-9]+(e[+-]?[0-9]+)?
+            ([0-9]+\.?[0-9]*|\.[0-9]+)(e[+-]?[0-9]+)
         * 其他：bool, char, char*, void*, string, streambuf*, bitset, complex
     ```
     * 关联stream：
@@ -1014,11 +1017,11 @@ exception                 `<exception>`
     * left                          ：使用setw()后输出左对齐
     * right!                        ：使用setw()后输出右对齐
     * internal                      ：正负号靠左，数值靠右（无`no`版本）
-    * noboolalpha! | boolalpha      ：字符化输出boolean，如`true`和`false`
-    * noshowpos! | showpos          ：正数输出正号
-    * nouppercase! | uppercase      ：对数值输出中的字母强制大写或强制小写
-    * noshowpoint! | showpoint      ：小数部分为零的浮点数也打印小数部分
-    * noshowbase! | showbase        ：对二/八/十六/进制的数字输出进制前缀
+    * noboolalpha! | boolalpha      ：是否字符化输出boolean，如`true`和`false`
+    * noshowpos! | showpos          ：是否正数输出正号
+    * nouppercase! | uppercase      ：是否对数值输出中的字母强制大写或强制小写
+    * noshowpoint! | showpoint      ：是否小数部分为零的浮点数也打印小数部分
+    * noshowbase! | showbase        ：是否对二/八/十六/进制的数字输出进制前缀
     * setprecision(v)               ：设置输出浮点数的精度
         > 使用以下两个操作符后, 精度的语义由“所有数字位数”变为“小数位数”
         * fixed                     ：强制用定点表示法输出浮点数
@@ -1038,8 +1041,8 @@ exception                 `<exception>`
 ```cpp
 string in{"hello \"world\""}, out;
 stringstream ss;
-ss << quoted(in);   // ss.str() == "\"hello \\\"world\\\""，即输出"hello \"world\""
-ss >> quoted(out);  // 将ss中被引用包围后的字符还原，即out输出为hello "world"
+ss << quoted(in);   // 输出时进行引用。ss.str() == "\"hello \\\"world\\\""，即输出"hello \"world\""
+ss >> quoted(out);  // 输入是取消引用。将ss中被引用包围后的字符还原，即out输出为hello "world"
 ```
 
 * fstream：`<fstream>`
@@ -1106,7 +1109,7 @@ ss >> quoted(out);  // 将ss中被引用包围后的字符还原，即out输出�
     get_wstring_from_multibytes_stream >> wstring;
 
     wbuffer_convert<codecvt_utf8<wchar_t> > wchar_t_to_utf8(cout.rdbuf())
-    wistream put_wstring_to_multibytes_stream(&wchar_t_to_utf8)
+    wostream put_wstring_to_multibytes_stream(&wchar_t_to_utf8)
     put_wstring_to_multibytes_stream << wstring; // 注意结束时必须冲刷该缓冲区，不然会有字符留在里面未输出
     // 注意cout与put_wstring_to_multibytes_stream的缓冲区并不一样，
     ```
@@ -1143,6 +1146,8 @@ ss >> quoted(out);  // 将ss中被引用包围后的字符还原，即out输出�
 * 线程并行：`<thread>` `<future>`
     * async(launch::async, func, args...)
         > 封装并启动线程函数, 将其返回值存到shared data  
+        > 注意，若不将返回值 赋值给future，则不会异步启动  
+        > 注意，func函数不能使用默认return
         * 发射策略
             * launch::async         ：异步调用
             * launch::deferred      ：延迟发射
@@ -1173,13 +1178,14 @@ ss >> quoted(out);  // 将ss中被引用包围后的字符还原，即out输出�
 * 互斥锁：`<mutex>`
     * mutex及其变种：
         * 用法：在全局中声明
+
         | 操作                | mutex | recursive_mutex | shared_mutex | timed_mutex | recursive_timed_mutex | shared_timed_mutex |
         |---------------------+-------+-----------------+--------------+-------------+-----------------------+--------------------|
         | .lock()             |                                   捕获mutex，失败则阻塞                                           |
         | .try_lock()         |                               捕获mutex，失败则返回false                                          |
         | .unlock()           |                                   解除锁定的mutex                                                 |
-        | .try_lock_for(dur)  |   -   |        -        |      -       |                限制时间内进行捕获                        |
-        | .try_lock_until(tp) |   -   |        -        |      -       |                限制期限前进行捕获                        |
+        | .try_lock_for(dur)  |   -   |        -        |      -       |                限制时间内尝试捕获                        |
+        | .try_lock_until(tp) |   -   |        -        |      -       |                限制期限前尝试捕获                        |
         | 多个lock            |   -   |        🉑️️       |      -       |      -      |          🉑️️           |         -          |
     * 辅助函数：
         * lock(mutex...)      ：避免死锁
@@ -1202,7 +1208,9 @@ ss >> quoted(out);  // 将ss中被引用包围后的字符还原，即out输出�
 <!-- -->
 
 * 条件量：`<condition_variable>`
-    * 依赖于unique_lock`<>`提供保护区, 在全局中声明
+    > 依赖于unique_lock`<>`提供保护区, 在全局中声明，  
+    > 注意由mutex锁住的线程由mutex唤醒，被condition_variable锁住的线程由condition_variable唤醒，
+    > 前者可由lock_guard自动触发唤醒机制，而condition_variable需要手动
     * 成员：
         * .wait(u_l, pred)
         * .wait_for(u_l, dur, func)

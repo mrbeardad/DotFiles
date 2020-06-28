@@ -33,6 +33,9 @@
 7. 加载kernel
 
 ## Kernel
+> 需要掌握：
+> * 内核的抽象模型与功能
+
 1. 挂载initramfs模拟的`/ (根目录设备)`
     1. 加载Modules
     2. 启动init程序(systemd)
