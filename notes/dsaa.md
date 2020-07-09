@@ -90,15 +90,17 @@
 
 ## 分支
 首先要明确分支操作所需要的条件
-* `if-else`：不可能同时发生的条件，有时可用`if{return}`或`if{continue}`代替
-* `if-if`：可能同时发生的条件
-* `if-elseif-else`：若两个分支有重合的公共语句，可以转化为`if-else{if-else}`
-* `if-else{if-else}`：若内部分支无公共语句，可以转化为`if-elseif-else`
-* `for{if{break}}`：可以将if{break}的条件并入for中
-* `if{for}`：if与for的检测条件重合时
+* `if-else`                             ：不可能同时发生的条件，有时可用`if{return}`或`if{continue}`代替
+* `if-if`                               ：可能同时发生的条件
+* `if-elseif-else`与`if-else{if-else}`  ：有公共语句则前者转为后者，无则后者转前者
+* `for{if-break}`                       ：可以将if{break}的条件并入for中
+* `for(true){if-break}`                 ：循环结束条件需要的变量在循环体中才构造，将其提出又较麻烦，即可使用此形式
+* `if{for}`
+    * if与for的检测条件重合时
     * 目的：某条件下需要进行循环操作
     * 合并：只要for，if的语义用for的初始条件替代
-* `for{if{for}}`：外层for与内层for的检测条件重合时
+* `for{if{for}}`
+    * 外层for与内层for的检测条件重合时
     * 目的：在某条件下用另一种方式完成循环
     * 合并：外for内嵌if-else，注意变量迭代是否有差异
         > 当然合并可以简化代码，但可能导致性能降低，因为每次循环都要多个条件检测

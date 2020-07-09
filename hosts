@@ -1,5 +1,11 @@
 # Host addresses
 127.0.0.1  localhost
+127.0.1.1  BEAR-ASUS
+::1        localhost ip6-localhost ip6-loopback
+ff02::1    ip6-allnodes
+ff02::2    ip6-allrouters
+# Host addresses
+127.0.0.1  localhost
 127.0.1.1  ASUS-Manjaro
 ::1        localhost ip6-localhost ip6-loopback
 ff02::1    ip6-allnodes
@@ -7,13 +13,10 @@ ff02::2    ip6-allrouters
 
 # GitHub Fastly Access
 
-# XinJin
-# 13.250.177.223      www.github.com
-# 13.250.177.223      github.com
-52.74.223.119       www.github.com
-52.74.223.119       github.com
-88.191.249.182      github.global.ssl.fastly.net
-185.199.109.153     assets-cdn.github.com
+140.82.113.3        github.com
+151.101.229.194     github.global.ssl.fastly.net
+185.199.110.153     assets-cdn.github.com
+185.199.108.154     github.githubassets.com
 13.250.177.223      gist.github.com
 151.101.184.133     raw.githubusercontent.com
 151.101.108.133     gist.githubusercontent.com

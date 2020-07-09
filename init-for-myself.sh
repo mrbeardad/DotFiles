@@ -155,7 +155,7 @@ function rime_cfg() {
     cp -rv fcitx5 ~/.config
 
     # 让桌面程序使用fcitx5输入框架
-    echo -e 'export GTK_IM_MODULE=fcitx5\nexport QT_IM_MODULE=fcitx5\nexport XMODIFIERS="@im=fcitx5"\nfcitx5 > /dev/null &' > ~/.xprofile
+    echo -e 'export GTK_IM_MODULE=fcitx5\nexport QT_IM_MODULE=fcitx5\nexport XMODIFIERS="@im=fcitx5"\nfcitx5 > /dev/null &\ndevilspie &' > ~/.xprofile
 }
 
 function chfs_cfg() {
@@ -207,7 +207,7 @@ function cli_cfg() {
 function desktop_cfg() {
     # 桌面应用
     yay -S deepin.com.qq.office baidunetdisk-bin netease-cloud-music wps-office ttf-wps-fonts \
-        flameshot google-chrome guake xfce4-terminal
+        flameshot google-chrome guake xfce4-terminal devilspie
 
     # 其它工具：多媒体播放、多媒体处理、多媒体录制、gif录制、字体修改、渗透、抓包
     yay -S vlc ffmpeg obs-studio peek fontforge nmap tcpdump wireshark-qt
@@ -278,6 +278,8 @@ net.ipv6.conf.lo.disable_ipv6 =1" | sudo tee -a /etc/sysctl.conf
     # 安装gnome配置
     makedir ~/.config/dconf
     cp -v gnome/user ~/.config/dconf
+    makedir ~/.devilspie
+    cp -v gnome/transparent.ds ~/.devilspie/transparent.ds
     makedir ~/Pictures/Wallpapers
     cp -v /mnt/ASUS/backup/Wallpapers/* ~/Pictures/Wallpapers
 }

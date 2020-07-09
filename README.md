@@ -100,6 +100,7 @@ $ ./init.sh
 * <kbd>Alt</kbd>+ <kbd>T</kbd>切换guake全屏状态
 * <kbd>Ctrl</kbd>+ <kbd>T</kbd>下拉或者关掉guake
 * <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>A</kbd> FlameShot截图
+* <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>↑/↓</kbd> 上/下个工作区
 >
 
 guake是一个下拉式终端，可以集成在gnome中  
@@ -110,8 +111,11 @@ guake的开机启动并自动连接tmux又依赖`init.sh`中安装的desktop文�
     * <kbd>Ctrl</kbd>+ <kbd>2</kbd> 还原窗口
     * <kbd>Ctrl</kbd>+ <kbd>3</kbd> 最小化窗口
     * <kbd>Ctrl</kbd>+ <kbd>4</kbd> 关闭窗口
-    * <kbd>Super</kbd>+ <kbd>left</kbd> 左分屏
-    * <kbd>Super</kbd>+ <kbd>right</kbd> 右分屏
+    * <kbd>Ctrl</kbd>+ <kbd>n</kbd> 启动底部dock第n个软件
+    * <kbd>Super</kbd>+ <kbd>←</kbd> 左分屏
+    * <kbd>Super</kbd>+ <kbd>→</kbd> 右分屏
+    * <kbd>Super</kbd>+ <kbd>V</kbd> 通知
+    * <kbd>Super</kbd>+ <kbd>L</kbd> 锁屏
     * <kbd>Super</kbd>+ <kbd>H</kbd> 隐藏窗口
     * <kbd>Super</kbd>+ <kbd>tab</kbd> 选择窗口
     * <kbd>Alt</kbd>+ <kbd>tab</kbd> 切换窗口
