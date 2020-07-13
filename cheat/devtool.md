@@ -208,7 +208,7 @@
     * `pp`          ：粘贴（冲突时自动更名）
     * `po`          ：粘贴时强制覆盖
     * `pl`          ：为复制的文件创建软链接
-
+<!--  -->
 # git概念
 * 管理目录
     > 工作区`W`相对暂存区`S`：untraced，deleted，rename，modified  

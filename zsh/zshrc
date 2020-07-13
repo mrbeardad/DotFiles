@@ -120,8 +120,10 @@ alias free='free -wh'
 alias vmstat='vmstat -w'
 alias ip='ip -c'
 alias expactf='expac --timefmt="%Y-%m-%d %T" "%l\t%n" | sort'
-alias gdb='cgdb -- -q'
+alias cgdb='cgdb -- -q'
+alias gdb='gdb --tui'
 alias dif='diff -Naur'
+alias ra='ranger'
 function f() {
     if [[ -n "$1" ]] ;then
         cd $1

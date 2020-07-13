@@ -356,6 +356,7 @@ exception                 `<exception>`
 * shared_ptr：`<memory>`
     * 构造：
         * 拷贝/移动构造         ：更新引用计数
+        * shared_ptr<T>(unique_ptr)
         * shared_ptr<T>(new_ptr, deleter)
         * make_shared<T>()
             > 对象内存与引用计数器一次分配  
@@ -380,14 +381,16 @@ exception                 `<exception>`
     * 错误问题：
         * 循环依赖
         * 多组指向
+    * std::enable_shared_from_this<T>
+    * shared_from_this()
 <!-- -->
 
 * weak_ptr：`<memory>`
     * 构造：
-        * weak_ptr<T>(sp)
-    * 访问：
-        * .operator*()
-        * .operator->()
+        * weak_ptr<T>(shared_ptr)
+    * 访问
+        * .lock()
+            > 返回shared_ptr
     * 读取
         * .expired()
             > 返回是否为空
@@ -395,7 +398,7 @@ exception                 `<exception>`
 
 * unique_ptr：`<memory>`
     * 构造：
-        * unique_ptr<T, Del>(ptr, del)
+        * unique_ptr<T, Del>(new_ptr, del)
             > del默认为delete表达式
         * make_unique<>()
         * 支持move, 拒绝copy
