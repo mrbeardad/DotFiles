@@ -180,6 +180,9 @@ function cli_cfg() {
 
     # CLI工具
     yay -S htop iotop dstat cloc screenfetch figlet cmatrix
+    pip install pip -U
+    pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
+    sudo pip install gdbgui
     sudo pip3 install cppman
     # yay -S ncdu ranger
 

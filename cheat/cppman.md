@@ -1,12 +1,32 @@
-> # 注意：  
-> 该文档虽然是Markdown格式，但是因为这篇文档主要用来在终端下通过`see`命令来快速查阅的，  
-> 故编写时为了终端环境下更好看，以markdown格式渲染出来的画面就有些不可描述了:joy:  
-> 因为代码中有很多`<>`、`_`、`*`都会被当作标签
-> 所以这篇文档得看源码哦
+***注意，该文档主要用于通过本仓库的see命令进行终端查询，故未太注重渲染后的排版与美观***
+# 目录
+<!-- vim-markdown-toc GFM -->
+
+- [解释规范](#解释规范)
+- [标准库异常](#标准库异常)
+- [C库](#c库)
+- [通用工具](#通用工具)
+- [STL](#stl)
+- [字符串与流](#字符串与流)
+- [并发](#并发)
+
+<!-- vim-markdown-toc -->
+
+# 解释规范
+> * 类聚合式构造    ：即是对每个数据成员进行copy/move构造
+> * 逐块式构造      ：利用tuple传递每个数据成员的构造函数的实参
+>
+> * 成员模板构造    ：比如pair<int, char*>可以赋值给pair<int, string>，尽管类型不一样，
+>   但提供了模板构造函数用于接收不同实例。
+> * 所有需要使用`foo<T>::type`与`bar<T>::value`，都提供了模板类型别名`foo_t<T>`与变量模板`bar_v<T>`代替
+> * **访问**表示可以读取也可以写入
+> * .operator=()与.emplace()省略参数
+> * 函数参数列表如`(x, y = 0)`，不一定表示y有默认实参，
+>   也可能表示有两个重载函数，第一个为`(x)`，第二个为`(x, y)`，只不过若第二个中y=0则与第一个函数作用一样（实现细节不一样）
 
 # 标准库异常
 * 异常体系结构
-```
+```cpp
 exception                 `<exception>`  
 ├─── bad_cast             `<typeinfo>`      ：多态引用的转换失败  
 ├─── bad_typeid           `<typeinfo>`      ：在typeid()中解引用多态类型的空指针
@@ -39,30 +59,24 @@ exception                 `<exception>`
         > 根部基类**exception**的虚函数
         > 异常类销毁后该C-string也不复存在  
     * .code() ：返回error_code类对象
-        > error_code 与 error_condition 区别：可移植性  
+        > error_code 与 error_condition 区别：**可移植性**  
         > 前者由编译器定义(OS相关), 后者为默认标准
         * error_code成员：
             * .message()
-            * .value()
             * .category().name()
+            * .value()
             * .default_error_condition()
             * .default_error_condition().message()
-            * .default_error_condition().value()
             * .default_error_condition().category().name()
+            * .default_error_condition().value()
         * 比较：
             > 重载了与**领域枚举值**的比较运算符
-            * errc        ：`<cerrno>`
-            * io_errc     ：`<ios>`
-            * future_errc ：`<future>`
+            * errc::mem        ：`<cerrno>`
+            * io_errc::mem     ：`<ios>`
+            * future_errc::mem ：`<future>`
 <!-- -->
 
-* 异常挂起
-    * current_exception()       ：返回exception_ptr对象
-    * rethrow_exception(exceptr)：重新抛出exception_ptr对象
-<!-- -->
-
-* 异常构造
-    > 异常类的构造参数
+* 异常构造参数
     * logic_error与runtime_error
         * (const string&)
         * (const char*)
@@ -73,12 +87,17 @@ exception                 `<exception>`
         * (error_code, const char*)
 <!-- -->
 
+* 异常挂起
+    * current_exception()       ：返回exception_ptr对象
+    * rethrow_exception(exceptr)：重新抛出exception_ptr对象
+<!-- -->
+
 # C库
 * 调试：`<cassert>`
     * assert(expr)                  ：运行时断言, false则执行
         > #define NDEGUG  
         > 可以取消宏函数assert()
-    * static_assert(expr, message)  ：编译期断言, 可以自定义打印消息
+    * static_assert(constexpr, message)  ：编译期断言, 可以自定义打印消息
         > #define NDEBUG  
         > 并不会取消**关键字static_assert()**
     * 编译器预处理宏：
@@ -99,25 +118,25 @@ exception                 `<exception>`
 <!-- -->
 
 * `<cctype>`
-    * isalnum(c)     ：字母+数字
-    * isalpha(c)     ：字母
-    * islower(c)     ：小写字母
-    * isupper(c)     ：大写字母
-    * isdigit(c)     ：数字
-    * isxdigit(c)    ：数字+`xabcdefXABCDEF`
-    * ispunct(c)     ：符号
-    * isblank(c)     ：` `+`\t`
-    * isspace(c)     ：` `+`\t`+`\n`+`\r`+`\v`+`\f`
-    * iscntrl(c)     ：0x00-0x1F + 0x7F
-    * isgraph(c)     ：字母+数字+符号
-    * isprint(c)     ：字母+数字+符号+空格
-    * toupper(c)
-    * tolower(c)
+    * `isalnum(c)`     ：字母+数字
+    * `isalpha(c)`     ：字母
+    * `islower(c)`     ：小写字母
+    * `isupper(c)`     ：大写字母
+    * `isdigit(c)`     ：数字
+    * `isxdigit(c)`    ：数字+`xabcdefXABCDEF`
+    * `ispunct(c)`     ：符号
+    * `isblank(c)`     ：`空格`+`\t`
+    * `isspace(c)`     ：`空格`+`\t`+`\n`+`\r`+`\v`+`\f`
+    * `iscntrl(c)`     ：0x00-0x1F + 0x7F
+    * `isgraph(c)`     ：字母+数字+符号
+    * `isprint(c)`     ：字母+数字+符号+空格
+    * `toupper(c)`
+    * `tolower(c)`
 <!--  -->
 
 * 数学库：`<cmath>`
     > 几乎所有函数的参数都对`float` `double` `long double` 和整数 有重载，故一般省略形参类型  
-    > 若只能为浮点数会指明`double`
+    > 若只能为浮点数（float或double）会指明`double`
     * 三角函数
         * cos(T)
         * sin(T)
@@ -128,7 +147,7 @@ exception                 `<exception>`
 
     * 对数与幂
         * log(N)                    ：log_e(N)
-        * log1p(N)                  ：更加精准的log_e(N + 1)
+        * log1p(N)                  ：log_e(N + 1)（计算更精准）
         * log2(N)                   ：log_2(N)
         * log10(N)                  ：log_10(N)
 
@@ -140,7 +159,7 @@ exception                 `<exception>`
         * pow(x, y)                 ：x ^ y
         * sqrt(double x)            ：x的平方根
         * cbrt(double x)            ：x的立方根
-        * hypot(x, y, z=0)          ：sqrt(pow(x, 2), pow(y, 2), pow(z, 2))
+        * hypot(x, y, z = 0)        ：`sqrt(x * x, y * y, z * z)`
 
     * 浮点数取整
         * ceil(double x)            ：向上取整
@@ -182,7 +201,7 @@ exception                 `<exception>`
 
 > 命令行单个参数中可能有以下几种情况：
 > * `-o`单个选项`o`
-> * `-opt`多个选项`o` `p` `t`，且除了最后一个选项`t`，其它选项必须**没有参数**
+> * `-opt`多个选项`o` `p` `t`；若其中选项`p`可能有参数或必有参数，则`t`作为选项`p`的参数
 > * `-ofile`单个选项`o`及其参数`file`
 > * `file`作为前面**必有参数**的选项的参数，或者作为该命令需要的参数
 
@@ -202,7 +221,7 @@ exception                 `<exception>`
         ```c
         struct option {
             const char* name;    // 选项名称
-            int has_arg;         // no|required|optional_argrument
+            int has_arg;         // no_argrument|required_argrument|optional_argrument
             int* flag;           // 等于NULL则函数返回val，否则匹配时*flag=val且函数返回0
             int val;             // 指定匹配到该选项时返回的int值
         };
@@ -214,6 +233,7 @@ exception                 `<exception>`
 <!-- -->
 
 * SIMD：`<immintrin.h>`
+    > SIMD指令可以通过给STL算法执行策略而应用到程序中
     * 需要利用`alignas(32)`对齐数组
     * 向量寄存器抽象类型：
         * `__m256`
@@ -240,15 +260,6 @@ exception                 `<exception>`
         ```
 <!-- -->
 
-# 解释规范
-> * 类聚合式构造    ：即是对每个数据成员进行copy/move构造
-> * 逐块式构造      ：利用tuple传递每个数据成员的构造函数的实参
-> * 成员模板构造    ：比如pair<int, char*>可以赋值给pair<int, string>，尽管类型不一样，
->   但提供了模板构造函数用于接收不同实例。
-> * 所有需要使用`foo<T>::type`与`bar<T>::value`，都提供了模板类型别名`foo_t<T>`与变量模板`bar_v<T>`代替
-> * **访问**表示可以读取也可以写入
-> * .operator=()与.emplace()省略参数
-
 # 通用工具
 * initializer_list：`<initializer_list>`
     > 语言支持库，支持聚合初始化
@@ -256,10 +267,11 @@ exception                 `<exception>`
     > * 在range-based-for中，可以直接在冒号右边用列表初始化构造initializer_list作为容器
 
 * integer_sequence：`<utility>`
+    > 与initializer_list的区别在于，integer_sequence可以用于编译期计算
     * 构造
         * integer_sequence<typename T, T... INTS>
         * index_sequence<size_t... SIZETS>
-        > 以下构造1 ~ N-1的T类型的证书序列
+        > 以下构造1 ~ N-1的T类型的整数序列
         * make_integer_sequence<typename T, T N>
         * make_index_sequence<size_t N>
     * 读取
@@ -285,12 +297,12 @@ exception                 `<exception>`
         * 成员模板构造
         * 支持由pair赋值
     * 访问
-        * get<T>(t) 与 get<N>(t)
+        * `get<T>(t)` 与 `get<N>(t)`
             > 返回引用
     * 读取
-        * tuple_size<TT>::value
-        * tuple_element<N, TT>::type
-        * tuple_cat(tuple1, tuple2, ...)
+        * `tuple_size<TT>::value`
+        * `tuple_element<N, TT>::type`
+        * `tuple_cat(tuple1, tuple2, ...)`
     * 比较：
         > 字典比较
 <!-- -->
@@ -307,9 +319,9 @@ exception                 `<exception>`
         * .type().name()
             > 利用关键字type_id()比较
     * 修改：
-        * .operator=()
-        * .emplace<T>()
-        * .reset()
+        * `.operator=()`
+        * `.emplace<T>()`
+        * `.reset()`
 <!-- -->
 
 * variant：`<variant>`
@@ -325,13 +337,13 @@ exception                 `<exception>`
         * .index()
     * 修改：
         * .operator=()
-        * .emplace<T>()
-        * .emplace<N>()
+        * `.emplace<T>()`
+        * `.emplace<N>()`
     * 访问：
-        * get<T>(vrt)
-        * get<N>(vrt)
-        * get_if<T>(vrt*)
-        * get_if<N>(vrt*)
+        * `get<T>(vrt)`
+        * `get<N>(vrt)`
+        * `get_if<T>(vrt*)`
+        * `get_if<N>(vrt*)`
         > get<>错误匹配类型会抛出异常，get_if<>错误匹配类型返回空指针
         * visit(func, vrt)
             > func为能接受所有vrt模板参数类型的重载可调用类型
@@ -356,9 +368,9 @@ exception                 `<exception>`
 * shared_ptr：`<memory>`
     * 构造：
         * 拷贝/移动构造         ：更新引用计数
-        * shared_ptr<T>(unique_ptr)
-        * shared_ptr<T>(new_ptr, deleter)
-        * make_shared<T>()
+        * `shared_ptr<T>(unique_ptr)`
+        * `shared_ptr<T>(new_ptr, deleter)`
+        * `make_shared<T>()`
             > 对象内存与引用计数器一次分配  
             > 同时避免new表达式与用shared_ptr管理new获取的指针这两步之间发生异常，而导致内存泄漏（make_unique同）
     * 访问：
@@ -381,13 +393,13 @@ exception                 `<exception>`
     * 错误问题：
         * 循环依赖
         * 多组指向
-    * std::enable_shared_from_this<T>
+    * `std::enable_shared_from_this<T>`
     * shared_from_this()
 <!-- -->
 
 * weak_ptr：`<memory>`
     * 构造：
-        * weak_ptr<T>(shared_ptr)
+        * `weak_ptr<T>(shared_ptr)`
     * 访问
         * .lock()
             > 返回shared_ptr
@@ -425,15 +437,14 @@ exception                 `<exception>`
 <!-- -->
 
 * `<type_traits>`
+    > 元编程可以利用该库进行模板类型限制
     * 类型判断式
-    * 类型修饰符
     * 类型关系检验
+    * 类型修饰符
     * 类型计算
-    * 常用：`decay<T>::type`
     * 使用：
         * ::value   ：返回std::true_type或std::false_type
         * ::type    ：返回修饰后的类型
-        * wrapper函数利用上述两者封装调用重载的too函数
 <!-- -->
 
 * reference_wrapper：`<functional>`
@@ -468,8 +479,8 @@ exception                 `<exception>`
             * 字面值构造
         * 读取：
             * .count()
-            * ::rep
-            * ::period
+            * ::rep     ：整数的类型
+            * ::period  ：分数的类型
         * 算术运算：会隐式转换为更高精度
         * 类型转换：转为粗精度直接截断数值
             * duration_cast<>()
@@ -709,6 +720,7 @@ exception                 `<exception>`
     * for_each_n(b, n, op1)
     * count(b, e, v)
     * count_if(b, e, op1)
+<!--  -->
 
 * 最值比较
     * max(x, y)
