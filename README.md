@@ -146,7 +146,7 @@ cd ~/.local/DotFiles
 #### Misc
 | 按键                          | 功能                    |
 |-------------------------------|-------------------------|
-| <kbd>Alt</kbd>+<kbd>n</kbd>  | 启动底部工具栏第n个软件 |
+| <kbd>Super</kbd>+<kbd>n</kbd> | 启动底部工具栏第n个软件 |
 | <kbd>Super</kbd>              | 软件搜索                |
 | <kbd>Super</kbd>+<kbd>A</kbd> | 列出所有软件            |
 | <kbd>Super</kbd>+<kbd>V</kbd> | 打开通知窗口            |
