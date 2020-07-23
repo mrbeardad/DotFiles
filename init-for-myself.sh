@@ -40,7 +40,7 @@ function system_cfg() {
 
 function pacman_cfg() {
     # 修改pacman源为腾讯源，直接改/etc/pacman.conf而非/etc/pacman.d/mirrorlist，因为有时更新系统会覆盖后者
-    sudo sed -i '/^Include = /s/^.*$/Server = https:\/\/mirrors.cloud.tencent.com\/manjaro\/unstable\/$repo\/$arch/' /etc/pacman.conf
+    sudo sed -i '/^Include = /s/^.*$/Server = https:\/\/mirrors.cloud.tencent.com\/manjaro\/stable\/$repo\/$arch/' /etc/pacman.conf
 
     # pacman彩色输出
     sudo sed -i "/^#Color/s/#//" /etc/pacman.conf

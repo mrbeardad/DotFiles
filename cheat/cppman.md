@@ -851,7 +851,7 @@ exception                 `<exception>`
     * adjacent_difference(b, e, destB, op2=reduce)                      ：a1, a2-a1, a3-a2,
 <!-- -->
 
-# 字符串与流
+# 其它容器
 
 * bitset：`<bitset>`
     * 方便访问指定位
@@ -961,6 +961,7 @@ exception                 `<exception>`
     ```
 <!-- -->
 
+# 流与格式化
 * iostream：`<iostream>`
     * 状态与异常
         * .good()
@@ -1025,8 +1026,8 @@ exception                 `<exception>`
     * noskipws | skipws!            ：是否需要输入时忽略前导空白
     > OStream
     * endl                          ：输出`\n`并刷新缓冲区
-    * ends                          ：输出`\0`
     * flush                         ：刷新缓冲区
+    * ends                          ：输出`\0`
     * nounitbuf | unitbuf           ：是否每次都刷新缓冲区
     * setfill(char)                 ：用char填充setw()制造的空白，默认空格
     * left                          ：使用setw()后输出左对齐
@@ -1059,7 +1060,7 @@ stringstream ss;
 ss << quoted(in);   // 输出时进行引用。ss.str() == "\"hello \\\"world\\\""，即输出"hello \"world\""
 ss >> quoted(out);  // 输入是取消引用。将ss中被引用包围后的字符还原，即out输出为hello "world"
 ```
-
+<!--  -->
 * fstream：`<fstream>`
     * 构造：(filename, flag=)
     * 成员：
@@ -1071,7 +1072,7 @@ ss >> quoted(out);  // 输入是取消引用。将ss中被引用包围后的字�
         * in            ：只读，文件必须存在
         * out           ：只写，覆盖
         * app           ：只写，追加
-        * in|out        ：读写，文件必须存在
+        * in|out        ：读写，覆盖，文件必须存在，(fstream默认)
         * in|out|trunc  ：读写，覆盖
         * in|app        ：读写，追加
         * binary        ：不要将`\r\n`替换为`\n`
@@ -1142,6 +1143,45 @@ ss >> quoted(out);  // 输入是取消引用。将ss中被引用包围后的字�
 
     ```
 <!-- -->
+
+* 格式化：`<format>`
+    > `"{arg_id:填充与对齐 符号 # 0 宽度 精度 L 类型}"`
+    * 填充与对齐
+        > 对齐符号前可选添加填充符
+        * `<`left，非整数与非浮点数默认左对齐
+        * `>`right，整数与浮点数默认右对齐
+        * `^`center，居中
+    * 符号
+        * `+`showpos
+        * `空格`非负数前导空格
+    * #
+        * 对整数，showbase
+        * 对浮点数，showpoint
+    * 0
+        * 对整数与浮点数，用0填充前导空白，若与对齐符号一同使用则失效
+    * 宽度与精度
+        * 宽度：`{:6}`
+        * 精度：`{:.6}`
+        * 宽度与精度：`{:6.6}`
+    * L
+    > 本地化
+        * 对整数：插入合适数位分隔符
+        * 对浮点数：插入合适数位分隔符与底分隔符
+        * 对bool：boolalpha
+    * 类型
+    > 类型再编译期便已知，故不其它需要则无需指出
+        * `c`字符
+        * `s`字符串
+        * 整数：
+            * `b`与`B`：二进制
+            * `o`：八进制
+            * `x`与`X`：十六进制
+        * 浮点数：
+            * `a`与`A`：十六进制
+            * `e`与`E`：科学计数法
+            * `f`与`F`：定点表示法
+            * `g`与`G`：智能表示
+<!--  -->
 
 * 随机数生成器：`<random>`
 * 引擎：
@@ -1241,3 +1281,69 @@ ss >> quoted(out);  // 输入是取消引用。将ss中被引用包围后的字�
         * 唤醒
 <!-- -->
 
+# BOOST
+## 序列化
+```cpp
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/serialization/string.hpp>
+#include <fstream>
+#include <ios>
+#include <iostream>
+
+using std::cin;
+using std::cout;
+
+class Test
+{
+    friend class boost::serialization::access; // Note!
+public:
+    Test() = default;
+
+    Test(int i_a, double d_a, const std::string& s_a): i_m{i_a}, d_m{d_a}, s_m{s_a} {}
+
+    void output()
+    {
+        std::cout << "i_m: " << i_m;
+        std::cout << "\nd_m: " << d_m;
+        std::cout << "\ns_m: " << s_m;
+        std::cout << '\n';
+    }
+private:
+    template <typename Archive>
+    void serialize(Archive& ar, unsigned version) // Note!
+    {
+        ar & i_m;
+        ar & d_m;
+        ar & s_m;
+    }
+
+    int i_m;
+    double d_m;
+    std::string s_m;
+};
+
+int main()
+{
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    std::fstream file{"test.bin", std::ios_base::in | std::ios_base::out | std::ios_base::trunc | std::ios_base::binary}; // Note
+
+    boost::archive::binary_oarchive toa{file};
+    Test t{1, 2.5, "string"};
+    t.output();
+    std::cout << "Writting..." << std::endl;
+    toa << t;
+
+    file.seekg(std::ios_base::beg); // Note
+    boost::archive::binary_iarchive tia{file};
+    std::cout << "Reading..." << std::endl;
+    Test newT;
+    tia >> newT;
+    newT.output();
+
+    return 0;
+}
+
+```

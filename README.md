@@ -59,7 +59,7 @@
     > [vim配置](https://github.com/mrbeardad/SpaceVim)的使用手册
 
 ## C++
-* [C++标准库](cheat/cppman.md)
+* [C++程序库](cheat/cppman.md)
     > 中文版C++标准库手册，主要用于终端查询
 * [C++语法特性](notes/cpp.md)
     > 一份语法清单，适合有基础的同学
@@ -146,7 +146,7 @@ cd ~/.local/DotFiles
 #### Misc
 | 按键                          | 功能                    |
 |-------------------------------|-------------------------|
-| <kbd>Ctrl</kbd>+<kbd>n</kbd>  | 启动底部工具栏第n个软件 |
+| <kbd>Alt</kbd>+<kbd>n</kbd>  | 启动底部工具栏第n个软件 |
 | <kbd>Super</kbd>              | 软件搜索                |
 | <kbd>Super</kbd>+<kbd>A</kbd> | 列出所有软件            |
 | <kbd>Super</kbd>+<kbd>V</kbd> | 打开通知窗口            |
@@ -194,10 +194,11 @@ guake是一个下拉式终端，可以集成在gnome中
 ![cmatrix](images/matrix.gif)
 
 ### 踩过的坑
-* guake相关的快捷键依赖于在guake中运行tmux，且需要仓库中的[.tmux.conf](tmux/tmux.conf)。
-    原理即是使用guake命令传递按键序列给后台的guake，于是guake就会把这些序列视作用户手动输入一般，
-    若此时guake运行有前台程序，通常会出错。于是让guake启动是自动连接tmux，而我将传递按键序列给guake
-    会让它使用tmux快捷键，guake中的tmux于是重新开启一个window执行命令，而不会影响到原来的程序
+&emsp;guake相关的快捷键依赖于在guake中运行tmux，且需要仓库中的.tmux.conf。  
+&emsp;原理即是使用guake命令传递按键序列给正在运行的guake，于是guake就会把这些序列视作用户手动输入一般，
+但若此时guake中运行有前台程序，如vim，通常会出错。因为这些按键序列传递给了vim，而我们本想在shell中运行命令。  
+&emsp;于是我让guake启动时自动连接tmux，tmux配置了一些快捷键，而利用guake命令传递tmux快捷键的按键序列给guake，
+guake中的tmux于是重新开启一个window执行命令，而不会影响到原来的“前台程序”
 
 ## grub
 &emsp;系统启动加载器（bootloader），由固件启动并加载*Linux Kernel*并为其提供参数，
@@ -455,7 +456,8 @@ rime是一个输入法引擎，高度自定义，Linux称作中州韵，Windows�
 &emsp;还有注意，词库需要由`yaml`格式转换成二进制格式，有时会重新执行这一过程，需要点时间
 
 ## neovim编辑器
-一个终端文本编辑器，超顶的  
+vim/neovim是现在最流行的编辑器之二。  
+通过编写脚本与安装插件，可以让双手打字有飞一般的感觉  
 这个配置单独一个仓库，[传送门](https://github.com/mrbeardad/SpaceVim)  
 vim目录下的配置是以前用vim是自己搭的，现在转neovim了，并把配置都转移到了spacevim里  
 
