@@ -63,7 +63,7 @@ function pacman_cfg() {
 
 function nvim_cfg() {
     # 围绕NeoVim搭建IDE
-    yay -S base-devel neovim gvim xsel python-pynvim cmake ctags global silver-searcher-git ripgrep npm php markdown2ctags shellcheck cppcheck clang gdb cgdb boost
+    yay -S base-devel neovim gvim xsel python-pynvim cmake ctags global silver-searcher-git ripgrep npm php markdown2ctags shellcheck cppcheck clang gdb cgdb boost mariadb mysql++
     # yay -S vim-youcompleteme-git
 
     # 安装neovim配置

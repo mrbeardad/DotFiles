@@ -2,29 +2,36 @@
 # 目录
 <!-- vim-markdown-toc GFM -->
 
-- [解释规范](#解释规范)
-- [标准库异常](#标准库异常)
-- [C库](#c库)
-- [通用工具](#通用工具)
-- [STL](#stl)
-- [字符串与流](#字符串与流)
-- [并发](#并发)
+- [C++标准库](#c标准库)
+  - [规范解释](#规范解释)
+  - [标准库异常](#标准库异常)
+  - [C库](#c库)
+  - [通用工具](#通用工具)
+  - [STL](#stl)
+  - [其它容器](#其它容器)
+  - [流与格式化](#流与格式化)
+  - [并发](#并发)
+- [BOOST](#boost)
+  - [序列化](#序列化)
+- [Mysql++](#mysql)
 
 <!-- vim-markdown-toc -->
 
-# 解释规范
-> * 类聚合式构造    ：即是对每个数据成员进行copy/move构造
-> * 逐块式构造      ：利用tuple传递每个数据成员的构造函数的实参
->
-> * 成员模板构造    ：比如pair<int, char*>可以赋值给pair<int, string>，尽管类型不一样，
->   但提供了模板构造函数用于接收不同实例。
-> * 所有需要使用`foo<T>::type`与`bar<T>::value`，都提供了模板类型别名`foo_t<T>`与变量模板`bar_v<T>`代替
-> * **访问**表示可以读取也可以写入
-> * .operator=()与.emplace()省略参数
-> * 函数参数列表如`(x, y = 0)`，不一定表示y有默认实参，
->   也可能表示有两个重载函数，第一个为`(x)`，第二个为`(x, y)`，只不过若第二个中y=0则与第一个函数作用一样（实现细节不一样）
+# C++标准库
+## 规范解释
+* C++程序库规范解释
+    * 类聚合式构造    ：即是对每个数据成员进行copy/move构造
+    * 逐块式构造      ：利用tuple传递每个数据成员的构造函数的实参
+    * 成员模板构造    ：比如pair<int, char*>可以赋值给pair<int, string>，
+        尽管类型不一样，但提供了模板构造函数用于接收不同实例。
 
-# 标准库异常
+    * 所有需要使用`foo<T>::type`与`bar<T>::value`，都提供了模板类型别名`foo_t<T>`与变量模板`bar_v<T>`代替
+    * **访问**表示可以读取也可以写入
+    * 一些参数内容很明显的函数不再指出形参列表，如`.operator()`
+    * 函数参数列表如`(x, y = 0)`，不一定表示y有默认实参，
+        也可能表示有两个重载函数，第一个为`(x)`，第二个为`(x, y)`，只不过若第二个中y=0则与第一个函数作用一样（实现细节不一样）
+
+## 标准库异常
 * 异常体系结构
 ```cpp
 exception                 `<exception>`  
@@ -92,7 +99,7 @@ exception                 `<exception>`
     * rethrow_exception(exceptr)：重新抛出exception_ptr对象
 <!-- -->
 
-# C库
+## C库
 * 调试：`<cassert>`
     * assert(expr)                  ：运行时断言, false则执行
         > #define NDEGUG  
@@ -260,7 +267,7 @@ exception                 `<exception>`
         ```
 <!-- -->
 
-# 通用工具
+## 通用工具
 * initializer_list：`<initializer_list>`
     > 语言支持库，支持聚合初始化
     > * 使用列表初始化时，会优先调用参数为initializer_list的构造函数
@@ -511,7 +518,7 @@ exception                 `<exception>`
     * put_time(tm*, fmt)
 <!-- -->
 
-# STL
+## STL
 > * STL组件
 >     * 容器：序列、关联、无序
 >         * 异常发生：容器reallocate, 元素的copy与move等
@@ -851,7 +858,7 @@ exception                 `<exception>`
     * adjacent_difference(b, e, destB, op2=reduce)                      ：a1, a2-a1, a3-a2,
 <!-- -->
 
-# 其它容器
+## 其它容器
 
 * bitset：`<bitset>`
     * 方便访问指定位
@@ -961,7 +968,7 @@ exception                 `<exception>`
     ```
 <!-- -->
 
-# 流与格式化
+## 流与格式化
 * iostream：`<iostream>`
     * 状态与异常
         * .good()
@@ -1153,7 +1160,7 @@ ss >> quoted(out);  // 输入是取消引用。将ss中被引用包围后的字�
         * `^`center，居中
     * 符号
         * `+`showpos
-        * `空格`非负数前导空格
+        * `<space>`非负数前导空格
     * #
         * 对整数，showbase
         * 对浮点数，showpoint
@@ -1197,7 +1204,7 @@ ss >> quoted(out);  // 输入是取消引用。将ss中被引用包围后的字�
     * normal_distribution dn(u=0, o=1)                  ：正态分布
 <!-- -->
 
-# 并发
+## 并发
 * 任务发射：`<future>`
     * `async(func, args...)`与`async(launch::async | launch::deferred, func, args...)`
         > 发射策略：
@@ -1291,9 +1298,6 @@ ss >> quoted(out);  // 输入是取消引用。将ss中被引用包围后的字�
 #include <ios>
 #include <iostream>
 
-using std::cin;
-using std::cout;
-
 class Test
 {
     friend class boost::serialization::access; // Note!
@@ -1345,5 +1349,49 @@ int main()
 
     return 0;
 }
-
+// 若使用指针，则指针所指类型必须具有`serilize`函数，所以指向内置类型不合法
 ```
+
+# Mysql++
+* mysqlpp::Connection
+    * 连接数据库：
+        * 构造(db, server, user, password, port)    ：除了`db`其余参数均有默认实参
+                > 对于`server`：
+                > * 0                   ：让数据库驱动选择通讯方式
+                > * "."                 ：Windows named pipes
+                > * "/path/to/socket"   ：Unix domain socket
+                > * "host.or.ip:port"   ：TCP
+        * .connect(db, host, user, password，port)  ：返回bool表示是否连接成功，其余同上述构造函数
+        * .connected()                              ：返回bool表示是否连接成功
+    * 信息查询：
+        * .select_db(db)                            ：选择数据库db
+        * .count_rows(table)                        ：返回table的行数
+        * .query("SQL Statement")                   ：返回mysqlpp::Query
+    * 错误处理
+        * .private_bool_type()                      ：返回bool表示是否发生过错误
+        * .error()                                  ：返回上次发生错误时的信息
+        * .ping()                                   ：返回bool表示是否可ping通
+
+* mysqlpp::Query
+    * 执行SQL
+        * .execute()                        ：返回mysqlpp::SimpleResult
+        * .exec()                           ：返回bool
+        * .store()                          ：返回mysqlpp::StoreQueryResult
+        * .use()                            ：返回mysqlpp::UseQueryReslt
+    * 错误处理
+        * .error()                          ：返回错误消息
+
+* mysqlpp::StoreQueryResult
+    * .operator bool()
+    * .operator[]()                     ：返回mysqlpp::Row
+    * .num_rows()                       ：返回总行数
+
+* mysqlpp::UseQueryReslt
+    * .fetch_field()                    ：返回mysqlpp::Field
+    * .fetch_row()                      ：返回mysqlpp::Row
+
+* mysqlpp::Null<Type, NullIsNullOrZero>
+    > 由`mysqlpp::null`赋值后才是(NULL)
+    * mysqlpp::sql_int_null，即Null<mysqlpp::sql_int, mysqlpp::NullIsNull>
+
+String 可以将 SQL 类型字符串转换为 C++ 数据类型。STA 可以将 C++数据类型转换为 SQL 类型字符串
