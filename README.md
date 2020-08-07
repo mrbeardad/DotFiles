@@ -182,7 +182,7 @@ guake中的tmux于是重新开启一个window执行命令，而不会影响到�
 ## ssh
 &emsp;安全外壳协议，OpenSSH是它的一个实现。
 有了它你就可以安全、方便地远程连接你的主机，连上后取得你的shell，就像在本地登录一样。
-它通过[非对称加密技术]()为你和主机之间建立安全隧道，故**公私钥对**是必不可少的。
+它通过[非对称加密技术](https://github.com/mrbeardad/learning-notes-and-cheat-sheets/blob/master/notes/bitcoin.md)为你和主机之间建立安全隧道，故**公私钥对**是必不可少的。
 当然你可以使用你的用户密码登录而不用密钥，如果你的主机暴露在互联网中那当然是不推荐的。
 * 提供`~/.ssh/ssh_config`，用于git通过ssh协议链接github与gitee
     > 这个你得自己把`ssh/ssh_config`复制到你的`~/.ssh`下，因为这是我自己的配置，
