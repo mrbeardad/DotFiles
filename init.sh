@@ -169,9 +169,10 @@ function chfs_cfg() {
 
 function cli_cfg() {
     # 安装say, see, terminal-tmux.sh，以及用于say, see修改和查看的cheat-sheets
-    cp -v bin/* ~/.local/bin
+    cp -v bin/terminal-tmux.sh ~/.local/bin
     backup ~/.cheat
     git clone https://github.com/mrbeardad/learning-notes-and-cheat-sheets ~/.cheat
+    g++ -std=c++17 -o ~/.local/bin/see ~/.cheat/see.cpp
 
     # CLI工具
     yay -S htop iotop dstat cloc screenfetch figlet cmatrix

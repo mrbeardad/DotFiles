@@ -28,11 +28,12 @@
 
 <!-- vim-markdown-toc -->
 
-&emsp;**注**：仓库中[*bin*目录](bin)下的**see**与**say**两个命令用于终端快速查阅笔记与修改笔记，
-`see -h ; say -h`了解详情。  
-所有笔记和cheatsheet位于[learning-notes-and-cheat-sheets](https://github.com/mrbeardad/learning-notes-and-cheat-sheets)，由**init.sh**自动下载  
-它们会搜索`~/.cheat/*.md`查找entry，一级列表开头到`<!-- -->`结束为一条entry，见下图  
-`see`会利用`ANSI`进行简单的美化输出，其中包括将`<!-- -->`替换成空行
+> &emsp;**注**：仓库中[*bin*目录](bin)下的**see**与**say**两个命令用于终端快速查阅笔记与修改笔记，
+> `see -h ; say -h`了解详情。  
+> 所有笔记和cheatsheet位于[learning-notes-and-cheat-sheets](https://github.com/mrbeardad/learning-notes-and-cheat-sheets)，由**init.sh**自动下载  
+> 它们会搜索`~/.cheat/*.md`查找entry，一级列表开头到`<!-- -->`结束为一条entry，见下图  
+> `see`会利用`ANSI`进行简单的美化输出，其中包括将`<!-- -->`替换成空行
+***注意：笔记与see目前已分离至[单独的仓库](https://github.com/mrbeardad/learning-notes-and-cheat-sheets)，本仓库中的see与say已停止维护，清使用单独仓库中的C++版本的see***
 
 ![see&say](images/see&say.png)
 
