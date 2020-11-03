@@ -30,10 +30,10 @@
 
 > &emsp;**注**：仓库中[*bin*目录](bin)下的**see**与**say**两个命令用于终端快速查阅笔记与修改笔记，
 > `see -h ; say -h`了解详情。  
-> 所有笔记和cheatsheet位于[learning-notes-and-cheat-sheets](https://github.com/mrbeardad/learning-notes-and-cheat-sheets)，由**init.sh**自动下载  
+> 所有笔记和cheatsheet位于[SeeCheatSheets](https://github.com/mrbeardad/SeeCheatSheets)，由**init.sh**自动下载  
 > 它们会搜索`~/.cheat/*.md`查找entry，一级列表开头到`<!-- -->`结束为一条entry，见下图  
 > `see`会利用`ANSI`进行简单的美化输出，其中包括将`<!-- -->`替换成空行
-***注意：笔记与see目前已分离至[单独的仓库](https://github.com/mrbeardad/learning-notes-and-cheat-sheets)，本仓库中的see与say已停止维护，清使用单独仓库中的C++版本的see***
+***注意：笔记与see目前已分离至[单独的仓库](https://github.com/mrbeardad/SeeCheatSheets)，本仓库中的see与say已停止维护，清使用单独仓库中的C++版本的see***
 
 ![see&say](images/see&say.png)
 
@@ -183,7 +183,7 @@ guake中的tmux于是重新开启一个window执行命令，而不会影响到�
 ## ssh
 &emsp;安全外壳协议，OpenSSH是它的一个实现。
 有了它你就可以安全、方便地远程连接你的主机，连上后取得你的shell，就像在本地登录一样。
-它通过[非对称加密技术](https://github.com/mrbeardad/learning-notes-and-cheat-sheets/blob/master/notes/bitcoin.md)为你和主机之间建立安全隧道，故**公私钥对**是必不可少的。
+它通过[非对称加密技术](https://github.com/mrbeardad/SeeCheatSheets/blob/master/notes/bitcoin.md)为你和主机之间建立安全隧道，故**公私钥对**是必不可少的。
 当然你可以使用你的用户密码登录而不用密钥，如果你的主机暴露在互联网中那当然是不推荐的。
 * 提供`~/.ssh/ssh_config`，用于git通过ssh协议链接github与gitee
     > 这个你得自己把`ssh/ssh_config`复制到你的`~/.ssh`下，因为这是我自己的配置，
@@ -360,7 +360,7 @@ git状态：
     * <kbd>/</kbd>与 <kbd>?</kbd>快速搜索
     * <kbd>:</kbd>进入命令模式
     * <kbd>space</kbd>设置断点
-    * [更多gdb命令](https://github.com/mrbeardad/learning-notes-and-cheat-sheets/blob/master/notes/devtool.md)
+    * [更多gdb命令](https://github.com/mrbeardad/SeeCheatSheets/blob/master/notes/devtool.md)
 
 真正调试的话，脚本下载了更好用的gdbgui，里面可以使用gdb命令，所以学好gdb命令更方便，
 
