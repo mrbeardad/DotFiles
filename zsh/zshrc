@@ -150,6 +150,14 @@ function f() {
     fi
 }
 
+function o() {
+    if [[ -z "$1" ]] ;then
+        xdg-open .
+    else
+        xdg-open "$1"
+    fi
+}
+
 # zsh中git插件的补充
 alias gmv='git mv'
 alias grst='git restore --staged'

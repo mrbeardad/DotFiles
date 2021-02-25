@@ -11,15 +11,14 @@ function backup() {
     if [[ -z "$1" ]] ;then
         echo -e "\033[31mError:backup(): required one parameter\033[m"
         exit 1
-    elif [[ ! -e "$1" ]] ;then
-        echo -e "\033[31mError:backup(): file $1 does not exist\033[m"
-        exit 1
+    elif [[ -e "$1" ]] ;then
+        backFileName="$1"
+        while [[ -e "$backFileName" ]] ;do
+            backFileName+=$RANDOM
+        done
+        mv -v "$1" "$backFileName"
     fi
-    backFileName="$1"
-    while [[ -e "$backFileName" ]] ;do
-        backFileName+=$RANDOM
-    done
-    mv -v "$1" "$backFileName"
+    
 }
 
 function makedir() {
@@ -39,7 +38,7 @@ function system_cfg() {
     sudo systemctl enable --now fstrim.timer
 
     # 限制系统日志大小为100M
-    sudo sed -i '/^#SystemMaxUse=/s/.*/SystemMaxUse=100M' /etc/systemd/journald.conf
+    sudo sed -i '/^#SystemMaxUse=/s/.*/SystemMaxUse=100M/' /etc/systemd/journald.conf
 
     # 笔记本电源，20%提醒电量过低，10%提醒即将耗尽电源，3%强制休眠(根据系统差异，也可能会关机)
     sudo sed -i '/^PercentageLow=/s/=.*$/=20/; /^PercentageCritical=/s/=.*$/=10/; /^PercentageAction=/s/=.*$/=3/' /etc/UPower/UPower.conf
@@ -50,18 +49,18 @@ function pacman_cfg() {
     sudo sed -i '/^Include = /s/^.*$/Server = https:\/\/mirrors.cloud.tencent.com\/manjaro\/stable\/$repo\/$arch/' /etc/pacman.conf
 
     # pacman配置彩色输出与使用系统日志
-    sudo sed -i -e "/^#Color$/s/#//" -e "/^#UseSyslog$/s/#//" /etc/pacman.conf
+    sudo sed -i "/^#Color$/s/#//; /^#UseSyslog$/s/#//; /^#TotalDownload/s/#//" /etc/pacman.conf
 
     # 添加腾讯云的archlinuxcn源
     if ! grep -q archlinuxcn /etc/pacman.conf ; then
         echo -e '[archlinuxcn]\nServer = https://mirrors.cloud.tencent.com/archlinuxcn/$arch' \
             | sudo tee -a /etc/pacman.conf
     fi
-    yay --aururl "https://aur.tuna.tsinghua.edu.cn" --save
 
     # 更新系统，并准备下载软件包
     sudo pacman -Syyu
     sudo pacman -S archlinuxcn-keyring yay expac
+    yay --aururl "https://aur.tuna.tsinghua.edu.cn" --save
 
     # 启动定时清理软件包服务
     sudo systemctl enable --now paccache.timer
@@ -69,22 +68,23 @@ function pacman_cfg() {
 
 function nvim_cfg() {
     # 围绕NeoVim搭建IDE
-    yay -S base-devel gvim neovim-qt xsel python-pynvim cmake ctags global silver-searcher-git ripgrep \
+    yay -S base-devel gvim neovim-qt \
+        xsel python-pynvim cmake ctags global silver-searcher-git ripgrep \
         npm php shellcheck cppcheck clang gdb cgdb boost gtest gmock asio
 
     # 安装neovim配置
     backup ~/.SpaceVim
-    git clone https://gitee.com/mrbeardad/SpaceVim ~/.SpaceVim
+    git clone https://github.com/mrbeardad/SpaceVim ~/.SpaceVim
 
     makedir ~/.config
     backup ~/.config/nvim
-    ln -s ~/.SpaceVim ~/.config/nvim
+    ln -sv ~/.SpaceVim ~/.config/nvim
 
     backup ~/.SpaceVim.d
-    ln -sfv ~/.SpaceVim/mode ~/.SpaceVim.d
+    ln -sv ~/.SpaceVim/mode ~/.SpaceVim.d
 
     makedir ~/.local/bin
-    g++ -O3 -DNDEBUG -std=c++17 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
+    clang++ -O3 -DNDEBUG -std=c++17 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
 }
 
 function grub_cfg() {
@@ -92,24 +92,21 @@ function grub_cfg() {
     sudo cp -v grub/01_users /etc/grub.d
     sudo cp -v grub/user.cfg /boot/grub
     sudo sed -i '/--class os/s/--class os/--class os --unrestricted /' /etc/grub.d/{10_linux,30_os-prober}
-
-    yay -S grub-theme-tela-whitesur-1080p-git
-    sudo cp -v grub/DNA.jpg /usr/share/grub/themes/tela-whitesur-1080p/background.jpg
-    # 安装grub主题，自选png图片替代/usr/share/grub/themes/manjaro/background.png即可替换背景图片
-    sudo sed -i '/^GRUB_DEFAULT=saved/s/^/#/; /^GRUB_THEME="\/usr\/share\/grub\/themes\/manjaro\/theme.txt"/s/manjaro/tela-whitesur-1080p/' /etc/default/grub
+    sudo sed -i '/^GRUB_DEFAULT=saved/s/^/#/' /etc/default/grub
+    echo -e 'menuentry "Reboot" {\n    reboot\n}\nmenuentry "PowerOff" {\n    halt\n}' | sudo tee -a /etc/grub.d/40_custom
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
 function ssh_cfg() {
     # 添加git push <remote>需要的ssh配置，提供了对github与gitee的配置
     makedir ~/.ssh
-    cat ssh/ssh_config >> ~/.ssh/ssh_config
+    #cat ssh/ssh_config >> ~/.ssh/ssh_config
 
     # 安装我自己的ssh公私钥对。。。
 
     # 仓库中的.gitconfig提供了将`git difftool`中vimdiff链接到nvim的配置
     # 需要的话，修改后拷贝到家目录下
-    cp -v .gitconfig ~
+    #cp -v .gitconfig ~
 
     # 配置sshd用于连接到该主机并启动sshd服务
     sudo sed -i -e "/^#Port 22$/s/.*/Port 50000/" -e "/^#PasswordAuthentication yes$/s/.*/PasswordAuthentication no/" /etc/ssh/sshd_config
@@ -125,7 +122,7 @@ function zsh_cfg() {
     cp -v zsh/zshrc ~/.zshrc
 
     # 安装zsh主题
-    sudo cp -v zsh/agnoster.zsh-theme /usr/share/oh-my-zsh/themes/
+    #sudo cp -v zsh/agnoster.zsh-theme /usr/share/oh-my-zsh/themes/
 }
 
 
@@ -137,28 +134,28 @@ function tmux_cfg() {
 }
 
 function rime_cfg() {
-    if [[ "$1" == fcitx5-rime ]] ;then
+    if [[ "$1" != sogou ]] ;then
         # 下载fcitx5与rime
         yay -S fcitx5-git fcitx5-qt4-git fcitx5-qt5-git fcitx5-qt6-git fcitx5-gtk-git fcitx5-configtool-git \
-            fcitx5-rime-git rime-double-pinyin rime-easy-en-git rime-emoji ssfconv
+            fcitx5-rime-git rime-dict-yangshann-git rime-double-pinyin rime-easy-en-git rime-emoji ssfconv
 
         # 下载fcitx5皮肤
-        yay -S fcitx5-skin-simple-blue fcitx5-skin-base16-material-darker fcitx5-skin-dark-transparent \
-            fcitx5-skin-dark-numix fcitx5-skin-materia-exp fcitx5-skin-arc
+        #yay -S fcitx5-skin-simple-blue fcitx5-skin-base16-material-darker fcitx5-skin-dark-transparent \
+        #    fcitx5-skin-dark-numix fcitx5-skin-materia-exp fcitx5-skin-arc
         makedir ~/.local/share/fcitx5/themes
         cp -vr ./fcitx5/themes/* ~/.local/share/fcitx5/themes
 
         # 安装fcitx5配置
+        makedir ~/.config/fcitx5
         cp -vr ./fcitx5/{conf,config,profile} ~/.config/fcitx5/
 
         # 安装配置与词库
         makedir ~/.local/share/fcitx5/rime
         git submodule update --init
-        ln -sv "$PWD"/rime-dict/ ~/.local/share/fcitx5/rime
+        cp -rv rime-dict/* ~/.local/share/fcitx5/rime
 
         # 自动启动fcitx5
-        cp -v /usr/share/applications/org.fcitx.Fcitx5.desktop ~/.config/autostart/
-        echo -e 'export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS="@im=fcitx"' > ~/.xprofile
+        echo -e 'export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS="@im=fcitx"\nfcitx5 &' > ~/.xprofile
     else
         yay -S fcitx-sogoupinyin fcitx-qt4 fcitx-configtool
         backup ~/.config/fcitx
@@ -192,11 +189,12 @@ function cli_cfg() {
     )
 
     # CLI工具
-    yay -S strace lsof tree lsd htop gtop iotop iftop dstat cloc screenfetch figlet cmatrix docker
+    yay -S strace lsof tree lsd htop-vim-git bashtop iotop iftop dstat cloc screenfetch figlet cmatrix docker
     npm config set registry http://mirrors.cloud.tencent.com/npm/
     pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
     pip install cppman gdbgui thefuck mycli
-    cp -rv cppman ~/.cache/
+    makedir ~/.cache/cppman
+    cp -rv cppman/* ~/.cache/cppman
 
     # 更改docker源
     sudo mkdir /etc/docker
@@ -222,12 +220,12 @@ function cli_cfg() {
 
 function desktop_cfg() {
     # 手动解析github域名
-    cat hosts | sudo tee -a /etc/hosts
+    sudo mv -v hosts /etc/hosts
 
     # 桌面应用
     # wps-office ttf-wps-fonts
     yay -S deepin-wine-tim baidunetdisk-electron listen1-desktop-appimage \
-        flameshot google-chrome guake gnome-terminal-transparency xfce4-terminal uget \
+        flameshot google-chrome guake xfce4-terminal uget \
         vlc ffmpeg obs-studio peek fontforge nmap tcpdump wireshark-qt visual-studio-code-bin lantern-bin
 
     # GNOME扩展
@@ -243,15 +241,15 @@ function desktop_cfg() {
 
     # Sweet-dark
     sudo cp -r /usr/share/themes/Sweet{,-dark}
-    sudo cp -f /usr/share/themes/Sweet-dark/gtk-3.0/gtk{,-dark}.css
-    sudo cp -f /usr/share/themes/Sweet-dark/gtk-3.0/gtk{,-dark}.scss
+    sudo cp -vf /usr/share/themes/Sweet-dark/gtk-3.0/gtk{-dark,}.css
+    sudo cp -vf /usr/share/themes/Sweet-dark/gtk-3.0/gtk{-dark,}.scss
 
     # Tela-candy
     sudo cp -r /usr/share/icons/Tela{,-candy}
     sudo cp -f /usr/share/icons/candy-icons/places/48/* /usr/share/icons/Tela-candy/scalable/places
 
     # 安装字体
-    yay -S ttf-google-fonts-git adobe-source-han-sans-cn-fonts ttf-hanazono ttf-joypixels unicode-emoji
+    yay -S adobe-source-han-sans-cn-fonts ttf-joypixels unicode-emoji
     (
         makedir ~/.local/share/fonts/NerdCodePro
         cp fonts/*.ttf ~/.local/share/fonts/NerdCodePro
@@ -271,11 +269,6 @@ function desktop_cfg() {
     backup ~/.config/xfce4/terminal/terminalrc
     cp -v xfce4-terminal/terminalrc ~/.config/xfce4/terminal/terminalrc
 
-    # TIM配置，启动TIM时禁用ipv6，否则不显示图片
-    # echo "net.ipv6.conf.all.disable_ipv6 =1
-# net.ipv6.conf.default.disable_ipv6 =1
-# net.ipv6.conf.lo.disable_ipv6 =1" | sudo tee -a /etc/sysctl.conf
-
     cp -v /usr/share/applications/guake.desktop ~/.config/autostart/guake-tmux.desktop
     sed -i '/^Exec=guake/s/guake/guake -e "terminal-tmux.sh"/' ~/.config/autostart/guake-tmux.desktop
 
@@ -294,15 +287,15 @@ function main() {
     ssh_cfg
     zsh_cfg
     tmux_cfg
-    rime_cfg
+    rime_cfg "$@"
     chfs_cfg
     cli_cfg
     desktop_cfg
-    echo -e '\e[33m=====> Install your ssh key for github'
-    echo -e '\e[33m=====> Gnome dconf has been installed, logout immediately and back-in will apply it.
-If it does not wrok, copy gnome/user to ~/.config/dconf/user manually, and then logout immediately and back-in will work.'
+    echo -e '\e[33m=====> Gnome dconf has been installed, logout immediately and back-in will apply it.'
 }
 
 # 安装完镜像后后就改个sudoer & fstab配置，其他啥也不用动
-main
+main "$@"
 
+# SSH:  ~/.gitconfig ~/.ssh
+# Grub: theme

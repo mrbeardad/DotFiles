@@ -17,10 +17,10 @@ PrevCandidate=
 NextCandidate=
 
 [Hotkey/TriggerKeys]
-0=Shift+Shift_L
+0=Control+space
 
 [Hotkey/AltTriggerKeys]
-0=Shift+Shift_L
+0=Control+space
 
 [Hotkey/EnumerateForwardKeys]
 0=Control+Shift+Shift_L
