@@ -2,7 +2,7 @@
 MiscAlwaysShowTabs=FALSE
 MiscBell=TRUE
 MiscBellUrgent=FALSE
-MiscBordersDefault=FALSE
+MiscBordersDefault=TRUE
 MiscCursorBlinks=FALSE
 MiscCursorShape=TERMINAL_CURSOR_SHAPE_BLOCK
 MiscDefaultGeometry=80x24
@@ -26,7 +26,7 @@ MiscSlimTabs=FALSE
 MiscNewTabAdjacent=FALSE
 MiscSearchDialogOpacity=100
 MiscShowUnsafePasteDialog=FALSE
-FontName=NerdCode Heavy 11
+FontName=NerdCodePro Font 11
 ShortcutsNoMenukey=TRUE
 ShortcutsNoMnemonics=TRUE
 ShortcutsNoHelpkey=TRUE
@@ -41,7 +41,8 @@ ColorPalette=rgb(0,0,0);rgb(255,85,85);rgb(80,250,123);rgb(241,250,140);rgb(189,
 TabActivityColor=#d7d7dfdfffff
 ColorCursorUseDefault=FALSE
 ScrollingBar=TERMINAL_SCROLLBAR_NONE
-RunCustomCommand=TRUE
 CustomCommand=terminal-tmux.sh
 ColorCursorForeground=#000000000000
+RunCustomCommand=TRUE
+DropdownKeepAbove=FALSE
 

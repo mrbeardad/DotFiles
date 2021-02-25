@@ -1,18 +1,18 @@
 #!/bin/bash
 
+tmuxSessions=$(tmux list-sessions | cut -f1 -d' ' | xargs)
+
 if [[ -z "$1" ]] ;then
-    SessionName='Routine'
+    { echo "$GIO_LAUNCHED_DESKTOP_FILE" | grep -q guake && sessionName=Guake; } \
+        || { echo "$GIO_LAUNCHED_DESKTOP_FILE" | grep -q xfce4 && sessionName=Xfce4; } \
+        || { [[ -n "$GNOME_TERMINAL_SERVICE" ]] && sessionName=Gnome; } \
+        || sessionName=Manjaro
 else
-    SessionName="$1"
+    sessionName="$1"
 fi
 
-tmux list-sessions | grep -q $SessionName
-if [[ $? == 0 ]] ;then
-    exec tmux attach -t $SessionName
+if [[ "$tmuxSessions" == *"$sessionName:"* ]] ;then
+    exec tmux attach -t "$sessionName"
 else
-    if [[ $SessionName == "NeoVim" ]] ;then
-        exec tmux new-session -s $SessionName "DARKBG=1 nvim"
-    else
-        exec tmux new-session -s $SessionName
-    fi
+    exec tmux new-session -s "$sessionName"
 fi

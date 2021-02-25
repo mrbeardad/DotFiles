@@ -4,183 +4,151 @@
 <!-- vim-markdown-toc GFM -->
 
 - [安装](#安装)
-- [详细](#详细)
-  - [Gnome Dconf](#gnome-dconf)
-    - [界面元素](#界面元素)
-    - [快捷键](#快捷键)
-      - [Misc](#misc)
-      - [截图](#截图)
-      - [窗口操作](#窗口操作)
-      - [Guake操作](#guake操作)
-  - [grub](#grub)
-  - [ssh](#ssh)
+- [详细介绍](#详细介绍)
+  - [Gnome桌面环境](#gnome桌面环境)
+    - [全局按键](#全局按键)
+    - [窗口操作](#窗口操作)
+    - [截图与录屏](#截图与录屏)
+    - [文件管理器操作](#文件管理器操作)
+    - [Guake下拉式终端操作](#guake下拉式终端操作)
+  - [Grub](#grub)
+  - [SSH](#ssh)
   - [zsh](#zsh)
     - [好看](#好看)
     - [好用](#好用)
+    - [踩过的坑](#踩过的坑)
   - [tmux](#tmux)
+    - [踩过的坑：](#踩过的坑-1)
   - [alacritty终端](#alacritty终端)
   - [xfce4-terminal终端](#xfce4-terminal终端)
   - [gdb调试器](#gdb调试器)
   - [chfs](#chfs)
-  - [prime独显运行程序](#prime独显运行程序)
   - [fcitx5-rime输入法](#fcitx5-rime输入法)
   - [neovim编辑器](#neovim编辑器)
 
 <!-- vim-markdown-toc -->
 
-> &emsp;**注**：仓库中[*bin*目录](bin)下的**see**与**say**两个命令用于终端快速查阅笔记与修改笔记，
-> `see -h ; say -h`了解详情。  
-> 所有笔记和cheatsheet位于[SeeCheatSheets](https://github.com/mrbeardad/SeeCheatSheets)，由**init.sh**自动下载  
-> 它们会搜索`~/.cheat/*.md`查找entry，一级列表开头到`<!-- -->`结束为一条entry，见下图  
-> `see`会利用`ANSI`进行简单的美化输出，其中包括将`<!-- -->`替换成空行
-***注意：笔记与see目前已分离至[单独的仓库](https://github.com/mrbeardad/SeeCheatSheets)，本仓库中的see与say已停止维护，清使用单独仓库中的C++版本的see***
-
-![see&say](images/see&say.png)
-
 # 安装
-提供了shell脚本用于安装配置，**得[Manjaro20](https://manjaro.org)才得行哦**，不然的话照着[init.sh](init.sh)也可以非常容易的安装
+提供了shell脚本用于安装配置**Manjaro21**，**Manjaro20版本**见 c21fb82e74f9fc2e96ed670037213f85f20211e6
 
-**注意**：在安装之前，需要你需要做两件事
-1. 修改<i>/etc/sudoers</i>与<i>/etc/sudoers.d/10-installer</i>，使`sudo`执行所有命令且无需密码，
-不然安装过程有你受的
+**小贴士**：在安装之前，需要你需要做两件事
+1. 修改 */etc/sudoers* 与 */etc/sudoers.d/\** ，使whell组的`sudo`可执行所有命令且无需密码，
+并将平时使用的普通用户加入wheel组；
 
-2. 安装的最重要也最容易出错的便是下载软件包，确保你的网络环境OK。
-同时确认你没有动过<i>/etc/pacman.conf</i>（除非你知道自己在干什么），因为:
-    * 脚本会在里面添加腾讯云的archlinuxcn源，且若里面已有`archlinuxcn`字样则不会进行修改，
-        如果你用的清华源等教育网最好换了，经常出问题
-
-    * 修改源列表一般在<i>/etc/pacman.d/mirrorlist</i>中修改，若你在<i>/etc/pacman.conf</i>中修改源配置，
-        请确保其有效且速度快，因为它会覆盖前者的配置。脚本默认会在*mirrorlist*中添加腾讯源（PS：它真的很快诶）
+2. 确保你的网络环境OK，注意不要更改 */etc/pacman.conf* 。
 
 准备妥当后，执行
 ```sh
-git clone https://github.com/mrbeardad/DotFiles ~/.local/DotFiles
-
+git clone --depth=1 https://github.com/mrbeardad/DotFiles ~/.local/DotFiles
 cd ~/.local/DotFiles
-
 ./init.sh
 ```
 
-# 详细
-[**init.sh**](init.sh)脚本中已经写了非常详细的注释，可以直接打开看看修改了那些内容，不懂*bash语法*也无关系哦
+# 详细介绍
+[init.sh](init.sh)脚本中已经写了注释，可以直接打开看看执行流程，不懂bash语法也无关系哦
 
-**所以接下来介绍的主要是如何使用整个开发环境：**
-* 为什么需要这个工具
-* 怎么使用这个工具
-
-## Gnome Dconf
+## Gnome桌面环境
 &emsp;Gnome作为最流行的DE之一，总是少不了争议，卡是确实有点卡，不知道是X的锅还是gnome的（或者鱼与熊掌都下锅？）。
-我没用过其它桌面环境，就不多评价了，反正挺好看就得行
-### 界面元素
-就像第一张图那样，桌面还挺好看是吧！
+开源的事儿，怎么能甩锅给他们呢，那还是Fxxk Nvidia吧。我没用过其它桌面环境，就不多评价了。
 
-![gnome](images/gnome.svg)
+**注意**：<kbd>Super</kbd>也就是<kbd>Win</kbd>
 
-1. 简洁的用户列表与软件列表
-2. 任务栏
-3. 时间
-4. 一些后台软件，如`guake`与`tim`
-5. 天气预报，需要自己设置定位
-6. 插件列表（一些软件启动后也会将图标显示在此），从左到右依次为
-    * FlameShot截图
-    * chrome浏览器
-    * caffeine，防止息屏
-    * RIME输入法
-    * pamac软件更新提醒
-    * 提示数字小键盘锁与大写字母锁
-    * 系统状态监测
-7. 简洁的工具栏
-8. 所有软件列表
+### 全局按键
+| 按键                             | 功能                    |
+|----------------------------------|-------------------------|
+| <kbd>Super</kbd>                 | 总览当前工作区的窗口    |
+| <kbd>Super</kbd>+<kbd>S</kbd>    | 搜索文件、应用等        |
+| <kbd>Super</kbd>+<kbd>A</kbd>    | 列出本地所有已安装应用  |
+| <kbd>Super</kbd>+<kbd>数字</kbd> | 启动底部工具栏第n个软件 |
+| <kbd>Super</kbd>+<kbd>N</kbd>    | 打开通知窗口            |
+| <kbd>Super</kbd>+<kbd>R</kbd>    | 打开运行窗口，`r`重启X  |
+| <kbd>Super</kbd>+<kbd>I</kbd>    | 打开系统设置            |
+| <kbd>Super</kbd>+<kbd>E</kbd>    | 打开文件管理器          |
+| <kbd>Super</kbd>+<kbd>L</kbd>    | 锁屏                    |
 
-### 快捷键
-**当然除了好看，还挺好用哦！**  
-列出了实用的一些快捷键，包括默认自带的
+### 窗口操作
+| 按键                                           | 功能                     |
+|------------------------------------------------|--------------------------|
+| <kbd>Super</kbd>+<kbd>D</kbd>                  | 显示桌面                 |
+| <kbd>Super</kbd>+<kbd>H</kbd>                  | 隐藏窗口                 |
+| <kbd>Super</kbd>+<kbd>↑</kbd>                  | 最大化窗口               |
+| <kbd>Super</kbd>+<kbd>↓</kbd>                  | 还原窗口大小             |
+| <kbd>Super</kbd>+<kbd>Q</kbd>                  | 关闭窗口                 |
+| <kbd>Super</kbd>+<kbd>←</kbd>                  | 当前窗口左分屏           |
+| <kbd>Super</kbd>+<kbd>→</kbd>                  | 当前窗口右分屏           |
+| <kbd>Super</kbd>+<kbd>Y</kbd>                  | 自动分屏模式             |
+| <kbd>Super</kbd>+<kbd>tab</kbd>                | 切换窗口                 |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>↑</kbd>    | 上个工作区               |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>↓</kbd>    | 下个工作区               |
+| <kbd>Super</kbd>+<kbd>Shift</kbd>+<kbd>↑</kbd> | 将当前窗口移至上个工作区 |
+| <kbd>Super</kbd>+<kbd>Shift</kbd>+<kbd>↓</kbd> | 将当前窗口移至下个工作区 |
 
-#### Misc
-| 按键                          | 功能                    |
-|-------------------------------|-------------------------|
-| <kbd>Super</kbd>+<kbd>n</kbd> | 启动底部工具栏第n个软件 |
-| <kbd>Super</kbd>              | 软件搜索                |
-| <kbd>Super</kbd>+<kbd>A</kbd> | 列出所有软件            |
-| <kbd>Super</kbd>+<kbd>V</kbd> | 打开通知窗口            |
-| <kbd>Super</kbd>+<kbd>L</kbd> | 锁屏                    |
-| <kbd>Alt</kbd>+<kbd>F2</kbd>  | 执行命令，`r`可重启X    |
+### 截图与录屏
+| 按键                                              | 功能                         |
+|---------------------------------------------------|------------------------------|
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd>       | Peek录屏                     |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>A</kbd>       | FlameShot截图                |
+| <kbd>PrtSc</kbd>                                  | 保存桌面截图到~/Pictures     |
+| <kbd>Ctrl</kbd>+<kbd>PrtSc</kbd>                  | 保存截图到系统剪切板         |
+| <kbd>Super</kbd>+<kbd>PrtSc</kbd>                 | 保存当前窗口截图到~/Pictures |
+| <kbd>Ctrl</kbd>+<kbd>Super</kbd>+<kbd>PrtSc</kbd> | 保存当前窗口截图到系统剪切板 |
 
-#### 截图
-| 按键                                            | 功能                         |
-|-------------------------------------------------|------------------------------|
-| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>A</kbd>     | FlameShot截图                |
-| <kbd>PrtSc</kbd>                                | 保存桌面截图到~/Pictures     |
-| <kbd>Ctrl</kbd>+<kbd>PrtSc</kbd>                | 保存截图到系统剪切板         |
-| <kbd>Alt</kbd>+<kbd>PrtSc</kbd>                 | 保存当前窗口截图到~/Pictures |
-| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>PrtSc</kbd> | 保存当前窗口截图到系统剪切板 |
+### 文件管理器操作
+| 按键                                          | 功能          |
+|-----------------------------------------------|---------------|
+| <kbd>Ctrl</kbd>+<kbd>A</kbd>                  | 选择全部      |
+| <kbd>Ctrl</kbd>+<kbd>C</kbd>                  | 复制          |
+| <kbd>Ctrl</kbd>+<kbd>X</kbd>                  | 剪切          |
+| <kbd>Ctrl</kbd>+<kbd>V</kbd>                  | 粘贴          |
+| <kbd>Ctrl</kbd>+<kbd>F</kbd>                  | 搜索          |
+| <kbd>Ctrl</kbd>+<kbd>Z</kbd>                  | 撤销          |
+| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> | 取消撤销      |
+| <kbd>Ctrl</kbd>+<kbd>H</kbd>                  | 显示/隐藏文件 |
+| <kbd>Ctrl</kbd>+<kbd>D</kbd>                  | 固定到快捷栏  |
+| <kbd>Ctrl</kbd>+<kbd>T</kbd>                  | 打开新Tab     |
+| <kbd>Ctrl</kbd>+<kbd>W</kbd>                  | 关闭Tab       |
+| <kbd>/</kbd>                                  | 根目录        |
+| <kbd>~</kbd>                                  | 家目录        |
 
-#### 窗口操作
-| 按键                                           | 功能              |
-|------------------------------------------------|-------------------|
-| <kbd>Ctrl</kbd>+<kbd>1</kbd>                   | 最大化窗口        |
-| <kbd>Ctrl</kbd>+<kbd>2</kbd>                   | 还原窗口大小      |
-| <kbd>Ctrl</kbd>+<kbd>3</kbd>                   | 最小化窗口        |
-| <kbd>Ctrl</kbd>+<kbd>4</kbd>                   | 关闭窗口          |
-| <kbd>Super</kbd>+<kbd>←/→</kbd>                | 当前窗口左/右分屏 |
-| <kbd>Super</kbd>+<kbd>H</kbd>                  | 隐藏窗口          |
-| <kbd>Super</kbd>+<kbd>tab</kbd>                | 选择窗口          |
-| <kbd>Alt</kbd>+<kbd>tab</kbd>                  | 切换窗口          |
-| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+ <kbd>↑/↓</kbd> | 上/下个工作区     |
-
-#### Guake操作
-guake是一个下拉式终端，可以集成在gnome中  
-
-| 按键                                          | 功能                  |
-|-----------------------------------------------|-----------------------|
-| <kbd>Ctrl</kbd>+<kbd>T</kbd>                  | 下拉或者隐藏guake窗口 |
-| <kbd>Alt</kbd>+ <kbd>T</kbd>                  | 切换guake全屏状态     |
-| <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>R</kbd> | `ranger`              |
-| <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>H</kbd> | `htop`                |
-| <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>I</kbd> | `iotop`               |
-| <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>F</kbd> | `fzf`                 |
-| <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>M</kbd> | `cmatrix`屏保         |
-| <kbd>Ctrl</kbd>+ <kbd>Alt</kbd>+ <kbd>C</kbd> | `cmatrix -r`屏保      |
+### Guake下拉式终端操作
+| 按键                                          | 功能               |
+|-----------------------------------------------|--------------------|
+| <kbd>F12</kbd>                                | 下拉或隐藏终端窗口 |
+| <kbd>Alt</kbd>+<kbd>Enter</kbd>               | 切换全屏状态       |
+| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> | 复制               |
+| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> | 粘贴               |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>   | htop系统资源监控   |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>I</kbd>   | iotop磁盘IO监控    |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>M</kbd>   | cmatrix屏保        |
 
 > 矩阵革命来一波( ◔ ڼ ◔  )
 
 ![cmatrix](images/matrix.gif)
 
-### 踩过的坑
-&emsp;guake相关的快捷键依赖于在guake中运行tmux，且需要仓库中的.tmux.conf。  
-&emsp;原理即是使用guake命令传递按键序列给正在运行的guake，于是guake就会把这些序列视作用户手动输入一般，
-但若此时guake中运行有前台程序，如vim，通常会出错。因为这些按键序列传递给了vim，而我们本想在shell中运行命令。  
-&emsp;于是我让guake启动时自动连接tmux，tmux配置了一些快捷键，而利用guake命令传递tmux快捷键的按键序列给guake，
-guake中的tmux于是重新开启一个window执行命令，而不会影响到原来的“前台程序”
-
-## grub
+## Grub
 &emsp;系统启动加载器（bootloader），由固件启动并加载*Linux Kernel*并为其提供参数，
-如果你装的双系统，则需要它提供选单来在开机是决定进入哪个OS。学过Linux都知道这东西，就不多废话了
+如果你装的双系统，则需要它提供选单来在开机是决定进入哪个OS。
 
 * `init.sh`会下载grub-theme-manjaro，你可以用你喜欢的图片替换`/usr/share/grub/themes/manjaro/background.png`，
-    注意图片的名字和格式都得一样哦，不然你得修改`/usr/share/grub/themes/manjaro/theme.txt`配置。
-    [grub目录](grub)里面有几张为觉得还🉑️️的图片。  
-    默认是这张
+注意图片的名字和格式都得一样哦，不然你得修改`/usr/share/grub/themes/manjaro/theme.txt`配置。
+[grub](grub)目录里面有几张为觉得还🉑️️的图片，默认是这张
 
-    ![dna](grub/DNA.png)
+> grub背景图片似乎只能用*png*格式（似乎是能支持*jpg*格式的呀，grub里有jpg的模块）。
 
-* 现在你可以在`/boot/grub/user.cfg`中定义变量`GRUB_PASSWORD`为`密码`即可为grub设置密码
-    ``````bash
-    # 输入两次密码，此命令会输出加密后的密码
-    $ grub-mkpasswd-pbkdf2
+![dna](grub/DNA.png)
 
-    # 然后把密码写入/boot/grub/user.cfg，没有该文件就自己建一个
-    $ vim /boot/grub/user.cfg
+* 现在你只需要在`/boot/grub/user.cfg`中定义变量`GRUB_PASSWORD`为`密码`即可为grub设置密码来防止篡改选单内容
+```sh
+# 输入两次密码，此命令会输出加密后的密码
+$ grub-mkpasswd-pbkdf2
 
-    # 最后/bot/grub/user.cfg中应该设置成这样
-    GRUB_PASSWORD=grub.pbkdf2.sha512.一长串密码
-    ``````
-    > PS: 该配置是我用fedora时抄下来的
-### 踩过的坑
-* grub背景图片只能用*png*格式（似乎是能支持*jpg*格式的呀，grub里有jpg的模块）。
-    找个在线转换网站转换下格式就行。
+# 然后把密码写入/boot/grub/user.cfg，没有该文件就自己建一个
+$ vim /boot/grub/user.cfg
 
-## ssh
+# 最后/bot/grub/user.cfg中应该设置成这样
+GRUB_PASSWORD=grub.pbkdf2.sha512.一长串密码
+```
+## SSH
 &emsp;安全外壳协议，OpenSSH是它的一个实现。
 有了它你就可以安全、方便地远程连接你的主机，连上后取得你的shell，就像在本地登录一样。
 它通过[非对称加密技术](https://github.com/mrbeardad/SeeCheatSheets/blob/master/notes/bitcoin.md)为你和主机之间建立安全隧道，故**公私钥对**是必不可少的。
@@ -201,7 +169,10 @@ guake中的tmux于是重新开启一个window执行命令，而不会影响到�
 ## zsh
 代替**bash**，强有力的生产工具，当然写脚本还是得用bash  
 相较与bash，zsh主要的有点是**好看**与**好用**
-### 好看  
+### 好看
+> manjaro21自带的主题似乎更好看0.0
+> ![manjaro-zsh](images/zsh6.png)
+
 **提示符**  
 ![zsh1](images/zsh1.png)
 很奈斯的提示符是吧，从左到右分别是：
@@ -292,8 +263,12 @@ git状态：
         * <kbd>Ctrl</kbd>+<kbd>S</kbd>：保存会话到磁盘文件
         * <kbd>Ctrl</kbd>+<kbd>R</kbd>：从磁盘文件恢复会话
     * copy模式：
+        * <kbd>p</kbd>：粘贴
         * <kbd>\[</kbd>：进入copy-mode
-        * <kbd>/</kbd>：在copy-mode中的快捷键，搜索tmux缓冲区，和vim差不多
+        * <kbd>v</kbd>：选取(copy-mode)
+        * <kbd>Ctrl</kbd>+<kbd>V</kbd>：块选取(copy-mode)
+        * <kbd>y</kbd>：复制(copy-mode)
+        * <kbd>/</kbd>：搜索(copy-mode)
     * 其他操作：
         * <kbd>R</kbd>：重载配置，某些配置重载是没用的，需要重启tmux服务
         * <kbd>:</kbd>：命令模式
@@ -317,7 +292,7 @@ git状态：
 &emsp;alacritty是用rust写的，没用qt也没用gtk，
 为了可移植性而与OS的交互甚少，反正开发者们为alacritty添加特性很谨慎。
 这些种种原因导致我弃坑，现在用的**xfce4-terminal**，除了速度没alacritty快（有时真的可以感受得到）
-其他都OK。**不过alacritty的配置我始终保留着，在alacritty目录下**
+其他都OK。
 
 ## xfce4-terminal终端
 现在分析一波[xfce4-terminal](https://github.com/xfce-mirror/xfce4-terminal)与[alacritty](https://github.com/alacritty/alacritty)的区别：
@@ -362,51 +337,35 @@ git状态：
     * <kbd>space</kbd>设置断点
     * [更多gdb命令](https://github.com/mrbeardad/SeeCheatSheets/blob/master/notes/devtool.md)
 
-真正调试的话，脚本下载了更好用的gdbgui，里面可以使用gdb命令，所以学好gdb命令更方便，
+真正调试的话，脚本下载了更好用的[gdbgui](https://github.com/cs01/gdbgui)，
+里面可以使用gdb命令，所以学好gdb命令很有必要
+
 
 ## chfs
 [一个小型局域网web](http://iscute.cn/chfs)，方便手机与电脑传文件，当然用wine.qq也很方便，不过wine.qq没法在局域网共享资源吧
 * `init.sh`默认安装并设置了开机自动启动它，使用`ip a`查看主机的ip地址，然后用浏览器访问就ok
 
-<img align="center" height=700 src="images/chfs.png"></img>
-
-
-## prime独显运行程序
-一个Linux上解决Nvidia显卡切换的方案，Manjaro.20默认使用该方案  
-PS:玛德，以后笔记本还是买AMD吧，核显就够用了，性价比高还没linux的驱动问题
-
-* 修改了一些桌面应用的desktop文件，从桌面图标启动时默认使用prime而让他们运行在Nvidia独显上  
-包括：
-    * google-chrome
-
-    * WPS全家桶
-
-    * wine.qq.office，而且启动TIM前会自动禁用ipv6，这样TIM才可以接受图片
-        > the evil tencent :joy:
-* 在此也将就解释一下`bin`目录下的东西吧
-    * [terminal-tmux.sh](bin/terminal-tmux.sh)会由xfce4-terminal调用(写在其配置里了)，
-        启动xfce4-terminal时会自动启动或连接到tmux，session name为Routine
-
-    * [see](bin/see) & [say](bin/say)最上面提到了，用于快速查阅与修改笔记
-
 ## fcitx5-rime输入法
-fcitx5是一个输入框架。  
-rime是一个输入法引擎，高度自定义，Linux称作中州韵，Windows小狼毫，Mac鼠须管。作者文化人，仰慕！
+&emsp;fcitx5是一个输入框架。Rime是一个输入法引擎，高度自定义。  
+Linux称作中州韵，Windows小狼毫，Mac鼠须管。作者文化人，仰慕！
 
-&emsp;我只开启了**全拼方案**与**双拼方案**，默认双拼，
+&emsp;开启了**全拼**、**双拼**与**英文**，默认双拼。
 修改`~/.local/share/fcitx5/rime/default.custom.yaml`中的顺序即可更改默认方案。  
 
 常用快捷键：  
-* <kbd>Ctrl</kbd>+<kbd>Space</kbd>：切换输入法
-* <kbd>Left_Shift</kbd>：切换中英，有提示
-* <kbd>Right_Shift</kbd>：切换中英，注意这个哦，切换中英没有提示，要是不小心按到了你可能会很懵逼
-* <kbd>Ctrl</kbd>+ <kbd>\`</kbd>：设置输入方案、半/全角、中/西文等等
-* <kbd>\`</kbd>：反查
 
-&emsp;此外，还提供了海量词库，好吧其实是小水沟量的词库o(=·ェ·=)o，毕竟不是云词库，这方面肯定比不上搜狗输入法。
-初始的词库来自与[Chernfalin/better-rime-dict](https://github.com/Chernfalin/better-rime-dict)与[Iorest/rime-dict](https://github.com/Iorest/rime-dict)，
-万分感谢这两位亲爱的网友啦 :smile:  
-&emsp;还有注意，词库需要由`yaml`格式转换成二进制格式，有时会重新执行这一过程，需要点时间
+| 按键                          | 功能                           |
+|-------------------------------|--------------------------------|
+| <kbd>Ctrl</kbd>+<kbd>\`</kbd> | 选单                           |
+| <kbd>Left_Shift</kbd>         | Fcitx5切换输入法引擎（有提示） |
+| <kbd>Right_Shift</kbd>        | Rime切换中英文（无提示）       |
+| <kbd>Ctrl</kbd>+<kbd>.</kbd>  | 切换中西文标点符号             |
+| <kbd>Ctrl</kbd>+<kbd>;</kbd>  | 系统剪切板                     |
+| <kbd>\`</kbd>                 | 笔画反查                       |
+
+默认提供了几款皮肤，可用fcitx5配置工具修改，若不合口味则可利用[ssfconv](https://github.com/fkxxyz/ssfconv)转换搜狗输入法的皮肤
+
+&emsp;**注意**：词库需要由`yaml`格式转换成二进制格式，有时会重新执行这一过程，需要点时间
 
 ## neovim编辑器
 vim/neovim是现在最流行的编辑器之二。  

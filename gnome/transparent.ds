@@ -1,6 +1,0 @@
-( if
-( contains ( window_class ) "netease-cloud-music" )
-( begin
-( spawn_async (str "xprop -id " (window_xid) " -f _NET_WM_WINDOW_OPACITY 32c -set _NET_WM_WINDOW_OPACITY 0xcfffffff") )
-)
-)

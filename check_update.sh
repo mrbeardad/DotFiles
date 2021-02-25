@@ -1,21 +1,13 @@
 #!/bin/bash
 
-if [[ "$1" == "-f" ]] ;then
-    option="-f"
-elif [[ "$1" == "-n" ]] ;then
-    option="-n"
-else
-    option="-i"
-fi
-
-# cp $option -vu ~/.cheat/*.md cheat
-cp $option -vu ~/.gdbinit gdb/gdbinit
-cp $option -vu ~/.cgdb/cgdbrc gdb
-cp -vru ~/.local/share/fcitx5/rime/* rime-dict
-cp -vru ~/.config/fcitx5/*  fcitx5
-cp $option -vu ~/.tmux.conf tmux/tmux.conf
-cp $option -vu ~/.config/xfce4/terminal/terminalrc xfce4-terminal
-cp $option -vu ~/.zshrc zsh/zshrc
-cp -vu ~/.config/dconf/user gnome
-cp $option -vu ~/.local/bin/{say,see,terminal-tmux.sh} bin
+cp -rvu ~/.cache/cppman/* cppman/
+cp -rvu ~/.config/fcitx/* fcitx/
+cp -rvu ~/.config/fcitx5/* fcitx5/
+cp -rvu ~/.local/share/fcitx5/themes/* fcitx5/themes
+cp -rvu ~/.gdbinit gdb/gdbinit
+cp -rvu ~/.cgdb/cgdbrc gdb/cgdbrc
+cp -rvu ~/.config/dconf/user gnome/
+cp -rvu ~/.tmux.conf tmux/tmux.conf
+cp -vu ~/.config/xfce4/terminal/terminalrc xfce4-terminal
+cp -vu ~/.zshrc zsh/zshrc
 

@@ -3,7 +3,7 @@ Description="Cut HTTP File Server"
 Conflicts=chfs.socket
 
 [Service]
-ExecStart=/opt/bin/chfs --path=/srv/chfs
+ExecStart=/usr/local/bin/chfs --path=/srv/chfs
 
 [Install]
 WantedBy="multi-user.target"
