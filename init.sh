@@ -34,6 +34,10 @@ function makedir() {
 }
 
 function system_cfg() {
+    # 启动时间同步服务，使用本地时间（兼容Windows）
+    timedatectl set-ntp 1
+    timedatectl set-local-rtc 1
+
     # 开启硬盘定时清理服务
     sudo systemctl enable --now fstrim.timer
 
@@ -93,7 +97,16 @@ function grub_cfg() {
     sudo cp -v grub/user.cfg /boot/grub
     sudo sed -i '/--class os/s/--class os/--class os --unrestricted /' /etc/grub.d/{10_linux,30_os-prober}
     sudo sed -i '/^GRUB_DEFAULT=saved/s/^/#/' /etc/default/grub
-    echo -e 'menuentry "Reboot" {\n    reboot\n}\nmenuentry "PowerOff" {\n    halt\n}' | sudo tee -a /etc/grub.d/40_custom
+    echo '
+menuentry "Power Off" --class shutdown {
+echo "System shutting down..."
+halt
+}
+
+menuentry "Reboot" --class reboot {
+echo "System is rebooting..."
+reboot
+}'  >> /etc/grub.d/40_custom
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
@@ -137,7 +150,8 @@ function rime_cfg() {
     if [[ "$1" != sogou ]] ;then
         # 下载fcitx5与rime
         yay -S fcitx5-git fcitx5-qt4-git fcitx5-qt5-git fcitx5-qt6-git fcitx5-gtk-git fcitx5-configtool-git \
-            fcitx5-rime-git rime-dict-yangshann-git rime-double-pinyin rime-easy-en-git rime-emoji ssfconv
+            fcitx5-rime-git rime-dict-yangshann-git rime-double-pinyin \
+            rime-easy-en-git librime wordninja-rs rime-emoji ssfconv
 
         # 下载fcitx5皮肤
         #yay -S fcitx5-skin-simple-blue fcitx5-skin-base16-material-darker fcitx5-skin-dark-transparent \
@@ -224,8 +238,8 @@ function desktop_cfg() {
 
     # 桌面应用
     # wps-office ttf-wps-fonts
-    yay -S deepin-wine-tim baidunetdisk-electron listen1-desktop-appimage \
-        flameshot google-chrome guake xfce4-terminal uget \
+    yay -S deepin-wine-tim com.qq.im.deepin baidunetdisk-electron listen1-desktop-appimage \
+        flameshot google-chrome guake xfce4-terminal uget evolution \
         vlc ffmpeg obs-studio peek fontforge nmap tcpdump wireshark-qt visual-studio-code-bin lantern-bin
 
     # GNOME扩展
@@ -237,7 +251,7 @@ function desktop_cfg() {
 
     # 切换Tim到deepin-wine5
     /opt/apps/com.qq.office.deepin/files/run.sh -d
-    cp -v /usr/share/applications/com.qq.office.deepin.desktop ~/.config/autostart
+    # cp -v /usr/share/applications/com.qq.office.deepin.desktop ~/.config/autostart
 
     # Sweet-dark
     sudo cp -r /usr/share/themes/Sweet{,-dark}
@@ -298,4 +312,11 @@ function main() {
 main "$@"
 
 # SSH:  ~/.gitconfig ~/.ssh
-# Grub: theme
+# Grub: breeze-theme
+# Mail: evolution
+# Font: comici.ttf
+# WPS: backgroud
+# TIM: login
+# BaiduNetDisk: login
+# Listen1: PlayList
+# Nvidia: disable

@@ -1,6 +1,12 @@
 [Hotkey]
 # Enumerate when press trigger key repeatedly
-EnumerateWithTriggerKeys=True
+EnumerateWithTriggerKeys=False
+# Temporally switch between first and current Input Method
+AltTriggerKeys=
+# Enumerate Input Method Forward
+EnumerateForwardKeys=
+# Enumerate Input Method Backward
+EnumerateBackwardKeys=
 # Skip first input method while enumerating
 EnumerateSkipFirst=False
 # Enumerate Input Method Group Forward
@@ -11,6 +17,10 @@ EnumerateGroupBackwardKeys=
 ActivateKeys=
 # Deactivate Input Method
 DeactivateKeys=
+# Default Previous page
+PrevPage=
+# Default Next page
+NextPage=
 # Default Previous Candidate
 PrevCandidate=
 # Default Next Candidate
@@ -19,23 +29,8 @@ NextCandidate=
 [Hotkey/TriggerKeys]
 0=Control+space
 
-[Hotkey/AltTriggerKeys]
-0=Control+space
-
-[Hotkey/EnumerateForwardKeys]
-0=Control+Shift+Shift_L
-
-[Hotkey/EnumerateBackwardKeys]
-0=Control+Shift_R
-
-[Hotkey/PrevPage]
-0=minus
-
-[Hotkey/NextPage]
-0=equal
-
 [Hotkey/TogglePreedit]
-0=Control+Alt+P
+0=Control+Shift+P
 
 [Behavior]
 # Active By Default
