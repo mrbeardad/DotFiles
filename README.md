@@ -10,16 +10,15 @@
     - [窗口操作](#窗口操作)
     - [截图与录屏](#截图与录屏)
     - [文件管理器操作](#文件管理器操作)
-    - [Guake下拉式终端操作](#guake下拉式终端操作)
-  - [Grub](#grub)
-  - [SSH](#ssh)
-  - [zsh](#zsh)
+    - [下拉式终端操作](#下拉式终端操作)
+  - [Grub启动加载器](#grub启动加载器)
+  - [SSH远程连接服务器](#ssh远程连接服务器)
+  - [zsh命令行Shell](#zsh命令行shell)
     - [好看](#好看)
     - [好用](#好用)
     - [踩过的坑](#踩过的坑)
-  - [tmux](#tmux)
+  - [tmux终端复用器](#tmux终端复用器)
     - [踩过的坑：](#踩过的坑-1)
-  - [alacritty终端](#alacritty终端)
   - [xfce4-terminal终端](#xfce4-terminal终端)
   - [gdb调试器](#gdb调试器)
   - [chfs](#chfs)
@@ -54,17 +53,17 @@ cd ~/.local/DotFiles
 **注意**：<kbd>Super</kbd>也就是<kbd>Win</kbd>
 
 ### 全局按键
-| 按键                             | 功能                    |
-|----------------------------------|-------------------------|
-| <kbd>Super</kbd>                 | 总览当前工作区的窗口    |
-| <kbd>Super</kbd>+<kbd>S</kbd>    | 搜索文件、应用等        |
-| <kbd>Super</kbd>+<kbd>A</kbd>    | 列出本地所有已安装应用  |
-| <kbd>Super</kbd>+<kbd>数字</kbd> | 启动底部工具栏第n个软件 |
-| <kbd>Super</kbd>+<kbd>N</kbd>    | 打开通知窗口            |
-| <kbd>Super</kbd>+<kbd>R</kbd>    | 打开运行窗口，`r`重启X  |
-| <kbd>Super</kbd>+<kbd>I</kbd>    | 打开系统设置            |
-| <kbd>Super</kbd>+<kbd>E</kbd>    | 打开文件管理器          |
-| <kbd>Super</kbd>+<kbd>L</kbd>    | 锁屏                    |
+| 按键                             | 功能                                   |
+|----------------------------------|----------------------------------------|
+| <kbd>Super</kbd>                 | 打开“开始”菜单                         |
+| <kbd>Super</kbd>+<kbd>S</kbd>    | 打开窗口总览                           |
+| <kbd>Super</kbd>+<kbd>A</kbd>    | 列出本地所有已安装应用                 |
+| <kbd>Super</kbd>+<kbd>数字</kbd> | 启动底部工具栏第n个软件                |
+| <kbd>Super</kbd>+<kbd>N</kbd>    | 打开通知窗口（可顺便查看天气、日历等） |
+| <kbd>Super</kbd>+<kbd>R</kbd>    | 打开运行窗口，`r`重启X                 |
+| <kbd>Super</kbd>+<kbd>I</kbd>    | 打开系统设置                           |
+| <kbd>Super</kbd>+<kbd>E</kbd>    | 打开文件管理器                         |
+| <kbd>Super</kbd>+<kbd>L</kbd>    | 锁屏                                   |
 
 ### 窗口操作
 | 按键                                           | 功能                     |
@@ -76,7 +75,7 @@ cd ~/.local/DotFiles
 | <kbd>Super</kbd>+<kbd>Q</kbd>                  | 关闭窗口                 |
 | <kbd>Super</kbd>+<kbd>←</kbd>                  | 当前窗口左分屏           |
 | <kbd>Super</kbd>+<kbd>→</kbd>                  | 当前窗口右分屏           |
-| <kbd>Super</kbd>+<kbd>Y</kbd>                  | 自动分屏模式             |
+| <kbd>Super</kbd>+<kbd>Y</kbd>                  | 开启/关闭自动分屏模式    |
 | <kbd>Super</kbd>+<kbd>tab</kbd>                | 切换窗口                 |
 | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>↑</kbd>    | 上个工作区               |
 | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>↓</kbd>    | 下个工作区               |
@@ -86,8 +85,8 @@ cd ~/.local/DotFiles
 ### 截图与录屏
 | 按键                                              | 功能                         |
 |---------------------------------------------------|------------------------------|
-| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd>       | Peek录屏                     |
-| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>A</kbd>       | FlameShot截图                |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd>       | 录屏                         |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>A</kbd>       | 截图                         |
 | <kbd>PrtSc</kbd>                                  | 保存桌面截图到~/Pictures     |
 | <kbd>Ctrl</kbd>+<kbd>PrtSc</kbd>                  | 保存截图到系统剪切板         |
 | <kbd>Super</kbd>+<kbd>PrtSc</kbd>                 | 保存当前窗口截图到~/Pictures |
@@ -110,32 +109,31 @@ cd ~/.local/DotFiles
 | <kbd>/</kbd>                                  | 根目录        |
 | <kbd>~</kbd>                                  | 家目录        |
 
-### Guake下拉式终端操作
-| 按键                                          | 功能               |
-|-----------------------------------------------|--------------------|
-| <kbd>F12</kbd>                                | 下拉或隐藏终端窗口 |
-| <kbd>Alt</kbd>+<kbd>Enter</kbd>               | 切换全屏状态       |
-| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> | 复制               |
-| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> | 粘贴               |
-| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>   | htop系统资源监控   |
-| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>I</kbd>   | iotop磁盘IO监控    |
-| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>M</kbd>   | cmatrix屏保        |
+### 下拉式终端操作
+| 按键                                          | 功能                |
+|-----------------------------------------------|---------------------|
+| <kbd>F12</kbd>                                | 下拉或隐藏终端窗口  |
+| <kbd>Alt</kbd>+<kbd>Enter</kbd>               | 切换全屏状态        |
+| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> | 复制                |
+| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> | 粘贴                |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>   | htop系统资源监控    |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>G</kbd>   | bashtop系统资源监控 |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>I</kbd>   | iotop磁盘IO监控     |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>M</kbd>   | cmatrix屏保         |
 
 > 矩阵革命来一波( ◔ ڼ ◔  )
 
 ![cmatrix](images/matrix.gif)
 
-## Grub
+## Grub启动加载器
 &emsp;系统启动加载器（bootloader），由固件启动并加载*Linux Kernel*并为其提供参数，
 如果你装的双系统，则需要它提供选单来在开机是决定进入哪个OS。
 
-* `init.sh`会下载grub-theme-manjaro，你可以用你喜欢的图片替换`/usr/share/grub/themes/manjaro/background.png`，
-注意图片的名字和格式都得一样哦，不然你得修改`/usr/share/grub/themes/manjaro/theme.txt`配置。
-[grub](grub)目录里面有几张为觉得还🉑️️的图片，默认是这张
+* 你可以用你喜欢的图片替换`/usr/share/grub/themes/manjaro/background.png`，
+注意图片的名字、格式、分辨率都得一样哦，如果还不行那就用gThumb打开图片，然后点击右上角的🔧️按钮，
+选择`Delete Metadata`
 
-> grub背景图片似乎只能用*png*格式（似乎是能支持*jpg*格式的呀，grub里有jpg的模块）。
-
-![dna](grub/DNA.png)
+> 本来是打算安装breeze-grub的，但是AUR这个包有bug，可以去<gnome-look.org>手动下载
 
 * 现在你只需要在`/boot/grub/user.cfg`中定义变量`GRUB_PASSWORD`为`密码`即可为grub设置密码来防止篡改选单内容
 ```sh
@@ -148,16 +146,16 @@ $ vim /boot/grub/user.cfg
 # 最后/bot/grub/user.cfg中应该设置成这样
 GRUB_PASSWORD=grub.pbkdf2.sha512.一长串密码
 ```
-## SSH
+## SSH远程连接服务器
 &emsp;安全外壳协议，OpenSSH是它的一个实现。
 有了它你就可以安全、方便地远程连接你的主机，连上后取得你的shell，就像在本地登录一样。
 它通过[非对称加密技术](https://github.com/mrbeardad/SeeCheatSheets/blob/master/notes/bitcoin.md)为你和主机之间建立安全隧道，故**公私钥对**是必不可少的。
 当然你可以使用你的用户密码登录而不用密钥，如果你的主机暴露在互联网中那当然是不推荐的。
-* 提供`~/.ssh/ssh_config`，用于git通过ssh协议链接github与gitee
+* `~/.ssh/ssh_config`，用于git通过ssh协议链接github与gitee
     > 这个你得自己把`ssh/ssh_config`复制到你的`~/.ssh`下，因为这是我自己的配置，
     > 你得自己创建**公私钥对**才能用，若不知道可以google，也可以用命令`$ see ssh`查看
 
-* 提供`/etc/ssh/sshd_config`，用于手机ssh链接电脑，端口改为50000
+* `/etc/ssh/sshd_config`，用于手机ssh链接电脑，端口改为50000
     > 本来想设置只允许密钥链接的，结果我手机上用的**JuiceSSH**，它生成的公钥电脑上无法识别，
     > 电脑上生成的私钥它又无法识别。要是有万能的网友朋友知道，提个issue呀:smile:
 
@@ -166,7 +164,7 @@ GRUB_PASSWORD=grub.pbkdf2.sha512.一长串密码
     > 要是速度仍然慢，或者有些域名直接无法访问，那就照着自己改改，
     > 去[这个网站](http://tool.chinaz.com/dns/)上测试一下域名对应的IP
 
-## zsh
+## zsh命令行Shell
 代替**bash**，强有力的生产工具，当然写脚本还是得用bash  
 相较与bash，zsh主要的有点是**好看**与**好用**
 ### 好看
@@ -220,7 +218,8 @@ git状态：
 
 * `r`：重复上次命令
 * `x`：该命令可以智能解压各种压缩包
-* `j`：该命令会根据你`cd`的频率，智能、模糊化地跳转到目标目录  
+* `o`：`xdg-open`的别名，用于使用默认图形应用打开目标文件
+* `j`：该命令会根据你`cd`的频率，智能、模糊化地跳转到目标目录
 * `f`：该命令启动[fzf](https://github.com/junegunn/fzf)并用[ranger](https://github.com/ranger/ranger)打开选择的文件，
     若用[init.sh](init.sh)安装的话默认都会显示所有隐藏文件
 * `fuck`：该命令帮助修改上次错误的命令，解气由实用，提高祖安手速
@@ -231,7 +230,7 @@ git状态：
 * 使用`syntax-highlight`会让终端复制极其之慢，原因是该插件会对每个复制的字符进行检测。  
     解决办法是给该插件设置一下
 
-## tmux
+## tmux终端复用器
 终端分屏工具和环境保护工具：
 * 首先是分屏：  
   如果只是在本地登录，那这相较于终端模拟器的分屏没有啥区别，
@@ -263,20 +262,20 @@ git状态：
         * <kbd>Ctrl</kbd>+<kbd>S</kbd>：保存会话到磁盘文件
         * <kbd>Ctrl</kbd>+<kbd>R</kbd>：从磁盘文件恢复会话
     * copy模式：
-        * <kbd>p</kbd>：粘贴
         * <kbd>\[</kbd>：进入copy-mode
-        * <kbd>v</kbd>：选取(copy-mode)
-        * <kbd>Ctrl</kbd>+<kbd>V</kbd>：块选取(copy-mode)
-        * <kbd>y</kbd>：复制(copy-mode)
+        * <kbd>Space</kbd>：选取(copy-mode)
+        * <kbd>Ctrl</kbd>+<kbd>V</kbd>+<kbd>Space</kbd>：块选取(copy-mode)
         * <kbd>/</kbd>：搜索(copy-mode)
+        * <kbd>Enter</kbd>：复制(copy-mode)
+        * <kbd>p</kbd>：粘贴
     * 其他操作：
         * <kbd>R</kbd>：重载配置，某些配置重载是没用的，需要重启tmux服务
         * <kbd>:</kbd>：命令模式
         * <kbd>h</kbd>：打开htop
+        * <kbd>o</kbd>：打开bashtop
         * <kbd>r</kbd>：打开ranger
         * <kbd>f</kbd>：打开fzf
         * <kbd>m</kbd>：打开cmatrix
-        * <kbd>c</kbd>：打开cmatrix -r
 
 ### 踩过的坑：
 * 按键序列被截获并更改，导致vim里面的映射失效
@@ -286,13 +285,6 @@ git状态：
 * 如果你的neovim剪切板使用的是`xsel`，有时重启X是会导致其失效，因为`$DISPLAY`环境变量在重启X时已经更改了，
     而neovim不知道，当你在tmux运行neovim的时候就会出现这bug，因为tmux也不知道`$DISPLAY`变了，而neovim以致被它接管着，
     所以解决办法就是重启tmux，`tmux kill-server`把tmux服务杀了在重启。所有在终端启动图形程序的操作都会有这问题
-
-## alacritty终端
-&emsp;一个GPU加速的终端模拟器  
-&emsp;alacritty是用rust写的，没用qt也没用gtk，
-为了可移植性而与OS的交互甚少，反正开发者们为alacritty添加特性很谨慎。
-这些种种原因导致我弃坑，现在用的**xfce4-terminal**，除了速度没alacritty快（有时真的可以感受得到）
-其他都OK。
 
 ## xfce4-terminal终端
 现在分析一波[xfce4-terminal](https://github.com/xfce-mirror/xfce4-terminal)与[alacritty](https://github.com/alacritty/alacritty)的区别：
@@ -354,14 +346,13 @@ Linux称作中州韵，Windows小狼毫，Mac鼠须管。作者文化人，仰�
 
 常用快捷键：  
 
-| 按键                          | 功能                           |
-|-------------------------------|--------------------------------|
-| <kbd>Ctrl</kbd>+<kbd>\`</kbd> | 选单                           |
-| <kbd>Left_Shift</kbd>         | Fcitx5切换输入法引擎（有提示） |
-| <kbd>Right_Shift</kbd>        | Rime切换中英文（无提示）       |
-| <kbd>Ctrl</kbd>+<kbd>.</kbd>  | 切换中西文标点符号             |
-| <kbd>Ctrl</kbd>+<kbd>;</kbd>  | 系统剪切板                     |
-| <kbd>\`</kbd>                 | 笔画反查                       |
+| 按键                          | 功能               |
+|-------------------------------|--------------------|
+| <kbd>Ctrl</kbd>+<kbd>\`</kbd> | 选单               |
+| <kbd>Shift_L</kbd>            | 切换中英文         |
+| <kbd>Ctrl</kbd>+<kbd>.</kbd>  | 切换中西文标点符号 |
+| <kbd>Ctrl</kbd>+<kbd>;</kbd>  | 系统剪切板         |
+| <kbd>\`</kbd>                 | 笔画反查           |
 
 默认提供了几款皮肤，可用fcitx5配置工具修改，若不合口味则可利用[ssfconv](https://github.com/fkxxyz/ssfconv)转换搜狗输入法的皮肤
 
