@@ -112,8 +112,8 @@ cd ~/.local/DotFiles
 ### 下拉式终端操作
 | 按键                                          | 功能                |
 |-----------------------------------------------|---------------------|
-| <kbd>F12</kbd>                                | 下拉或隐藏终端窗口  |
-| <kbd>Alt</kbd>+<kbd>Enter</kbd>               | 切换全屏状态        |
+| <kbd>Alt</kbd>+<kbd>Enter</kbd>               | 下拉或隐藏终端窗口  |
+| <kbd>F11</kbd>                                | 切换全屏状态        |
 | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> | 复制                |
 | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> | 粘贴                |
 | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>   | htop系统资源监控    |
@@ -335,7 +335,7 @@ git状态：
 
 ## chfs
 [一个小型局域网web](http://iscute.cn/chfs)，方便手机与电脑传文件，当然用wine.qq也很方便，不过wine.qq没法在局域网共享资源吧
-* `init.sh`默认安装并设置了开机自动启动它，使用`ip a`查看主机的ip地址，然后用浏览器访问就ok
+* `init.sh`默认安装并设置了开机自动启动它，使用`ip a`查看主机的ip地址，然后用浏览器访问就ok，端口是50001
 
 ## fcitx5-rime输入法
 &emsp;fcitx5是一个输入框架。Rime是一个输入法引擎，高度自定义。  

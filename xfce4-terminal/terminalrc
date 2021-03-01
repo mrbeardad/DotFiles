@@ -45,4 +45,6 @@ CustomCommand=terminal-tmux.sh
 ColorCursorForeground=#000000000000
 RunCustomCommand=TRUE
 DropdownKeepAbove=FALSE
+DropdownWidth=100
+DropdownHeight=45
 

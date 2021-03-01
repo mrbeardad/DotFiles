@@ -18,7 +18,6 @@ function backup() {
         done
         mv -v "$1" "$backFileName"
     fi
-    
 }
 
 function makedir() {
@@ -37,6 +36,7 @@ function system_cfg() {
     # 启动时间同步服务，使用本地时间（兼容Windows）
     timedatectl set-ntp 1
     timedatectl set-local-rtc 1
+    sudo hwclock -w
 
     # 开启硬盘定时清理服务
     sudo systemctl enable --now fstrim.timer
@@ -74,7 +74,7 @@ function nvim_cfg() {
     # 围绕NeoVim搭建IDE
     yay -S base-devel gvim neovim-qt \
         xsel python-pynvim cmake ctags global silver-searcher-git ripgrep \
-        npm php shellcheck cppcheck clang gdb cgdb boost gtest gmock asio
+        npm php shellcheck cppcheck clang gdb cgdb boost asio gtest gmock
 
     # 安装neovim配置
     backup ~/.SpaceVim
@@ -94,32 +94,38 @@ function nvim_cfg() {
 function grub_cfg() {
     # 设置grub密码
     sudo cp -v grub/01_users /etc/grub.d
-    sudo cp -v grub/user.cfg /boot/grub
+    if [[ "$1" == mrbeardad ]] ;then
+        sudo cp -v grub/user.cfg /boot/grub
+    fi
     sudo sed -i '/--class os/s/--class os/--class os --unrestricted /' /etc/grub.d/{10_linux,30_os-prober}
     sudo sed -i '/^GRUB_DEFAULT=saved/s/^/#/' /etc/default/grub
     echo '
-menuentry "Power Off" --class shutdown {
-echo "System shutting down..."
-halt
+menuentry "Power Off" --class shutdown --unrestricted {
+    echo "System shutting down..."
+    halt
 }
 
-menuentry "Reboot" --class reboot {
-echo "System is rebooting..."
-reboot
-}'  >> /etc/grub.d/40_custom
+menuentry "Reboot" --class reboot --unrestricted {
+    echo "System is rebooting..."
+    reboot
+}'  | sudo tee -a /etc/grub.d/40_custom
+    sudo cp -r grub/breeze-timer /usr/share/grub/themes/
+    sudo sed -i '/^GRUB_THEME=/s/=.*/="\/usr\/share\/grub\/themes\/breeze-timer\/theme.txt"/' /etc/default/grub
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
 function ssh_cfg() {
     # 添加git push <remote>需要的ssh配置，提供了对github与gitee的配置
     makedir ~/.ssh
-    #cat ssh/ssh_config >> ~/.ssh/ssh_config
+    if [[ "$1" == mrbeardad ]] ;then
+        cat ssh/ssh_config >> ~/.ssh/ssh_config
 
-    # 安装我自己的ssh公私钥对。。。
+        # 安装我自己的ssh公私钥对。。。
 
-    # 仓库中的.gitconfig提供了将`git difftool`中vimdiff链接到nvim的配置
-    # 需要的话，修改后拷贝到家目录下
-    #cp -v .gitconfig ~
+        # 仓库中的.gitconfig提供了将`git difftool`中vimdiff链接到nvim的配置
+        # 需要的话，修改后拷贝到家目录下
+        cp -v .gitconfig ~
+    fi
 
     # 配置sshd用于连接到该主机并启动sshd服务
     sudo sed -i -e "/^#Port 22$/s/.*/Port 50000/" -e "/^#PasswordAuthentication yes$/s/.*/PasswordAuthentication no/" /etc/ssh/sshd_config
@@ -147,35 +153,29 @@ function tmux_cfg() {
 }
 
 function rime_cfg() {
-    if [[ "$1" != sogou ]] ;then
-        # 下载fcitx5与rime
-        yay -S fcitx5-git fcitx5-qt4-git fcitx5-qt5-git fcitx5-qt6-git fcitx5-gtk-git fcitx5-configtool-git \
-            fcitx5-rime-git rime-dict-yangshann-git rime-double-pinyin \
-            rime-easy-en-git librime wordninja-rs rime-emoji ssfconv
+    # 下载fcitx5与rime
+    yay -S fcitx5-git fcitx5-qt4-git fcitx5-qt5-git fcitx5-qt6-git fcitx5-gtk-git fcitx5-configtool-git \
+        fcitx5-rime-git rime-dict-yangshann-git rime-double-pinyin \
+        rime-easy-en-git librime wordninja-rs rime-emoji ssfconv
 
-        # 下载fcitx5皮肤
-        #yay -S fcitx5-skin-simple-blue fcitx5-skin-base16-material-darker fcitx5-skin-dark-transparent \
-        #    fcitx5-skin-dark-numix fcitx5-skin-materia-exp fcitx5-skin-arc
-        makedir ~/.local/share/fcitx5/themes
-        cp -vr ./fcitx5/themes/* ~/.local/share/fcitx5/themes
+    # 下载fcitx5皮肤
+    #yay -S fcitx5-skin-simple-blue fcitx5-skin-base16-material-darker fcitx5-skin-dark-transparent \
+    #    fcitx5-skin-dark-numix fcitx5-skin-materia-exp fcitx5-skin-arc
+    makedir ~/.local/share/fcitx5/themes
+    cp -vr ./fcitx5/themes/* ~/.local/share/fcitx5/themes
 
-        # 安装fcitx5配置
-        makedir ~/.config/fcitx5
-        cp -vr ./fcitx5/{conf,config,profile} ~/.config/fcitx5/
+    # 安装fcitx5配置
+    makedir ~/.config/fcitx5
+    cp -vr ./fcitx5/{conf,config,profile} ~/.config/fcitx5/
 
-        # 安装配置与词库
-        makedir ~/.local/share/fcitx5/rime
-        git submodule update --init
-        cp -rv rime-dict/* ~/.local/share/fcitx5/rime
+    # 安装配置与词库
+    makedir ~/.local/share/fcitx5/rime
+    git submodule update --init
+    cp -rv rime-dict/* ~/.local/share/fcitx5/rime
 
-        # 自动启动fcitx5
-        echo -e 'export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS="@im=fcitx"\nfcitx5 &' > ~/.xprofile
-    else
-        yay -S fcitx-sogoupinyin fcitx-qt4 fcitx-configtool
-        backup ~/.config/fcitx
-        cp -rv fcitx ~/.config/fcitx
-        echo -e 'export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS="@im=fcitx\nfcitx &"' > ~/.xprofile
-    fi
+    # 自动启动fcitx5
+    echo -e 'export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS="@im=fcitx\nINPUT_METHOD=fcitx"' > ~/.pam_environment
+    cp -v /usr/share/applications/org.fcitx.Fcitx5.desktop ~/.config/autostart
 }
 
 function chfs_cfg() {
@@ -187,10 +187,13 @@ function chfs_cfg() {
         chmod 755 chfs
         sudo cp -v chfs /usr/local/bin
     )
-    sudo cp -v chfs/chfs.{service,socket} /etc/systemd/system/
-    sudo mkdir --mode=777 /srv/chfs
-    sudo systemctl daemon-reload
-    sudo systemctl enable --now chfs.socket
+    makedir ~/.local/share/applications
+    sed '/\$HOME/s/\$HOME/\/home\/'$USERNAME'/' chfs/chfs.desktop > ~/.local/share/applications/chfs.desktop
+    # cp -v ~/.local/share/applications/chfs.desktop ~/.config/autostart
+    # sudo cp -v chfs/chfs.{service,socket} /etc/systemd/system/
+    # sudo mkdir --mode=777 /srv/chfs
+    # sudo systemctl daemon-reload
+    # sudo systemctl enable --now chfs.socket
 }
 
 function cli_cfg() {
@@ -203,7 +206,7 @@ function cli_cfg() {
     )
 
     # CLI工具
-    yay -S strace lsof tree lsd htop-vim-git bashtop iotop iftop dstat cloc screenfetch figlet cmatrix docker
+    yay -S strace lsof tree lsd htop-vim-git bashtop iotop iftop dstat cloc screenfetch figlet cmatrix docker nmap tcpdump 
     npm config set registry http://mirrors.cloud.tencent.com/npm/
     pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
     pip install cppman gdbgui thefuck mycli
@@ -215,10 +218,10 @@ function cli_cfg() {
     echo -e "{\n    \"registry-mirrors\": [\"http://hub-mirror.c.163.com\"]\n}" | sudo tee /etc/docker/daemon.json
 
     # 修改Manjaro默认的ranger配置，用于fzf与vim-defx预览文件
-    sed -i '/^set show_hidden/s/false/true/;
-    /^#map cw console rename%space/s/^.*$/map rn console rename%space/;
-    /^map dD console delete$/s/dD/rm/' ~/.config/ranger/rc.conf
-    sed -i '/highlight_format=xterm256/s/xterm256/ansi/' ~/.config/ranger/scope.sh
+    # sed -i '/^set show_hidden/s/false/true/;
+    # /^#map cw console rename%space/s/^.*$/map rn console rename%space/;
+    # /^map dD console delete$/s/dD/rm/' ~/.config/ranger/rc.conf
+    # sed -i '/highlight_format=xterm256/s/xterm256/ansi/' ~/.config/ranger/scope.sh
 
     # htop
     mkdir ~/.config/htop
@@ -237,10 +240,10 @@ function desktop_cfg() {
     sudo mv -v hosts /etc/hosts
 
     # 桌面应用
-    # wps-office ttf-wps-fonts
-    yay -S deepin-wine-tim com.qq.im.deepin baidunetdisk-electron listen1-desktop-appimage \
-        flameshot google-chrome guake xfce4-terminal uget evolution \
-        vlc ffmpeg obs-studio peek fontforge nmap tcpdump wireshark-qt visual-studio-code-bin lantern-bin
+    # wps-office
+    yay -S deepin-wine-tim deepin-wine-wechat mailspring listen1-desktop-appimage \
+        flameshot google-chrome guake xfce4-terminal uget \
+        vlc ffmpeg obs-studio peek fontforge wireshark-qt visual-studio-code-bin lantern-bin
 
     # GNOME扩展
     yay -S mojave-gtk-theme-git sweet-theme-git adapta-gtk-theme \
@@ -250,7 +253,7 @@ function desktop_cfg() {
         gnome-shell-extension-lockkeys-git gnome-shell-extension-topicons-plus-git
 
     # 切换Tim到deepin-wine5
-    /opt/apps/com.qq.office.deepin/files/run.sh -d
+    # /opt/apps/com.qq.office.deepin/files/run.sh -d
     # cp -v /usr/share/applications/com.qq.office.deepin.desktop ~/.config/autostart
 
     # Sweet-dark
@@ -263,7 +266,7 @@ function desktop_cfg() {
     sudo cp -f /usr/share/icons/candy-icons/places/48/* /usr/share/icons/Tela-candy/scalable/places
 
     # 安装字体
-    yay -S adobe-source-han-sans-cn-fonts ttf-joypixels unicode-emoji
+    yay -S adobe-source-han-sans-cn-fonts ttf-wps-fonts ttf-joypixels unicode-emoji
     (
         makedir ~/.local/share/fonts/NerdCodePro
         cp fonts/*.ttf ~/.local/share/fonts/NerdCodePro
@@ -297,8 +300,8 @@ function main() {
     system_cfg
     pacman_cfg
     nvim_cfg
-    grub_cfg
-    ssh_cfg
+    grub_cfg "$@"
+    ssh_cfg "$@"
     zsh_cfg
     tmux_cfg
     rime_cfg "$@"
@@ -311,9 +314,9 @@ function main() {
 # 安装完镜像后后就改个sudoer & fstab配置，其他啥也不用动
 main "$@"
 
-# SSH:  ~/.gitconfig ~/.ssh
+# SSH: ~/.ssh
 # Grub: breeze-theme
-# Mail: evolution
+# Mail: mailspring
 # Font: comici.ttf
 # WPS: backgroud
 # TIM: login

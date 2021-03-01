@@ -34,7 +34,7 @@ NextCandidate=
 
 [Behavior]
 # Active By Default
-ActiveByDefault=False
+ActiveByDefault=True
 # Share Input State
 ShareInputState=No
 # Show preedit in application
