@@ -94,7 +94,7 @@ function nvim_cfg() {
 function grub_cfg() {
     # 设置grub密码
     sudo cp -v grub/01_users /etc/grub.d
-    if [[ "$1" == mrbeardad ]] ;then
+    if [[ "$USER" == beardad ]] ;then
         sudo cp -v grub/user.cfg /boot/grub
     fi
     sudo sed -i '/--class os/s/--class os/--class os --unrestricted /' /etc/grub.d/{10_linux,30_os-prober}
@@ -117,7 +117,7 @@ menuentry "Reboot" --class reboot --unrestricted {
 function ssh_cfg() {
     # 添加git push <remote>需要的ssh配置，提供了对github与gitee的配置
     makedir ~/.ssh
-    if [[ "$1" == mrbeardad ]] ;then
+    if [[ "$USER" == beardad ]] ;then
         cat ssh/ssh_config >> ~/.ssh/ssh_config
 
         # 安装我自己的ssh公私钥对。。。
@@ -174,7 +174,11 @@ function rime_cfg() {
     cp -rv rime-dict/* ~/.local/share/fcitx5/rime
 
     # 自动启动fcitx5
-    echo -e 'export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS="@im=fcitx\nINPUT_METHOD=fcitx"' > ~/.pam_environment
+    echo '
+GTK_IM_MODULE DEFAULT=fcitx
+QT_IM_MODULE  DEFAULT=fcitx
+XMODIFIERS    DEFAULT=\@im=fcitx
+SDL_IM_MODULE DEFAULT=fcitx' > ~/.pam_environment
     cp -v /usr/share/applications/org.fcitx.Fcitx5.desktop ~/.config/autostart
 }
 
@@ -206,7 +210,7 @@ function cli_cfg() {
     )
 
     # CLI工具
-    yay -S strace lsof tree lsd htop-vim-git bashtop iotop iftop dstat cloc screenfetch figlet cmatrix docker nmap tcpdump 
+    yay -S strace lsof socat tree lsd htop-vim-git bashtop iotop iftop dstat cloc screenfetch figlet cmatrix docker nmap tcpdump 
     npm config set registry http://mirrors.cloud.tencent.com/npm/
     pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
     pip install cppman gdbgui thefuck mycli
@@ -216,6 +220,11 @@ function cli_cfg() {
     # 更改docker源
     sudo mkdir /etc/docker
     echo -e "{\n    \"registry-mirrors\": [\"http://hub-mirror.c.163.com\"]\n}" | sudo tee /etc/docker/daemon.json
+    sudo systemctl enable --now docker.socket
+    sudo docker pull alpine
+    sudo docker pull mysql
+    sudo docker pull nginx
+    sudo gpasswd -a beardad docker
 
     # 修改Manjaro默认的ranger配置，用于fzf与vim-defx预览文件
     # sed -i '/^set show_hidden/s/false/true/;
@@ -236,8 +245,14 @@ function cli_cfg() {
 }
 
 function desktop_cfg() {
-    # 手动解析github域名
+    # 解决DNS污染
     sudo mv -v hosts /etc/hosts
+    sudo sed -i '/^resolv_conf=/s/=.*/=\/etc\/resolv-dnsmasq.conf/' /etc/resolvconf.conf
+    echo -e '[main]\nrc-manager=resolvconf' | sudo tee -a /etc/NetworkManager/NetworkManager.conf
+    echo -e 'nameserver 127.0.0.1\noptions edns. trust-ad' | sudo tee /etc/resolv.conf
+    echo -e 'resolv-file=/etc/resolv-dnsmasq.conf\nserver=/github.io/198.51.44.5' | sudo tee -a /etc/dnsmasq.conf
+    sudo systemctl enable --now dnsmasq.server
+    sudo systemctl restart NetworkManager.server
 
     # 桌面应用
     # wps-office
@@ -248,12 +263,13 @@ function desktop_cfg() {
     # GNOME扩展
     yay -S mojave-gtk-theme-git sweet-theme-git adapta-gtk-theme \
         breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git \
-        tela-icon-theme-git candy-icons-git \
+        tela-icon-theme-git candy-icons-git humanity-icon-theme \
         gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git gnome-shell-extension-openweather \
         gnome-shell-extension-lockkeys-git gnome-shell-extension-topicons-plus-git
 
     # 切换Tim到deepin-wine5
-    # /opt/apps/com.qq.office.deepin/files/run.sh -d
+    /opt/apps/com.qq.office.deepin/files/run.sh -d
+    /opt/apps/com.qq.weixin.deepin/files/run.sh -d
     # cp -v /usr/share/applications/com.qq.office.deepin.desktop ~/.config/autostart
 
     # Sweet-dark
@@ -323,3 +339,4 @@ main "$@"
 # BaiduNetDisk: login
 # Listen1: PlayList
 # Nvidia: disable
+# docker:

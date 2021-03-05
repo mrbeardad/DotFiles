@@ -13,7 +13,7 @@ ff02::2    ip6-allrouters
 203.208.39.104      assets-cdn.github.com
 31.13.82.52         github.global.ssl.fastly.net
 185.199.108.154     github.githubassets.com
-151.101.76.133      raw.githubusercontent.com
+185.199.108.133     raw.githubusercontent.com
 151.101.108.133     camo.githubusercontent.com
 151.101.108.133     gist.githubusercontent.com
 151.101.108.133     cloud.githubusercontent.com

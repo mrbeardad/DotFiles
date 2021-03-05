@@ -11,6 +11,8 @@
     - [截图与录屏](#截图与录屏)
     - [文件管理器操作](#文件管理器操作)
     - [下拉式终端操作](#下拉式终端操作)
+  - [桌面软件](#桌面软件)
+    - [关于deepin-wine-tim与deepin-wine-wechat](#关于deepin-wine-tim与deepin-wine-wechat)
   - [Grub启动加载器](#grub启动加载器)
   - [SSH远程连接服务器](#ssh远程连接服务器)
   - [zsh命令行Shell](#zsh命令行shell)
@@ -125,6 +127,12 @@ cd ~/.local/DotFiles
 
 ![cmatrix](images/matrix.gif)
 
+## 桌面软件
+### 关于deepin-wine-tim与deepin-wine-wechat
+这两移植的软件在第一次运行时可能会报错，重启一次就行了。
+若无法输入中文的话，检查你的机器是否支持中文：`locale -a`。
+若无`zh_CN.UTF-8`则打开/etc/locale.gen取消注释中文那行再运行`sudo locale-gen`
+
 ## Grub启动加载器
 &emsp;系统启动加载器（bootloader），由固件启动并加载*Linux Kernel*并为其提供参数，
 如果你装的双系统，则需要它提供选单来在开机是决定进入哪个OS。
@@ -159,10 +167,13 @@ GRUB_PASSWORD=grub.pbkdf2.sha512.一长串密码
     > 本来想设置只允许密钥链接的，结果我手机上用的**JuiceSSH**，它生成的公钥电脑上无法识别，
     > 电脑上生成的私钥它又无法识别。要是有万能的网友朋友知道，提个issue呀:smile:
 
-* 安装`/etc/hosts`文件，手动解析github的域名，访问更快速
+* 安装`/etc/hosts`文件，手动解析github的域名，访问更快速。  
+    注：现在启用本地DNS服务器解析域名
     > (*￣︿￣)现在是不是就被墙一下，搞的我们很难受呀。  
     > 要是速度仍然慢，或者有些域名直接无法访问，那就照着自己改改，
-    > 去[这个网站](http://tool.chinaz.com/dns/)上测试一下域名对应的IP
+    > 去[这个网站](https://www.ipaddress.com/)上测试一下域名对应的IP
+
+
 
 ## zsh命令行Shell
 代替**bash**，强有力的生产工具，当然写脚本还是得用bash  
@@ -272,7 +283,7 @@ git状态：
         * <kbd>R</kbd>：重载配置，某些配置重载是没用的，需要重启tmux服务
         * <kbd>:</kbd>：命令模式
         * <kbd>h</kbd>：打开htop
-        * <kbd>o</kbd>：打开bashtop
+        * <kbd>g</kbd>：打开bashtop
         * <kbd>r</kbd>：打开ranger
         * <kbd>f</kbd>：打开fzf
         * <kbd>m</kbd>：打开cmatrix
