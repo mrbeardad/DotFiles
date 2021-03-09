@@ -1,10 +1,10 @@
 #!/bin/bash
 # Copyright (c) 2020-2021 Heachen Bear & Contributors
-# File: init-for-myself.sh
+# File: init.sh
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 20.02.2021
+# Last Modified Date: 09.03.2021
 # Last Modified By: Heachen Bear <mrbeardad@qq.com>
 
 function backup() {
@@ -74,7 +74,7 @@ function nvim_cfg() {
     # 围绕NeoVim搭建IDE
     yay -S base-devel gvim neovim-qt \
         xsel python-pynvim cmake ctags global silver-searcher-git ripgrep \
-        npm php shellcheck cppcheck clang gdb cgdb boost asio gtest gmock
+        npm php shellcheck cppcheck clang gdb cgdb gperftools-git graphviz conan boost asio gtest gmock
 
     # 安装neovim配置
     backup ~/.SpaceVim

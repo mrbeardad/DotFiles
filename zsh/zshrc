@@ -111,8 +111,8 @@ source $ZSH/oh-my-zsh.sh
 # 实用的别名
 # alias l='ls -lah  --time-style="+%Y %m-%d %H:%M:%S "'
 # alias l.='ls -ladh  --time-style="+%Y %m-%d %H:%M:%S " .*'
-alias l='lsd -lah'
-alias l.='lsd -lhd .*'
+alias l='lsd -lah --group-dirs first'
+alias l.='lsd -lhd --group-dirs first .*'
 alias ll='ls -lah  --time-style="+%Y %m-%d %H:%M:%S "'
 alias cp='cp -i'
 alias mv='mv -i'

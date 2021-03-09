@@ -1,18 +1,19 @@
 define s
-step
+    step
 end
 
 define n
-next
+    next
 end
 
 define v
-i locals
+    i locals
 end
 
 define f
-finish
+    finish
 end
+
 #
 # C++ related beautifiers (optional)
 #
@@ -30,6 +31,5 @@ set case-sensitive off
 set history save
 set history filename ~/.gdb_history
 set verbose off
-#  set python print-stack full
-set prompt [31m>[33m>[32m>[36m>[35m> [m
+set prompt [33;46mGDB[36m [m
 
