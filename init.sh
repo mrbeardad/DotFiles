@@ -4,7 +4,7 @@
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 09.03.2021
+# Last Modified Date: 10.03.2021
 # Last Modified By: Heachen Bear <mrbeardad@qq.com>
 
 function backup() {
@@ -87,6 +87,7 @@ function nvim_cfg() {
     backup ~/.SpaceVim.d
     ln -sv ~/.SpaceVim/mode ~/.SpaceVim.d
 
+    # 编译QuickRun插件依赖，程序计时更精准
     makedir ~/.local/bin
     clang++ -O3 -DNDEBUG -std=c++17 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
 }
@@ -242,6 +243,14 @@ function cli_cfg() {
     makedir ~/.cgdb
     backup ~/.cgdb/cgdbrc
     cp -v gdb/cgdbrc ~/.cgdb
+
+    # 安装google/pprof
+    (
+        mkdir /tmp/google-pprof
+        cd /tmp/google-pprof || exit 1
+        env GOPROXY=https://mirrors.cloud.tencent.com/go/ GOPATH=/tmp/google-pprof go get -u github.com/google/pprof
+        cp -v bin/pprof ~/.local/bin
+    )
 }
 
 function desktop_cfg() {
