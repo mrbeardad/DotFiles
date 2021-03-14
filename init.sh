@@ -4,7 +4,7 @@
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 10.03.2021
+# Last Modified Date: 14.03.2021
 # Last Modified By: Heachen Bear <mrbeardad@qq.com>
 
 function backup() {
@@ -70,36 +70,12 @@ function pacman_cfg() {
     sudo systemctl enable --now paccache.timer
 }
 
-function nvim_cfg() {
-    # 围绕NeoVim搭建IDE
-    yay -S base-devel gvim neovim-qt \
-        xsel python-pynvim cmake ctags global silver-searcher-git ripgrep \
-        npm php shellcheck cppcheck clang gdb cgdb gperftools-git graphviz conan boost asio gtest gmock
-
-    # 安装neovim配置
-    backup ~/.SpaceVim
-    git clone https://github.com/mrbeardad/SpaceVim ~/.SpaceVim
-
-    makedir ~/.config
-    backup ~/.config/nvim
-    ln -sv ~/.SpaceVim ~/.config/nvim
-
-    backup ~/.SpaceVim.d
-    ln -sv ~/.SpaceVim/mode ~/.SpaceVim.d
-
-    # 编译QuickRun插件依赖，程序计时更精准
-    makedir ~/.local/bin
-    clang++ -O3 -DNDEBUG -std=c++17 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
-}
-
 function grub_cfg() {
     # 设置grub密码
     sudo cp -v grub/01_users /etc/grub.d
     if [[ "$USER" == beardad ]] ;then
         sudo cp -v grub/user.cfg /boot/grub
     fi
-    sudo sed -i '/--class os/s/--class os/--class os --unrestricted /' /etc/grub.d/{10_linux,30_os-prober}
-    sudo sed -i '/^GRUB_DEFAULT=saved/s/^/#/' /etc/default/grub
     echo '
 menuentry "Power Off" --class shutdown --unrestricted {
     echo "System shutting down..."
@@ -111,7 +87,14 @@ menuentry "Reboot" --class reboot --unrestricted {
     reboot
 }'  | sudo tee -a /etc/grub.d/40_custom
     sudo cp -r grub/breeze-timer /usr/share/grub/themes/
-    sudo sed -i '/^GRUB_THEME=/s/=.*/="\/usr\/share\/grub\/themes\/breeze-timer\/theme.txt"/' /etc/default/grub
+
+    sudo sed -i '/--class os/s/--class os/--class os --unrestricted /' /etc/grub.d/{10_linux,30_os-prober}
+    sudo sed -i '/^GRUB_DEFAULT=saved/s/^/#/;
+        /^GRUB_TIMEOUT_STYLE=/s/=.*/=menu/;
+        /^GRUB_CMDLINE_LINUX_DEFAULT=/s/=.*/="quiet splash"/;
+        /^GRUB_THEME=/s/=.*/="\/usr\/share\/grub\/themes\/breeze-timer\/theme.txt"/;
+        /^#GRUB_DISABLE_OS_PROBER=false/s/^#//;' /etc/default/grub
+
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
@@ -193,12 +176,32 @@ function chfs_cfg() {
         sudo cp -v chfs /usr/local/bin
     )
     makedir ~/.local/share/applications
-    sed '/\$HOME/s/\$HOME/\/home\/'$USERNAME'/' chfs/chfs.desktop > ~/.local/share/applications/chfs.desktop
+    sed '/\$HOME/s/\$HOME/\/home\/'"$USERNAME"'/' chfs/chfs.desktop > ~/.local/share/applications/chfs.desktop
     # cp -v ~/.local/share/applications/chfs.desktop ~/.config/autostart
     # sudo cp -v chfs/chfs.{service,socket} /etc/systemd/system/
     # sudo mkdir --mode=777 /srv/chfs
     # sudo systemctl daemon-reload
     # sudo systemctl enable --now chfs.socket
+}
+
+function nvim_cfg() {
+    # 围绕NeoVim搭建IDE
+    yay -S base-devel gvim neovim-qt xsel python-pynvim ctags global silver-searcher-git ripgrep npm php
+
+    # 安装neovim配置
+    backup ~/.SpaceVim
+    git clone https://github.com/mrbeardad/SpaceVim ~/.SpaceVim
+
+    makedir ~/.config
+    backup ~/.config/nvim
+    ln -sv ~/.SpaceVim ~/.config/nvim
+
+    backup ~/.SpaceVim.d
+    ln -sv ~/.SpaceVim/mode ~/.SpaceVim.d
+
+    # 编译QuickRun插件依赖，程序计时更精准
+    makedir ~/.local/bin
+    clang++ -O3 -DNDEBUG -std=c++17 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
 }
 
 function cli_cfg() {
@@ -211,10 +214,13 @@ function cli_cfg() {
     )
 
     # CLI工具
-    yay -S strace lsof socat tree lsd htop-vim-git bashtop iotop iftop dstat cloc screenfetch figlet cmatrix docker nmap tcpdump 
+    yay -S strace lsof socat tree lsd htop-vim-git bashtop iotop iftop dstat cloc screenfetch figlet cmatrix docker nmap tcpdump \
+        shellcheck cppcheck clang gdb cgdb conan cmake gperftools-git graphviz boost asio gtest gmock \
+        tk
+
     npm config set registry http://mirrors.cloud.tencent.com/npm/
     pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
-    pip install cppman gdbgui thefuck mycli
+    pip install cppman gdbgui thefuck mycli pylint flake8
     makedir ~/.cache/cppman
     cp -rv cppman/* ~/.cache/cppman
 
@@ -324,13 +330,13 @@ function main() {
     export dotfiles_dir
     system_cfg
     pacman_cfg
-    nvim_cfg
     grub_cfg "$@"
     ssh_cfg "$@"
     zsh_cfg
     tmux_cfg
     rime_cfg "$@"
     chfs_cfg
+    nvim_cfg
     cli_cfg
     desktop_cfg
     echo -e '\e[33m=====> Gnome dconf has been installed, logout immediately and back-in will apply it.'
@@ -348,4 +354,4 @@ main "$@"
 # BaiduNetDisk: login
 # Listen1: PlayList
 # Nvidia: disable
-# docker:
+# docker: alphine mysql

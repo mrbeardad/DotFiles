@@ -30,7 +30,7 @@
 <!-- vim-markdown-toc -->
 
 # 安装
-提供了shell脚本用于安装配置**Manjaro21**，**Manjaro20版本**见 c21fb82e74f9fc2e96ed670037213f85f20211e6
+提供了shell脚本用于安装配置**Manjaro21**，**Manjaro20版本**见 [c21fb8](https://github.com/mrbeardad/DotFiles/tree/c21fb82e74f9fc2e96ed670037213f85f20211e6)
 
 **小贴士**：在安装之前，需要你需要做两件事
 1. 修改 */etc/sudoers* 与 */etc/sudoers.d/\** ，使whell组的`sudo`可执行所有命令且无需密码，
