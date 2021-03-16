@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cp -rvu /etc/hosts hosts
+cp -rvu /etc/dnsmasq.conf dnsmasq.conf
 cp -rvu ~/.cache/cppman/* cppman/
 cp -rvu ~/.config/fcitx/* fcitx/
 cp -rvu ~/.config/fcitx5/* fcitx5/

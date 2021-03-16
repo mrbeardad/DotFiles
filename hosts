@@ -8,19 +8,8 @@ ff02::1    ip6-allnodes
 ff02::2    ip6-allrouters
 
 # GitHub Fastly Access
-13.250.177.223      github.com
-243.185.187.39      gist.github.com
-203.208.39.104      assets-cdn.github.com
-31.13.82.52         github.global.ssl.fastly.net
+140.82.113.3        github.com
+140.82.113.4        gist.github.com
+185.199.108.153     assets-cdn.github.com
 185.199.108.154     github.githubassets.com
-185.199.108.133     raw.githubusercontent.com
-151.101.108.133     camo.githubusercontent.com
-151.101.108.133     gist.githubusercontent.com
-151.101.108.133     cloud.githubusercontent.com
-151.101.228.133     user-images.githubusercontent.com
-151.101.108.133     avatars1.githubusercontent.com
-151.101.108.133     avatars2.githubusercontent.com
-151.101.108.133     avatars3.githubusercontent.com
-151.101.108.133     avatars4.githubusercontent.com
-151.101.108.133     avatars5.githubusercontent.com
-151.101.108.133     avatars6.githubusercontent.com
+199.232.69.194      github.global.ssl.fastly.net

@@ -4,7 +4,7 @@
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 14.03.2021
+# Last Modified Date: 16.03.2021
 # Last Modified By: Heachen Bear <mrbeardad@qq.com>
 
 function backup() {
@@ -261,11 +261,13 @@ function cli_cfg() {
 
 function desktop_cfg() {
     # 解决DNS污染
-    sudo mv -v hosts /etc/hosts
-    sudo sed -i '/^resolv_conf=/s/=.*/=\/etc\/resolv-dnsmasq.conf/' /etc/resolvconf.conf
+    sudo mv -fv hosts /etc/hosts
+    sudo mv -fv dnsmasq.conf /etc/dnsmasq.conf
+    # 使NetworkManager的DHCP不再自动更改/etc/resolv.conf转而更新/etc/resolv-dnsmasq.conf
     echo -e '[main]\nrc-manager=resolvconf' | sudo tee -a /etc/NetworkManager/NetworkManager.conf
+    sudo sed -i '/^resolv_conf=/s/=.*/=\/etc\/resolv-dnsmasq.conf/' /etc/resolvconf.conf
+    # 让系统使用本地搭建的DNS服务器
     echo -e 'nameserver 127.0.0.1\noptions edns. trust-ad' | sudo tee /etc/resolv.conf
-    echo -e 'resolv-file=/etc/resolv-dnsmasq.conf\nserver=/github.io/198.51.44.5' | sudo tee -a /etc/dnsmasq.conf
     sudo systemctl enable --now dnsmasq.server
     sudo systemctl restart NetworkManager.server
 
