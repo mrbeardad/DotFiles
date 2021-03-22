@@ -126,7 +126,7 @@ alias vmstat='vmstat -w'
 alias ip='ip -c'
 alias cgdb='cgdb -- -q'
 alias gdb='gdb --tui'
-alias dif='diff -Naur'
+alias dif='diff -Naur --color'
 alias ra='ranger'
 alias expactf='expac --timefmt="%Y-%m-%d %T" "%l\t%n" | sort'
 alias stl='sudo systemctl'
@@ -143,7 +143,7 @@ function f() {
     export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -l -g ""'
     FZF_FILESS=$(fzf)
     if [[ -n "$FZF_FILESS" ]] ;then
-        ranger --selectfile=$FZF_FILESS
+        cd ${FZF_FILESS%/*}
     fi
     if [[ -n "$1" ]] ;then
         cd -
@@ -155,6 +155,14 @@ function o() {
         xdg-open .
     else
         xdg-open "$1"
+    fi
+}
+
+function db() {
+    if [[ "$(eval 'file $1')" =~ 'Python script' ]] ;then
+        pudb3 "$@"
+    else
+        cgdb "$@"
     fi
 }
 

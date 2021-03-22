@@ -1,3 +1,19 @@
+define e
+    enable
+end
+
+define d
+    disable
+end
+
+define ig
+    disable
+end
+
+define del
+    disable
+end
+
 define s
     step
 end
@@ -6,17 +22,30 @@ define n
     next
 end
 
-define v
-    i locals
-end
-
 define f
     finish
 end
 
-#
-# C++ related beautifiers (optional)
-#
+define ret
+    return
+end
+
+define ds
+    display
+end
+
+define v
+    i locals
+end
+
+define it
+    i thread
+end
+
+define t
+    thread
+end
+
 # Better GDB defaults ----------------------------------------------------------
 set print pretty on
 set print object on
@@ -31,5 +60,5 @@ set case-sensitive off
 set history save
 set history filename ~/.gdb_history
 set verbose off
-set prompt [33;46mGDB[36m [m
+set prompt [33;45mGDB![m 
 

@@ -8,7 +8,9 @@ ff02::1    ip6-allnodes
 ff02::2    ip6-allrouters
 
 # GitHub Fastly Access
-140.82.113.3        github.com
+# 13.250.177.223      github.com
+140.82.114.3        github.com
+192.30.255.116      api.github.com
 140.82.113.4        gist.github.com
 185.199.108.153     assets-cdn.github.com
 185.199.108.154     github.githubassets.com
