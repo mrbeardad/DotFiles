@@ -4,7 +4,7 @@
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 22.03.2021
+# Last Modified Date: 05.05.2021
 # Last Modified By: Heachen Bear <mrbeardad@qq.com>
 
 function backup() {
@@ -233,8 +233,9 @@ function cli_cfg() {
     )
 
     # CLI工具
-    yay -S strace lsof socat tree lsd htop-vim-git bashtop iotop iftop dstat cloc screenfetch figlet cmatrix docker nmap tcpdump \
-        shellcheck cppcheck clang gdb cgdb conan cmake gperftools-git graphviz boost asio gtest gmock \
+    yay -S strace lsof socat tree lsd htop bashtop iotop iftop dstat cloc screenfetch figlet cmatrix docker nmap tcpdump \
+        bash-completion shellcheck vint vim-language-server \
+        cppcheck clang gdb cgdb conan cmake gperftools-git graphviz boost asio gtest gmock \
         tk
 
     npm config set registry http://mirrors.cloud.tencent.com/npm/

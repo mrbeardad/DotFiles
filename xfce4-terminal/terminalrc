@@ -41,10 +41,10 @@ ColorPalette=rgb(0,0,0);rgb(255,85,85);rgb(80,250,123);rgb(241,250,140);rgb(189,
 TabActivityColor=#d7d7dfdfffff
 ColorCursorUseDefault=FALSE
 ScrollingBar=TERMINAL_SCROLLBAR_NONE
-CustomCommand=terminal-tmux.sh
 ColorCursorForeground=#000000000000
-RunCustomCommand=TRUE
 DropdownKeepAbove=FALSE
 DropdownWidth=100
 DropdownHeight=45
+CustomCommand=terminal-tmux.sh
+RunCustomCommand=TRUE
 

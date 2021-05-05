@@ -1,4 +1,4 @@
-#
+#    2
 #   STL GDB evaluators/views/utilities - 1.03
 #
 #   The new GDB commands:
@@ -29,7 +29,7 @@
 #   Make sure your debugger supports $argc
 #
 #   Simple GDB Macros writen by Dan Marinescu (H-PhD) - License GPL
-#   Inspired by intial work of Tom Malnar, 
+#   Inspired by intial work of Tom Malnar,
 #     Tony Novac (PhD) / Cornell / Stanford,
 #     Gilad Mishne (PhD) and Many Many Others.
 #   Contact: dan_c_marinescu@yahoo.com (Subject: STL)
@@ -40,21 +40,149 @@
 
 
 #
-# std::vector<>
+# std::vector<std::shared_ptr<T>>
+# smart_ptr
+define pspvector
+	if $argc < 2
+		help pspvector
+	else
+		set $size = $arg0._M_impl._M_finish - $arg0._M_impl._M_start
+		set $capacity = $arg0._M_impl._M_end_of_storage - $arg0._M_impl._M_start
+		set $size_max = $size - 1
+	end
+	if $argc == 2
+		set $i = 0
+		while $i < $size
+			printf "elem[%u]: ", $i
+			p *((($arg1)(*($arg0._M_impl._M_start + $i)))._M_ptr)
+			set $i++
+		end
+	end
+	if $argc == 3
+		set $idx = $arg2
+		if $idx < 0 || $idx > $size_max
+			printf "idx1, idx2 are not in acceptable range: [0..%u].\n", $size_max
+		else
+			printf "elem[%u]: ", $idx
+			p *((($arg1)(*($arg0._M_impl._M_start + $i)))._M_ptr)
+		end
+	end
+	if $argc == 4
+	  set $start_idx = $arg2
+	  set $stop_idx = $arg3
+	  if $start_idx > $stop_idx
+	    set $tmp_idx = $start_idx
+	    set $start_idx = $stop_idx
+	    set $stop_idx = $tmp_idx
+	  end
+	  if $start_idx < 0 || $stop_idx < 0 || $start_idx > $size_max || $stop_idx > $size_max
+	    printf "idx1, idx2 are not in acceptable range: [0..%u].\n", $size_max
+	  else
+	    set $i = $start_idx
+		while $i <= $stop_idx
+			printf "elem[%u]: ", $i
+			p *((($arg1)(*($arg0._M_impl._M_start + $i)))._M_ptr)
+			set $i++
+		end
+	  end
+	end
+	if $argc > 0
+		printf "Vector size = %u\n", $size
+		printf "Vector capacity = %u\n", $capacity
+		printf "Element "
+		whatis $arg0._M_impl._M_start
+	end
+end
+
+document pspvector
+	Prints std::vector<T> information.
+	Syntax: pspvector <vector> <T> <idx1> <idx2>
+	Note: idx, idx1 and idx2 must be in acceptable range [0..<vector>.size()-1].
+	Examples:
+	pspvector v NodeSPtr - Prints vector content, size, capacity and T typedef
+	pspvector v NodeSPtr 0 - Prints element[idx] from vector
+	pspvector v NodeSPtr 1 2 - Prints elements in range [idx1..idx2] from vector
+end
+
 #
+# std::vector<T*>
+# smart_ptr
+
+define ppvector
+	if $argc < 2
+		help ppvector
+	else
+		set $size = $arg0._M_impl._M_finish - $arg0._M_impl._M_start
+		set $capacity = $arg0._M_impl._M_end_of_storage - $arg0._M_impl._M_start
+		set $size_max = $size - 1
+	end
+	if $argc == 2
+		set $i = 0
+		while $i < $size
+			printf "elem[%u]: ", $i
+			p *(($arg1*)($arg0._M_impl._M_start + $i))
+			set $i++
+		end
+	end
+	if $argc == 3
+		set $idx = $arg2
+		if $idx < 0 || $idx > $size_max
+			printf "idx1, idx2 are not in acceptable range: [0..%u].\n", $size_max
+		else
+			printf "elem[%u]: ", $idx
+			p *(($arg1*)($arg0._M_impl._M_start + $i))
+		end
+	end
+	if $argc == 4
+	  set $start_idx = $arg2
+	  set $stop_idx = $arg3
+	  if $start_idx > $stop_idx
+	    set $tmp_idx = $start_idx
+	    set $start_idx = $stop_idx
+	    set $stop_idx = $tmp_idx
+	  end
+	  if $start_idx < 0 || $stop_idx < 0 || $start_idx > $size_max || $stop_idx > $size_max
+	    printf "idx1, idx2 are not in acceptable range: [0..%u].\n", $size_max
+	  else
+	    set $i = $start_idx
+		while $i <= $stop_idx
+			printf "elem[%u]: ", $i
+			p *(($arg1*)($arg0._M_impl._M_start + $i))
+			set $i++
+		end
+	  end
+	end
+	if $argc > 0
+		printf "Vector size = %u\n", $size
+		printf "Vector capacity = %u\n", $capacity
+		printf "Element "
+		whatis $arg0._M_impl._M_start
+	end
+end
+
+document ppvector
+	Prints std::vector<T> information.
+	Syntax: ppvector <vector> <T> <idx1> <idx2>
+	Note: idx, idx1 and idx2 must be in acceptable range [0..<vector>.size()-1].
+	Examples:
+	ppvector v int* - Prints vector content, size, capacity and T typedef
+	ppvector v int* 0 - Prints element[idx] from vector
+	ppvector v int* 1 2 - Prints elements in range [idx1..idx2] from vector
+end
 
 define pvector
 	if $argc == 0
 		help pvector
 	else
-		set $size = $arg0.__end_ - $arg0.__begin_
+		set $size = $arg0._M_impl._M_finish - $arg0._M_impl._M_start
+		set $capacity = $arg0._M_impl._M_end_of_storage - $arg0._M_impl._M_start
 		set $size_max = $size - 1
 	end
 	if $argc == 1
 		set $i = 0
 		while $i < $size
 			printf "elem[%u]: ", $i
-			p *($arg0.__begin_ + $i)
+			p *($arg0._M_impl._M_start + $i)
 			set $i++
 		end
 	end
@@ -64,7 +192,7 @@ define pvector
 			printf "idx1, idx2 are not in acceptable range: [0..%u].\n", $size_max
 		else
 			printf "elem[%u]: ", $idx
-			p *($arg0.__begin_ + $idx)
+			p *($arg0._M_impl._M_start + $idx)
 		end
 	end
 	if $argc == 3
@@ -81,16 +209,16 @@ define pvector
 	    set $i = $start_idx
 		while $i <= $stop_idx
 			printf "elem[%u]: ", $i
-			p *($arg0.__begin_ + $i)
+			p *($arg0._M_impl._M_start + $i)
 			set $i++
 		end
 	  end
 	end
 	if $argc > 0
 		printf "Vector size = %u\n", $size
-                #printf "Vector capacity = %u\n", $capacity
+		printf "Vector capacity = %u\n", $capacity
 		printf "Element "
-		whatis $arg0.__begin_
+		whatis $arg0._M_impl._M_start
 	end
 end
 
@@ -102,7 +230,7 @@ document pvector
 	pvector v - Prints vector content, size, capacity and T typedef
 	pvector v 0 - Prints element[idx] from vector
 	pvector v 1 2 - Prints elements in range [idx1..idx2] from vector
-end 
+end
 
 #
 # std::list<>
@@ -112,27 +240,21 @@ define plist
 	if $argc == 0
 		help plist
 	else
-		set Misplaced &arg0._M_impl._M_node
-		set current=arg0._M_impl._M_node._M_next
+		set $head = &$arg0._M_impl._M_node
+		set $current = $arg0._M_impl._M_node._M_next
 		set $size = 0
-		while current!=head
+		while $current != $head
 			if $argc == 2
 				printf "elem[%u]: ", $size
-				p **(arg1∗∗)(current + 1)
+				p *($arg1*)($current + 1)
 			end
 			if $argc == 3
-				if size==arg2
+				if $size == $arg2
 					printf "elem[%u]: ", $size
-					p **(arg1∗∗)(current + 1)
+					p *($arg1*)($current + 1)
 				end
 			end
-			if $argc == 4
-				if strcmp("$arg2","-context") == 0
-					printf "elem[%u]: ", $size
-					p (**(arg1∗∗)(current + 1))$arg3
-				end
-			end
-			set current=current._M_next
+			set $current = $current._M_next
 			set $size++
 		end
 		printf "List size = %u \n", $size
@@ -444,15 +566,10 @@ define pset
 			end
 		end
 		if $argc == 3
-			set $idx = $arg2
-			set $ElementsFound = 0
 			while $i < $tree_size
 				set $value = (void *)($node + 1)
-				if *($arg1*)$value == $idx
-					printf "elem[%u]: ", $i
-					p *($arg1*)$value
-					set $ElementsFound++
-				end
+				printf "elem[%u]: ", $i
+            	p *((*($arg1*)$value)._M_ptr)
 				if $node._M_right != 0
 					set $node = $node._M_right
 					while $node._M_left != 0
@@ -470,8 +587,37 @@ define pset
 				end
 				set $i++
 			end
-			printf "Number of elements found = %u\n", $ElementsFound
 		end
+
+#		if $argc == 3
+#			set $idx = $arg2
+#			set $ElementsFound = 0
+#			while $i < $tree_size
+#				set $value = (void *)($node + 1)
+#				if *($arg1*)$value == $idx
+#					printf "elem[%u]: ", $i
+#					p *($arg1*)$value
+#					set $ElementsFound++
+#				end
+#				if $node._M_right != 0
+#					set $node = $node._M_right
+#					while $node._M_left != 0
+#						set $node = $node._M_left
+#					end
+#				else
+#					set $tmp_node = $node._M_parent
+#					while $node == $tmp_node._M_right
+#						set $node = $tmp_node
+#						set $tmp_node = $tmp_node._M_parent
+#					end
+#					if $node._M_right != $tmp_node
+#						set $node = $tmp_node
+#					end
+#				end
+#				set $i++
+#			end
+#			printf "Number of elements found = %u\n", $ElementsFound
+#		end
 		printf "Set size = %u\n", $tree_size
 	end
 end
@@ -662,7 +808,7 @@ document pstring
 	Syntax: pstring <string>
 	Example:
 	pstring s - Prints content, size/length, capacity and ref-count of string s
-end 
+end
 
 #
 # std::wstring
@@ -684,7 +830,20 @@ document pwstring
 	Syntax: pwstring <wstring>
 	Example:
 	pwstring s - Prints content, size/length, capacity and ref-count of wstring s
-end 
+end
+
+#
+# C++ related beautifiers (optional)
+#
+
+set print pretty on
+set print object on
+set print static-members on
+set print vtbl on
+set print demangle on
+set demangle-style gnu-v3
+set print sevenbit-strings off
+
 
 ###################################################################################################
 define e
@@ -700,7 +859,7 @@ define ig
 end
 
 define del
-    disable
+    delete
 end
 
 define ib
