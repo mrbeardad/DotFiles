@@ -33,7 +33,7 @@
 提供了shell脚本用于安装配置**Manjaro21**，**Manjaro20版本**见 [c21fb8](https://github.com/mrbeardad/DotFiles/tree/c21fb82e74f9fc2e96ed670037213f85f20211e6)
 
 **小贴士**：在安装之前，需要你需要做两件事
-1. 修改 */etc/sudoers* 与 */etc/sudoers.d/\** ，使whell组的`sudo`可执行所有命令且无需密码，
+1. 修改 */etc/sudoers* 与 */etc/sudoers.d/\** ，使wheel组的`sudo`可执行所有命令且无需密码，
 并将平时使用的普通用户加入wheel组；
 
 2. 确保你的网络环境OK，注意不要更改 */etc/pacman.conf* 。
@@ -55,17 +55,16 @@ cd ~/.local/DotFiles
 **注意**：<kbd>Super</kbd>也就是<kbd>Win</kbd>
 
 ### 全局按键
-| 按键                             | 功能                                   |
-|----------------------------------|----------------------------------------|
-| <kbd>Super</kbd>                 | 打开“开始”菜单                         |
-| <kbd>Super</kbd>+<kbd>S</kbd>    | 打开窗口总览                           |
-| <kbd>Super</kbd>+<kbd>A</kbd>    | 列出本地所有已安装应用                 |
-| <kbd>Super</kbd>+<kbd>数字</kbd> | 启动底部工具栏第n个软件                |
-| <kbd>Super</kbd>+<kbd>N</kbd>    | 打开通知窗口（可顺便查看天气、日历等） |
-| <kbd>Super</kbd>+<kbd>R</kbd>    | 打开运行窗口，`r`重启X                 |
-| <kbd>Super</kbd>+<kbd>I</kbd>    | 打开系统设置                           |
-| <kbd>Super</kbd>+<kbd>E</kbd>    | 打开文件管理器                         |
-| <kbd>Super</kbd>+<kbd>L</kbd>    | 锁屏                                   |
+| 按键                            | 功能                      |
+|---------------------------------|---------------------------|
+| <kbd>Super</kbd>                | 打开窗口总览              |
+| <kbd>Super</kbd>+<kbd>A</kbd>   | 列出本地所有已安装应用    |
+| <kbd>Super</kbd>+<kbd>num</kbd> | 启动底部工具栏第num个软件 |
+| <kbd>Super</kbd>+<kbd>N</kbd>   | 打开通知窗口              |
+| <kbd>Super</kbd>+<kbd>R</kbd>   | 打开运行窗口，`r`重启X    |
+| <kbd>Super</kbd>+<kbd>S</kbd>   | 打开系统设置              |
+| <kbd>Super</kbd>+<kbd>E</kbd>   | 打开文件管理器            |
+| <kbd>Super</kbd>+<kbd>L</kbd>   | 锁屏                      |
 
 ### 窗口操作
 | 按键                                           | 功能                     |
@@ -103,7 +102,7 @@ cd ~/.local/DotFiles
 | <kbd>Ctrl</kbd>+<kbd>V</kbd>                  | 粘贴          |
 | <kbd>Ctrl</kbd>+<kbd>F</kbd>                  | 搜索          |
 | <kbd>Ctrl</kbd>+<kbd>Z</kbd>                  | 撤销          |
-| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> | 取消撤销      |
+| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> | 重做      |
 | <kbd>Ctrl</kbd>+<kbd>H</kbd>                  | 显示/隐藏文件 |
 | <kbd>Ctrl</kbd>+<kbd>D</kbd>                  | 固定到快捷栏  |
 | <kbd>Ctrl</kbd>+<kbd>T</kbd>                  | 打开新Tab     |

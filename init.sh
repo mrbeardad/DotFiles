@@ -4,7 +4,7 @@
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 05.05.2021
+# Last Modified Date: 02.06.2021
 # Last Modified By: Heachen Bear <mrbeardad@qq.com>
 
 function backup() {
@@ -183,7 +183,7 @@ function chfs_cfg() {
         cd /tmp || exit 1
         unzip /tmp/chfs.zip
         chmod 755 chfs
-        sudo cp -v chfs /usr/local/bin
+        sudo cp -v chfs ~/.local/bin
     )
     makedir ~/.local/share/applications
 
@@ -234,13 +234,15 @@ function cli_cfg() {
 
     # CLI工具
     yay -S strace lsof socat tree lsd htop bashtop iotop iftop dstat cloc screenfetch figlet cmatrix docker nmap tcpdump \
-        bash-completion shellcheck vint vim-language-server \
-        cppcheck clang gdb cgdb conan cmake gperftools-git graphviz boost asio gtest gmock \
-        tk
+        vint vim-language-server \
+        bash-completion shellcheck \
+        tk \
+        clang gdb cgdb conan cmake gperftools-git graphviz cppcheck boost asio gtest gmock \
+        gotags golangci-lint
 
     npm config set registry http://mirrors.cloud.tencent.com/npm/
     pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
-    pip install cppman gdbgui thefuck mycli pylint flake8 bandit pudb jedi ipython
+    pip install cppman gdbgui thefuck mycli pylint flake8 bandit pudb ipython
 
     # pudb配置
     cp -rv pudb ~/.config
