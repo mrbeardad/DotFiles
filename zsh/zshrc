@@ -116,7 +116,6 @@ alias l.='lsd -lhd --group-dirs first .*'
 alias ll='ls -lah  --time-style="+%Y %m-%d %H:%M:%S "'
 alias cp='cp -i'
 alias mv='mv -i'
-# alias rm='rm -i'
 alias jobs='jobs -l'
 alias df='df -hT'
 alias psa='ps axo stat,euid,ruid,tty,sess,tpgid,pgrp,ppid,pid,pcpu,pmem,comm'
@@ -124,8 +123,6 @@ alias pstree='pstree -Uup'
 alias free='free -wh'
 alias vmstat='vmstat -w'
 alias ip='ip -c'
-alias cgdb='cgdb -- -q'
-alias gdb='gdb --tui'
 alias dif='diff -Naur --color'
 alias ra='ranger'
 alias expactf='expac --timefmt="%Y-%m-%d %T" "%l\t%n" | sort'
@@ -212,8 +209,7 @@ bindkey '^Y' yank
 bindkey '^[OA' up-line-or-beginning-search
 bindkey '^[OB' down-line-or-beginning-search
 
-zstyle ':completion:*:*:docker:*' option-stacking yes   
-zstyle ':completion:*:*:docker-*:*' option-stacking yes 
+zstyle ':completion:*:*:docker:*' option-stacking yes
+zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
 eval $(thefuck --alias)
-

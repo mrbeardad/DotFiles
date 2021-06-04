@@ -4,7 +4,7 @@
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 02.06.2021
+# Last Modified Date: 04.06.2021
 # Last Modified By: Heachen Bear <mrbeardad@qq.com>
 
 function backup() {
@@ -236,10 +236,12 @@ function cli_cfg() {
     yay -S strace lsof socat tree lsd htop bashtop iotop iftop dstat cloc screenfetch figlet cmatrix docker nmap tcpdump \
         vint vim-language-server \
         bash-completion shellcheck \
-        tk \
         clang gdb cgdb conan cmake gperftools-git graphviz cppcheck boost asio gtest gmock \
-        gotags golangci-lint
+        go
 
+    go env -w GOPATH=$HOME/.local/go/
+    go env -w GOPROXY=https://mirrors.cloud.tencent.com/go/
+    mkdir -p ~/.local/go && ln -s ~/.local/bin ~/.local/go/bin
     npm config set registry http://mirrors.cloud.tencent.com/npm/
     pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
     pip install cppman gdbgui thefuck mycli pylint flake8 bandit pudb ipython
@@ -308,7 +310,7 @@ function desktop_cfg() {
     # GNOME扩展
     yay -S mojave-gtk-theme-git sweet-theme-git adapta-gtk-theme \
         breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git \
-        tela-icon-theme-git candy-icons-git humanity-icon-theme \
+        tela-icon-theme-git candy-icons-git \
         gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git gnome-shell-extension-openweather \
         gnome-shell-extension-lockkeys-git gnome-shell-extension-topicons-plus-git
 
