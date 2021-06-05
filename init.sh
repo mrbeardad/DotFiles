@@ -4,7 +4,7 @@
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 04.06.2021
+# Last Modified Date: 05.06.2021
 # Last Modified By: Heachen Bear <mrbeardad@qq.com>
 
 function backup() {
@@ -240,8 +240,9 @@ function cli_cfg() {
         go
 
     go env -w GOPATH=$HOME/.local/go/
+    go env -w GOBIN=$HOME/.local/bin/
     go env -w GOPROXY=https://mirrors.cloud.tencent.com/go/
-    mkdir -p ~/.local/go && ln -s ~/.local/bin ~/.local/go/bin
+    go get -u github.com/google/pprof
     npm config set registry http://mirrors.cloud.tencent.com/npm/
     pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
     pip install cppman gdbgui thefuck mycli pylint flake8 bandit pudb ipython
@@ -259,14 +260,6 @@ function cli_cfg() {
     makedir ~/.cgdb
     backup ~/.cgdb/cgdbrc
     cp -v gdb/cgdbrc ~/.cgdb
-
-    # 安装google/pprof
-    (
-        mkdir /tmp/google-pprof
-        cd /tmp/google-pprof || exit 1
-        env GOPROXY=https://mirrors.cloud.tencent.com/go/ GOPATH=/tmp/google-pprof go get -u github.com/google/pprof
-        cp -v bin/pprof ~/.local/bin
-    )
 
     # docker配置
     sudo mkdir /etc/docker
