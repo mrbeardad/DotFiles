@@ -4,7 +4,7 @@
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 05.06.2021
+# Last Modified Date: 09.06.2021
 # Last Modified By: Heachen Bear <mrbeardad@qq.com>
 
 function backup() {
@@ -235,13 +235,13 @@ function cli_cfg() {
     # CLI工具
     yay -S strace lsof socat tree lsd htop bashtop iotop iftop dstat cloc screenfetch figlet cmatrix docker nmap tcpdump \
         vint vim-language-server \
-        bash-completion shellcheck \
-        clang gdb cgdb conan cmake gperftools-git graphviz cppcheck boost asio gtest gmock \
+        bash-language-server shellcheck \
+        clang gdb cgdb conan cmake graphviz cppcheck boost asio gtest gmock \
         go
 
-    go env -w GOPATH=$HOME/.local/go/
-    go env -w GOBIN=$HOME/.local/bin/
-    go env -w GOPROXY=https://mirrors.cloud.tencent.com/go/
+    go env -w GOPATH="$HOME"/.local/go/
+    go env -w GOBIN="$HOME"/.local/bin/
+    go env -w GOPROXY=https://mirrors.cloud.tencent.com/go/,direct
     go get -u github.com/google/pprof
     npm config set registry http://mirrors.cloud.tencent.com/npm/
     pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
