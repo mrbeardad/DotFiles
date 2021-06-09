@@ -65,7 +65,7 @@ function pacman_cfg() {
     # 更新系统，并准备下载软件包
     sudo pacman -Syyu
     sudo pacman -S archlinuxcn-keyring yay expac
-    yay --aururl "https://aur.tuna.tsinghua.edu.cn" --save
+    # yay --aururl "https://aur.tuna.tsinghua.edu.cn" --save
 
     # 启动定时清理软件包服务
     sudo systemctl enable --now paccache.timer
@@ -236,7 +236,7 @@ function cli_cfg() {
     yay -S strace lsof socat tree lsd htop bashtop iotop iftop dstat cloc screenfetch figlet cmatrix docker nmap tcpdump \
         vint vim-language-server \
         bash-language-server shellcheck \
-        clang gdb cgdb conan cmake graphviz cppcheck boost asio gtest gmock \
+        clang gdb cgdb conan cmake cmake-language-server graphviz cppcheck boost asio gtest gmock \
         go
 
     go env -w GOPATH="$HOME"/.local/go/
