@@ -4,7 +4,7 @@
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 09.06.2021
+# Last Modified Date: 10.06.2021
 # Last Modified By: Heachen Bear <mrbeardad@qq.com>
 
 function backup() {
@@ -305,7 +305,7 @@ function desktop_cfg() {
         breeze-hacked-cursor-theme breeze-adapta-cursor-theme-git \
         tela-icon-theme-git candy-icons-git \
         gnome-shell-extension-coverflow-alt-tab-git gnome-shell-extension-system-monitor-git gnome-shell-extension-openweather \
-        gnome-shell-extension-lockkeys-git gnome-shell-extension-topicons-plus-git
+        gnome-shell-extension-lockkeys-git gnome-shell-extension-topicons-plus
 
     # 切换Tim到deepin-wine5
     /opt/apps/com.qq.office.deepin/files/run.sh -d

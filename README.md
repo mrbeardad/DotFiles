@@ -12,7 +12,7 @@
     - [文件管理器操作](#文件管理器操作)
     - [下拉式终端操作](#下拉式终端操作)
   - [桌面软件](#桌面软件)
-    - [关于deepin-wine-tim与deepin-wine-wechat](#关于deepin-wine-tim与deepin-wine-wechat)
+    - [关于deepin-wine系桌面软件中文输入问题](#关于deepin-wine系桌面软件中文输入问题)
   - [Grub启动加载器](#grub启动加载器)
   - [SSH远程连接服务器](#ssh远程连接服务器)
   - [zsh命令行Shell](#zsh命令行shell)
@@ -30,13 +30,11 @@
 <!-- vim-markdown-toc -->
 
 # 安装
-提供了shell脚本用于安装配置**Manjaro21**，**Manjaro20版本**见 [c21fb8](https://github.com/mrbeardad/DotFiles/tree/c21fb82e74f9fc2e96ed670037213f85f20211e6)
-
-**小贴士**：在安装之前，需要你需要做两件事
-1. 修改 */etc/sudoers* 与 */etc/sudoers.d/\** ，使wheel组的`sudo`可执行所有命令且无需密码，
+**小贴士**：在重装之前，一般需要你需要做两件事
+1. 修改 `/etc/sudoers` 与 `/etc/sudoers.d/*` ，使wheel组的`sudo`命令可执行所有命令且无需密码，
 并将平时使用的普通用户加入wheel组；
 
-2. 确保你的网络环境OK，注意不要更改 */etc/pacman.conf* 。
+2. 确保你的网络环境OK，注意不要更改`/etc/pacman.conf` 。
 
 准备妥当后，执行
 ```sh
@@ -49,10 +47,10 @@ cd ~/.local/DotFiles
 [init.sh](init.sh)脚本中已经写了注释，可以直接打开看看执行流程，不懂bash语法也无关系哦
 
 ## Gnome桌面环境
-&emsp;Gnome作为最流行的DE之一，总是少不了争议，卡是确实有点卡，不知道是X的锅还是gnome的（或者鱼与熊掌都下锅？）。
+&emsp;Gnome作为最流行的DE之一，总是少不了争议，卡是确实有点卡，不知道是Xorg的锅还是Gnome的（或者鱼与熊掌都下锅？）。
 开源的事儿，怎么能甩锅给他们呢，那还是Fxxk Nvidia吧。我没用过其它桌面环境，就不多评价了。
 
-**注意**：<kbd>Super</kbd>也就是<kbd>Win</kbd>
+> **注意**：<kbd>Super</kbd>也就是<kbd>Win</kbd>
 
 ### 全局按键
 | 按键                            | 功能                      |
@@ -60,10 +58,10 @@ cd ~/.local/DotFiles
 | <kbd>Super</kbd>                | 打开窗口总览              |
 | <kbd>Super</kbd>+<kbd>A</kbd>   | 列出本地所有已安装应用    |
 | <kbd>Super</kbd>+<kbd>num</kbd> | 启动底部工具栏第num个软件 |
-| <kbd>Super</kbd>+<kbd>N</kbd>   | 打开通知窗口              |
-| <kbd>Super</kbd>+<kbd>R</kbd>   | 打开运行窗口，`r`重启X    |
-| <kbd>Super</kbd>+<kbd>S</kbd>   | 打开系统设置              |
 | <kbd>Super</kbd>+<kbd>E</kbd>   | 打开文件管理器            |
+| <kbd>Super</kbd>+<kbd>C</kbd>   | 打开通知窗口              |
+| <kbd>Super</kbd>+<kbd>S</kbd>   | 打开系统设置              |
+| <kbd>Super</kbd>+<kbd>R</kbd>   | 打开运行窗口，`r`重启X    |
 | <kbd>Super</kbd>+<kbd>L</kbd>   | 锁屏                      |
 
 ### 窗口操作
@@ -78,8 +76,8 @@ cd ~/.local/DotFiles
 | <kbd>Super</kbd>+<kbd>→</kbd>                  | 当前窗口右分屏           |
 | <kbd>Super</kbd>+<kbd>Y</kbd>                  | 开启/关闭自动分屏模式    |
 | <kbd>Super</kbd>+<kbd>tab</kbd>                | 切换窗口                 |
-| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>↑</kbd>    | 上个工作区               |
-| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>↓</kbd>    | 下个工作区               |
+| <kbd>Super</kbd>+<kbd>Ctrl</kbd>+<kbd>↑</kbd>  | 上个工作区               |
+| <kbd>Super</kbd>+<kbd>Ctrl</kbd>+<kbd>↓</kbd>  | 下个工作区               |
 | <kbd>Super</kbd>+<kbd>Shift</kbd>+<kbd>↑</kbd> | 将当前窗口移至上个工作区 |
 | <kbd>Super</kbd>+<kbd>Shift</kbd>+<kbd>↓</kbd> | 将当前窗口移至下个工作区 |
 
@@ -102,13 +100,11 @@ cd ~/.local/DotFiles
 | <kbd>Ctrl</kbd>+<kbd>V</kbd>                  | 粘贴          |
 | <kbd>Ctrl</kbd>+<kbd>F</kbd>                  | 搜索          |
 | <kbd>Ctrl</kbd>+<kbd>Z</kbd>                  | 撤销          |
-| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> | 重做      |
+| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> | 重做          |
 | <kbd>Ctrl</kbd>+<kbd>H</kbd>                  | 显示/隐藏文件 |
 | <kbd>Ctrl</kbd>+<kbd>D</kbd>                  | 固定到快捷栏  |
 | <kbd>Ctrl</kbd>+<kbd>T</kbd>                  | 打开新Tab     |
 | <kbd>Ctrl</kbd>+<kbd>W</kbd>                  | 关闭Tab       |
-| <kbd>/</kbd>                                  | 根目录        |
-| <kbd>~</kbd>                                  | 家目录        |
 
 ### 下拉式终端操作
 | 按键                                          | 功能                |
@@ -117,6 +113,7 @@ cd ~/.local/DotFiles
 | <kbd>F11</kbd>                                | 切换全屏状态        |
 | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> | 复制                |
 | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> | 粘贴                |
+| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>T</kbd> | 切换透明度          |
 | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>H</kbd>   | htop系统资源监控    |
 | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>G</kbd>   | bashtop系统资源监控 |
 | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>I</kbd>   | iotop磁盘IO监控     |
@@ -127,8 +124,8 @@ cd ~/.local/DotFiles
 ![cmatrix](images/matrix.gif)
 
 ## 桌面软件
-### 关于deepin-wine-tim与deepin-wine-wechat
-这两移植的软件在第一次运行时可能会报错，重启一次就行了。
+### 关于deepin-wine系桌面软件中文输入问题
+  这两移植的软件在第一次运行时可能会报错，重启一次就行了。
 若无法输入中文的话，检查你的机器是否支持中文：`locale -a`。
 若无`zh_CN.UTF-8`则打开/etc/locale.gen取消注释中文那行再运行`sudo locale-gen`
 
@@ -136,11 +133,7 @@ cd ~/.local/DotFiles
 &emsp;系统启动加载器（bootloader），由固件启动并加载*Linux Kernel*并为其提供参数，
 如果你装的双系统，则需要它提供选单来在开机是决定进入哪个OS。
 
-* 你可以用你喜欢的图片替换`/usr/share/grub/themes/manjaro/background.png`，
-注意图片的名字、格式、分辨率都得一样哦，如果还不行那就用gThumb打开图片，然后点击右上角的🔧️按钮，
-选择`Delete Metadata`
-
-> 本来是打算安装breeze-grub的，但是AUR这个包有bug，可以去<gnome-look.org>手动下载
+* 安装漂漂亮亮的主题
 
 * 现在你只需要在`/boot/grub/user.cfg`中定义变量`GRUB_PASSWORD`为`密码`即可为grub设置密码来防止篡改选单内容
 ```sh
@@ -166,54 +159,29 @@ GRUB_PASSWORD=grub.pbkdf2.sha512.一长串密码
     > 本来想设置只允许密钥链接的，结果我手机上用的**JuiceSSH**，它生成的公钥电脑上无法识别，
     > 电脑上生成的私钥它又无法识别。要是有万能的网友朋友知道，提个issue呀:smile:
 
-* 安装`/etc/hosts`文件，手动解析github的域名，访问更快速。  
-    注：现在启用本地DNS服务器解析域名
-    > (*￣︿￣)现在是不是就被墙一下，搞的我们很难受呀。  
-    > 要是速度仍然慢，或者有些域名直接无法访问，那就照着自己改改，
-    > 去[这个网站](https://www.ipaddress.com/)上测试一下域名对应的IP
-
-
 
 ## zsh命令行Shell
-代替**bash**，强有力的生产工具，当然写脚本还是得用bash  
+代替**bash**，强有力的生产工具，当然写脚本一般还是用bash  
 相较与bash，zsh主要的有点是**好看**与**好用**
 ### 好看
-> manjaro21自带的主题似乎更好看0.0
-> ![manjaro-zsh](images/zsh6.png)
+![mzsh](images/zsh6.png)
 
-**提示符**  
-![zsh1](images/zsh1.png)
-很奈斯的提示符是吧，从左到右分别是：
-* 状态提示符
-* 用户名
-* 时间
-* 当前目录
-* git分支
-* git状态
-* vi-mode提示  
->
+**左边提示符**
+* 当前工作目录
+* Git分支，
+    +2表示暂存区有2个变更文件待提交，
+    !1表示工作区有1个变更文件待暂存 ，
+    ?1表示工作区有1个未跟踪文件
 
-状态提示符会出现3种符号：
-* `✘`表示上个命令返回非零
-* `⚡`表示当前用户为root
-* `⚙`表示后台有作业
->
+**中间命令行**
+* 对命令行进行语法高亮，诸如字符串，变量等等
+* 输入前缀自动展示匹配到的历史命令，按Ctrl+E补全
 
-![zsh2](images/zsh2.png)  
-![zsh3](images/zsh3.png)  
-git状态：
-* 背景为黄色代表**工作区**不干净，反之则为绿色
-* ` master`代表分支名，`➦ a53b99b`代表HEAD指向`a53b99b`的提交
-* `⬍`表示工作区相对暂存区有变更，`⥥` 表示暂存区有待提交
-
-**语法高亮**  
-![zsh4](images/zsh4.png)  
-对命令行进行语法高亮，大大减少了输入错误语法的可能
-
-**命令推荐**  
-![zsh5](images/zsh5.png)  
-每次输入命令时，都会自动搜索历史命令，并找出匹配已输入的命令的历史，然后推荐给你。
-你只需要按`→`即可应用它推荐的历史命令
+**右边提示符**
+* 上条命令运行结果（成功返回0，失败返回非0，接受信号）
+* 上条命令运行时间
+* 小齿轮表示有后台命令
+* NORMAL提示处于vi-mode（Ctrl+[进入，i退出），可使用类似vi的快捷键，额外的，vi-mode中按V键打开编辑器修改命令行
 
 ### 好用
 **vi-mode**  
@@ -230,8 +198,7 @@ git状态：
 * `x`：该命令可以智能解压各种压缩包
 * `o`：`xdg-open`的别名，用于使用默认图形应用打开目标文件
 * `j`：该命令会根据你`cd`的频率，智能、模糊化地跳转到目标目录
-* `f`：该命令启动[fzf](https://github.com/junegunn/fzf)并用[ranger](https://github.com/ranger/ranger)打开选择的文件，
-    若用[init.sh](init.sh)安装的话默认都会显示所有隐藏文件
+* `f`：该命令启动[fzf](https://github.com/junegunn/fzf)并自动跳转对应目录
 * `fuck`：该命令帮助修改上次错误的命令，解气由实用，提高祖安手速
 >
 ### 踩过的坑
