@@ -4,7 +4,7 @@
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 10.06.2021
+# Last Modified Date: 11.06.2021
 # Last Modified By: Heachen Bear <mrbeardad@qq.com>
 
 function backup() {
@@ -73,7 +73,7 @@ function pacman_cfg() {
 
 function grub_cfg() {
     # 设置grub密码，只需创建/boot/grub/user.cfg并写入适当格式的内容，密码内容由grub-mkpasswd-pbkdf2命令生成
-    sudo cp -v grub/01_users /etc/grub.d
+    sudo cp -v grub/01_users /etc/grub.d/
     if [[ "$USER" == beardad ]] ;then
         sudo cp -v grub/user.cfg /boot/grub
     fi
@@ -147,12 +147,10 @@ function tmux_cfg() {
 
 function rime_cfg() {
     # 下载fcitx5输入法框架与rime输入法引擎
-    yay -S fcitx5-git fcitx5-qt4-git fcitx5-qt5-git fcitx5-qt6-git fcitx5-gtk-git fcitx5-configtool-git \
-        fcitx5-rime-git rime-dict-yangshann-git rime-double-pinyin \
-        rime-easy-en-git librime wordninja-rs rime-emoji ssfconv
-
-    # 下载fcitx5皮肤
-    #yay -S fcitx5-skin-simple-blue fcitx5-skin-base16-material-darker fcitx5-skin-dark-transparent fcitx5-skin-dark-numix fcitx5-skin-materia-exp fcitx5-skin-arc
+    yay -S fcitx5-git fcitx5-qt4-git fcitx5-qt5-git fcitx5-qt6-git fcitx5-gtk-git \
+        fcitx5-configtool-git ssfconv \
+        fcitx5-rime-git rime-double-pinyin rime-dict-yangshann-git rime-emoji \
+        rime-easy-en-git librime wordninja-rs
 
     # 安装fcitx5皮肤，由ssfconv转换搜狗输入法皮肤得到
     makedir ~/.local/share/fcitx5/themes
@@ -199,7 +197,14 @@ function chfs_cfg() {
 
 function nvim_cfg() {
     # 围绕NeoVim搭建IDE
-    yay -S base-devel gvim neovim-qt xsel python-pynvim ctags global silver-searcher-git ripgrep npm php
+    yay -S base-devel gvim neovim-qt xsel python-pynvim \
+        ripgrep silver-searcher-git global ctags \
+        npm php \
+        vim-language-server vint \
+        bash-language-server shellcheck \
+        go \
+        clang cmake cmake-language-server
+
 
     # 安装github.com/mrbeardad/SpaceVim配置
     backup ~/.SpaceVim
@@ -214,7 +219,7 @@ function nvim_cfg() {
 
     # 编译QuickRun插件依赖，程序计时更精准
     makedir ~/.local/bin
-    g++ -O3 -DNDEBUG -std=c++17 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
+    g++ -O3 -DNDEBUG -std=c++11 -o ~/.local/bin/quickrun_time ~/.SpaceVim/custom/quickrun_time.cpp
 }
 
 function cli_cfg() {
@@ -233,11 +238,10 @@ function cli_cfg() {
     )
 
     # CLI工具
-    yay -S strace lsof socat tree lsd htop bashtop iotop iftop dstat cloc screenfetch figlet cmatrix docker nmap tcpdump \
-        vint vim-language-server \
-        bash-language-server shellcheck \
-        clang gdb cgdb conan cmake cmake-language-server graphviz cppcheck boost asio gtest gmock \
-        go
+    yay -S strace lsof socat nmap tcpdump docker gist \
+        gdb cgdb conan graphviz cppcheck boost asio gtest gmock \
+        tree lsd htop bashtop iotop iftop dstat cloc \
+        screenfetch toilet cowfortune cmatrix sl asciiquarium
 
     go env -w GOPATH="$HOME"/.local/go/
     go env -w GOBIN="$HOME"/.local/bin/
