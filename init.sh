@@ -4,7 +4,7 @@
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 11.06.2021
+# Last Modified Date: 14.06.2021
 # Last Modified By: Heachen Bear <mrbeardad@qq.com>
 
 function backup() {
@@ -239,7 +239,7 @@ function cli_cfg() {
 
     # CLI工具
     yay -S strace lsof socat nmap tcpdump docker gist \
-        gdb cgdb conan graphviz cppcheck boost asio gtest gmock \
+        delve gdb cgdb conan graphviz cppcheck boost asio gtest gmock \
         tree lsd htop bashtop iotop iftop dstat cloc \
         screenfetch toilet cowfortune cmatrix sl asciiquarium
 

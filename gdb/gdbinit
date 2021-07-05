@@ -855,7 +855,7 @@ define d
 end
 
 define ig
-    disable
+    ignore
 end
 
 define del
