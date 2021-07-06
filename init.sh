@@ -4,7 +4,7 @@
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 14.06.2021
+# Last Modified Date: 06.07.2021
 # Last Modified By: Heachen Bear <mrbeardad@qq.com>
 
 function backup() {
@@ -233,7 +233,7 @@ function cli_cfg() {
         makedir ~/.cheat/build
         cd ~/.cheat/build || exit 1
         cmake -D CMAKE_BUILD_TYPE=Release ..
-        cmake --build .
+        cmake --build . -t see
         cmake --install .
     )
 
