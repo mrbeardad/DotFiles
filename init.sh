@@ -4,7 +4,7 @@
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 06.07.2021
+# Last Modified Date: 15.07.2021
 # Last Modified By: Heachen Bear <mrbeardad@qq.com>
 
 function backup() {
@@ -247,6 +247,7 @@ function cli_cfg() {
     go env -w GOBIN="$HOME"/.local/bin/
     go env -w GOPROXY=https://mirrors.cloud.tencent.com/go/,direct
     go get -u github.com/google/pprof
+    go get -u github.com/juntaki/gogtags
     npm config set registry http://mirrors.cloud.tencent.com/npm/
     pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
     pip install cppman gdbgui thefuck mycli pylint flake8 bandit pudb ipython
