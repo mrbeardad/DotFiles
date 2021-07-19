@@ -59,8 +59,8 @@ cd ~/.local/DotFiles
 | <kbd>Super</kbd>+<kbd>A</kbd>   | 列出本地所有已安装应用    |
 | <kbd>Super</kbd>+<kbd>num</kbd> | 启动底部工具栏第num个软件 |
 | <kbd>Super</kbd>+<kbd>E</kbd>   | 打开文件管理器            |
-| <kbd>Super</kbd>+<kbd>C</kbd>   | 打开通知窗口              |
 | <kbd>Super</kbd>+<kbd>S</kbd>   | 打开系统设置              |
+| <kbd>Super</kbd>+<kbd>C</kbd>   | 打开通知窗口              |
 | <kbd>Super</kbd>+<kbd>R</kbd>   | 打开运行窗口，`r`重启X    |
 | <kbd>Super</kbd>+<kbd>L</kbd>   | 锁屏                      |
 
@@ -69,15 +69,15 @@ cd ~/.local/DotFiles
 |------------------------------------------------|--------------------------|
 | <kbd>Super</kbd>+<kbd>D</kbd>                  | 显示桌面                 |
 | <kbd>Super</kbd>+<kbd>H</kbd>                  | 隐藏窗口                 |
+| <kbd>Super</kbd>+<kbd>Q</kbd>                  | 关闭窗口                 |
 | <kbd>Super</kbd>+<kbd>↑</kbd>                  | 最大化窗口               |
 | <kbd>Super</kbd>+<kbd>↓</kbd>                  | 还原窗口大小             |
-| <kbd>Super</kbd>+<kbd>Q</kbd>                  | 关闭窗口                 |
 | <kbd>Super</kbd>+<kbd>←</kbd>                  | 当前窗口左分屏           |
 | <kbd>Super</kbd>+<kbd>→</kbd>                  | 当前窗口右分屏           |
 | <kbd>Super</kbd>+<kbd>Y</kbd>                  | 开启/关闭自动分屏模式    |
 | <kbd>Super</kbd>+<kbd>tab</kbd>                | 切换窗口                 |
-| <kbd>Super</kbd>+<kbd>Ctrl</kbd>+<kbd>↑</kbd>  | 上个工作区               |
-| <kbd>Super</kbd>+<kbd>Ctrl</kbd>+<kbd>↓</kbd>  | 下个工作区               |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>↑/←</kbd>  | 上个工作区               |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>↓/→</kbd>  | 下个工作区               |
 | <kbd>Super</kbd>+<kbd>Shift</kbd>+<kbd>↑</kbd> | 将当前窗口移至上个工作区 |
 | <kbd>Super</kbd>+<kbd>Shift</kbd>+<kbd>↓</kbd> | 将当前窗口移至下个工作区 |
 
@@ -90,6 +90,8 @@ cd ~/.local/DotFiles
 | <kbd>Ctrl</kbd>+<kbd>PrtSc</kbd>                  | 保存截图到系统剪切板         |
 | <kbd>Super</kbd>+<kbd>PrtSc</kbd>                 | 保存当前窗口截图到~/Pictures |
 | <kbd>Ctrl</kbd>+<kbd>Super</kbd>+<kbd>PrtSc</kbd> | 保存当前窗口截图到系统剪切板 |
+| <kbd>Shift</kbd>+<kbd>PrtSc</kbd>                 | 保存选择区域截图到~/Pictures |
+| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>PrtSc</kbd> | 保存选择区域截图到系统剪切板 |
 
 ### 文件管理器操作
 | 按键                                          | 功能          |

@@ -1,4 +1,0 @@
-#!/bin/sh
-
-# use for zsh-complete
-compgen "$@"

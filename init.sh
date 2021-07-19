@@ -4,8 +4,8 @@
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 15.07.2021
-# Last Modified By: Heachen Bear <mrbeardad@qq.com>
+# Last Modified Date: 19.07.2021
+# Last Modified By: Heache Bear <mrbeardad@qq.com>
 
 function backup() {
     if [[ -z "$1" ]] ;then
@@ -254,10 +254,6 @@ function cli_cfg() {
 
     # pudb配置
     cp -rv pudb ~/.config
-
-    # cppman配置
-    makedir ~/.cache/cppman
-    cp -rv cppman/* ~/.cache/cppman
 
     # gdb与cgdb配置
     backup ~/.gdbinit
