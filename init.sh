@@ -4,7 +4,7 @@
 # License: GPLv3
 # Author: Heachen Bear <mrbeardad@qq.com>
 # Date: 20.02.2021
-# Last Modified Date: 19.07.2021
+# Last Modified Date: 25.07.2021
 # Last Modified By: Heache Bear <mrbeardad@qq.com>
 
 function backup() {
@@ -59,7 +59,7 @@ function pacman_cfg() {
     fi
 
     # pacman配置彩色输出与使用系统日志
-    sudo sed -i "/^#Color$/s/#//; /^#UseSyslog$/s/#//; /^#TotalDownload/s/#//" /etc/pacman.conf
+    sudo sed -i "/^#Color$/s/#//; /^#UseSyslog$/s/#//" /etc/pacman.conf
 
 
     # 更新系统，并准备下载软件包
@@ -95,8 +95,7 @@ menuentry "Reboot" --class reboot --unrestricted {
 
     # 安装grub主题
     sudo cp -r grub/breeze-timer /usr/share/grub/themes/
-    sudo sed -i '/^GRUB_DEFAULT=saved/s/^/#/;
-        /^GRUB_TIMEOUT_STYLE=/s/=.*/=menu/;
+    sudo sed -i '/^GRUB_TIMEOUT_STYLE=/s/=.*/=menu/;
         /^GRUB_CMDLINE_LINUX_DEFAULT=/s/=.*/="quiet splash"/;
         /^GRUB_THEME=/s/=.*/="\/usr\/share\/grub\/themes\/breeze-timer\/theme.txt"/;
         /^#GRUB_DISABLE_OS_PROBER=false/s/^#//;' /etc/default/grub
@@ -126,7 +125,7 @@ function ssh_cfg() {
 
 function zsh_cfg() {
     # 下载zsh插件，有些插件Manjaro系统已自带
-    yay -S oh-my-zsh-git autojump
+    yay -S manjaro-zsh-config oh-my-zsh-git autojump
 
     # 安装zsh配置
     backup ~/.zshrc
@@ -238,10 +237,10 @@ function cli_cfg() {
     )
 
     # CLI工具
-    yay -S strace lsof socat nmap tcpdump docker gist \
-        delve gdb cgdb conan graphviz cppcheck boost asio gtest gmock \
+    yay -S delve gdb cgdb conan graphviz cppcheck boost asio gtest gmock \
+        strace lsof socat nmap tcpdump docker gist \
         tree lsd htop bashtop iotop iftop dstat cloc \
-        screenfetch toilet cowfortune cmatrix sl asciiquarium
+        neofetch toilet cowfortune cmatrix sl asciiquarium
 
     go env -w GOPATH="$HOME"/.local/go/
     go env -w GOBIN="$HOME"/.local/bin/
@@ -299,7 +298,7 @@ function desktop_cfg() {
     # wps-office已被移出archlinuxcn源
     yay -S deepin-wine-tim deepin-wine-wechat mailspring listen1-desktop-appimage \
         flameshot google-chrome guake xfce4-terminal uget \
-        vlc ffmpeg obs-studio peek fontforge wireshark-qt visual-studio-code-bin lantern-bin
+        vlc ffmpeg obs-studio peek fontforge wireshark-qt visual-studio-code-bin lantern-beta
 
     # GNOME扩展
     yay -S mojave-gtk-theme-git sweet-theme-git adapta-gtk-theme \
