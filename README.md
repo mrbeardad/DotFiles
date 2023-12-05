@@ -1,5 +1,7 @@
 ![screen shot](images/screenshot.png)
 
+**不出意外的话此仓库不再更新，毕竟Windows已经成为最好的Linux桌面发行版了（笑），命令行工具的配置更新请转移到[MyIDE](https://github.com/mrbeardad/MyIDE)**
+
 # 目录
 <!-- vim-markdown-toc GFM -->
 
